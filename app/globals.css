@@ -22,7 +22,7 @@
   }
   
   .quiz-option {
-    @apply w-full p-6 text-left bg-gray-50 hover:bg-blue-50 rounded-xl transition-all duration-300 border border-gray-200 hover:border-blue-300 group cursor-pointer;
+    @apply w-full p-6 text-left bg-gray-50 hover:bg-blue-50 rounded-xl transition-all duration-300 border border-gray-200 hover:border-blue-300 cursor-pointer;
   }
   
   .progress-bar {
