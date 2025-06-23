@@ -4,6 +4,9 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Your Assistant ID from OpenAI dashboard
+const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID || 'asst_bSz8nzm3dYx8yrTbpFqh4ijR';
+
 // Pathway templates with complete data
 const pathwayTemplates = {
   'touring-performer': {
@@ -60,7 +63,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Invalid request data' });
     }
 
-    const prompt = `Based on these music creator quiz responses, analyze and provide personalized recommendations:
+    console.log('🤖 Calling OpenAI Assistant for pathway generation...');
+
+    // Create a thread
+    const thread = await openai.beta.threads.create();
+
+    // Add message to thread
+    await openai.beta.threads.messages.create(thread.id, {
+      role: "user",
+      content: `Analyze these music creator quiz responses and provide pathway recommendation:
 
 RESPONSES:
 - Motivation: ${responses.motivation}
@@ -69,46 +80,57 @@ RESPONSES:
 - Current Stage: ${responses['stage-level']}
 - Resource Priority: ${responses['resources-priority']}
 
-TASK: Determine the best pathway and create personalized content.
-
-PATHWAYS:
-1. "touring-performer" - For live performance focused creators
-2. "creative-artist" - For brand/content focused creators  
-3. "writer-producer" - For behind-the-scenes focused creators
-
-RESPONSE FORMAT (JSON only):
-{
-  "pathway": "one of the three pathways above",
-  "personalizedDescription": "2-3 sentences tailored to their specific responses and goals",
-  "customNextSteps": [
-    "Specific actionable step 1 based on their stage and motivation",
-    "Specific actionable step 2 that addresses their resource priority",
-    "Specific actionable step 3 for their success vision",
-    "Specific actionable step 4 relevant to their ideal day"
-  ]
-}
-
-Make it personal, specific, and actionable based on their exact responses.`;
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
-      max_tokens: 800
+Please provide personalized pathway recommendation in the specified JSON format.`
     });
+
+    // Run the assistant
+    const run = await openai.beta.threads.runs.create(thread.id, {
+      assistant_id: ASSISTANT_ID
+    });
+
+    // Wait for completion
+    let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+    
+    while (runStatus.status !== 'completed') {
+      if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
+        throw new Error(`Assistant run failed: ${runStatus.status}`);
+      }
+      
+      // Wait before checking again
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+    }
+
+    // Get the assistant's response
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    const assistantMessage = messages.data.find(msg => msg.role === 'assistant');
+    
+    if (!assistantMessage) {
+      throw new Error('No response from assistant');
+    }
+
+    // Parse the assistant's response
+    const responseText = assistantMessage.content[0].text.value;
+    console.log('🎯 Assistant response:', responseText);
 
     let aiResponse;
     try {
-      aiResponse = JSON.parse(completion.choices[0].message.content);
+      // Try to extract JSON from the response
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        aiResponse = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error('No JSON found in assistant response');
+      }
     } catch (parseError) {
-      console.error('Failed to parse OpenAI response:', parseError);
-      throw new Error('Invalid AI response format');
+      console.error('Failed to parse assistant response:', parseError);
+      throw new Error('Invalid assistant response format');
     }
     
     // Get template data and combine with AI personalization
     const template = pathwayTemplates[aiResponse.pathway];
     if (!template) {
-      throw new Error('Invalid pathway returned by AI');
+      throw new Error('Invalid pathway returned by assistant');
     }
     
     const result = {
@@ -116,14 +138,18 @@ Make it personal, specific, and actionable based on their exact responses.`;
       description: aiResponse.personalizedDescription,
       nextSteps: aiResponse.customNextSteps,
       isPersonalized: true,
+      assistantUsed: true,
       responses // Include for debugging/analytics
     };
 
+    console.log('✅ Successfully generated personalized pathway using Assistant');
     res.status(200).json(result);
+    
   } catch (error) {
-    console.error('OpenAI API error:', error);
+    console.error('🚨 Assistant API error:', error);
     
     // Fallback to template-based result
+    console.log('📋 Using fallback pathway generation...');
     const fallbackPathway = determineFallbackPathway(req.body.responses);
     const template = pathwayTemplates[fallbackPathway];
     
@@ -136,7 +162,8 @@ Make it personal, specific, and actionable based on their exact responses.`;
         'Create a consistent workflow for your projects',
         'Join the HOME community for support and resources'
       ],
-      isPersonalized: false
+      isPersonalized: false,
+      assistantUsed: false
     };
     
     res.status(200).json(fallbackResult);
