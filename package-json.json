@@ -1,0 +1,29 @@
+{
+  "name": "home-quiz-mvp",
+  "version": "1.0.0",
+  "description": "AI-powered music creator pathway quiz for HOME",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "lucide-react": "^0.263.1",
+    "openai": "^4.20.0"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.0.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
