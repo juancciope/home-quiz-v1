@@ -106,10 +106,10 @@ RESPONSES:
 - Motivation: ${responses.motivation}
 - Ideal Day: ${responses['ideal-day']}
 - Success Vision: ${responses['success-vision']}
-- Current Stage: ${responses['stage-level']}
-- Resource Priority: ${responses['resources-priority']}
+- Current Stage: ${responses['current-stage']}
+- Biggest Challenge: ${responses['biggest-challenge']}
 
-Please provide personalized pathway recommendation in the specified JSON format.`
+Please provide personalized pathway recommendation in the specified JSON format with prioritized next steps.`
         });
 
         // Run the assistant
