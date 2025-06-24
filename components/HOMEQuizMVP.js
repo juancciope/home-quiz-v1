@@ -335,7 +335,7 @@ const HOMEQuizMVP = () => {
           <div className="max-w-4xl mx-auto px-6 py-4">
             <div className="flex items-center">
               <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
                 alt="HOME for Music" 
                 style={{
                   height: '100px',
