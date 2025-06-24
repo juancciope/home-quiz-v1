@@ -335,32 +335,8 @@ const HOMEQuizMVP = () => {
     );
   }
 
-  if (currentStep === 'generating') {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="max-w-md mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
-            <Loader className="w-8 h-8 text-white animate-spin" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Creating Your Personal Roadmap</h2>
-          <p className="text-gray-600 mb-8">
-            Our AI is analyzing your responses and crafting a pathway designed specifically for your music career goals...
-          </p>
-          {aiResult && (
-            <button 
-              onClick={() => setCurrentStep('result')}
-              className="text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 hover:opacity-90"
-              style={{ backgroundColor: '#B91372' }}
-            >
-              View Your Results
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (currentStep === 'result' && aiResult) {
+  // Email capture step
+  if (currentStep === 'email-capture') {
     return (
       <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         {/* Header */}
@@ -378,104 +354,89 @@ const HOMEQuizMVP = () => {
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          {/* Results Header */}
-          <div className="text-center mb-12">
-            <div className="text-6xl mb-4">{aiResult.icon}</div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">{aiResult.description}</p>
-            {aiResult.isPersonalized === false && (
-              <p className="text-sm mt-2" style={{ color: '#1DD1A1' }}>*Personalized with AI recommendations coming soon</p>
-            )}
-          </div>
-          
-          {/* Pathway Details */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="rounded-2xl p-8 border shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)', borderColor: 'rgba(29, 209, 161, 0.2)' }}>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Your Next Steps</h3>
-              <div className="space-y-4">
-                {aiResult.nextSteps.map((step, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-1 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
-                      {index + 1}
-                    </div>
-                    <span className="text-gray-700 leading-relaxed">{step}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200 shadow-sm">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Recommended Resources</h3>
-              <div className="space-y-3">
-                {aiResult.resources.map((resource, index) => (
-                  <div key={index} className="flex items-center">
-                    <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
-                    <span className="text-gray-700">{resource}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* HOME Connection */}
-          <div className="rounded-2xl p-8 text-white text-center mb-12 shadow-lg" style={{ background: 'linear-gradient(135deg, #B91372 0%, #1DD1A1 100%)' }}>
-            <h3 className="text-2xl font-semibold mb-4">How HOME Can Help</h3>
-            <p className="text-white/90 text-lg mb-6 leading-relaxed">{aiResult.homeConnection}</p>
-            <div className="flex items-center justify-center">
-              <Users className="w-6 h-6 mr-2" />
-              <span>Join 1,000+ creators in our community</span>
-            </div>
-          </div>
-          
-          {/* Webinar CTA */}
-          <div className="bg-gray-50 rounded-2xl p-8 text-center border border-gray-200 shadow-sm">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Your Complete Roadmap</h3>
-            <p className="text-gray-600 mb-8">
-              Join our monthly <strong style={{ color: '#B91372' }}>"Find Your Path on the Music Creator Roadmap"</strong> webinar
+        <div className="max-w-2xl mx-auto px-6 py-20">
+          <div className="text-center">
+            <div className="text-6xl mb-6">🎯</div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-6">Your Personalized Roadmap is Ready!</h1>
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              Get your AI-generated pathway with personalized next steps, recommended resources, and exclusive access to HOME's community.
             </p>
-            
-            <div className="grid md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                <h4 className="font-semibold text-gray-900 mb-2">Music Creator Roadmap Course</h4>
-                <p className="text-gray-600 text-sm">9-module course ($299 value)</p>
-              </div>
-              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                <h4 className="font-semibold text-gray-900 mb-2">Artist Branding Playbook</h4>
-                <p className="text-gray-600 text-sm">FREE bonus for 24-hour enrollees</p>
-              </div>
-              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                <h4 className="font-semibold text-gray-900 mb-2">HOME Community Access</h4>
-                <p className="text-gray-600 text-sm">Connect with Nashville's top talent</p>
+
+            {/* Benefits */}
+            <div className="bg-gray-50 rounded-2xl p-8 mb-8 text-left">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">You'll receive:</h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
+                  <span className="text-gray-700">Your personalized music creator pathway</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
+                  <span className="text-gray-700">Specific next steps tailored to your goals</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
+                  <span className="text-gray-700">Curated resources and tools for your journey</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
+                  <span className="text-gray-700">Invitation to monthly HOME webinar ($299 course access)</span>
+                </div>
               </div>
             </div>
-            
-            <div className="max-w-md mx-auto">
+
+            {/* Email Form */}
+            <div className="bg-white border-2 rounded-2xl p-8 shadow-sm" style={{ borderColor: '#1DD1A1' }}>
+              <h3 className="text-xl font-semibold text-gray-900 mb-6">Enter your email to get your results:</h3>
               <div className="flex gap-3 mb-4">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email for webinar access"
-                  className="flex-1 px-4 py-3 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent"
+                  placeholder="Enter your email address"
+                  className="flex-1 px-4 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent text-lg"
                   style={{ focusRingColor: '#1DD1A1' }}
                 />
                 <button
                   onClick={handleEmailSubmit}
                   disabled={!email || isSubmitting}
-                  className="text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 flex items-center disabled:opacity-50 hover:opacity-90"
+                  className="text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 flex items-center disabled:opacity-50 hover:opacity-90 text-lg"
                   style={{ backgroundColor: '#B91372' }}
                 >
-                  {isSubmitting ? <Loader className="w-5 h-5 animate-spin" /> : <Mail className="w-5 h-5" />}
+                  {isSubmitting ? (
+                    <>
+                      <Loader className="w-5 h-5 animate-spin mr-2" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      Get My Results
+                      <Mail className="w-5 h-5 ml-2" />
+                    </>
+                  )}
                 </button>
               </div>
-              <p className="text-sm text-gray-500">Next webinar: Third Thursday of every month</p>
+              <p className="text-sm text-gray-500">We'll send your results instantly. No spam, ever.</p>
+            </div>
+
+            {/* Social Proof */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="flex items-center justify-center text-sm text-gray-500">
+                <div className="flex text-yellow-400 mr-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                Join 1,000+ music creators who found their path with HOME
+              </div>
             </div>
           </div>
         </div>
       </div>
     );
   }
+
+  // Remove the old results page - we're sending results via email now
 
   if (currentStep === 'complete') {
     return (
@@ -484,31 +445,51 @@ const HOMEQuizMVP = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
             <Check className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to the HOME Community! 🏡</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Check Your Email! 📧</h1>
           <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Check your email for your webinar invitation and complete roadmap. 
-            We're excited to support your journey as a music creator!
+            Your personalized Music Creator Roadmap has been sent to <strong>{email}</strong>
           </p>
+          
           <div className="rounded-2xl p-6 mb-8 border shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)', borderColor: 'rgba(29, 209, 161, 0.2)' }}>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">What happens next?</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">What's in your email:</h3>
             <div className="text-left space-y-2 text-gray-700">
-              <p>✓ You'll receive pathway-specific emails over the next 5-7 days</p>
-              <p>✓ Webinar reminder 3 days before the event</p>
-              <p>✓ Early access to HOME community resources</p>
+              <p>✓ Your personalized pathway with AI-generated insights</p>
+              <p>✓ Specific next steps tailored to your responses</p>
+              <p>✓ Recommended resources for your journey</p>
+              <p>✓ Exclusive webinar invitation ($299 course access)</p>
             </div>
           </div>
-          <button 
-            onClick={() => {
-              setCurrentStep('landing');
-              setResponses({});
-              setAiResult(null);
-              setEmail('');
-            }}
-            className="text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 hover:opacity-90"
-            style={{ backgroundColor: '#B91372' }}
-          >
-            Take Quiz Again
-          </button>
+
+          <div className="text-center">
+            <p className="text-gray-600 mb-6">Don't see the email? Check your spam folder or try another email address.</p>
+            <button 
+              onClick={() => {
+                setCurrentStep('email-capture');
+                setEmail('');
+              }}
+              className="text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 hover:opacity-90 mr-4"
+              style={{ backgroundColor: '#B91372' }}
+            >
+              Try Different Email
+            </button>
+            <button 
+              onClick={() => {
+                setCurrentStep('landing');
+                setResponses({});
+                setAiResult(null);
+                setEmail('');
+              }}
+              className="text-gray-600 hover:text-gray-900 font-semibold py-3 px-6 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
+            >
+              Take Quiz Again
+            </button>
+          </div>
+
+          {/* Social Proof */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h4 className="text-lg font-semibold text-gray-900 mb-4">Welcome to the HOME Community! 🏡</h4>
+            <p className="text-gray-600">You're now part of Nashville's most supportive music creator community. We're excited to support your journey!</p>
+          </div>
         </div>
       </div>
     );
