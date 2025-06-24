@@ -157,6 +157,10 @@ const HOMEQuizMVP = () => {
         description: `${template.baseDescription} Based on your responses, this path aligns with your goals and current stage.`,
         icon: template.icon,
         nextSteps: template.nextSteps,
+        customNextSteps: template.nextSteps.map((step, index) => ({
+          priority: index + 1,
+          step: step
+        })),
         resources: template.resources,
         homeConnection: template.homeConnection,
         isPersonalized: false
@@ -175,36 +179,48 @@ const HOMEQuizMVP = () => {
       'writer-producer': 0
     };
     
-    const motivationMap = {
-      'stage-energy': 'touring-performer',
-      'creative-expression': 'creative-artist', 
-      'behind-scenes': 'writer-producer',
-      'business-building': 'creative-artist'
-    };
-    
-    if (motivationMap[responses.motivation]) {
-      pathwayScores[motivationMap[responses.motivation]] += 3;
+    // Score based on motivation
+    if (responses.motivation === 'live-performance') {
+      pathwayScores['touring-performer'] += 4;
+    }
+    if (responses.motivation === 'artistic-expression') {
+      pathwayScores['creative-artist'] += 4;
+    }
+    if (responses.motivation === 'collaboration') {
+      pathwayScores['writer-producer'] += 4;
     }
     
-    const idealDayMap = {
-      'performing': 'touring-performer',
-      'creating-content': 'creative-artist',
-      'studio-work': 'writer-producer',
-      'strategy-networking': 'creative-artist'
-    };
-    
-    if (idealDayMap[responses['ideal-day']]) {
-      pathwayScores[idealDayMap[responses['ideal-day']]] += 3;
+    // Score based on ideal day
+    if (responses['ideal-day'] === 'performing-travel') {
+      pathwayScores['touring-performer'] += 3;
+    }
+    if (responses['ideal-day'] === 'releasing-music') {
+      pathwayScores['creative-artist'] += 3;
+    }
+    if (responses['ideal-day'] === 'writing-creating') {
+      pathwayScores['writer-producer'] += 3;
     }
     
-    const visionMap = {
-      'touring-artist': 'touring-performer',
-      'creative-brand': 'creative-artist',
-      'in-demand-producer': 'writer-producer'
-    };
+    // Score based on success vision (highest weight)
+    if (responses['success-vision'] === 'touring-headliner') {
+      pathwayScores['touring-performer'] += 5;
+    }
+    if (responses['success-vision'] === 'passive-income-artist') {
+      pathwayScores['creative-artist'] += 5;
+    }
+    if (responses['success-vision'] === 'hit-songwriter') {
+      pathwayScores['writer-producer'] += 5;
+    }
     
-    if (visionMap[responses['success-vision']]) {
-      pathwayScores[visionMap[responses['success-vision']]] += 4;
+    // Score based on biggest challenge
+    if (responses['biggest-challenge'] === 'performance-opportunities') {
+      pathwayScores['touring-performer'] += 3;
+    }
+    if (responses['biggest-challenge'] === 'brand-audience') {
+      pathwayScores['creative-artist'] += 3;
+    }
+    if (responses['biggest-challenge'] === 'collaboration-income') {
+      pathwayScores['writer-producer'] += 3;
     }
     
     return Object.keys(pathwayScores).reduce((a, b) => 
@@ -284,7 +300,9 @@ const HOMEQuizMVP = () => {
         email: submitPayload.email,
         pathway: submitPayload.pathway,
         resultsKeys: Object.keys(submitPayload.results),
-        nextStepsLength: submitPayload.results.next_steps?.length,
+        nextStepsType: Array.isArray(submitPayload.results.next_steps) ? 'array' : typeof submitPayload.results.next_steps,
+        nextStepsLength: Array.isArray(submitPayload.results.next_steps) ? submitPayload.results.next_steps.length : 'not array',
+        firstStepStructure: Array.isArray(submitPayload.results.next_steps) ? submitPayload.results.next_steps[0] : 'not array',
         resourcesLength: submitPayload.results.recommended_resources?.length
       });
       
@@ -463,7 +481,7 @@ const HOMEQuizMVP = () => {
             )}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+                      <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* Next Steps */}
             <div className="bg-gray-50 rounded-2xl p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
@@ -471,12 +489,14 @@ const HOMEQuizMVP = () => {
                 Your Next Steps
               </h3>
               <div className="space-y-4">
-                {aiResult.nextSteps.map((step, index) => (
+                {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => (
                   <div key={index} className="flex items-start">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
-                      {index + 1}
+                      {typeof step === 'object' ? step.priority : index + 1}
                     </div>
-                    <p className="text-gray-700 leading-relaxed">{step}</p>
+                    <p className="text-gray-700 leading-relaxed">
+                      {typeof step === 'object' ? step.step : step}
+                    </p>
                   </div>
                 ))}
               </div>
