@@ -311,16 +311,16 @@ const HOMEQuizMVP = () => {
       <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6 py-3">
+          <div className="max-w-4xl mx-auto px-6 py-4">
             <div className="flex items-center">
               <img 
                 src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
                 alt="HOME for Music" 
                 style={{
-                  height: '60px',
+                  height: '100px',
                   width: 'auto',
-                  maxWidth: '250px',
-                  maxHeight: '60px',
+                  maxWidth: '400px',
+                  maxHeight: '100px',
                   objectFit: 'contain'
                 }}
               />
@@ -580,16 +580,16 @@ const HOMEQuizMVP = () => {
       
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-6 py-3">
+        <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center">
             <img 
               src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
               alt="HOME for Music" 
               style={{
-                height: '60px',
+                height: '100px',
                 width: 'auto',
-                maxWidth: '250px',
-                maxHeight: '60px',
+                maxWidth: '400px',
+                maxHeight: '100px',
                 objectFit: 'contain'
               }}
             />
