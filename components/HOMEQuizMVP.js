@@ -313,13 +313,11 @@ const HOMEQuizMVP = () => {
         <div className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-6 py-4">
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
-                <Home className="w-6 h-6 text-white font-bold" />
-              </div>
-              <div>
-                <span className="text-2xl font-bold text-gray-900">HOME</span>
-                <span className="text-sm text-gray-500 ml-2">for Music</span>
-              </div>
+              <img 
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
+                alt="HOME for Music" 
+                className="home-logo"
+              />
             </div>
           </div>
         </div>
@@ -431,13 +429,11 @@ const HOMEQuizMVP = () => {
         <div className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-6 py-4">
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
-                <Home className="w-6 h-6 text-white font-bold" />
-              </div>
-              <div>
-                <span className="text-2xl font-bold text-gray-900">HOME</span>
-                <span className="text-sm text-gray-500 ml-2">for Music</span>
-              </div>
+              <img 
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
+                alt="HOME for Music" 
+                className="home-logo"
+              />
             </div>
           </div>
         </div>
@@ -550,6 +546,42 @@ const HOMEQuizMVP = () => {
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+      <style jsx>{`
+        .quiz-option {
+            background-color: #f9fafb !important;
+            border-color: #e5e7eb !important;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%) !important;
+            border-color: #1DD1A1 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 209, 161, 0.2);
+        }
+
+        .quiz-option:active {
+            transform: translateY(0);
+        }
+
+        .home-logo {
+            height: 40px;
+            width: auto;
+            max-width: 200px;
+        }
+
+        /* Mobile responsive */
+        @media only screen and (max-width: 600px) {
+            .home-logo {
+                height: 32px;
+            }
+
+            .quiz-option:hover {
+                transform: none; /* Disable hover transform on mobile */
+            }
+        }
+      `}</style>
+      
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 py-4">
