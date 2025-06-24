@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Home, Mail, ArrowRight, Check, Users, Star, Loader } from 'lucide-react';
+import { ChevronRight, Home, Mail, ArrowRight, Check, Users, Star, Loader, ChevronLeft } from 'lucide-react';
 
 const HOMEQuizMVP = () => {
   const [currentStep, setCurrentStep] = useState('landing');
@@ -216,6 +216,22 @@ const HOMEQuizMVP = () => {
     }
   };
 
+  const handleBack = () => {
+    const currentIndex = questions.findIndex(q => q.id === currentStep);
+    if (currentIndex > 0) {
+      const previousQuestion = questions[currentIndex - 1];
+      setCurrentStep(previousQuestion.id);
+      
+      // Remove the current question's response
+      const newResponses = { ...responses };
+      delete newResponses[currentStep];
+      setResponses(newResponses);
+    } else {
+      setCurrentStep('landing');
+      setResponses({});
+    }
+  };
+
   const handleEmailSubmit = async () => {
     if (!email) return;
     
@@ -246,76 +262,73 @@ const HOMEQuizMVP = () => {
 
   if (currentStep === 'landing') {
     return (
-      <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100">
-          <div className="max-w-6xl mx-auto px-4 py-4">
+      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-4xl mx-auto px-6 py-4">
             <div className="flex items-center">
-              <Home className="w-8 h-8 text-blue-600 mr-3" />
-              <span className="text-2xl font-bold text-gray-900">HOME</span>
-              <span className="text-sm text-gray-500 ml-2">for Music</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
+                <Home className="w-6 h-6 text-white font-bold" />
+              </div>
+              <div>
+                <span className="text-2xl font-bold text-gray-900">HOME</span>
+                <span className="text-sm text-gray-500 ml-2">for Music</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+        {/* Hero Section */}
+        <div className="max-w-4xl mx-auto px-6 py-20">
+          <div className="text-center">
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Find Your Path on the<br />
-              <span className="text-blue-600">Music Creator Roadmap</span>
+              <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                Music Creator Roadmap
+              </span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Take our AI-powered quiz to discover your personalized pathway and get connected 
-              with Nashville's most supportive music community.
+            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+              2-minute AI quiz to discover your personalized pathway in the music industry
             </p>
             
-            <div className="flex items-center justify-center mb-8">
-              <div className="flex text-yellow-400 mr-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-current" />
-                ))}
+            {/* Simple value props */}
+            <div className="flex items-center justify-center gap-8 mb-12 text-sm text-gray-600">
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                AI-Powered Results
               </div>
-              <span className="text-gray-600">Trusted by 1,000+ music creators</span>
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                Nashville Community
+              </div>
+              <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                Personalized Roadmap
+              </div>
             </div>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="text-center p-6 bg-blue-50 rounded-xl">
-              <div className="text-3xl mb-4">🎯</div>
-              <h3 className="text-xl font-semibold mb-3">AI-Powered Personalization</h3>
-              <p className="text-gray-600">Get a custom pathway based on your unique goals, experience, and creative focus.</p>
-            </div>
-            <div className="text-center p-6 bg-blue-50 rounded-xl">
-              <div className="text-3xl mb-4">🏡</div>
-              <h3 className="text-xl font-semibold mb-3">Nashville Community</h3>
-              <p className="text-gray-600">Connect with Music City's top talent and join our supportive creator community.</p>
-            </div>
-            <div className="text-center p-6 bg-blue-50 rounded-xl">
-              <div className="text-3xl mb-4">📈</div>
-              <h3 className="text-xl font-semibold mb-3">Business Growth</h3>
-              <p className="text-gray-600">Learn to turn your passion into a sustainable, profitable music career.</p>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 rounded-2xl p-8 mb-12 text-center">
-            <p className="text-lg text-gray-700 mb-4 italic">
-              "HOME is amazing no matter what kind of role you play in the music industry. 
-              It's rehearsal space, multiple recording studios, a content making palace, 
-              and better than a masterclass subscription rolled into one🤘🏻"
-            </p>
-            <div className="text-sm text-gray-600">
-              — Nolan Brown, Music City Mayhem Competition Winner
-            </div>
-          </div>
-
-          <div className="text-center">
+            {/* CTA */}
             <button 
               onClick={() => setCurrentStep(questions[0].id)}
-              className="btn-primary inline-flex items-center"
+              className="text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90"
+              style={{ backgroundColor: '#B91372' }}
             >
-              Start Your Roadmap Quiz
+              Start Your Quiz
               <ChevronRight className="w-5 h-5 ml-2" />
             </button>
             <p className="text-sm text-gray-500 mt-4">Takes 2 minutes • Completely free</p>
+
+            {/* Social proof */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <div className="flex items-center justify-center text-sm text-gray-500">
+                <div className="flex text-yellow-400 mr-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                Trusted by 1,000+ music creators
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -324,10 +337,10 @@ const HOMEQuizMVP = () => {
 
   if (currentStep === 'generating') {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <div className="max-w-md mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
-            <Loader className="w-8 h-8 text-blue-600 animate-spin" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
+            <Loader className="w-8 h-8 text-white animate-spin" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Creating Your Personal Roadmap</h2>
           <p className="text-gray-600 mb-8">
@@ -336,7 +349,8 @@ const HOMEQuizMVP = () => {
           {aiResult && (
             <button 
               onClick={() => setCurrentStep('result')}
-              className="btn-primary"
+              className="text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 hover:opacity-90"
+              style={{ backgroundColor: '#B91372' }}
             >
               View Your Results
             </button>
@@ -348,48 +362,55 @@ const HOMEQuizMVP = () => {
 
   if (currentStep === 'result' && aiResult) {
     return (
-      <div className="min-h-screen bg-white">
-        <div className="bg-white border-b border-gray-100">
-          <div className="max-w-6xl mx-auto px-4 py-4">
+      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-4xl mx-auto px-6 py-4">
             <div className="flex items-center">
-              <Home className="w-8 h-8 text-blue-600 mr-3" />
-              <span className="text-2xl font-bold text-gray-900">HOME</span>
-              <span className="text-sm text-gray-500 ml-2">for Music</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
+                <Home className="w-6 h-6 text-white font-bold" />
+              </div>
+              <div>
+                <span className="text-2xl font-bold text-gray-900">HOME</span>
+                <span className="text-sm text-gray-500 ml-2">for Music</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          {/* Results Header */}
           <div className="text-center mb-12">
             <div className="text-6xl mb-4">{aiResult.icon}</div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">{aiResult.description}</p>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">{aiResult.description}</p>
             {aiResult.isPersonalized === false && (
-              <p className="text-sm text-blue-600 mt-2">*Personalized with AI recommendations coming soon</p>
+              <p className="text-sm mt-2" style={{ color: '#1DD1A1' }}>*Personalized with AI recommendations coming soon</p>
             )}
           </div>
           
+          {/* Pathway Details */}
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="bg-blue-50 rounded-xl p-8">
+            <div className="rounded-2xl p-8 border shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)', borderColor: 'rgba(29, 209, 161, 0.2)' }}>
               <h3 className="text-2xl font-semibold text-gray-900 mb-6">Your Next Steps</h3>
               <div className="space-y-4">
                 {aiResult.nextSteps.map((step, index) => (
                   <div key={index} className="flex items-start">
-                    <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-1 flex-shrink-0">
+                    <div className="w-6 h-6 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 mt-1 flex-shrink-0" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
                       {index + 1}
                     </div>
-                    <span className="text-gray-700">{step}</span>
+                    <span className="text-gray-700 leading-relaxed">{step}</span>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="bg-gray-50 rounded-xl p-8">
+            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200 shadow-sm">
               <h3 className="text-2xl font-semibold text-gray-900 mb-6">Recommended Resources</h3>
               <div className="space-y-3">
                 {aiResult.resources.map((resource, index) => (
                   <div key={index} className="flex items-center">
-                    <Check className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" />
+                    <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
                     <span className="text-gray-700">{resource}</span>
                   </div>
                 ))}
@@ -397,31 +418,33 @@ const HOMEQuizMVP = () => {
             </div>
           </div>
 
-          <div className="bg-blue-600 rounded-xl p-8 text-white text-center mb-12">
+          {/* HOME Connection */}
+          <div className="rounded-2xl p-8 text-white text-center mb-12 shadow-lg" style={{ background: 'linear-gradient(135deg, #B91372 0%, #1DD1A1 100%)' }}>
             <h3 className="text-2xl font-semibold mb-4">How HOME Can Help</h3>
-            <p className="text-blue-100 text-lg mb-6">{aiResult.homeConnection}</p>
+            <p className="text-white/90 text-lg mb-6 leading-relaxed">{aiResult.homeConnection}</p>
             <div className="flex items-center justify-center">
               <Users className="w-6 h-6 mr-2" />
               <span>Join 1,000+ creators in our community</span>
             </div>
           </div>
           
-          <div className="bg-gray-50 rounded-xl p-8 text-center">
+          {/* Webinar CTA */}
+          <div className="bg-gray-50 rounded-2xl p-8 text-center border border-gray-200 shadow-sm">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Your Complete Roadmap</h3>
-            <p className="text-gray-600 mb-6">
-              Join our monthly <strong>"Find Your Path on the Music Creator Roadmap"</strong> webinar and receive:
+            <p className="text-gray-600 mb-8">
+              Join our monthly <strong style={{ color: '#B91372' }}>"Find Your Path on the Music Creator Roadmap"</strong> webinar
             </p>
             
             <div className="grid md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">Music Creator Roadmap Course</h4>
                 <p className="text-gray-600 text-sm">9-module course ($299 value)</p>
               </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">Artist Branding Playbook</h4>
                 <p className="text-gray-600 text-sm">FREE bonus for 24-hour enrollees</p>
               </div>
-              <div className="bg-white rounded-lg p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">HOME Community Access</h4>
                 <p className="text-gray-600 text-sm">Connect with Nashville's top talent</p>
               </div>
@@ -434,12 +457,14 @@ const HOMEQuizMVP = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email for webinar access"
-                  className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-3 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent"
+                  style={{ focusRingColor: '#1DD1A1' }}
                 />
                 <button
                   onClick={handleEmailSubmit}
                   disabled={!email || isSubmitting}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg transition-all duration-300 flex items-center"
+                  className="text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 flex items-center disabled:opacity-50 hover:opacity-90"
+                  style={{ backgroundColor: '#B91372' }}
                 >
                   {isSubmitting ? <Loader className="w-5 h-5 animate-spin" /> : <Mail className="w-5 h-5" />}
                 </button>
@@ -454,17 +479,17 @@ const HOMEQuizMVP = () => {
 
   if (currentStep === 'complete') {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-6">
-            <Check className="w-10 h-10 text-blue-600" />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
+            <Check className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Welcome to the HOME Community! 🏡</h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
             Check your email for your webinar invitation and complete roadmap. 
             We're excited to support your journey as a music creator!
           </p>
-          <div className="bg-blue-50 rounded-xl p-6 mb-8">
+          <div className="rounded-2xl p-6 mb-8 border shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)', borderColor: 'rgba(29, 209, 161, 0.2)' }}>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">What happens next?</h3>
             <div className="text-left space-y-2 text-gray-700">
               <p>✓ You'll receive pathway-specific emails over the next 5-7 days</p>
@@ -479,7 +504,8 @@ const HOMEQuizMVP = () => {
               setAiResult(null);
               setEmail('');
             }}
-            className="btn-primary"
+            className="text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 hover:opacity-90"
+            style={{ backgroundColor: '#B91372' }}
           >
             Take Quiz Again
           </button>
@@ -496,23 +522,43 @@ const HOMEQuizMVP = () => {
   const progress = ((currentIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 py-4">
+    <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center">
-            <Home className="w-8 h-8 text-blue-600 mr-3" />
-            <span className="text-2xl font-bold text-gray-900">HOME</span>
-            <span className="text-sm text-gray-500 ml-2">for Music</span>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
+              <Home className="w-6 h-6 text-white font-bold" />
+            </div>
+            <div>
+              <span className="text-2xl font-bold text-gray-900">HOME</span>
+              <span className="text-sm text-gray-500 ml-2">for Music</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-16">
+      <div className="max-w-3xl mx-auto px-6 py-16">
+        {/* Back Button */}
+        <div className="mb-8">
+          <button
+            onClick={handleBack}
+            className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 group"
+          >
+            <ChevronLeft className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform duration-200" />
+            Back
+          </button>
+        </div>
+
+        {/* Progress Bar */}
         <div className="mb-12">
-          <div className="progress-bar">
+          <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="progress-fill"
-              style={{ width: `${progress}%` }}
+              className="h-2 rounded-full transition-all duration-500"
+              style={{ 
+                width: `${progress}%`,
+                background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)'
+              }}
             ></div>
           </div>
           <p className="text-gray-500 text-center mt-3 text-sm">
@@ -520,8 +566,9 @@ const HOMEQuizMVP = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        {/* Question */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center leading-tight">
             {currentQuestion.question}
           </h2>
           
@@ -530,13 +577,27 @@ const HOMEQuizMVP = () => {
               <button
                 key={option.value}
                 onClick={() => handleResponse(currentQuestion.id, option.value)}
-                className="quiz-option"
+                className="w-full p-6 text-left bg-gray-50 rounded-xl transition-all duration-300 border border-gray-200 group cursor-pointer hover:shadow-md"
+                style={{
+                  ':hover': {
+                    background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)',
+                    borderColor: '#1DD1A1'
+                  }
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)';
+                  e.target.style.borderColor = '#1DD1A1';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#e5e7eb';
+                }}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-900 group-hover:text-blue-900 transition-colors duration-300">
+                  <span className="text-gray-900 transition-colors duration-300 leading-relaxed">
                     {option.label}
                   </span>
-                  <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                  <ArrowRight className="w-5 h-5 text-gray-400 group-hover:opacity-100 transition-all duration-300" style={{ color: '#1DD1A1' }} />
                 </div>
               </button>
             ))}
