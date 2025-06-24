@@ -565,15 +565,20 @@ const HOMEQuizMVP = () => {
         }
 
         .home-logo {
-            height: 40px;
+            height: 35px;
             width: auto;
-            max-width: 200px;
+            max-width: 150px;
+            max-height: 35px;
+            object-fit: contain;
+            display: block;
         }
 
         /* Mobile responsive */
         @media only screen and (max-width: 600px) {
             .home-logo {
-                height: 32px;
+                height: 30px;
+                max-height: 30px;
+                max-width: 120px;
             }
 
             .quiz-option:hover {
