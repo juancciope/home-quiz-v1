@@ -211,8 +211,8 @@ const HOMEQuizMVP = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentStep(questions[currentIndex + 1].id);
     } else {
-      generateAIResult(newResponses);
-      setCurrentStep('generating');
+      // After last question, go to email capture instead of generating
+      setCurrentStep('email-capture');
     }
   };
 
@@ -233,31 +233,57 @@ const HOMEQuizMVP = () => {
   };
 
   const handleEmailSubmit = async () => {
-    if (!email) return;
+    if (!email || isSubmitting) return;
     
     setIsSubmitting(true);
     
     try {
-      await fetch('/api/submit-lead', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          pathway: aiResult?.title,
-          responses,
-          source: 'music-creator-roadmap-quiz'
-        })
-      });
+      // First, generate the AI results
+      console.log('🤖 Generating AI results...');
+      await generateAIResult(responses);
       
-      setCurrentStep('complete');
+      // Wait a moment to ensure aiResult is set
+      setTimeout(async () => {
+        try {
+          // Then submit to GHL with results
+          console.log('📧 Submitting to GHL with results...');
+          await fetch('/api/submit-lead', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              pathway: aiResult?.title,
+              responses,
+              source: 'music-creator-roadmap-quiz',
+              results: {
+                pathway_title: aiResult?.title,
+                pathway_description: aiResult?.description,
+                pathway_icon: aiResult?.icon,
+                home_connection: aiResult?.homeConnection,
+                next_steps: aiResult?.nextSteps,
+                recommended_resources: aiResult?.resources,
+                is_personalized: aiResult?.isPersonalized
+              }
+            })
+          });
+          
+          console.log('✅ Successfully submitted to GHL');
+          setCurrentStep('results');
+        } catch (error) {
+          console.error('Error submitting to GHL:', error);
+          setCurrentStep('results'); // Still show results even if GHL fails
+        }
+        
+        setIsSubmitting(false);
+      }, 1500); // Give time for AI result to be set
+      
     } catch (error) {
-      console.error('Error submitting lead:', error);
-      setCurrentStep('complete');
+      console.error('Error in email submit process:', error);
+      setIsSubmitting(false);
+      setCurrentStep('results'); // Show results anyway
     }
-    
-    setIsSubmitting(false);
   };
 
   if (currentStep === 'landing') {
@@ -334,14 +360,13 @@ const HOMEQuizMVP = () => {
       </div>
     );
   }
-//test
-  // Email capture step - SIMPLIFIED VERSION
+
+  // Email capture step
   if (currentStep === 'email-capture') {
-    console.log('🎯 Rendering email capture step');
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">Your Personalized Roadmap is Ready!</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">Get Your Personalized Roadmap!</h1>
           <p className="text-xl text-gray-600 mb-8">
             Enter your email to receive your AI-generated pathway with personalized recommendations.
           </p>
@@ -358,63 +383,113 @@ const HOMEQuizMVP = () => {
               <button
                 onClick={handleEmailSubmit}
                 disabled={!email || isSubmitting}
-                className="w-full text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 hover:opacity-90 text-lg"
+                className="w-full text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 hover:opacity-90 text-lg flex items-center justify-center"
                 style={{ backgroundColor: '#B91372' }}
               >
-                {isSubmitting ? 'Generating Your Results...' : 'Get My Results'}
+                {isSubmitting ? (
+                  <>
+                    <Loader className="w-5 h-5 mr-2 animate-spin" />
+                    Generating Your Results...
+                  </>
+                ) : (
+                  'Get My Results'
+                )}
               </button>
             </div>
             <p className="text-sm text-gray-500">We'll send your results instantly. No spam, ever.</p>
-          </div>
-
-          {/* Debug info */}
-          <div className="mt-8 p-4 bg-gray-100 rounded text-left text-sm">
-            <strong>Debug Info:</strong>
-            <br />Current Step: {currentStep}
-            <br />Email: {email}
-            <br />Responses: {Object.keys(responses).length} questions answered
-            <br />Questions: {JSON.stringify(Object.keys(responses))}
           </div>
         </div>
       </div>
     );
   }
 
-  // Remove the old results page - we're sending results via email now
-
-  if (currentStep === 'complete') {
+  // Results page
+  if (currentStep === 'results' && aiResult) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}>
-            <Check className="w-10 h-10 text-white" />
+      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-200">
+          <div className="max-w-4xl mx-auto px-6 py-4">
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
+                <Home className="w-6 h-6 text-white font-bold" />
+              </div>
+              <div>
+                <span className="text-2xl font-bold text-gray-900">HOME</span>
+                <span className="text-sm text-gray-500 ml-2">for Music</span>
+              </div>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Check Your Email! 📧</h1>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Your personalized Music Creator Roadmap has been sent to <strong>{email}</strong>
-          </p>
-          
-          <div className="rounded-2xl p-6 mb-8 border shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)', borderColor: 'rgba(29, 209, 161, 0.2)' }}>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">What's in your email:</h3>
-            <div className="text-left space-y-2 text-gray-700">
-              <p>✓ Your personalized pathway with AI-generated insights</p>
-              <p>✓ Specific next steps tailored to your responses</p>
-              <p>✓ Recommended resources for your journey</p>
-              <p>✓ Exclusive webinar invitation ($299 course access)</p>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          {/* Results Header */}
+          <div className="text-center mb-12">
+            <div className="text-6xl mb-4">{aiResult.icon}</div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
+            <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+              {aiResult.description}
+            </p>
+            {aiResult.isPersonalized && (
+              <div className="inline-flex items-center mt-4 px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)', color: '#B91372' }}>
+                <Star className="w-4 h-4 mr-2" />
+                AI-Personalized for You
+              </div>
+            )}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Next Steps */}
+            <div className="bg-gray-50 rounded-2xl p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <ArrowRight className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
+                Your Next Steps
+              </h3>
+              <div className="space-y-4">
+                {aiResult.nextSteps.map((step, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
+                      {index + 1}
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Resources */}
+            <div className="bg-gray-50 rounded-2xl p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <Users className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
+                Recommended Resources
+              </h3>
+              <div className="space-y-3">
+                {aiResult.resources.map((resource, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#1DD1A1' }}></div>
+                    <p className="text-gray-700">{resource}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="text-center">
-            <p className="text-gray-600 mb-6">Don't see the email? Check your spam folder or try another email address.</p>
+          {/* HOME Connection */}
+          <div className="rounded-2xl p-8 text-center" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)' }}>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">How HOME Supports Your Journey</h3>
+            <p className="text-gray-700 leading-relaxed text-lg max-w-3xl mx-auto">
+              {aiResult.homeConnection}
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-12">
+            <p className="text-gray-600 mb-6">Ready to accelerate your music career?</p>
             <button 
-              onClick={() => {
-                setCurrentStep('email-capture');
-                setEmail('');
-              }}
-              className="text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 hover:opacity-90 mr-4"
+              className="text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:opacity-90 mr-4"
               style={{ backgroundColor: '#B91372' }}
             >
-              Try Different Email
+              Join HOME Community
             </button>
             <button 
               onClick={() => {
@@ -423,17 +498,24 @@ const HOMEQuizMVP = () => {
                 setAiResult(null);
                 setEmail('');
               }}
-              className="text-gray-600 hover:text-gray-900 font-semibold py-3 px-6 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
+              className="text-gray-600 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
             >
               Take Quiz Again
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          {/* Social Proof */}
-          <div className="mt-12 pt-8 border-t border-gray-200">
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">Welcome to the HOME Community! 🏡</h4>
-            <p className="text-gray-600">You're now part of Nashville's most supportive music creator community. We're excited to support your journey!</p>
-          </div>
+  // Loading state while generating results
+  if (currentStep === 'results' && isSubmitting) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="text-center">
+          <Loader className="w-16 h-16 animate-spin mx-auto mb-4" style={{ color: '#B91372' }} />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Personalized Roadmap</h2>
+          <p className="text-gray-600">Our AI is analyzing your responses...</p>
         </div>
       </div>
     );
