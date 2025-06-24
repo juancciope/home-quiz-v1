@@ -140,6 +140,8 @@ const HOMEQuizMVP = () => {
       
       const result = await response.json();
       setAiResult(result);
+      setIsGenerating(false);
+      return result; // Return the result so we can use it immediately
       
     } catch (error) {
       console.error('Error generating pathway:', error);
@@ -148,15 +150,19 @@ const HOMEQuizMVP = () => {
       const template = pathwayTemplates[pathwayKey];
       
       const fallbackResult = {
-        ...template,
+        title: template.title,
         description: `${template.baseDescription} Based on your responses, this path aligns with your goals and current stage.`,
+        icon: template.icon,
+        nextSteps: template.nextSteps,
+        resources: template.resources,
+        homeConnection: template.homeConnection,
         isPersonalized: false
       };
       
       setAiResult(fallbackResult);
+      setIsGenerating(false);
+      return fallbackResult; // Return fallback result too
     }
-    
-    setIsGenerating(false);
   };
 
   const determinePathwayFallback = (responses) => {
@@ -238,52 +244,66 @@ const HOMEQuizMVP = () => {
     setIsSubmitting(true);
     
     try {
-      // First, generate the AI results
-      console.log('🤖 Generating AI results...');
-      await generateAIResult(responses);
+      // Generate AI results and get the result directly
+      console.log('🤖 Generating AI results for responses:', responses);
+      const generatedResult = await generateAIResult(responses);
       
-      // Wait a moment to ensure aiResult is set
-      setTimeout(async () => {
-        try {
-          // Then submit to GHL with results
-          console.log('📧 Submitting to GHL with results...');
-          await fetch('/api/submit-lead', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              pathway: aiResult?.title,
-              responses,
-              source: 'music-creator-roadmap-quiz',
-              results: {
-                pathway_title: aiResult?.title,
-                pathway_description: aiResult?.description,
-                pathway_icon: aiResult?.icon,
-                home_connection: aiResult?.homeConnection,
-                next_steps: aiResult?.nextSteps,
-                recommended_resources: aiResult?.resources,
-                is_personalized: aiResult?.isPersonalized
-              }
-            })
-          });
-          
-          console.log('✅ Successfully submitted to GHL');
-          setCurrentStep('results');
-        } catch (error) {
-          console.error('Error submitting to GHL:', error);
-          setCurrentStep('results'); // Still show results even if GHL fails
+      console.log('✅ Generated result:', {
+        title: generatedResult?.title,
+        description: generatedResult?.description?.substring(0, 100) + '...',
+        hasNextSteps: !!generatedResult?.nextSteps?.length,
+        nextStepsCount: generatedResult?.nextSteps?.length,
+        hasResources: !!generatedResult?.resources?.length,
+        resourcesCount: generatedResult?.resources?.length,
+        isPersonalized: generatedResult?.isPersonalized,
+        fullResult: generatedResult
+      });
+      
+      // Now submit to GHL with the actual results
+      console.log('📧 Submitting to GHL with results...');
+      const submitPayload = {
+        email,
+        pathway: generatedResult?.title,
+        responses,
+        source: 'music-creator-roadmap-quiz',
+        results: {
+          pathway_title: generatedResult?.title,
+          pathway_description: generatedResult?.description,
+          pathway_icon: generatedResult?.icon,
+          home_connection: generatedResult?.homeConnection,
+          next_steps: generatedResult?.nextSteps,
+          recommended_resources: generatedResult?.resources,
+          is_personalized: generatedResult?.isPersonalized
         }
-        
-        setIsSubmitting(false);
-      }, 1500); // Give time for AI result to be set
+      };
+      
+      console.log('📤 Payload being sent to GHL:', {
+        email: submitPayload.email,
+        pathway: submitPayload.pathway,
+        resultsKeys: Object.keys(submitPayload.results),
+        nextStepsLength: submitPayload.results.next_steps?.length,
+        resourcesLength: submitPayload.results.recommended_resources?.length
+      });
+      
+      const submitResponse = await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitPayload)
+      });
+      
+      const submitResult = await submitResponse.json();
+      console.log('✅ Submit result:', submitResult);
+      
+      setCurrentStep('results');
       
     } catch (error) {
       console.error('Error in email submit process:', error);
-      setIsSubmitting(false);
       setCurrentStep('results'); // Show results anyway
     }
+    
+    setIsSubmitting(false);
   };
 
   if (currentStep === 'landing') {
