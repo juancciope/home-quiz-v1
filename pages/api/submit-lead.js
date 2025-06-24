@@ -41,15 +41,16 @@ export default async function handler(req, res) {
       tags: [
         'quiz-completed',
         `pathway-${(pathway || 'unknown').toLowerCase().replace(/\s+/g, '-').replace('the-', '')}`,
-        `stage-${responses?.['stage-level'] || 'unknown'}`
+        `stage-${responses?.['current-stage'] || 'unknown'}`,
+        `challenge-${responses?.['biggest-challenge'] || 'unknown'}`.substring(0, 30) // Limit tag length
       ],
       custom_fields: {
         // Original quiz responses
         motivation: responses?.motivation || '',
         ideal_day: responses?.['ideal-day'] || '',
         success_vision: responses?.['success-vision'] || '',
-        stage_level: responses?.['stage-level'] || '',
-        resource_priority: responses?.['resources-priority'] || '',
+        current_stage: responses?.['current-stage'] || '',
+        biggest_challenge: responses?.['biggest-challenge'] || '',
         quiz_completed_date: new Date().toISOString(),
         
         // Results data for personalized emails
