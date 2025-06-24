@@ -604,24 +604,10 @@ const HOMEQuizMVP = () => {
               <button
                 key={option.value}
                 onClick={() => handleResponse(currentQuestion.id, option.value)}
-                className="w-full p-6 text-left bg-gray-50 rounded-xl transition-all duration-300 border border-gray-200 group cursor-pointer hover:shadow-md"
-                style={{
-                  ':hover': {
-                    background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)',
-                    borderColor: '#1DD1A1'
-                  }
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)';
-                  e.target.style.borderColor = '#1DD1A1';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = '#f9fafb';
-                  e.target.style.borderColor = '#e5e7eb';
-                }}
+                className="quiz-option w-full p-6 text-left rounded-xl border border-gray-200 group cursor-pointer"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-900 transition-colors duration-300 leading-relaxed">
+                  <span className="text-gray-900 leading-relaxed">
                     {option.label}
                   </span>
                   <ArrowRight className="w-5 h-5 text-gray-400 group-hover:opacity-100 transition-all duration-300" style={{ color: '#1DD1A1' }} />
