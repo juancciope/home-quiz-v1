@@ -335,101 +335,45 @@ const HOMEQuizMVP = () => {
     );
   }
 
-  // Email capture step
+  // Email capture step - SIMPLIFIED VERSION
   if (currentStep === 'email-capture') {
+    console.log('🎯 Rendering email capture step');
     return (
-      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6 py-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
-                <Home className="w-6 h-6 text-white font-bold" />
-              </div>
-              <div>
-                <span className="text-2xl font-bold text-gray-900">HOME</span>
-                <span className="text-sm text-gray-500 ml-2">for Music</span>
-              </div>
+      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="max-w-2xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">Your Personalized Roadmap is Ready!</h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Enter your email to receive your AI-generated pathway with personalized recommendations.
+          </p>
+
+          <div className="bg-white border-2 rounded-2xl p-8 shadow-sm" style={{ borderColor: '#1DD1A1' }}>
+            <div className="mb-6">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                className="w-full px-4 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent text-lg mb-4"
+              />
+              <button
+                onClick={handleEmailSubmit}
+                disabled={!email || isSubmitting}
+                className="w-full text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 hover:opacity-90 text-lg"
+                style={{ backgroundColor: '#B91372' }}
+              >
+                {isSubmitting ? 'Generating Your Results...' : 'Get My Results'}
+              </button>
             </div>
+            <p className="text-sm text-gray-500">We'll send your results instantly. No spam, ever.</p>
           </div>
-        </div>
 
-        <div className="max-w-2xl mx-auto px-6 py-20">
-          <div className="text-center">
-            <div className="text-6xl mb-6">🎯</div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-6">Your Personalized Roadmap is Ready!</h1>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Get your AI-generated pathway with personalized next steps, recommended resources, and exclusive access to HOME's community.
-            </p>
-
-            {/* Benefits */}
-            <div className="bg-gray-50 rounded-2xl p-8 mb-8 text-left">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">You'll receive:</h3>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
-                  <span className="text-gray-700">Your personalized music creator pathway</span>
-                </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
-                  <span className="text-gray-700">Specific next steps tailored to your goals</span>
-                </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
-                  <span className="text-gray-700">Curated resources and tools for your journey</span>
-                </div>
-                <div className="flex items-center">
-                  <Check className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#1DD1A1' }} />
-                  <span className="text-gray-700">Invitation to monthly HOME webinar ($299 course access)</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Email Form */}
-            <div className="bg-white border-2 rounded-2xl p-8 shadow-sm" style={{ borderColor: '#1DD1A1' }}>
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">Enter your email to get your results:</h3>
-              <div className="flex gap-3 mb-4">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  className="flex-1 px-4 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent text-lg"
-                  style={{ focusRingColor: '#1DD1A1' }}
-                />
-                <button
-                  onClick={handleEmailSubmit}
-                  disabled={!email || isSubmitting}
-                  className="text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 flex items-center disabled:opacity-50 hover:opacity-90 text-lg"
-                  style={{ backgroundColor: '#B91372' }}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader className="w-5 h-5 animate-spin mr-2" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      Get My Results
-                      <Mail className="w-5 h-5 ml-2" />
-                    </>
-                  )}
-                </button>
-              </div>
-              <p className="text-sm text-gray-500">We'll send your results instantly. No spam, ever.</p>
-            </div>
-
-            {/* Social Proof */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <div className="flex items-center justify-center text-sm text-gray-500">
-                <div className="flex text-yellow-400 mr-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                Join 1,000+ music creators who found their path with HOME
-              </div>
-            </div>
+          {/* Debug info */}
+          <div className="mt-8 p-4 bg-gray-100 rounded text-left text-sm">
+            <strong>Debug Info:</strong>
+            <br />Current Step: {currentStep}
+            <br />Email: {email}
+            <br />Responses: {Object.keys(responses).length} questions answered
+            <br />Questions: {JSON.stringify(Object.keys(responses))}
           </div>
         </div>
       </div>
