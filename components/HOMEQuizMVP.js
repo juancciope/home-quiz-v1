@@ -311,16 +311,16 @@ const HOMEQuizMVP = () => {
       <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6 py-2">
+          <div className="max-w-4xl mx-auto px-6 py-3">
             <div className="flex items-center">
               <img 
                 src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
                 alt="HOME for Music" 
                 style={{
-                  height: '100px',
+                  height: '60px',
                   width: 'auto',
-                  maxWidth: '150px',
-                  maxHeight: '35px',
+                  maxWidth: '250px',
+                  maxHeight: '60px',
                   objectFit: 'contain'
                 }}
               />
@@ -580,15 +580,19 @@ const HOMEQuizMVP = () => {
       
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-6 py-4">
+        <div className="max-w-4xl mx-auto px-6 py-3">
           <div className="flex items-center">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3" style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #1DD1A1 100%)' }}>
-              <Home className="w-6 h-6 text-white font-bold" />
-            </div>
-            <div>
-              <span className="text-2xl font-bold text-gray-900">HOME</span>
-              <span className="text-sm text-gray-500 ml-2">for Music</span>
-            </div>
+            <img 
+              src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
+              alt="HOME for Music" 
+              style={{
+                height: '60px',
+                width: 'auto',
+                maxWidth: '250px',
+                maxHeight: '60px',
+                objectFit: 'contain'
+              }}
+            />
           </div>
         </div>
       </div>
