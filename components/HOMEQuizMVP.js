@@ -334,7 +334,7 @@ const HOMEQuizMVP = () => {
       </div>
     );
   }
-
+//test
   // Email capture step - SIMPLIFIED VERSION
   if (currentStep === 'email-capture') {
     console.log('🎯 Rendering email capture step');
