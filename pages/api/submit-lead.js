@@ -11,7 +11,10 @@ export default async function handler(req, res) {
       pathway,
       hasResponses: !!responses,
       hasResults: !!results,
-      resultsKeys: results ? Object.keys(results) : []
+      resultsKeys: results ? Object.keys(results) : [],
+      nextStepsType: results?.customNextSteps ? 'customNextSteps (new format)' : results?.next_steps ? 'next_steps (old format)' : 'none',
+      nextStepsLength: (results?.customNextSteps || results?.next_steps)?.length || 0,
+      firstStepStructure: (results?.customNextSteps || results?.next_steps)?.[0]
     });
     
     // Validate required fields
@@ -23,6 +26,12 @@ export default async function handler(req, res) {
     const formatNextSteps = (steps) => {
       if (!steps || !Array.isArray(steps)) return '';
       
+      // Handle new OpenAI format with priority objects
+      if (steps.length > 0 && typeof steps[0] === 'object' && steps[0].step) {
+        return steps.map((stepObj, index) => `${stepObj.priority || index + 1}. ${stepObj.step}`).join('\n');
+      }
+      
+      // Handle legacy simple array format
       return steps.map((step, index) => `${index + 1}. ${step}`).join('\n');
     };
 
@@ -32,6 +41,17 @@ export default async function handler(req, res) {
       
       return resources.map(resource => `• ${resource}`).join('\n');
     };
+
+    // Debug formatted content
+    const formattedNextSteps = formatNextSteps(results?.customNextSteps || results?.next_steps);
+    const formattedResources = formatResources(results?.recommended_resources || results?.resources);
+    
+    console.log('🔧 Formatted content preview:', {
+      nextStepsPreview: formattedNextSteps.substring(0, 100) + '...',
+      resourcesPreview: formattedResources.substring(0, 100) + '...',
+      nextStepsLength: formattedNextSteps.length,
+      resourcesLength: formattedResources.length
+    });
 
     // Prepare comprehensive data for GHL
     const ghlData = {
@@ -60,19 +80,23 @@ export default async function handler(req, res) {
         home_connection: results?.home_connection || '',
         is_personalized: results?.is_personalized || false,
         
-        // Formatted content for email templates
-        next_steps_formatted: formatNextSteps(results?.next_steps),
-        recommended_resources_formatted: formatResources(results?.recommended_resources),
+        // Formatted content for email templates (these are the main ones used in email)
+        next_steps: formattedNextSteps,
+        recommended_resources: formattedResources,
+        
+        // Legacy formatted fields for backward compatibility
+        next_steps_formatted: formattedNextSteps,
+        recommended_resources_formatted: formattedResources,
         
         // Raw arrays for advanced email builders (JSON strings)
-        next_steps_array: JSON.stringify(results?.next_steps || []),
-        recommended_resources_array: JSON.stringify(results?.recommended_resources || []),
+        next_steps_array: JSON.stringify(results?.customNextSteps || results?.next_steps || []),
+        recommended_resources_array: JSON.stringify(results?.recommended_resources || results?.resources || []),
         
         // Individual next steps (for drag-and-drop email builders)
-        next_step_1: results?.next_steps?.[0] || '',
-        next_step_2: results?.next_steps?.[1] || '',
-        next_step_3: results?.next_steps?.[2] || '',
-        next_step_4: results?.next_steps?.[3] || '',
+        next_step_1: (results?.customNextSteps || results?.next_steps)?.[0]?.step || (results?.customNextSteps || results?.next_steps)?.[0] || '',
+        next_step_2: (results?.customNextSteps || results?.next_steps)?.[1]?.step || (results?.customNextSteps || results?.next_steps)?.[1] || '',
+        next_step_3: (results?.customNextSteps || results?.next_steps)?.[2]?.step || (results?.customNextSteps || results?.next_steps)?.[2] || '',
+        next_step_4: (results?.customNextSteps || results?.next_steps)?.[3]?.step || (results?.customNextSteps || results?.next_steps)?.[3] || '',
         
         // Individual resources
         resource_1: results?.recommended_resources?.[0] || '',
@@ -100,7 +124,7 @@ export default async function handler(req, res) {
       pathway: ghlData.pathway,
       tags: ghlData.tags,
       customFieldsCount: Object.keys(ghlData.custom_fields).length,
-      hasNextSteps: !!(results?.next_steps?.length),
+      hasNextSteps: !!(results?.customNextSteps?.length || results?.next_steps?.length),
       hasResources: !!(results?.recommended_resources?.length)
     });
 
