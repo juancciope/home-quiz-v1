@@ -311,12 +311,18 @@ const HOMEQuizMVP = () => {
       <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="max-w-4xl mx-auto px-6 py-2">
             <div className="flex items-center">
               <img 
                 src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
                 alt="HOME for Music" 
-                className="home-logo"
+                style={{
+                  height: '35px',
+                  width: 'auto',
+                  maxWidth: '150px',
+                  maxHeight: '35px',
+                  objectFit: 'contain'
+                }}
               />
             </div>
           </div>
@@ -564,23 +570,8 @@ const HOMEQuizMVP = () => {
             transform: translateY(0);
         }
 
-        .home-logo {
-            height: 35px;
-            width: auto;
-            max-width: 150px;
-            max-height: 35px;
-            object-fit: contain;
-            display: block;
-        }
-
         /* Mobile responsive */
         @media only screen and (max-width: 600px) {
-            .home-logo {
-                height: 30px;
-                max-height: 30px;
-                max-width: 120px;
-            }
-
             .quiz-option:hover {
                 transform: none; /* Disable hover transform on mobile */
             }
