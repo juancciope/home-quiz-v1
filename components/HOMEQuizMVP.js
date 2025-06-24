@@ -15,10 +15,9 @@ const HOMEQuizMVP = () => {
       question: "What drives your music career ambitions?",
       type: 'single',
       options: [
-        { value: 'stage-energy', label: 'The energy of live performance and connecting with audiences' },
-        { value: 'creative-expression', label: 'Artistic expression and building something uniquely mine' },
-        { value: 'behind-scenes', label: 'Creating music for others and collaborating with artists' },
-        { value: 'business-building', label: 'Building a sustainable music business and brand' }
+        { value: 'live-performance', label: 'The energy of a live audience and performing music from the stage' },
+        { value: 'artistic-expression', label: 'Artistic expression through recording music and building a loyal following online' },
+        { value: 'collaboration', label: 'Making great songs and collaborating with other talented creators' }
       ]
     },
     {
@@ -26,41 +25,39 @@ const HOMEQuizMVP = () => {
       question: "Describe your ideal workday as a music professional:",
       type: 'single',
       options: [
-        { value: 'performing', label: 'Rehearsing, soundchecking, and performing for live audiences' },
-        { value: 'creating-content', label: 'Writing, recording, and creating content for my brand' },
-        { value: 'studio-work', label: 'In the studio producing tracks and collaborating with other artists' },
-        { value: 'strategy-networking', label: 'Planning releases, networking, and growing my business' }
+        { value: 'performing-travel', label: 'Traveling to a new city to perform for a live audience' },
+        { value: 'releasing-music', label: 'Releasing a new song that you are really proud of' },
+        { value: 'writing-creating', label: 'Writing the best song that you have ever written' }
       ]
     },
     {
       id: 'success-vision',
-      question: "When you imagine success 3 years from now, you see yourself:",
+      question: "When you imagine success 5 years from now, you see yourself:",
       type: 'single',
       options: [
-        { value: 'touring-artist', label: 'Headlining tours and playing major venues with a dedicated fanbase' },
-        { value: 'creative-brand', label: 'Having multiple revenue streams from my creative work and personal brand' },
-        { value: 'in-demand-producer', label: 'Being the go-to producer/writer that artists seek out for collaborations' }
+        { value: 'touring-headliner', label: 'Headlining major tours and playing sold out shows around the world' },
+        { value: 'passive-income-artist', label: 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions' },
+        { value: 'hit-songwriter', label: 'Having multiple major hit songs that you collaborated on and earning \'mailbox money\' through sync placements and other royalty streams' }
       ]
     },
     {
-      id: 'stage-level',
-      question: "Which best describes your current stage in HOME's framework?",
+      id: 'current-stage',
+      question: "Which best describes your current stage?",
       type: 'single',
       options: [
         { value: 'planning', label: 'Planning Stage - Figuring out my path and building foundations' },
         { value: 'production', label: 'Production Stage - Actively creating and releasing work' },
-        { value: 'scale', label: 'Scale Stage - Ready to grow and expand my existing success' }
+        { value: 'scale', label: 'Scale Stage - Already making the majority of my income from music and looking to grow my business' }
       ]
     },
     {
-      id: 'resources-priority',
-      question: "What type of resources would most accelerate your career right now?",
+      id: 'biggest-challenge',
+      question: "What's the biggest thing holding your music journey back right now?",
       type: 'single',
       options: [
-        { value: 'performance-facilities', label: 'Rehearsal spaces, live sound equipment, and performance opportunities' },
-        { value: 'content-creation', label: 'Recording studios, video production, and content creation tools' },
-        { value: 'collaboration-network', label: 'Access to other creators, producers, and industry professionals' },
-        { value: 'business-mentorship', label: 'Business guidance, marketing strategy, and industry connections' }
+        { value: 'performance-opportunities', label: 'I need more opportunities to perform and grow my live audience' },
+        { value: 'brand-audience', label: 'I\'m creating great content, but struggle to build a consistent brand and online audience' },
+        { value: 'collaboration-income', label: 'I work behind the scenes, but need better access to collaborators, placements, and consistent income' }
       ]
     }
   ];
@@ -68,57 +65,63 @@ const HOMEQuizMVP = () => {
   const pathwayTemplates = {
     'touring-performer': {
       title: 'The Touring Performer Path',
-      baseDescription: 'Your energy comes alive on stage. You\'re built for the big venues, the tours, and creating unforgettable live experiences.',
+      baseDescription: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities.',
       icon: '🎤',
       nextSteps: [
-        'Build a powerful 45-60 minute setlist that showcases your range',
-        'Develop your stage presence through regular performance opportunities',
-        'Create a professional EPK to pitch to venues and booking agents',
-        'Network with booking professionals and venue owners in your scene'
+        'Priority 1: Build a compelling 45-60 minute setlist that showcases your range and gets audiences engaged',
+        'Priority 2: Book regular local shows to develop your stage presence and build a local fanbase',
+        'Priority 3: Create a professional EPK (Electronic Press Kit) to pitch to larger venues and booking agents',
+        'Priority 4: Connect with HOME\'s performance community and utilize our 24/7 rehearsal facilities to perfect your live show'
       ],
       resources: [
         'Rehearsal Facility Access (24/7 at HOME)',
         'Live Sound & Performance Equipment',
         'Stage Presence Coaching Sessions',
-        'Booking Strategy & Agent Connections'
+        'Booking Strategy & Agent Connections',
+        'Performance Opportunities at HOME Venue',
+        'Artist Community & Mentorship'
       ],
-      homeConnection: 'HOME\'s 250-capacity venue and rehearsal facilities provide the perfect environment to develop your live show.'
+      homeConnection: 'HOME\'s 250-capacity venue and 24/7 rehearsal facilities provide the perfect environment to develop your live show and connect with booking professionals.'
     },
     'creative-artist': {
-      title: 'The Creative Artist Path', 
-      baseDescription: 'You\'re driven by authentic self-expression and building multiple creative revenue streams through your artistry.',
+      title: 'The Creative Artist Path',
+      baseDescription: 'You\'re driven by artistic expression and building an authentic online following. Your priority is developing a consistent brand and sustainable revenue streams.',
       icon: '🎨',
       nextSteps: [
-        'Define your unique artistic voice and visual brand identity',
-        'Create a content strategy that showcases your creative process',
-        'Develop multiple revenue streams: streaming, merchandise, content',
-        'Build an authentic community around your art through storytelling'
+        'Priority 1: Define your unique artistic voice and visual brand identity that resonates with your target audience',
+        'Priority 2: Develop a consistent content strategy that showcases your music and creative process across platforms',
+        'Priority 3: Build multiple revenue streams through streaming, merchandise, fan subscriptions, and brand partnerships',
+        'Priority 4: Join HOME\'s artist community to collaborate and learn from other creative entrepreneurs'
       ],
       resources: [
         'Content Creation Studios & Equipment',
-        'Brand Development & Visual Design',
-        'Social Media Strategy & Management',
-        'Revenue Diversification Coaching'
+        'Brand Development & Visual Design Support',
+        'Social Media Strategy & Management Training',
+        'Revenue Diversification Workshops',
+        'Video Production & Editing Tools',
+        'Artist Community & Collaboration Network'
       ],
-      homeConnection: 'HOME\'s content creation facilities and collaborative artist community provide the tools to build your creative empire.'
+      homeConnection: 'HOME\'s content creation facilities and collaborative artist community provide the tools and connections to build your creative empire and sustainable income.'
     },
     'writer-producer': {
       title: 'The Writer-Producer Path',
-      baseDescription: 'You thrive behind the scenes, crafting the perfect sound for other artists and building a reputation for excellence.',
+      baseDescription: 'You excel at collaboration and creating music for others. Your priority is building industry connections and developing multiple income streams through your technical skills.',
       icon: '🎹',
       nextSteps: [
-        'Master your DAW and develop a signature production style',
-        'Build a diverse portfolio showcasing your range across genres',
-        'Network with artists, labels, and music supervisors',
-        'Learn the business side: publishing, sync licensing, contracts'
+        'Priority 1: Master your craft and develop a signature sound that makes you indispensable to artists and labels',
+        'Priority 2: Build a diverse portfolio showcasing your range across genres and collaboration styles',
+        'Priority 3: Network strategically with artists, labels, and music supervisors to secure consistent placements',
+        'Priority 4: Learn the business side including publishing, sync licensing, and contracts to maximize your earnings'
       ],
       resources: [
         'Professional Recording Studios (24/7 access)',
         'Industry-Standard Production Equipment',
         'Collaboration Network & Artist Connections',
-        'Music Business & Publishing Education'
+        'Music Business & Publishing Education',
+        'Sync Licensing & Placement Opportunities',
+        'A&R Program & Industry Connections'
       ],
-      homeConnection: 'HOME\'s professional studios and A&R program provide the perfect ecosystem for producers to create and collaborate.'
+      homeConnection: 'HOME\'s professional studios, A&R program, and producer community provide the perfect ecosystem for behind-the-scenes creators to build sustainable careers.'
     }
   };
 
