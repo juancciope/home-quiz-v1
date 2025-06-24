@@ -317,7 +317,7 @@ const HOMEQuizMVP = () => {
                 src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
                 alt="HOME for Music" 
                 style={{
-                  height: '35px',
+                  height: '100px',
                   width: 'auto',
                   maxWidth: '150px',
                   maxHeight: '35px',
