@@ -331,17 +331,17 @@ const HOMEQuizMVP = () => {
     return (
       <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="bg-white shadow-sm">
           <div className="max-w-4xl mx-auto px-6 py-4">
-            <div className="flex items-center">
+            <div className="flex items-center justify-center">
               <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
                 alt="HOME for Music" 
                 style={{
-                  height: '100px',
+                  height: '80px',
                   width: 'auto',
-                  maxWidth: '400px',
-                  maxHeight: '100px',
+                  maxWidth: '350px',
+                  maxHeight: '80px',
                   objectFit: 'contain'
                 }}
               />
@@ -350,20 +350,20 @@ const HOMEQuizMVP = () => {
         </div>
 
         {/* Hero Section */}
-        <div className="max-w-4xl mx-auto px-6 py-20">
+        <div className="max-w-4xl mx-auto px-6 hero-section" style={{ paddingTop: '80px', paddingBottom: '80px' }}>
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="hero-title text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Find Your Path on the<br />
               <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Music Creator Roadmap
               </span>
             </h1>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            <p className="hero-subtitle text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
               2-minute AI quiz to discover your personalized pathway in the music industry
             </p>
             
             {/* Simple value props */}
-            <div className="flex items-center justify-center gap-8 mb-12 text-sm text-gray-600">
+            <div className="hero-features flex items-center justify-center gap-8 mb-12 text-sm text-gray-600 flex-wrap">
               <div className="flex items-center">
                 <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
                 AI-Powered Results
@@ -379,15 +379,17 @@ const HOMEQuizMVP = () => {
             </div>
 
             {/* CTA */}
-            <button 
-              onClick={() => setCurrentStep(questions[0].id)}
-              className="text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90"
-              style={{ backgroundColor: '#B91372' }}
-            >
-              Start Your Quiz
-              <ChevronRight className="w-5 h-5 ml-2" />
-            </button>
-            <p className="text-sm text-gray-500 mt-4">Takes 2 minutes • Completely free</p>
+            <div className="hero-cta-section">
+              <button 
+                onClick={() => setCurrentStep(questions[0].id)}
+                className="text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90"
+                style={{ backgroundColor: '#B91372' }}
+              >
+                Start Your Quiz
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </button>
+              <p className="text-sm text-gray-500 mt-4">Takes 2 minutes • Completely free</p>
+            </div>
 
             {/* Social proof */}
             <div className="mt-12 pt-8 border-t border-gray-200">
@@ -598,21 +600,51 @@ const HOMEQuizMVP = () => {
             .quiz-option:hover {
                 transform: none; /* Disable hover transform on mobile */
             }
+
+            .hero-section {
+                padding: 40px 0 30px 0; /* Reduced from py-20 for mobile */
+            }
+
+            .hero-title {
+                font-size: 2.5rem; /* Smaller title on mobile */
+                line-height: 1.1;
+                margin-bottom: 1rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.125rem; /* Smaller subtitle */
+                margin-bottom: 2rem;
+            }
+
+            .hero-features {
+                margin-bottom: 2rem; /* Reduced margin */
+            }
+
+            .hero-cta-section {
+                margin-bottom: 1.5rem; /* Reduced margin */
+            }
+
+            .hero-features {
+                flex-direction: column;
+                gap: 0.5rem;
+                font-size: 0.875rem;
+                margin-bottom: 1.5rem;
+            }
         }
       `}</style>
       
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <img 
               src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
               alt="HOME for Music" 
               style={{
-                height: '100px',
+                height: '80px',
                 width: 'auto',
-                maxWidth: '400px',
-                maxHeight: '100px',
+                maxWidth: '350px',
+                maxHeight: '80px',
                 objectFit: 'contain'
               }}
             />
