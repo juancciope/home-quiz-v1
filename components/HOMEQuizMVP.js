@@ -359,23 +359,6 @@ const HOMEQuizMVP = () => {
               height: 100%;
           }
 
-          .quiz-option {
-              background-color: #f9fafb !important;
-              border-color: #e5e7eb !important;
-              transition: all 0.3s ease;
-          }
-
-          .quiz-option:hover {
-              background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%) !important;
-              border-color: #1DD1A1 !important;
-              transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(29, 209, 161, 0.2);
-          }
-
-          .quiz-option:active {
-              transform: translateY(0);
-          }
-
           @media only screen and (max-width: 600px) {
               .main-container {
                   min-height: 100vh;
@@ -387,10 +370,6 @@ const HOMEQuizMVP = () => {
                   overflow-x: hidden;
                   -webkit-overflow-scrolling: touch;
                   height: 100%;
-              }
-
-              .quiz-option:hover {
-                  transform: none;
               }
 
               .hero-section {
@@ -429,6 +408,11 @@ const HOMEQuizMVP = () => {
                   touch-action: manipulation;
                   -webkit-transform: translate3d(0,0,0);
                   transform: translate3d(0,0,0);
+              }
+
+              .bottom-logo {
+                  height: 60px !important;
+                  max-width: 250px !important;
               }
           }
         `}</style>
@@ -470,7 +454,7 @@ const HOMEQuizMVP = () => {
                   className="text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90"
                   style={{ backgroundColor: '#B91372' }}
                 >
-                  Start Your Quiz
+                  Find My Path
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </button>
                 <p className="text-sm text-gray-500 mt-4">Takes 2 minutes • Completely free</p>
@@ -481,18 +465,16 @@ const HOMEQuizMVP = () => {
           {/* Made by HOME Section */}
           <div className="max-w-4xl mx-auto px-6 pb-20">
             <div className="text-center">
-              {/* Made by HOME text */}
-              <p className="text-gray-600 text-lg mb-8">By</p>
-              
               {/* HOME logo */}
-              <div className="flex justify-center mb-8">
+              <div className="flex justify-center mb-6">
                 <img 
                   src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
                   alt="HOME for Music" 
+                  className="bottom-logo"
                   style={{
-                    height: '120px',
+                    height: '80px',
                     width: 'auto',
-                    maxWidth: '400px',
+                    maxWidth: '300px',
                     objectFit: 'contain'
                   }}
                 />
@@ -711,7 +693,22 @@ const HOMEQuizMVP = () => {
               <button
                 key={option.value}
                 onClick={() => handleResponse(currentQuestion.id, option.value)}
-                className="quiz-option w-full p-6 text-left rounded-xl border border-gray-200 group cursor-pointer"
+                className="w-full p-6 text-left rounded-xl border border-gray-200 group cursor-pointer transition-all duration-300 hover:shadow-md"
+                style={{
+                  backgroundColor: '#f9fafb'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)';
+                  e.target.style.borderColor = '#1DD1A1';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(29, 209, 161, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-gray-900 leading-relaxed">
