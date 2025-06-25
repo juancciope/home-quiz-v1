@@ -431,74 +431,76 @@ const HOMEQuizMVP = () => {
         `}</style>
         
         <div className="page-content">
-          {/* Hero Section */}
-          <div className="max-w-4xl mx-auto px-6" style={{ paddingTop: '60px', paddingBottom: '80px' }}>
-            <div className="text-center">
-              {/* Main heading group */}
-              <div className="mb-16 mobile-spacing-1">
-                <h1 className="hero-title text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                  Find Your Path on the<br />
-                  <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    Music Creator Roadmap
-                  </span>
-                </h1>
-                <p className="hero-subtitle text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                  2-minute AI quiz to discover your personalized pathway in the music industry
-                </p>
-                
-                {/* Value props - tighter spacing */}
-                <div className="hero-features flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                    AI-Powered Results
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                    Nashville Community
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                    Personalized Roadmap
+          {/* Hero Section - Centered */}
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="max-w-4xl mx-auto px-6 w-full">
+              <div className="text-center">
+                {/* Main heading group */}
+                <div className="mb-16 mobile-spacing-1">
+                  <h1 className="hero-title text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                    Find Your Path on the<br />
+                    <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                      Music Creator Roadmap
+                    </span>
+                  </h1>
+                  <p className="hero-subtitle text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    2-minute AI quiz to discover your personalized pathway in the music industry
+                  </p>
+                  
+                  {/* Value props - tighter spacing */}
+                  <div className="hero-features flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                      AI-Powered Results
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                      Nashville Community
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                      Personalized Roadmap
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* CTA Section - well grouped */}
-              <div className="mb-12 mobile-spacing-2">
-                <button 
-                  onClick={() => setCurrentStep(questions[0].id)}
-                  className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4"
-                  style={{ backgroundColor: '#B91372' }}
-                >
-                  Find My Path
-                  <ChevronRight className="w-5 h-5 ml-2" />
-                </button>
-                <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
-              </div>
-
-              {/* Footer branding section - no line, better spacing */}
-              <div className="pt-8 mobile-footer">
-                <div className="mb-6">
-                  <img 
-                    src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
-                    alt="HOME for Music" 
-                    className="bottom-logo mx-auto"
-                    style={{
-                      height: '70px',
-                      width: 'auto',
-                      maxWidth: '280px',
-                      objectFit: 'contain'
-                    }}
-                  />
+                {/* CTA Section - well grouped */}
+                <div className="mb-10 mobile-spacing-2">
+                  <button 
+                    onClick={() => setCurrentStep(questions[0].id)}
+                    className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4"
+                    style={{ backgroundColor: '#B91372' }}
+                  >
+                    Find My Path
+                    <ChevronRight className="w-5 h-5 ml-2" />
+                  </button>
+                  <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
                 </div>
-                
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <div className="flex text-yellow-400 mr-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
+
+                {/* Footer branding section - matching spacing */}
+                <div className="mobile-footer">
+                  <div className="mb-6">
+                    <img 
+                      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
+                      alt="HOME for Music" 
+                      className="bottom-logo mx-auto"
+                      style={{
+                        height: '70px',
+                        width: 'auto',
+                        maxWidth: '280px',
+                        objectFit: 'contain'
+                      }}
+                    />
                   </div>
-                  Trusted by 1,000+ music creators
+                  
+                  <div className="flex items-center justify-center text-sm text-gray-500">
+                    <div className="flex text-yellow-400 mr-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
+                    </div>
+                    Trusted by 1,000+ music creators
+                  </div>
                 </div>
               </div>
             </div>
