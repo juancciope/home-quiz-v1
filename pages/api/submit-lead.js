@@ -8,6 +8,19 @@ const CIRCLE_SPACE_ID = 2102224;
 const formatQuizResultsForCircle = (email, pathway, responses, results) => {
   const content = [];
   
+  // Add email address at the top
+  content.push({
+    "type": "paragraph",
+    "content": [
+      {
+        "type": "text",
+        "marks": [{ "type": "bold" }],
+        "text": `📧 Email: ${email}`,
+        "circle_ios_fallback_text": `Email: ${email}`
+      }
+    ]
+  });
+  
   // Add header with pathway info
   content.push({
     "type": "heading",
