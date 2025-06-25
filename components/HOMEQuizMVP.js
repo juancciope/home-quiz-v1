@@ -464,7 +464,7 @@ const HOMEQuizMVP = () => {
               </div>
 
               {/* CTA Section - well grouped */}
-              <div className="mb-20 mobile-spacing-2">
+              <div className="mb-12 mobile-spacing-2">
                 <button 
                   onClick={() => setCurrentStep(questions[0].id)}
                   className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4"
@@ -476,8 +476,8 @@ const HOMEQuizMVP = () => {
                 <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
               </div>
 
-              {/* Footer branding section - visually separated */}
-              <div className="border-t border-gray-100 pt-16 mobile-footer">
+              {/* Footer branding section - no line, better spacing */}
+              <div className="pt-8 mobile-footer">
                 <div className="mb-6">
                   <img 
                     src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
