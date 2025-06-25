@@ -434,25 +434,6 @@ const HOMEQuizMVP = () => {
         `}</style>
         
         <div className="page-content">
-          {/* Header */}
-          <div className="bg-white shadow-sm">
-            <div className="max-w-4xl mx-auto px-6 py-4">
-              <div className="flex items-center justify-center">
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
-                  alt="HOME for Music" 
-                  style={{
-                    height: '80px',
-                    width: 'auto',
-                    maxWidth: '350px',
-                    maxHeight: '80px',
-                    objectFit: 'contain'
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
           {/* Hero Section */}
           <div className="max-w-4xl mx-auto px-6 hero-section" style={{ paddingTop: '80px', paddingBottom: '60px' }}>
             <div className="text-center">
@@ -500,21 +481,11 @@ const HOMEQuizMVP = () => {
           {/* Made by HOME Section */}
           <div className="max-w-4xl mx-auto px-6 pb-20">
             <div className="text-center">
-              {/* Trust badge */}
-              <div className="flex items-center justify-center text-sm text-gray-500 mb-4">
-                <div className="flex text-yellow-400 mr-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                Trusted by 1,000+ music creators
-              </div>
-              
               {/* Made by HOME text */}
-              <p className="text-gray-600 text-lg mb-8">Made by HOME</p>
+              <p className="text-gray-600 text-lg mb-8">By</p>
               
               {/* HOME logo */}
-              <div className="flex justify-center">
+              <div className="flex justify-center mb-8">
                 <img 
                   src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
                   alt="HOME for Music" 
@@ -525,6 +496,16 @@ const HOMEQuizMVP = () => {
                     objectFit: 'contain'
                   }}
                 />
+              </div>
+              
+              {/* Trust badge */}
+              <div className="flex items-center justify-center text-sm text-gray-500">
+                <div className="flex text-yellow-400 mr-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+                Trusted by 1,000+ music creators
               </div>
             </div>
           </div>
@@ -580,25 +561,6 @@ const HOMEQuizMVP = () => {
     return (
       <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <div className="page-content">
-          {/* Header */}
-          <div className="bg-white shadow-sm">
-            <div className="max-w-4xl mx-auto px-6 py-4">
-              <div className="flex items-center justify-center">
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
-                  alt="HOME for Music" 
-                  style={{
-                    height: '80px',
-                    width: 'auto',
-                    maxWidth: '350px',
-                    maxHeight: '80px',
-                    objectFit: 'contain'
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
           <div className="max-w-4xl mx-auto px-6 py-16">
             {/* Results Header */}
             <div className="text-center mb-12">
@@ -710,25 +672,6 @@ const HOMEQuizMVP = () => {
 
   return (
     <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-center">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
-              alt="HOME for Music" 
-              style={{
-                height: '80px',
-                width: 'auto',
-                maxWidth: '350px',
-                maxHeight: '80px',
-                objectFit: 'contain'
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
       <div className="page-content max-w-3xl mx-auto px-6 py-16">
         {/* Back Button */}
         <div className="mb-8">
