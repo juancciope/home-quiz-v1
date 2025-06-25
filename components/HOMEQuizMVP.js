@@ -144,7 +144,7 @@ const HOMEQuizMVP = () => {
       const result = await response.json();
       setAiResult(result);
       setIsGenerating(false);
-      return result; // Return the result so we can use it immediately
+      return result;
       
     } catch (error) {
       console.error('Error generating pathway:', error);
@@ -168,7 +168,7 @@ const HOMEQuizMVP = () => {
       
       setAiResult(fallbackResult);
       setIsGenerating(false);
-      return fallbackResult; // Return fallback result too
+      return fallbackResult;
     }
   };
 
@@ -236,7 +236,6 @@ const HOMEQuizMVP = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentStep(questions[currentIndex + 1].id);
     } else {
-      // After last question, go to email capture instead of generating
       setCurrentStep('email-capture');
     }
   };
@@ -247,7 +246,6 @@ const HOMEQuizMVP = () => {
       const previousQuestion = questions[currentIndex - 1];
       setCurrentStep(previousQuestion.id);
       
-      // Remove the current question's response
       const newResponses = { ...responses };
       delete newResponses[currentStep];
       setResponses(newResponses);
@@ -263,7 +261,6 @@ const HOMEQuizMVP = () => {
     setIsSubmitting(true);
     
     try {
-      // Generate AI results and get the result directly
       console.log('🤖 Generating AI results for responses:', responses);
       const generatedResult = await generateAIResult(responses);
       
@@ -278,7 +275,6 @@ const HOMEQuizMVP = () => {
         fullResult: generatedResult
       });
       
-      // Now submit to GHL with the actual results
       console.log('📧 Submitting to GHL with results...');
       const submitPayload = {
         email,
@@ -290,9 +286,11 @@ const HOMEQuizMVP = () => {
           pathway_description: generatedResult?.description,
           pathway_icon: generatedResult?.icon,
           home_connection: generatedResult?.homeConnection,
-          next_steps: generatedResult?.nextSteps,
+          next_steps: generatedResult?.customNextSteps || generatedResult?.nextSteps,
           recommended_resources: generatedResult?.resources,
-          is_personalized: generatedResult?.isPersonalized
+          is_personalized: generatedResult?.isPersonalized,
+          customNextSteps: generatedResult?.customNextSteps,
+          nextSteps: generatedResult?.nextSteps
         }
       };
       
@@ -321,7 +319,7 @@ const HOMEQuizMVP = () => {
       
     } catch (error) {
       console.error('Error in email submit process:', error);
-      setCurrentStep('results'); // Show results anyway
+      setCurrentStep('results');
     }
     
     setIsSubmitting(false);
@@ -329,71 +327,181 @@ const HOMEQuizMVP = () => {
 
   if (currentStep === 'landing') {
     return (
-      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        {/* Header */}
-        <div className="bg-white shadow-sm">
-          <div className="max-w-4xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-center">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
-                alt="HOME for Music" 
-                style={{
-                  height: '80px',
-                  width: 'auto',
-                  maxWidth: '350px',
-                  maxHeight: '80px',
-                  objectFit: 'contain'
-                }}
-              />
+      <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <style jsx>{`
+          body {
+              height: 100% !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              width: 100% !important;
+              font-family: 'Montserrat', Arial, sans-serif;
+              background-color: #f8f9fa;
+              -webkit-overflow-scrolling: touch;
+              overflow-x: hidden;
+          }
+
+          html {
+              height: 100%;
+              overflow-x: hidden;
+          }
+
+          .main-container {
+              min-height: 100vh;
+              min-height: -webkit-fill-available;
+              position: relative;
+              overflow-x: hidden;
+          }
+
+          .scroll-container {
+              -webkit-overflow-scrolling: touch;
+              overflow-y: auto;
+              overflow-x: hidden;
+              height: 100%;
+          }
+
+          .quiz-option {
+              background-color: #f9fafb !important;
+              border-color: #e5e7eb !important;
+              transition: all 0.3s ease;
+          }
+
+          .quiz-option:hover {
+              background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%) !important;
+              border-color: #1DD1A1 !important;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(29, 209, 161, 0.2);
+          }
+
+          .quiz-option:active {
+              transform: translateY(0);
+          }
+
+          @media only screen and (max-width: 600px) {
+              .main-container {
+                  min-height: 100vh;
+                  min-height: -webkit-fill-available;
+                  position: relative;
+              }
+
+              html, body {
+                  overflow-x: hidden;
+                  -webkit-overflow-scrolling: touch;
+                  height: 100%;
+              }
+
+              .quiz-option:hover {
+                  transform: none;
+              }
+
+              .hero-section {
+                  padding: 40px 0 30px 0;
+              }
+
+              .hero-title {
+                  font-size: 2.5rem;
+                  line-height: 1.1;
+                  margin-bottom: 1rem;
+              }
+
+              .hero-subtitle {
+                  font-size: 1.125rem;
+                  margin-bottom: 2rem;
+              }
+
+              .hero-features {
+                  flex-direction: column;
+                  gap: 0.5rem;
+                  font-size: 0.875rem;
+                  margin-bottom: 1.5rem;
+              }
+
+              .hero-cta-section {
+                  margin-bottom: 1.5rem;
+              }
+
+              .content-wrapper {
+                  transform: translateZ(0);
+                  backface-visibility: hidden;
+                  perspective: 1000px;
+              }
+
+              .page-content {
+                  touch-action: manipulation;
+                  -webkit-transform: translate3d(0,0,0);
+                  transform: translate3d(0,0,0);
+              }
+          }
+        `}</style>
+        
+        <div className="page-content">
+          {/* Header */}
+          <div className="bg-white shadow-sm">
+            <div className="max-w-4xl mx-auto px-6 py-4">
+              <div className="flex items-center justify-center">
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
+                  alt="HOME for Music" 
+                  style={{
+                    height: '80px',
+                    width: 'auto',
+                    maxWidth: '350px',
+                    maxHeight: '80px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Hero Section */}
-        <div className="max-w-4xl mx-auto px-6 hero-section" style={{ paddingTop: '80px', paddingBottom: '80px' }}>
-          <div className="text-center">
-            <h1 className="hero-title text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Find Your Path on the<br />
-              <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Music Creator Roadmap
-              </span>
-            </h1>
-            <p className="hero-subtitle text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              2-minute AI quiz to discover your personalized pathway in the music industry
-            </p>
-            
-            {/* Simple value props */}
-            <div className="hero-features flex items-center justify-center gap-8 mb-12 text-sm text-gray-600 flex-wrap">
-              <div className="flex items-center">
-                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                AI-Powered Results
+          {/* Hero Section */}
+          <div className="max-w-4xl mx-auto px-6 hero-section" style={{ paddingTop: '80px', paddingBottom: '60px' }}>
+            <div className="text-center">
+              <h1 className="hero-title text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                Find Your Path on the<br />
+                <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  Music Creator Roadmap
+                </span>
+              </h1>
+              <p className="hero-subtitle text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+                2-minute AI quiz to discover your personalized pathway in the music industry
+              </p>
+              
+              {/* Simple value props */}
+              <div className="hero-features flex items-center justify-center gap-8 mb-12 text-sm text-gray-600 flex-wrap">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                  AI-Powered Results
+                </div>
+                <div className="flex items-center">
+                  <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                  Nashville Community
+                </div>
+                <div className="flex items-center">
+                  <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                  Personalized Roadmap
+                </div>
               </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                Nashville Community
-              </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                Personalized Roadmap
+
+              {/* CTA */}
+              <div className="hero-cta-section">
+                <button 
+                  onClick={() => setCurrentStep(questions[0].id)}
+                  className="text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90"
+                  style={{ backgroundColor: '#B91372' }}
+                >
+                  Start Your Quiz
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </button>
+                <p className="text-sm text-gray-500 mt-4">Takes 2 minutes • Completely free</p>
               </div>
             </div>
+          </div>
 
-            {/* CTA */}
-            <div className="hero-cta-section">
-              <button 
-                onClick={() => setCurrentStep(questions[0].id)}
-                className="text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90"
-                style={{ backgroundColor: '#B91372' }}
-              >
-                Start Your Quiz
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </button>
-              <p className="text-sm text-gray-500 mt-4">Takes 2 minutes • Completely free</p>
-            </div>
-
-            {/* Social proof */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <div className="flex items-center justify-center text-sm text-gray-500">
+          {/* Made by HOME Section */}
+          <div className="max-w-4xl mx-auto px-6 pb-20">
+            <div className="text-center">
+              {/* Trust badge */}
+              <div className="flex items-center justify-center text-sm text-gray-500 mb-4">
                 <div className="flex text-yellow-400 mr-2">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-current" />
@@ -401,9 +509,24 @@ const HOMEQuizMVP = () => {
                 </div>
                 Trusted by 1,000+ music creators
               </div>
+              
+              {/* Made by HOME text */}
+              <p className="text-gray-600 text-lg mb-8">Made by HOME</p>
+              
+              {/* HOME logo */}
+              <div className="flex justify-center">
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
+                  alt="HOME for Music" 
+                  style={{
+                    height: '120px',
+                    width: 'auto',
+                    maxWidth: '400px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
             </div>
-          </div>
-          </div>
           </div>
         </div>
       </div>
@@ -457,101 +580,108 @@ const HOMEQuizMVP = () => {
     return (
       <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <div className="page-content">
-        {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-6 py-4">
-            <div className="flex items-center">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
-                alt="HOME for Music" 
-                className="home-logo"
-              />
+          {/* Header */}
+          <div className="bg-white shadow-sm">
+            <div className="max-w-4xl mx-auto px-6 py-4">
+              <div className="flex items-center justify-center">
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6849d8525a76ceebaddce1e2.png" 
+                  alt="HOME for Music" 
+                  style={{
+                    height: '80px',
+                    width: 'auto',
+                    maxWidth: '350px',
+                    maxHeight: '80px',
+                    objectFit: 'contain'
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          {/* Results Header */}
-          <div className="text-center mb-12">
-            <div className="text-6xl mb-4">{aiResult.icon}</div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
-            <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-              {aiResult.description}
-            </p>
-            {aiResult.isPersonalized && (
-              <div className="inline-flex items-center mt-4 px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)', color: '#B91372' }}>
-                <Star className="w-4 h-4 mr-2" />
-                AI-Personalized for You
-              </div>
-            )}
-          </div>
+          <div className="max-w-4xl mx-auto px-6 py-16">
+            {/* Results Header */}
+            <div className="text-center mb-12">
+              <div className="text-6xl mb-4">{aiResult.icon}</div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
+              <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+                {aiResult.description}
+              </p>
+              {aiResult.isPersonalized && (
+                <div className="inline-flex items-center mt-4 px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)', color: '#B91372' }}>
+                  <Star className="w-4 h-4 mr-2" />
+                  AI-Personalized for You
+                </div>
+              )}
+            </div>
 
-                      <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Next Steps */}
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <ArrowRight className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
-                Your Next Steps
-              </h3>
-              <div className="space-y-4">
-                {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
-                      {typeof step === 'object' ? step.priority : index + 1}
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              {/* Next Steps */}
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <ArrowRight className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
+                  Your Next Steps
+                </h3>
+                <div className="space-y-4">
+                  {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => (
+                    <div key={index} className="flex items-start">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
+                        {typeof step === 'object' ? step.priority : index + 1}
+                      </div>
+                      <p className="text-gray-700 leading-relaxed">
+                        {typeof step === 'object' ? step.step : step}
+                      </p>
                     </div>
-                    <p className="text-gray-700 leading-relaxed">
-                      {typeof step === 'object' ? step.step : step}
-                    </p>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </div>
+
+              {/* Resources */}
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Users className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
+                  Recommended Resources
+                </h3>
+                <div className="space-y-3">
+                  {aiResult.resources.map((resource, index) => (
+                    <div key={index} className="flex items-center">
+                      <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#1DD1A1' }}></div>
+                      <p className="text-gray-700">{resource}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Resources */}
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <Users className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
-                Recommended Resources
-              </h3>
-              <div className="space-y-3">
-                {aiResult.resources.map((resource, index) => (
-                  <div key={index} className="flex items-center">
-                    <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#1DD1A1' }}></div>
-                    <p className="text-gray-700">{resource}</p>
-                  </div>
-                ))}
-              </div>
+            {/* HOME Connection */}
+            <div className="rounded-2xl p-8 text-center" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)' }}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">How HOME Supports Your Journey</h3>
+              <p className="text-gray-700 leading-relaxed text-lg max-w-3xl mx-auto">
+                {aiResult.homeConnection}
+              </p>
             </div>
-          </div>
 
-          {/* HOME Connection */}
-          <div className="rounded-2xl p-8 text-center" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)' }}>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">How HOME Supports Your Journey</h3>
-            <p className="text-gray-700 leading-relaxed text-lg max-w-3xl mx-auto">
-              {aiResult.homeConnection}
-            </p>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <p className="text-gray-600 mb-6">Ready to accelerate your music career?</p>
-            <button 
-              className="text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:opacity-90 mr-4"
-              style={{ backgroundColor: '#B91372' }}
-            >
-              Join HOME Community
-            </button>
-            <button 
-              onClick={() => {
-                setCurrentStep('landing');
-                setResponses({});
-                setAiResult(null);
-                setEmail('');
-              }}
-              className="text-gray-600 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
-            >
-              Take Quiz Again
-            </button>
+            {/* CTA */}
+            <div className="text-center mt-12">
+              <p className="text-gray-600 mb-6">Ready to accelerate your music career?</p>
+              <button 
+                className="text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:opacity-90 mr-4"
+                style={{ backgroundColor: '#B91372' }}
+              >
+                Join HOME Community
+              </button>
+              <button 
+                onClick={() => {
+                  setCurrentStep('landing');
+                  setResponses({});
+                  setAiResult(null);
+                  setEmail('');
+                }}
+                className="text-gray-600 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
+              >
+                Take Quiz Again
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -580,64 +710,7 @@ const HOMEQuizMVP = () => {
 
   return (
     <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-      <style jsx>{`
-        .quiz-option {
-            background-color: #f9fafb !important;
-            border-color: #e5e7eb !important;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-option:hover {
-            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%) !important;
-            border-color: #1DD1A1 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(29, 209, 161, 0.2);
-        }
-
-        .quiz-option:active {
-            transform: translateY(0);
-        }
-
-        /* Mobile responsive */
-        @media only screen and (max-width: 600px) {
-            .quiz-option:hover {
-                transform: none; /* Disable hover transform on mobile */
-            }
-
-            .hero-section {
-                padding: 40px 0 30px 0; /* Reduced from py-20 for mobile */
-            }
-
-            .hero-title {
-                font-size: 2.5rem; /* Smaller title on mobile */
-                line-height: 1.1;
-                margin-bottom: 1rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.125rem; /* Smaller subtitle */
-                margin-bottom: 2rem;
-            }
-
-            .hero-features {
-                margin-bottom: 2rem; /* Reduced margin */
-            }
-
-            .hero-cta-section {
-                margin-bottom: 1.5rem; /* Reduced margin */
-            }
-
-            .hero-features {
-                flex-direction: column;
-                gap: 0.5rem;
-                font-size: 0.875rem;
-                margin-bottom: 1.5rem;
-            }
-        }
-      `}</style>
-      
-      <div className="page-content">
-        {/* Header */}
+      {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-center">
@@ -656,7 +729,7 @@ const HOMEQuizMVP = () => {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-6 py-16">
+      <div className="page-content max-w-3xl mx-auto px-6 py-16">
         {/* Back Button */}
         <div className="mb-8">
           <button
@@ -705,7 +778,6 @@ const HOMEQuizMVP = () => {
                 </div>
               </button>
             ))}
-          </div>
           </div>
         </div>
       </div>
