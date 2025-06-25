@@ -403,6 +403,8 @@ const HOMEQuizMVP = () => {
               </div>
             </div>
           </div>
+          </div>
+          </div>
         </div>
       </div>
     );
@@ -411,8 +413,8 @@ const HOMEQuizMVP = () => {
   // Email capture step
   if (currentStep === 'email-capture') {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="max-w-2xl mx-auto text-center">
+      <div className="main-container bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="page-content max-w-2xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-6">Get Your Personalized Roadmap!</h1>
           <p className="text-xl text-gray-600 mb-8">
             Enter your email to receive your AI-generated pathway with personalized recommendations.
@@ -453,7 +455,8 @@ const HOMEQuizMVP = () => {
   // Results page
   if (currentStep === 'results' && aiResult) {
     return (
-      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+      <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="page-content">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-6 py-4">
@@ -558,8 +561,8 @@ const HOMEQuizMVP = () => {
   // Loading state while generating results
   if (currentStep === 'results' && isSubmitting) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="text-center">
+      <div className="main-container bg-white flex items-center justify-center" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="page-content text-center">
           <Loader className="w-16 h-16 animate-spin mx-auto mb-4" style={{ color: '#B91372' }} />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Personalized Roadmap</h2>
           <p className="text-gray-600">Our AI is analyzing your responses...</p>
@@ -576,7 +579,7 @@ const HOMEQuizMVP = () => {
   const progress = ((currentIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+    <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
       <style jsx>{`
         .quiz-option {
             background-color: #f9fafb !important;
@@ -633,7 +636,8 @@ const HOMEQuizMVP = () => {
         }
       `}</style>
       
-      {/* Header */}
+      <div className="page-content">
+        {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-center">
@@ -701,6 +705,7 @@ const HOMEQuizMVP = () => {
                 </div>
               </button>
             ))}
+          </div>
           </div>
         </div>
       </div>
