@@ -327,15 +327,14 @@ const HOMEQuizMVP = () => {
 
   if (currentStep === 'landing') {
     return (
-      <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
         <style jsx>{`
           body {
-              height: 100% !important;
               margin: 0 !important;
               padding: 0 !important;
               width: 100% !important;
               font-family: 'Montserrat', Arial, sans-serif;
-              background-color: #f8f9fa;
+              background-color: #ffffff;
               -webkit-overflow-scrolling: touch;
               overflow-x: hidden;
           }
@@ -345,69 +344,29 @@ const HOMEQuizMVP = () => {
               overflow-x: hidden;
           }
 
-          .main-container {
-              min-height: 100vh;
-              min-height: -webkit-fill-available;
-              position: relative;
-              overflow-x: hidden;
-          }
-
-          .scroll-container {
-              -webkit-overflow-scrolling: touch;
-              overflow-y: auto;
-              overflow-x: hidden;
-              height: 100%;
-          }
-
-          @media only screen and (max-width: 600px) {
-              .main-container {
-                  min-height: 100vh;
-                  min-height: -webkit-fill-available;
-                  position: relative;
-              }
-
-              html, body {
-                  overflow-x: hidden;
-                  -webkit-overflow-scrolling: touch;
-                  height: 100%;
-              }
-
-              .hero-section {
-                  padding: 40px 0 30px 0;
-              }
-
+          @media only screen and (max-width: 768px) {
               .hero-title {
-                  font-size: 2.5rem;
-                  line-height: 1.1;
-                  margin-bottom: 1rem;
+                  font-size: 2.25rem !important;
+                  line-height: 1.2 !important;
+                  margin-bottom: 1.5rem !important;
               }
 
               .hero-subtitle {
-                  font-size: 1.125rem;
-                  margin-bottom: 1.5rem;
+                  font-size: 1.125rem !important;
+                  margin-bottom: 2rem !important;
               }
 
               .hero-features {
-                  flex-direction: column;
-                  gap: 0.5rem;
-                  font-size: 0.875rem;
-                  margin-bottom: 1.5rem;
+                  flex-direction: column !important;
+                  gap: 0.75rem !important;
+                  font-size: 0.875rem !important;
+                  margin-bottom: 2rem !important;
               }
 
-              .hero-cta-section {
-                  margin-bottom: 2rem;
-              }
-
-              .content-wrapper {
-                  transform: translateZ(0);
-                  backface-visibility: hidden;
-                  perspective: 1000px;
-              }
-
-              .page-content {
-                  touch-action: manipulation;
-                  -webkit-transform: translate3d(0,0,0);
-                  transform: translate3d(0,0,0);
+              .mobile-cta-button {
+                  font-size: 1.125rem !important;
+                  padding: 1rem 2rem !important;
+                  margin-bottom: 1rem !important;
               }
 
               .bottom-logo {
@@ -415,92 +374,85 @@ const HOMEQuizMVP = () => {
                   max-width: 200px !important;
               }
 
-              /* Mobile spacing adjustments */
-              .mobile-spacing-1 {
-                  margin-bottom: 3rem;
+              .mobile-container {
+                  padding: 2rem 1.5rem !important;
               }
 
-              .mobile-spacing-2 {
-                  margin-bottom: 4rem;
-              }
-
-              .mobile-footer {
-                  padding-top: 3rem;
+              .mobile-text-center {
+                  text-align: center;
               }
           }
         `}</style>
         
-        <div className="page-content">
-          {/* Hero Section - Centered */}
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="max-w-4xl mx-auto px-6 w-full">
-              <div className="text-center">
-                {/* Main heading group */}
-                <div className="mb-16 mobile-spacing-1">
-                  <h1 className="hero-title text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                    Find Your Path on the<br />
-                    <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                      Music Creator Roadmap
-                    </span>
-                  </h1>
-                  <p className="hero-subtitle text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                    2-minute AI quiz to discover your personalized pathway in the music industry
-                  </p>
-                  
-                  {/* Value props - tighter spacing */}
-                  <div className="hero-features flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                      AI-Powered Results
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                      Nashville Community
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
-                      Personalized Roadmap
-                    </div>
+        {/* Full screen centered container */}
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-full max-w-4xl mx-auto px-6 mobile-container">
+            <div className="text-center mobile-text-center">
+              {/* Main heading group */}
+              <div className="mb-12">
+                <h1 className="hero-title text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                  Find Your Path on the<br />
+                  <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Music Creator Roadmap
+                  </span>
+                </h1>
+                <p className="hero-subtitle text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  2-minute AI quiz to discover your personalized pathway in the music industry
+                </p>
+                
+                {/* Value props */}
+                <div className="hero-features flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                    AI-Powered Results
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                    Nashville Community
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>
+                    Personalized Roadmap
                   </div>
                 </div>
+              </div>
 
-                {/* CTA Section - well grouped */}
-                <div className="mb-10 mobile-spacing-2">
-                  <button 
-                    onClick={() => setCurrentStep(questions[0].id)}
-                    className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4"
-                    style={{ backgroundColor: '#B91372' }}
-                  >
-                    Find My Path
-                    <ChevronRight className="w-5 h-5 ml-2" />
-                  </button>
-                  <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
+              {/* CTA Section */}
+              <div className="mb-12">
+                <button 
+                  onClick={() => setCurrentStep(questions[0].id)}
+                  className="mobile-cta-button text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4"
+                  style={{ backgroundColor: '#B91372' }}
+                >
+                  Find My Path
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </button>
+                <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
+              </div>
+
+              {/* Footer branding section */}
+              <div>
+                <div className="mb-6">
+                  <img 
+                    src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
+                    alt="HOME for Music" 
+                    className="bottom-logo mx-auto"
+                    style={{
+                      height: '70px',
+                      width: 'auto',
+                      maxWidth: '280px',
+                      objectFit: 'contain'
+                    }}
+                  />
                 </div>
-
-                {/* Footer branding section - matching spacing */}
-                <div className="mobile-footer">
-                  <div className="mb-6">
-                    <img 
-                      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" 
-                      alt="HOME for Music" 
-                      className="bottom-logo mx-auto"
-                      style={{
-                        height: '70px',
-                        width: 'auto',
-                        maxWidth: '280px',
-                        objectFit: 'contain'
-                      }}
-                    />
+                
+                <div className="flex items-center justify-center text-sm text-gray-500">
+                  <div className="flex text-yellow-400 mr-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
                   </div>
-                  
-                  <div className="flex items-center justify-center text-sm text-gray-500">
-                    <div className="flex text-yellow-400 mr-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
-                    </div>
-                    Trusted by 1,000+ music creators
-                  </div>
+                  Trusted by 1,000+ music creators
                 </div>
               </div>
             </div>
@@ -513,14 +465,14 @@ const HOMEQuizMVP = () => {
   // Email capture step
   if (currentStep === 'email-capture') {
     return (
-      <div className="main-container bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="page-content max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">Get Your Personalized Roadmap!</h1>
-          <p className="text-xl text-gray-600 mb-8">
+      <div className="min-h-screen bg-white flex items-center justify-center p-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="w-full max-w-2xl mx-auto text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Get Your Personalized Roadmap!</h1>
+          <p className="text-lg md:text-xl text-gray-600 mb-8">
             Enter your email to receive your AI-generated pathway with personalized recommendations.
           </p>
 
-          <div className="bg-white border-2 rounded-2xl p-8 shadow-sm" style={{ borderColor: '#1DD1A1' }}>
+          <div className="bg-white border-2 rounded-2xl p-6 md:p-8 shadow-sm" style={{ borderColor: '#1DD1A1' }}>
             <div className="mb-6">
               <input
                 type="email"
@@ -555,75 +507,75 @@ const HOMEQuizMVP = () => {
   // Results page
   if (currentStep === 'results' && aiResult) {
     return (
-      <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="page-content">
-          <div className="max-w-4xl mx-auto px-6 py-16">
-            {/* Results Header */}
-            <div className="text-center mb-12">
-              <div className="text-6xl mb-4">{aiResult.icon}</div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
-              <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-                {aiResult.description}
-              </p>
-              {aiResult.isPersonalized && (
-                <div className="inline-flex items-center mt-4 px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)', color: '#B91372' }}>
-                  <Star className="w-4 h-4 mr-2" />
-                  AI-Personalized for You
-                </div>
-              )}
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              {/* Next Steps */}
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <ArrowRight className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
-                  Your Next Steps
-                </h3>
-                <div className="space-y-4">
-                  {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => (
-                    <div key={index} className="flex items-start">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
-                        {typeof step === 'object' ? step.priority : index + 1}
-                      </div>
-                      <p className="text-gray-700 leading-relaxed">
-                        {typeof step === 'object' ? step.step : step}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="w-full max-w-4xl mx-auto px-6 py-8 md:py-16">
+          {/* Results Header */}
+          <div className="text-center mb-8 md:mb-12">
+            <div className="text-4xl md:text-6xl mb-4">{aiResult.icon}</div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+              {aiResult.description}
+            </p>
+            {aiResult.isPersonalized && (
+              <div className="inline-flex items-center mt-4 px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)', color: '#B91372' }}>
+                <Star className="w-4 h-4 mr-2" />
+                AI-Personalized for You
               </div>
+            )}
+          </div>
 
-              {/* Resources */}
-              <div className="bg-gray-50 rounded-2xl p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Users className="w-6 h-6 mr-3" style={{ color: '#1DD1A1' }} />
-                  Recommended Resources
-                </h3>
-                <div className="space-y-3">
-                  {aiResult.resources.map((resource, index) => (
-                    <div key={index} className="flex items-center">
-                      <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#1DD1A1' }}></div>
-                      <p className="text-gray-700">{resource}</p>
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-8 md:mb-12">
+            {/* Next Steps */}
+            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <ArrowRight className="w-5 md:w-6 h-5 md:h-6 mr-3" style={{ color: '#1DD1A1' }} />
+                Your Next Steps
+              </h3>
+              <div className="space-y-4">
+                {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
+                      {typeof step === 'object' ? step.priority : index + 1}
                     </div>
-                  ))}
-                </div>
+                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+                      {typeof step === 'object' ? step.step : step}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* HOME Connection */}
-            <div className="rounded-2xl p-8 text-center" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)' }}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">How HOME Supports Your Journey</h3>
-              <p className="text-gray-700 leading-relaxed text-lg max-w-3xl mx-auto">
-                {aiResult.homeConnection}
-              </p>
+            {/* Resources */}
+            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <Users className="w-5 md:w-6 h-5 md:h-6 mr-3" style={{ color: '#1DD1A1' }} />
+                Recommended Resources
+              </h3>
+              <div className="space-y-3">
+                {aiResult.resources.map((resource, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#1DD1A1' }}></div>
+                    <p className="text-gray-700 text-sm md:text-base">{resource}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
 
-            {/* CTA */}
-            <div className="text-center mt-12">
-              <p className="text-gray-600 mb-6">Ready to accelerate your music career?</p>
+          {/* HOME Connection */}
+          <div className="rounded-2xl p-6 md:p-8 text-center mb-8 md:mb-12" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)' }}>
+            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">How HOME Supports Your Journey</h3>
+            <p className="text-gray-700 leading-relaxed text-base md:text-lg max-w-3xl mx-auto">
+              {aiResult.homeConnection}
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <p className="text-gray-600 mb-6">Ready to accelerate your music career?</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button 
-                className="text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:opacity-90 mr-4"
+                className="w-full sm:w-auto text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:opacity-90"
                 style={{ backgroundColor: '#B91372' }}
               >
                 Join HOME Community
@@ -635,7 +587,7 @@ const HOMEQuizMVP = () => {
                   setAiResult(null);
                   setEmail('');
                 }}
-                className="text-gray-600 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
+                className="w-full sm:w-auto text-gray-600 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
               >
                 Take Quiz Again
               </button>
@@ -649,10 +601,10 @@ const HOMEQuizMVP = () => {
   // Loading state while generating results
   if (currentStep === 'results' && isSubmitting) {
     return (
-      <div className="main-container bg-white flex items-center justify-center" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="page-content text-center">
+      <div className="min-h-screen bg-white flex items-center justify-center" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="text-center px-6">
           <Loader className="w-16 h-16 animate-spin mx-auto mb-4" style={{ color: '#B91372' }} />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Personalized Roadmap</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Generating Your Personalized Roadmap</h2>
           <p className="text-gray-600">Our AI is analyzing your responses...</p>
         </div>
       </div>
@@ -667,10 +619,10 @@ const HOMEQuizMVP = () => {
   const progress = ((currentIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="main-container bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-      <div className="page-content max-w-3xl mx-auto px-6 py-16">
+    <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+      <div className="w-full max-w-3xl mx-auto px-6 py-8 md:py-16">
         {/* Back Button */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <button
             onClick={handleBack}
             className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 group"
@@ -681,7 +633,7 @@ const HOMEQuizMVP = () => {
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className="h-2 rounded-full transition-all duration-500"
@@ -697,8 +649,8 @@ const HOMEQuizMVP = () => {
         </div>
 
         {/* Question */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center leading-tight">
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+          <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center leading-tight">
             {currentQuestion.question}
           </h2>
           
@@ -707,7 +659,7 @@ const HOMEQuizMVP = () => {
               <button
                 key={option.value}
                 onClick={() => handleResponse(currentQuestion.id, option.value)}
-                className="w-full p-6 text-left rounded-xl border border-gray-200 group cursor-pointer transition-all duration-300 hover:shadow-md"
+                className="w-full p-4 md:p-6 text-left rounded-xl border border-gray-200 group cursor-pointer transition-all duration-300 hover:shadow-md"
                 style={{
                   backgroundColor: '#f9fafb'
                 }}
@@ -725,10 +677,10 @@ const HOMEQuizMVP = () => {
                 }}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-900 leading-relaxed">
+                  <span className="text-gray-900 leading-relaxed text-sm md:text-base">
                     {option.label}
                   </span>
-                  <ArrowRight className="w-5 h-5 text-gray-400 group-hover:opacity-100 transition-all duration-300" style={{ color: '#1DD1A1' }} />
+                  <ArrowRight className="w-4 md:w-5 h-4 md:h-5 text-gray-400 group-hover:opacity-100 transition-all duration-300" style={{ color: '#1DD1A1' }} />
                 </div>
               </button>
             ))}
