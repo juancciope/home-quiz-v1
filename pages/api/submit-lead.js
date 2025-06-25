@@ -1,3 +1,295 @@
+// Import the Circle integration (you'll need to create this as a separate file)
+// const { createCirclePost } = require('../utils/circle-integration');
+
+// Circle integration functions (embedded for now - you can move to separate file)
+const CIRCLE_API_URL = 'https://app.circle.so/api/admin/v2/posts';
+const CIRCLE_SPACE_ID = 2102224;
+
+const formatQuizResultsForCircle = (email, pathway, responses, results) => {
+  const content = [];
+  
+  // Add header with pathway info
+  content.push({
+    "type": "heading",
+    "attrs": { "level": 2 },
+    "content": [
+      {
+        "type": "text",
+        "text": `${results?.pathway_icon || '🎵'} ${pathway}`,
+        "circle_ios_fallback_text": `${results?.pathway_icon || '🎵'} ${pathway}`
+      }
+    ]
+  });
+
+  // Add completion timestamp
+  content.push({
+    "type": "paragraph",
+    "content": [
+      {
+        "type": "text",
+        "text": `📅 Quiz completed: ${new Date().toLocaleString('en-US', { 
+          timeZone: 'America/Chicago',
+          dateStyle: 'full',
+          timeStyle: 'short'
+        })}`,
+        "circle_ios_fallback_text": `Quiz completed: ${new Date().toLocaleString()}`
+      }
+    ]
+  });
+
+  // Add pathway description
+  if (results?.pathway_description) {
+    content.push({
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": results.pathway_description,
+          "circle_ios_fallback_text": results.pathway_description
+        }
+      ]
+    });
+  }
+
+  // Add quiz responses section
+  content.push({
+    "type": "heading",
+    "attrs": { "level": 3 },
+    "content": [
+      {
+        "type": "text",
+        "text": "📝 Quiz Responses",
+        "circle_ios_fallback_text": "Quiz Responses"
+      }
+    ]
+  });
+
+  // Format responses
+  const responseLabels = {
+    motivation: "What drives your music career ambitions?",
+    'ideal-day': "Ideal workday as a music professional:",
+    'success-vision': "Success vision in 5 years:",
+    'current-stage': "Current stage:",
+    'biggest-challenge': "Biggest challenge:"
+  };
+
+  const valueMap = {
+    'live-performance': 'The energy of a live audience and performing music from the stage',
+    'artistic-expression': 'Artistic expression through recording music and building a loyal following online',
+    'collaboration': 'Making great songs and collaborating with other talented creators',
+    'performing-travel': 'Traveling to a new city to perform for a live audience',
+    'releasing-music': 'Releasing a new song that you are really proud of',
+    'writing-creating': 'Writing the best song that you have ever written',
+    'touring-headliner': 'Headlining major tours and playing sold out shows around the world',
+    'passive-income-artist': 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions',
+    'hit-songwriter': 'Having multiple major hit songs that you collaborated on and earning \'mailbox money\' through sync placements and other royalty streams',
+    'planning': 'Planning Stage - Figuring out my path and building foundations',
+    'production': 'Production Stage - Actively creating and releasing work',
+    'scale': 'Scale Stage - Already making the majority of my income from music and looking to grow my business',
+    'performance-opportunities': 'I need more opportunities to perform and grow my live audience',
+    'brand-audience': 'I\'m creating great content, but struggle to build a consistent brand and online audience',
+    'collaboration-income': 'I work behind the scenes, but need better access to collaborators, placements, and consistent income'
+  };
+
+  Object.entries(responses || {}).forEach(([key, value]) => {
+    if (responseLabels[key]) {
+      content.push({
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "marks": [{ "type": "bold" }],
+            "text": `${responseLabels[key]} `,
+            "circle_ios_fallback_text": `${responseLabels[key]} `
+          },
+          {
+            "type": "text",
+            "text": valueMap[value] || value,
+            "circle_ios_fallback_text": valueMap[value] || value
+          }
+        ]
+      });
+    }
+  });
+
+  // Add next steps section
+  content.push({
+    "type": "heading",
+    "attrs": { "level": 3 },
+    "content": [
+      {
+        "type": "text",
+        "text": "🎯 Personalized Next Steps",
+        "circle_ios_fallback_text": "Personalized Next Steps"
+      }
+    ]
+  });
+
+  const nextSteps = results?.customNextSteps || results?.next_steps || [];
+  if (Array.isArray(nextSteps)) {
+    nextSteps.forEach((step, index) => {
+      const stepText = typeof step === 'object' ? step.step : step;
+      const priority = typeof step === 'object' ? step.priority : index + 1;
+      
+      content.push({
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "marks": [{ "type": "bold" }],
+            "text": `${priority}. `,
+            "circle_ios_fallback_text": `${priority}. `
+          },
+          {
+            "type": "text",
+            "text": stepText,
+            "circle_ios_fallback_text": stepText
+          }
+        ]
+      });
+    });
+  }
+
+  // Add recommended resources section
+  content.push({
+    "type": "heading",
+    "attrs": { "level": 3 },
+    "content": [
+      {
+        "type": "text",
+        "text": "📚 Recommended Resources",
+        "circle_ios_fallback_text": "Recommended Resources"
+      }
+    ]
+  });
+
+  const resources = results?.recommended_resources || results?.resources || [];
+  if (Array.isArray(resources)) {
+    resources.forEach(resource => {
+      content.push({
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": `• ${resource}`,
+            "circle_ios_fallback_text": `• ${resource}`
+          }
+        ]
+      });
+    });
+  }
+
+  // Add HOME connection section
+  if (results?.home_connection) {
+    content.push({
+      "type": "heading",
+      "attrs": { "level": 3 },
+      "content": [
+        {
+          "type": "text",
+          "text": "🏡 How HOME Supports This Journey",
+          "circle_ios_fallback_text": "How HOME Supports This Journey"
+        }
+      ]
+    });
+
+    content.push({
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": results.home_connection,
+          "circle_ios_fallback_text": results.home_connection
+        }
+      ]
+    });
+  }
+
+  // Add personalization note
+  content.push({
+    "type": "paragraph",
+    "content": [
+      {
+        "type": "text",
+        "marks": [{ "type": "italic" }],
+        "text": results?.is_personalized ? 
+          "✨ This roadmap was AI-personalized based on the user's specific responses." :
+          "📋 This roadmap was generated using template-based recommendations.",
+        "circle_ios_fallback_text": results?.is_personalized ? 
+          "This roadmap was AI-personalized based on the user's specific responses." :
+          "This roadmap was generated using template-based recommendations."
+      }
+    ]
+  });
+
+  return {
+    "type": "doc",
+    "content": content
+  };
+};
+
+const createCirclePost = async (email, pathway, responses, results) => {
+  try {
+    console.log('🔄 Creating Circle post for:', email);
+    
+    const slug = `quiz-result-${email.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-${Date.now()}`;
+    const tiptapBody = formatQuizResultsForCircle(email, pathway, responses, results);
+    
+    const postData = {
+      space_id: CIRCLE_SPACE_ID,
+      status: "published",
+      name: `${email} - Music Creator Roadmap Results`,
+      slug: slug,
+      tiptap_body: {
+        body: tiptapBody
+      }
+    };
+
+    console.log('📤 Sending to Circle:', {
+      email,
+      pathway,
+      slug,
+      contentSections: tiptapBody.content.length
+    });
+
+    const response = await fetch(CIRCLE_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.CIRCLE_API_TOKEN}`,
+      },
+      body: JSON.stringify(postData)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Circle API error: ${response.status} - ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log('✅ Circle post created successfully:', {
+      postId: result.post?.id,
+      url: result.post?.url,
+      email
+    });
+
+    return {
+      success: true,
+      postId: result.post?.id,
+      url: result.post?.url,
+      message: result.message
+    };
+
+  } catch (error) {
+    console.error('❌ Failed to create Circle post:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
+
+// Main handler function
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -26,23 +318,18 @@ export default async function handler(req, res) {
     const formatNextSteps = (steps) => {
       if (!steps || !Array.isArray(steps)) return '';
       
-      // Handle new OpenAI format with priority objects
       if (steps.length > 0 && typeof steps[0] === 'object' && steps[0].step) {
         return steps.map((stepObj, index) => `${stepObj.priority || index + 1}. ${stepObj.step}`).join('\n');
       }
       
-      // Handle legacy simple array format
       return steps.map((step, index) => `${index + 1}. ${step}`).join('\n');
     };
 
-    // Format recommended resources for email template
     const formatResources = (resources) => {
       if (!resources || !Array.isArray(resources)) return '';
-      
       return resources.map(resource => `• ${resource}`).join('\n');
     };
 
-    // Debug formatted content
     const formattedNextSteps = formatNextSteps(results?.customNextSteps || results?.next_steps);
     const formattedResources = formatResources(results?.recommended_resources || results?.resources);
     
@@ -62,10 +349,9 @@ export default async function handler(req, res) {
         'quiz-completed',
         `pathway-${(pathway || 'unknown').toLowerCase().replace(/\s+/g, '-').replace('the-', '')}`,
         `stage-${responses?.['current-stage'] || 'unknown'}`,
-        `challenge-${responses?.['biggest-challenge'] || 'unknown'}`.substring(0, 30) // Limit tag length
+        `challenge-${responses?.['biggest-challenge'] || 'unknown'}`.substring(0, 30)
       ],
       custom_fields: {
-        // Original quiz responses
         motivation: responses?.motivation || '',
         ideal_day: responses?.['ideal-day'] || '',
         success_vision: responses?.['success-vision'] || '',
@@ -73,32 +359,25 @@ export default async function handler(req, res) {
         biggest_challenge: responses?.['biggest-challenge'] || '',
         quiz_completed_date: new Date().toISOString(),
         
-        // Results data for personalized emails
         pathway_title: results?.pathway_title || pathway || '',
         pathway_description: results?.pathway_description || '',
         pathway_icon: results?.pathway_icon || '',
         home_connection: results?.home_connection || '',
         is_personalized: results?.is_personalized || false,
         
-        // Formatted content for email templates (these are the main ones used in email)
         next_steps: formattedNextSteps,
         recommended_resources: formattedResources,
-        
-        // Legacy formatted fields for backward compatibility
         next_steps_formatted: formattedNextSteps,
         recommended_resources_formatted: formattedResources,
         
-        // Raw arrays for advanced email builders (JSON strings)
         next_steps_array: JSON.stringify(results?.customNextSteps || results?.next_steps || []),
         recommended_resources_array: JSON.stringify(results?.recommended_resources || results?.resources || []),
         
-        // Individual next steps (for drag-and-drop email builders)
         next_step_1: (results?.customNextSteps || results?.next_steps)?.[0]?.step || (results?.customNextSteps || results?.next_steps)?.[0] || '',
         next_step_2: (results?.customNextSteps || results?.next_steps)?.[1]?.step || (results?.customNextSteps || results?.next_steps)?.[1] || '',
         next_step_3: (results?.customNextSteps || results?.next_steps)?.[2]?.step || (results?.customNextSteps || results?.next_steps)?.[2] || '',
         next_step_4: (results?.customNextSteps || results?.next_steps)?.[3]?.step || (results?.customNextSteps || results?.next_steps)?.[3] || '',
         
-        // Individual resources
         resource_1: results?.recommended_resources?.[0] || '',
         resource_2: results?.recommended_resources?.[1] || '',
         resource_3: results?.recommended_resources?.[2] || '',
@@ -106,7 +385,6 @@ export default async function handler(req, res) {
         resource_5: results?.recommended_resources?.[4] || '',
         resource_6: results?.recommended_resources?.[5] || '',
         
-        // Additional useful fields for marketing
         webinar_offer: 'Music Creator Roadmap Course ($299 value) + Artist Branding Playbook (FREE bonus)',
         webinar_schedule: 'Third Thursday of every month',
         community_size: '1,000+ music creators',
@@ -128,53 +406,57 @@ export default async function handler(req, res) {
       hasResources: !!(results?.recommended_resources?.length)
     });
 
+    let ghlSuccess = false;
+    let ghlResult = null;
+
     // Send to Go High Level
     if (!process.env.GHL_WEBHOOK_URL) {
       console.warn('⚠️ GHL_WEBHOOK_URL not configured, skipping webhook call');
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Quiz completed successfully (webhook not configured)',
-        debug: 'GHL_WEBHOOK_URL environment variable not set'
-      });
+    } else {
+      try {
+        const ghlResponse = await fetch(process.env.GHL_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(ghlData)
+        });
+
+        console.log('📡 GHL Response:', {
+          status: ghlResponse.status,
+          statusText: ghlResponse.statusText,
+          ok: ghlResponse.ok
+        });
+
+        if (ghlResponse.ok) {
+          ghlResult = await ghlResponse.json();
+          ghlSuccess = true;
+          console.log('✅ Lead submitted to GHL successfully');
+        } else {
+          const errorText = await ghlResponse.text();
+          console.error('❌ GHL webhook failed:', errorText);
+        }
+      } catch (ghlError) {
+        console.error('❌ GHL webhook error:', ghlError);
+      }
     }
 
-    const ghlResponse = await fetch(process.env.GHL_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(ghlData)
-    });
-
-    console.log('📡 GHL Response:', {
-      status: ghlResponse.status,
-      statusText: ghlResponse.statusText,
-      ok: ghlResponse.ok
-    });
-
-    if (!ghlResponse.ok) {
-      const errorText = await ghlResponse.text();
-      console.error('❌ GHL webhook failed:', {
-        status: ghlResponse.status,
-        statusText: ghlResponse.statusText,
-        error: errorText
-      });
-      
-      // Still return success to user for better UX
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Quiz completed successfully',
-        note: 'Results will be sent shortly. If you don\'t receive them, please contact support.',
-        debug: process.env.NODE_ENV === 'development' ? `GHL Error: ${errorText}` : undefined
-      });
+    // Post to Circle (independent of GHL success)
+    let circleResult = null;
+    if (process.env.CIRCLE_API_TOKEN) {
+      console.log('🔄 Posting results to Circle...');
+      circleResult = await createCirclePost(email, pathway, responses, results);
+    } else {
+      console.warn('⚠️ CIRCLE_API_TOKEN not configured, skipping Circle post');
     }
 
-    const ghlResult = await ghlResponse.json();
-    console.log('✅ Lead and results submitted successfully to GHL:', { 
+    console.log('✅ Quiz submission complete:', { 
       email, 
       pathway: ghlData.pathway,
-      customFields: Object.keys(ghlData.custom_fields).length,
-      ghlResponse: ghlResult 
+      ghlSuccess,
+      circleSuccess: circleResult?.success || false,
+      circlePostId: circleResult?.postId,
+      circleUrl: circleResult?.url
     });
     
     res.status(200).json({ 
@@ -184,14 +466,23 @@ export default async function handler(req, res) {
         email,
         pathway: ghlData.pathway,
         hasPersonalizedResults: results?.is_personalized || false,
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
+        ghl: {
+          success: ghlSuccess,
+          result: ghlResult
+        },
+        circle: {
+          success: circleResult?.success || false,
+          postId: circleResult?.postId,
+          url: circleResult?.url,
+          error: circleResult?.error
+        }
       }
     });
     
   } catch (error) {
     console.error('❌ Lead submission error:', error);
     
-    // Still return success to user for better UX, but log the error
     res.status(200).json({ 
       success: true, 
       message: 'Thank you for completing the quiz!',
