@@ -26,7 +26,7 @@ const pathwayTemplates = {
       'Professional Photography & Video',
       'Tour Planning & Management Tools'
     ],
-    homeConnection: 'HOME\'s 250-capacity venue and rehearsal facilities provide the perfect environment to develop your live show and connect with booking professionals.'
+    homeConnection: 'HOME\'s 250-capacity venue and 24/7 rehearsal facilities are exactly what you need to perfect your live show and connect with industry professionals. Our venue hosts showcases where booking agents scout new talent, and our rehearsal spaces let you practice your setlist until it\'s bulletproof. Join our community to fast-track your performing career - attend our monthly webinar to learn the exact booking strategies our successful touring artists use.'
   },
   'creative-artist': {
     title: 'The Creative Artist Path',
@@ -45,7 +45,7 @@ const pathwayTemplates = {
       'Video Production & Editing Tools',
       'Artist Community & Collaboration Network'
     ],
-    homeConnection: 'HOME\'s content creation facilities and collaborative artist community provide the tools and connections to build your creative empire.'
+    homeConnection: 'HOME\'s content creation studios and brand development resources can accelerate your creative empire faster than going solo. Our facilities include professional video equipment, photography setups, and brand strategists who\'ve helped artists build six-figure creative businesses. The collaborative environment means you\'ll learn from other successful creative entrepreneurs. Secure your spot in our monthly webinar to discover the revenue diversification strategies that separate thriving artists from struggling ones.'
   },
   'writer-producer': {
     title: 'The Writer-Producer Path',
@@ -64,7 +64,7 @@ const pathwayTemplates = {
       'Sync Licensing & Placement Opportunities',
       'Technical Skill Development Programs'
     ],
-    homeConnection: 'HOME\'s professional studios and A&R program provide the perfect ecosystem for producers to create and collaborate.'
+    homeConnection: 'HOME\'s professional studios with 24/7 access and A&R program connections are your fast-track to consistent income as a producer. Our facilities feature industry-standard equipment, and our community includes successful producers earning six figures through sync placements and label collaborations. You\'ll gain access to our exclusive network of artists seeking production work. Register for our monthly webinar to learn the business strategies that turn talented producers into highly-paid industry professionals.'
   }
 };
 
@@ -109,7 +109,7 @@ RESPONSES:
 - Current Stage: ${responses['current-stage']}
 - Biggest Challenge: ${responses['biggest-challenge']}
 
-Please provide personalized pathway recommendation in the specified JSON format with prioritized next steps.`
+Please provide personalized pathway recommendation in the specified JSON format with prioritized next steps and personalized HOME connection content.`
         });
 
         // Run the assistant
@@ -174,7 +174,7 @@ Please provide personalized pathway recommendation in the specified JSON format 
           icon: template.icon,
           nextSteps: aiResponse.customNextSteps,
           resources: template.resources,
-          homeConnection: template.homeConnection,
+          homeConnection: aiResponse.homeConnection, // 🔥 FIXED: Use AI-generated content instead of template
           isPersonalized: true,
           assistantUsed: true,
           responses // Include for debugging/analytics
@@ -224,7 +224,7 @@ Please provide personalized pathway recommendation in the specified JSON format 
       icon: template.icon,
       nextSteps: template.nextSteps,
       resources: template.resources,
-      homeConnection: template.homeConnection,
+      homeConnection: template.homeConnection, // 🔥 Now uses improved template content
       isPersonalized: false,
       assistantUsed: false
     };
@@ -232,7 +232,8 @@ Please provide personalized pathway recommendation in the specified JSON format 
     console.log('✅ Generated fallback result:', {
       title: fallbackResult.title,
       hasNextSteps: !!fallbackResult.nextSteps?.length,
-      hasResources: !!fallbackResult.resources?.length
+      hasResources: !!fallbackResult.resources?.length,
+      hasHomeConnection: !!fallbackResult.homeConnection
     });
     
     res.status(200).json(fallbackResult);
@@ -257,7 +258,7 @@ Please provide personalized pathway recommendation in the specified JSON format 
         'Social Media Strategy & Management',
         'Artist Community & Collaboration Network'
       ],
-      homeConnection: 'HOME\'s supportive community and professional facilities provide the perfect environment to grow your music career.',
+      homeConnection: 'HOME\'s supportive community and professional facilities provide the perfect environment to grow your music career. Our content creation studios, collaborative artist network, and monthly educational webinars can accelerate your progress faster than going it alone. Secure your spot in our next webinar to learn the strategies successful artists use to build sustainable creative careers.',
       isPersonalized: false,
       assistantUsed: false,
       error: 'Emergency fallback used'
@@ -273,52 +274,57 @@ function determineFallbackPathway(responses) {
   
   console.log('🔍 Scoring responses:', responses);
   
-  // Score based on responses - FIXED: Added missing business-building case
-  if (responses.motivation === 'stage-energy') {
-    scores['touring-performer'] += 3;
-    console.log('+ 3 to touring-performer (motivation: stage-energy)');
-  }
-  if (responses.motivation === 'creative-expression') {
-    scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (motivation: creative-expression)');
-  }
-  if (responses.motivation === 'behind-scenes') {
-    scores['writer-producer'] += 3;
-    console.log('+ 3 to writer-producer (motivation: behind-scenes)');
-  }
-  if (responses.motivation === 'business-building') {
-    scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (motivation: business-building)');
-  }
-  
-  if (responses['ideal-day'] === 'performing') {
-    scores['touring-performer'] += 3;
-    console.log('+ 3 to touring-performer (ideal-day: performing)');
-  }
-  if (responses['ideal-day'] === 'creating-content') {
-    scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (ideal-day: creating-content)');
-  }
-  if (responses['ideal-day'] === 'studio-work') {
-    scores['writer-producer'] += 3;
-    console.log('+ 3 to writer-producer (ideal-day: studio-work)');
-  }
-  if (responses['ideal-day'] === 'strategy-networking') {
-    scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (ideal-day: strategy-networking)');
-  }
-  
-  if (responses['success-vision'] === 'touring-artist') {
+  // Score based on responses
+  if (responses.motivation === 'live-performance') {
     scores['touring-performer'] += 4;
-    console.log('+ 4 to touring-performer (success-vision: touring-artist)');
+    console.log('+ 4 to touring-performer (motivation: live-performance)');
   }
-  if (responses['success-vision'] === 'creative-brand') {
+  if (responses.motivation === 'artistic-expression') {
     scores['creative-artist'] += 4;
-    console.log('+ 4 to creative-artist (success-vision: creative-brand)');
+    console.log('+ 4 to creative-artist (motivation: artistic-expression)');
   }
-  if (responses['success-vision'] === 'in-demand-producer') {
+  if (responses.motivation === 'collaboration') {
     scores['writer-producer'] += 4;
-    console.log('+ 4 to writer-producer (success-vision: in-demand-producer)');
+    console.log('+ 4 to writer-producer (motivation: collaboration)');
+  }
+  
+  if (responses['ideal-day'] === 'performing-travel') {
+    scores['touring-performer'] += 3;
+    console.log('+ 3 to touring-performer (ideal-day: performing-travel)');
+  }
+  if (responses['ideal-day'] === 'releasing-music') {
+    scores['creative-artist'] += 3;
+    console.log('+ 3 to creative-artist (ideal-day: releasing-music)');
+  }
+  if (responses['ideal-day'] === 'writing-creating') {
+    scores['writer-producer'] += 3;
+    console.log('+ 3 to writer-producer (ideal-day: writing-creating)');
+  }
+  
+  if (responses['success-vision'] === 'touring-headliner') {
+    scores['touring-performer'] += 5;
+    console.log('+ 5 to touring-performer (success-vision: touring-headliner)');
+  }
+  if (responses['success-vision'] === 'passive-income-artist') {
+    scores['creative-artist'] += 5;
+    console.log('+ 5 to creative-artist (success-vision: passive-income-artist)');
+  }
+  if (responses['success-vision'] === 'hit-songwriter') {
+    scores['writer-producer'] += 5;
+    console.log('+ 5 to writer-producer (success-vision: hit-songwriter)');
+  }
+  
+  if (responses['biggest-challenge'] === 'performance-opportunities') {
+    scores['touring-performer'] += 3;
+    console.log('+ 3 to touring-performer (biggest-challenge: performance-opportunities)');
+  }
+  if (responses['biggest-challenge'] === 'brand-audience') {
+    scores['creative-artist'] += 3;
+    console.log('+ 3 to creative-artist (biggest-challenge: brand-audience)');
+  }
+  if (responses['biggest-challenge'] === 'collaboration-income') {
+    scores['writer-producer'] += 3;
+    console.log('+ 3 to writer-producer (biggest-challenge: collaboration-income)');
   }
   
   console.log('📊 Final scores:', scores);
