@@ -346,7 +346,7 @@ const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
             </div>
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Path is Ready!</h1>
-        <p className="text-lg md:text-xl text-gray-600 mb-8">Enter your email to unlock your complete roadmap and action plan</p>
+        <p className="text-lg md:text-xl text-gray-600 mb-8">Enter your email to instantly unlock your complete roadmap and action plan</p>
         <div className="bg-white border-2 rounded-2xl p-8 shadow-xl" style={{ borderColor: '#1DD1A1' }}>
             <div className="mb-6">
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" className="w-full px-6 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] focus:border-transparent text-lg transition-all duration-300"/>
