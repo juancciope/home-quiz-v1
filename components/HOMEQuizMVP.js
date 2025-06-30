@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronRight,
+  ChevronLeft,
   Star,
   Loader,
-  ChevronLeft,
   MapPin,
   UserCheck,
   ListChecks,
@@ -15,15 +15,15 @@ import {
   Home
 } from 'lucide-react';
 
-// --- Data ---
+// --- Quiz Questions Data ---
 const questions = [
   {
     id: 'motivation',
     question: "What drives your music career ambitions?",
     options: [
-      { value: 'live-performance', label: 'The energy of a live audience and performing music from the stage' },
-      { value: 'artistic-expression', label: 'Artistic expression through recording music and building a loyal following online' },
-      { value: 'collaboration', label: 'Making great songs and collaborating with other talented creators' }
+      { value: 'live-performance',   label: 'The energy of a live audience and performing music from the stage' },
+      { value: 'artistic-expression',label: 'Artistic expression through recording music and building a loyal following online' },
+      { value: 'collaboration',      label: 'Making great songs and collaborating with other talented creators' }
     ]
   },
   {
@@ -31,26 +31,26 @@ const questions = [
     question: "Describe your ideal workday as a music professional:",
     options: [
       { value: 'performing-travel', label: 'Traveling to a new city to perform for a live audience' },
-      { value: 'releasing-music', label: 'Releasing a new song that you are really proud of' },
-      { value: 'writing-creating', label: 'Writing the best song that you have ever written' }
+      { value: 'releasing-music',   label: 'Releasing a new song that you are really proud of' },
+      { value: 'writing-creating',  label: 'Writing the best song that you have ever written' }
     ]
   },
   {
     id: 'success-vision',
     question: "When you imagine success 5 years from now, you see yourself:",
     options: [
-      { value: 'touring-headliner', label: 'Headlining major tours and playing sold out shows around the world' },
-      { value: 'passive-income-artist', label: 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions' },
-      { value: 'hit-songwriter', label: "Having multiple major hit songs that you collaborated on and earning 'mailbox money' through sync placements and other royalty streams" }
+      { value: 'touring-headliner',    label: 'Headlining major tours and playing sold out shows around the world' },
+      { value: 'passive-income-artist',label: 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions' },
+      { value: 'hit-songwriter',       label: "Having multiple major hit songs that you collaborated on and earning 'mailbox money' through sync placements and other royalty streams" }
     ]
   },
   {
     id: 'current-stage',
     question: "Which best describes your current stage?",
     options: [
-      { value: 'planning', label: 'Planning Stage - Figuring out my path and building foundations' },
+      { value: 'planning',   label: 'Planning Stage - Figuring out my path and building foundations' },
       { value: 'production', label: 'Production Stage - Actively creating and releasing work' },
-      { value: 'scale', label: 'Scale Stage - Already making the majority of my income from music and looking to grow my business' }
+      { value: 'scale',      label: 'Scale Stage - Already making the majority of my income from music and looking to grow my business' }
     ]
   },
   {
@@ -58,12 +58,13 @@ const questions = [
     question: "What's the biggest thing holding your music journey back right now?",
     options: [
       { value: 'performance-opportunities', label: 'I need more opportunities to perform and grow my live audience' },
-      { value: 'brand-audience', label: "I'm creating great content, but struggle to build a consistent brand and online audience" },
-      { value: 'collaboration-income', label: 'I work behind the scenes, but need better access to collaborators, placements, and consistent income' }
+      { value: 'brand-audience',           label: "I'm creating great content, but struggle to build a consistent brand and online audience" },
+      { value: 'collaboration-income',     label: 'I work behind the scenes, but need better access to collaborators, placements, and consistent income' }
     ]
   }
 ];
 
+// --- Expanded Step Content Data ---
 const expandedStepContent = {
   'touring-performer': [
     {
@@ -73,7 +74,7 @@ const expandedStepContent = {
         "Map out a 45-minute setlist with emotional peaks and valleys",
         "Record live rehearsal videos to analyze your stage presence",
         "Design smooth transitions between songs with stories or audience interaction",
-        "Practice your set 3x this week in HOME's rehearsal space",
+        "Practice your set 3× this week in HOME's rehearsal space",
         "Get feedback from 5 fellow musicians on your performance energy"
       ],
       whyItMatters:
@@ -90,7 +91,7 @@ const expandedStepContent = {
       actions: [
         "Film yourself performing and identify 3 movements that feel authentic",
         "Study 5 favorite performers and note their engagement techniques",
-        "Practice talking between songs - write out 3 compelling stories",
+        "Practice talking between songs—write out 3 compelling stories",
         "Work with HOME's performance coach for personalized feedback",
         "Perform at 2 local venues this month to build confidence"
       ],
@@ -106,7 +107,7 @@ const expandedStepContent = {
       title: "Create Your Professional EPK",
       description: "Build a booking package that gets venue owners and agents to say YES",
       actions: [
-        "Shoot high-quality live performance videos (3-4 songs)",
+        "Shoot high-quality live performance videos (3–4 songs)",
         "Write a compelling artist bio that tells your story in 150 words",
         "Gather professional photos from recent shows",
         "Create a one-page PDF with all booking essentials",
@@ -181,162 +182,157 @@ const expandedStepContent = {
   ]
 };
 
-const getExpandedStepContent = (pathway, stepIndex) => {
+// --- Helpers ---
+const getExpandedStepContent = (pathway, index) => {
   if (!pathway) return null;
-  const key = pathway.toLowerCase().includes('touring') ? 'touring-performer' : 'creative-artist';
-  return expandedStepContent[key]?.[stepIndex] || null;
+  const key = pathway.toLowerCase().includes('touring')
+    ? 'touring-performer'
+    : 'creative-artist';
+  return expandedStepContent[key]?.[index] || null;
 };
 
-// --- Main App Component ---
-const HOMEQuizMVP = () => {
-  const [currentScreen, setCurrentScreen] = useState('landing');
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [responses, setResponses] = useState({});
-  const [aiResult, setAiResult] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState('');
-  const [resultStep, setResultStep] = useState(0);
-  const [animationDirection, setAnimationDirection] = useState('forward');
-  const [showConfetti, setShowConfetti] = useState(false);
+// Linear interpolation between two RGB arrays
+const interpolateColor = (c1, c2, factor) =>
+  c1.map((v, i) => Math.round(v + factor * (c2[i] - v)));
 
-  // --- NEW: scroll reset logic ---
+// --- Main Component ---
+const HOMEQuizMVP = () => {
+  const [screen, setScreen]           = useState('landing');
+  const [qIndex, setQIndex]           = useState(0);
+  const [responses, setResponses]     = useState({});
+  const [aiResult, setAiResult]       = useState(null);
+  const [email, setEmail]             = useState('');
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [step, setStep]               = useState(0);
+  const [direction, setDirection]     = useState('forward');
+  const [confetti, setConfetti]       = useState(false);
+
+  // Scroll reset on every change
   const mainRef = useRef(null);
   useEffect(() => {
     mainRef.current?.scrollTo({ top: 0 });
-  }, [currentScreen, questionIndex, resultStep]);
+  }, [screen, qIndex, step]);
 
-  const handleResponse = (questionId, value) => {
-    setAnimationDirection('forward');
-    setResponses(prev => ({ ...prev, [questionId]: value }));
-    if (questionIndex < questions.length - 1) {
-      setQuestionIndex(i => i + 1);
+  const handleAnswer = (id, val) => {
+    setDirection('forward');
+    setResponses(r => ({ ...r, [id]: val }));
+    if (qIndex < questions.length - 1) {
+      setQIndex(i => i + 1);
     } else {
-      setCurrentScreen('transition');
-      setTimeout(() => setCurrentScreen('email'), 1500);
+      setScreen('transition');
+      setTimeout(() => setScreen('email'), 1500);
     }
   };
 
-  const handleBack = () => {
-    setAnimationDirection('backward');
-    if (currentScreen === 'quiz' && questionIndex > 0) {
-      setQuestionIndex(i => i - 1);
-    } else if (currentScreen === 'quiz' && questionIndex === 0) {
-      setCurrentScreen('landing');
-    } else if (currentScreen === 'email') {
-      setCurrentScreen('quiz');
-    } else if (currentScreen === 'results' && resultStep > 0) {
-      setResultStep(i => i - 1);
-    } else if (currentScreen === 'results' && resultStep === 0) {
-      setCurrentScreen('email');
-    }
-  };
-
-  const handleNext = () => {
-    setAnimationDirection('forward');
-    if (currentScreen === 'results' && resultStep < 5) {
-      setResultStep(i => i + 1);
-    }
-  };
-
-  const handleEmailSubmit = async () => {
+  const handleEmail = () => {
     if (!email || isSubmitting) return;
-    setIsSubmitting(true);
-    setAnimationDirection('forward');
-
-    // Dummy AI result
+    setSubmitting(true);
+    setDirection('forward');
+    // Simulate AI response
     const dummy = {
       title: 'The Touring Performer Path',
       icon: '🎤',
       description:
-        'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities.'
+        'You thrive on stage energy and live connections. Focus on building a powerful live presence and strategic bookings.'
     };
     setAiResult(dummy);
-
     setTimeout(() => {
-      setIsSubmitting(false);
-      setCurrentScreen('results');
-      setResultStep(0);
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 4000);
+      setSubmitting(false);
+      setScreen('results');
+      setStep(0);
+      setConfetti(true);
+      setTimeout(() => setConfetti(false), 4000);
     }, 1500);
   };
 
-  const startQuiz = () => {
-    setAnimationDirection('forward');
-    setCurrentScreen('quiz');
+  const goBack = () => {
+    setDirection('backward');
+    if (screen === 'quiz' && qIndex > 0) setQIndex(i => i - 1);
+    else if (screen === 'quiz') setScreen('landing');
+    else if (screen === 'email') setScreen('quiz');
+    else if (screen === 'results' && step > 0) setStep(i => i - 1);
+    else if (screen === 'results') setScreen('email');
   };
-  const resetQuiz = () => {
-    setCurrentScreen('landing');
-    setQuestionIndex(0);
+
+  const goNext = () => {
+    setDirection('forward');
+    if (screen === 'results' && step < 5) setStep(i => i + 1);
+  };
+
+  const startQuiz = () => {
+    setDirection('forward');
+    setScreen('quiz');
+  };
+
+  const resetAll = () => {
+    setScreen('landing');
+    setQIndex(0);
     setResponses({});
     setAiResult(null);
     setEmail('');
-    setResultStep(0);
+    setStep(0);
   };
 
-  const getMasterStage = () => {
-    if (currentScreen === 'quiz') return 1;
-    if (['transition', 'email'].includes(currentScreen)) return 2;
-    if (currentScreen === 'results' && resultStep < 5) return 3;
-    if (currentScreen === 'results' && resultStep === 5) return 4;
+  const getStage = () => {
+    if (screen === 'quiz') return 1;
+    if (['transition', 'email'].includes(screen)) return 2;
+    if (screen === 'results' && step < 5) return 3;
+    if (screen === 'results' && step === 5) return 4;
     return 0;
   };
 
-  if (currentScreen === 'landing') {
-    return <LandingPage onStartQuiz={startQuiz} />;
+  if (screen === 'landing') {
+    return <LandingPage onStart={startQuiz} />;
   }
 
-  const masterStage = getMasterStage();
-  const screenKey = `${currentScreen}-${questionIndex}-${resultStep}`;
+  const stage = getStage();
+  const key   = `${screen}-${qIndex}-${step}`;
 
   return (
     <JourneyLayout
-      masterStage={masterStage}
-      resultStep={resultStep}
-      onBack={handleBack}
-      onNext={handleNext}
-      currentScreen={currentScreen}
-      questionIndex={questionIndex}
-      mainRef={mainRef} // pass the ref here
+      masterStage={stage}
+      resultStep={step}
+      onBack={goBack}
+      onNext={goNext}
+      currentScreen={screen}
+      questionIndex={qIndex}
+      mainRef={mainRef}
     >
-      <AnimatedContent key={screenKey} direction={animationDirection}>
-        {currentScreen === 'quiz' && (
+      <AnimatedContent key={key} direction={direction}>
+        {screen === 'quiz' && (
           <QuestionPage
-            question={questions[questionIndex]}
-            onResponse={handleResponse}
-            questionIndex={questionIndex}
-            totalQuestions={questions.length}
+            question={questions[qIndex]}
+            onAnswer={handleAnswer}
+            questionIndex={qIndex}
+            total={questions.length}
           />
         )}
-        {currentScreen === 'transition' && (
+        {screen === 'transition' && (
           <TransitionPage
             icon={<Sparkles className="animate-pulse" />}
             title="Analyzing Your Path..."
-            subtitle="We're mapping your unique journey"
+            subtitle="Creating your personalized plan"
           />
         )}
-        {currentScreen === 'email' && (
+        {screen === 'email' && (
           <EmailCapturePage
             email={email}
             setEmail={setEmail}
-            onSubmit={handleEmailSubmit}
+            onSubmit={handleEmail}
             isSubmitting={isSubmitting}
           />
         )}
-        {currentScreen === 'results' && aiResult && (
+        {screen === 'results' && aiResult && (
           <>
-            {resultStep === 0 && (
+            {step === 0 && (
               <ResultsLandingPage
                 aiResult={aiResult}
-                onBegin={() => {
-                  setAnimationDirection('forward');
-                  setResultStep(1);
-                }}
-                showConfetti={showConfetti}
+                onBegin={() => { setDirection('forward'); setStep(1); }}
+                showConfetti={confetti}
               />
             )}
-            {resultStep > 0 && resultStep < 5 && <StepPage stepIndex={resultStep - 1} aiResult={aiResult} />}
-            {resultStep === 5 && <FinalPage responses={responses} aiResult={aiResult} onReset={resetQuiz} />}
+            {step > 0 && step < 5 && <StepPage stepIndex={step - 1} aiResult={aiResult} />}
+            {step === 5 && <FinalPage responses={responses} aiResult={aiResult} onReset={resetAll} />}
           </>
         )}
       </AnimatedContent>
@@ -344,73 +340,60 @@ const HOMEQuizMVP = () => {
   );
 };
 
-// --- Utility ---
-const interpolateColor = (c1, c2, factor) => {
-  const result = c1.slice();
-  for (let i = 0; i < 3; i++) {
-    result[i] = Math.round(result[i] + factor * (c2[i] - result[i]));
-  }
-  return result;
-};
-
-// --- Layout & Sub-Components ---
+// --- Layout & Navigation ---
 const JourneyLayout = ({
-  children,
   masterStage,
   resultStep,
   onBack,
   onNext,
   currentScreen,
   questionIndex,
-  mainRef
+  mainRef,
+  children
 }) => {
   const stages = [
     { id: 1, title: 'Identify Your Path', icon: <Target className="w-4 h-4" /> },
-    { id: 2, title: 'Personalized Path', icon: <MapPin className="w-4 h-4" /> },
-    { id: 3, title: 'Personalized Plan', icon: <ListChecks className="w-4 h-4" /> },
-    { id: 4, title: 'Execute Plan', icon: <Rocket className="w-4 h-4" /> }
+    { id: 2, title: 'Personalized Path',  icon: <MapPin className="w-4 h-4" /> },
+    { id: 3, title: 'Personalized Plan',  icon: <ListChecks className="w-4 h-4" /> },
+    { id: 4, title: 'Execute Plan',       icon: <Rocket className="w-4 h-4" /> }
   ];
-  const showBackButton = ['quiz', 'email', 'results'].includes(currentScreen);
-  const showNextButton = currentScreen === 'results' && resultStep > 0 && resultStep < 4;
-  const showFinalPlanButton = currentScreen === 'results' && resultStep === 4;
-  const color1 = [29, 209, 161],
-    color2 = [185, 19, 114];
+
+  const showBack      = ['quiz','email','results'].includes(currentScreen);
+  const showNextStep  = currentScreen === 'results' && resultStep > 0 && resultStep < 4;
+  const showExecute   = currentScreen === 'results' && resultStep === 4;
+  const color1 = [29,209,161], color2=[185,19,114];
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm pt-3 pb-2">
-        <div className="container max-w-5xl mx-auto px-4">
-          <div className="flex items-start justify-between relative mb-2 text-center">
-            {stages.map(stage => {
-              const isActive = masterStage === stage.id;
-              const isCompleted = masterStage > stage.id;
-              const rgb = interpolateColor(color1, color2, (stage.id - 1) / 3).join(',');
+      {/* Sticky Header */}
+      <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm pt-2 pb-1">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-start justify-around relative mb-2 text-center">
+            {stages.map(s => {
+              const isActive    = masterStage === s.id;
+              const isCompleted = masterStage > s.id;
+              const rgb          = interpolateColor(color1, color2, (s.id - 1) / 3).join(',');
               return (
-                <div
-                  key={stage.id}
-                  className={`flex-1 transition-all duration-500 z-10 ${
-                    masterStage >= stage.id ? 'text-gray-900 font-bold' : 'text-gray-400'
-                  }`}
-                >
+                <div key={s.id} className="w-1/2 sm:w-auto mb-1">
                   <div
-                    className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold ${
+                    className={`mx-auto mb-1 w-8 h-8 rounded-full flex items-center justify-center ${
                       isActive ? 'scale-110' : ''
-                    }`}
+                    } font-bold border-2 transition`}
                     style={{
-                      borderColor: isActive || isCompleted ? `rgb(${rgb})` : '#d1d5db',
+                      borderColor: isActive||isCompleted ? `rgb(${rgb})` : '#d1d5db',
                       backgroundColor: isCompleted ? `rgb(${rgb})` : 'white',
                       color: isCompleted ? 'white' : isActive ? `rgb(${rgb})` : '#a0aec0'
                     }}
                   >
-                    {isCompleted ? <Check className="w-4 h-4" /> : stage.id}
+                    {isCompleted ? <Check className="w-4 h-4" /> : s.id}
                   </div>
-                  <div className="text-[10px] leading-tight sm:text-xs">{stage.title}</div>
+                  <div className="text-xs sm:text-[10px] leading-snug">{s.title}</div>
                 </div>
               );
             })}
             <div className="absolute top-4 left-0 w-full h-1 bg-gray-200 -z-10">
               <div
-                className="h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-500"
+                className="h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
                 style={{ width: `calc(${((masterStage - 1) / 3) * 100}% - 2rem)` }}
               />
             </div>
@@ -418,134 +401,100 @@ const JourneyLayout = ({
         </div>
       </header>
 
-      <main ref={mainRef} className="flex-grow overflow-y-auto">
-        {children}
-      </main>
+      {/* Scrollable Content */}
+      <main ref={mainRef} className="flex-grow overflow-y-auto">{children}</main>
 
-      <footer className="flex-shrink-0 bg-white border-t mt-auto">
-        <div className="container max-w-5xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <button
-              onClick={onBack}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                showBackButton ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'invisible'
-              }`}
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span className="hidden sm:inline">Back</span>
-            </button>
-            <div className="text-center text-sm text-gray-500">
-              {currentScreen === 'quiz' && `Question ${questionIndex + 1} of ${questions.length}`}
-              {currentScreen === 'results' && resultStep > 0 && resultStep < 5 && `Action Step ${resultStep} of 4`}
-            </div>
-            {showNextButton && (
-              <button
-                onClick={onNext}
-                className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
-              >
-                Next Step <ChevronRight className="w-5 h-5" />
-              </button>
-            )}
-            {showFinalPlanButton && (
-              <button
-                onClick={onNext}
-                className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-2"
-              >
-                Execute Plan <Rocket className="w-5 h-5" />
-              </button>
-            )}
-            {!showNextButton && !showFinalPlanButton && <div className="w-24" />}
+      {/* Sticky Footer */}
+      <footer className="sticky bottom-0 bg-white border-t z-20 shadow-inner">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <button
+            onClick={onBack}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+              showBack ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'invisible'
+            }`}
+          >
+            <ChevronLeft className="w-5 h-5" />
+            <span className="hidden sm:inline">Back</span>
+          </button>
+          <div className="text-sm text-gray-500">
+            {currentScreen === 'quiz' && `Question ${questionIndex + 1} of ${questions.length}`}
+            {currentScreen === 'results' && resultStep > 0 && resultStep < 5 && `Step ${resultStep} of 4`}
           </div>
+          {showNextStep && (
+            <button
+              onClick={onNext}
+              className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-1"
+            >
+              Next <ChevronRight className="w-5 h-5" />
+            </button>
+          )}
+          {showExecute && (
+            <button
+              onClick={onNext}
+              className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-1"
+            >
+              Execute <Rocket className="w-5 h-5" />
+            </button>
+          )}
+          {(!showNextStep && !showExecute) && <div className="w-16" />}
         </div>
       </footer>
     </div>
   );
 };
 
+// --- Animated Wrapper ---
 const AnimatedContent = ({ children, direction }) => (
   <div className={`h-full w-full p-4 md:p-8 flex items-center justify-center animate-on-load ${direction}`}>
     {children}
   </div>
 );
 
-const LandingPage = ({ onStartQuiz }) => (
-  <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl mx-auto text-center">
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold text-gray-700 mb-6">
-            <Sparkles className="w-4 h-4" style={{ color: '#B91372' }} />
-            AI-Powered Music Career Guidance
-          </div>
-        </div>
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-          Find Your Path on the
-          <br />
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}
-          >
-            Music Creator Roadmap
-          </span>
-        </h1>
-        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Answer 5 simple questions and get your personalized action plan to build a sustainable music
-          career
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-10 text-sm text-gray-600">
-          <div className="flex items-center">
-            <Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />
-            <span>2-Minute Quiz</span>
-          </div>
-          <div className="flex items-center">
-            <Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />
-            <span>Personalized Roadmap</span>
-          </div>
-          <div className="flex items-center">
-            <Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />
-            <span>Actionable Steps</span>
-          </div>
-        </div>
-        <div className="mb-12">
-          <button
-            onClick={onStartQuiz}
-            className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}
-          >
-            <span className="relative z-10">Start Your Journey</span>
-            <ChevronRight className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-          </button>
-          <p className="text-sm text-gray-500 mt-3">No email required to start • 100% free</p>
-        </div>
-        <img
-          src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png"
-          alt="HOME for Music"
-          className="mx-auto mb-6"
-          style={{ height: '70px', width: 'auto', maxWidth: '280px', objectFit: 'contain' }}
-        />
-        <div className="flex items-center justify-center text-sm text-gray-500">
-          <div className="flex text-yellow-400 mr-2">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-current" />
-            ))}
-          </div>
-          Trusted by 1,000+ music creators
+// --- Landing Page ---
+const LandingPage = ({ onStart }) => (
+  <div className="min-h-screen bg-white flex items-center justify-center p-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+    <div className="w-full max-w-4xl text-center">
+      <div className="mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold text-gray-700 mb-6">
+          <Sparkles className="w-4 h-4" style={{ color: '#B91372' }} />
+          AI-Powered Music Career Guidance
         </div>
       </div>
+      <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+        Find Your Path on the<br/>
+        <span style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
+          Music Creator Roadmap
+        </span>
+      </h1>
+      <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+        Answer 5 simple questions and get your personalized action plan to build a sustainable music career
+      </p>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-10 text-sm text-gray-600">
+        <div className="flex items-center"><Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />2-Minute Quiz</div>
+        <div className="flex items-center"><Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />Personalized Roadmap</div>
+        <div className="flex items-center"><Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />Actionable Steps</div>
+      </div>
+      <button
+        onClick={onStart}
+        className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-transform duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
+      >
+        <span className="relative z-10">Start Your Journey</span>
+        <ChevronRight className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+      </button>
+      <p className="text-sm text-gray-500 mt-3">No email required • 100% free</p>
     </div>
   </div>
 );
 
-const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) => (
+// --- Question Page ---
+const QuestionPage = ({ question, onAnswer, questionIndex, total }) => (
   <div className="w-full max-w-3xl mx-auto">
     <div className="text-center mb-8">
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold mb-4">
         <Target className="w-4 h-4" style={{ color: '#1DD1A1' }} />
-        Question {questionIndex + 1} of {totalQuestions}
+        Question {questionIndex + 1} of {total}
       </div>
     </div>
     <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-xl">
@@ -553,28 +502,27 @@ const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) =
         {question.question}
       </h2>
       <div className="space-y-4">
-        {question.options.map(option => (
+        {question.options.map(opt => (
           <button
-            key={option.value}
-            onClick={() => onResponse(question.id, option.value)}
-            className="w-full p-5 text-left rounded-xl border-2 group cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r from-gray-50 to-gray-50 hover:from-[#1DD1A1]/5 hover:to-[#B91372]/5 border-gray-200 hover:border-[#1DD1A1] relative overflow-hidden"
+            key={opt.value}
+            onClick={() => onAnswer(question.id, opt.value)}
+            className="w-full p-5 text-left rounded-xl border-2 group cursor-pointer transition shadow-sm hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r from-gray-50 to-gray-50 hover:from-[#1DD1A1]/5 hover:to-[#B91372]/5 border-gray-200 hover:border-[#1DD1A1] relative overflow-hidden"
           >
             <div className="flex items-center justify-between relative z-10">
-              <span className="text-gray-900 leading-relaxed pr-4">{option.label}</span>
-              <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 border-gray-300 group-hover:border-[#1DD1A1] group-hover:bg-[#1DD1A1] flex-shrink-0">
-                <Check className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="text-gray-900 pr-4">{opt.label}</span>
+              <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition border-gray-300 group-hover:border-[#1DD1A1] group-hover:bg-[#1DD1A1]">
+                <Check className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
           </button>
         ))}
       </div>
     </div>
-    <div className="text-center mt-6 text-sm text-gray-500">
-      💡 Tip: Choose the option that best reflects your current goals
-    </div>
+    <div className="text-center mt-6 text-sm text-gray-500">💡 Tip: Choose the option that best reflects your goals</div>
   </div>
 );
 
+// --- Transition Page ---
 const TransitionPage = ({ icon, title, subtitle }) => (
   <div className="text-center">
     <div className="w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
@@ -594,6 +542,7 @@ const TransitionPage = ({ icon, title, subtitle }) => (
   </div>
 );
 
+// --- Email Capture Page ---
 const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
   <div className="w-full max-w-2xl mx-auto text-center">
     <div className="mb-8">
@@ -602,53 +551,38 @@ const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
         Final Step
       </div>
     </div>
-    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-      Your Personalized Path is Ready!
-    </h1>
-    <p className="text-lg md:text-xl text-gray-600 mb-8">
-      Enter your email to instantly unlock your complete roadmap and action plan
-    </p>
+    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Path is Ready!</h1>
+    <p className="text-lg md:text-xl text-gray-600 mb-8">Enter your email to unlock your complete action plan</p>
     <div className="bg-white border-2 rounded-2xl p-8 shadow-xl" style={{ borderColor: '#1DD1A1' }}>
       <div className="mb-6">
         <input
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="your@email.com"
-          className="w-full px-6 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] focus:border-transparent text-lg transition-all duration-300"
+          placeholder="you@example.com"
+          className="w-full px-6 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] text-lg transition"
         />
         <button
           onClick={onSubmit}
           disabled={!email || isSubmitting}
-          className="w-full mt-4 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 hover:opacity-90 text-lg flex items-center justify-center transform hover:scale-105 disabled:hover:scale-100 shadow-lg hover:shadow-xl"
-          style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)' }}
+          className="w-full mt-4 text-white font-bold px-8 py-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 flex items-center justify-center text-lg shadow-lg"
+          style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
         >
-          {isSubmitting ? (
-            <>
-              <Loader className="w-5 h-5 mr-2 animate-spin" />
-              Creating Your Roadmap...
-            </>
-          ) : (
-            <>
-              Get My Personalized Plan <ChevronRight className="w-5 h-5 ml-2" />
-            </>
-          )}
+          {isSubmitting
+            ? <><Loader className="w-5 h-5 mr-2 animate-spin" />Creating Your Plan...</>
+            : <>Get My Plan <ChevronRight className="w-5 h-5 ml-2" /></>
+          }
         </button>
       </div>
       <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
-        <div className="flex items-center gap-1">
-          <Check className="w-4 h-4 text-[#1DD1A1]" />
-          <span>Instant access</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Check className="w-4 h-4 text-[#1DD1A1]" />
-          <span>No spam ever</span>
-        </div>
+        <div className="flex items-center gap-1"><Check className="w-4 h-4 text-[#1DD1A1]" /><span>Instant access</span></div>
+        <div className="flex items-center gap-1"><Check className="w-4 h-4 text-[#1DD1A1]" /><span>No spam ever</span></div>
       </div>
     </div>
   </div>
 );
 
+// --- Confetti Overlay ---
 const Confetti = ({ show }) => {
   if (!show) return null;
   return (
@@ -660,17 +594,17 @@ const Confetti = ({ show }) => {
         }
       `}</style>
       {[...Array(60)].map((_, i) => {
-        const colors = ['#1DD1A1', '#B91372', '#FFD93D', '#6BCB77', '#4D96FF', '#FF6B6B'];
+        const colors = ['#1DD1A1','#B91372','#FFD93D','#6BCB77','#4D96FF','#FF6B6B'];
         const style = {
           position: 'absolute',
-          left: `${Math.random() * 100}%`,
-          top: `-10%`,
-          width: `${8 + Math.random() * 8}px`,
-          height: `${8 + Math.random() * 8}px`,
-          backgroundColor: colors[Math.floor(Math.random() * colors.length)],
-          borderRadius: Math.random() > 0.5 ? '50%' : '0%',
-          animation: `confetti-fall ${3 + Math.random() * 3}s ${Math.random() * 2}s linear infinite`,
-          transform: `rotate(${Math.random() * 360}deg)`
+          left: `${Math.random()*100}%`,
+          top: '-10%',
+          width: `${8+Math.random()*8}px`,
+          height: `${8+Math.random()*8}px`,
+          backgroundColor: colors[Math.floor(Math.random()*colors.length)],
+          borderRadius: Math.random()>0.5?'50%':'0%',
+          animation: `confetti-fall ${3+Math.random()*3}s ${Math.random()*2}s linear infinite`,
+          transform: `rotate(${Math.random()*360}deg)`
         };
         return <div key={i} style={style} />;
       })}
@@ -678,8 +612,9 @@ const Confetti = ({ show }) => {
   );
 };
 
+// --- Results Landing Page ---
 const ResultsLandingPage = ({ aiResult, onBegin, showConfetti }) => (
-  <div className="relative w-full max-w-2xl text-center">
+  <div className="relative w-full max-w-2xl mx-auto text-center">
     <Confetti show={showConfetti} />
     <div className="mb-8">
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold mb-4">
@@ -689,119 +624,82 @@ const ResultsLandingPage = ({ aiResult, onBegin, showConfetti }) => (
     </div>
     <div className="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-100">
       <div className="relative mb-8">
-        <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] p-8 rounded-3xl shadow-xl transform transition-all duration-700 animate-bounce">
-          <div className="text-6xl md:text-7xl">{aiResult.icon}</div>
+        <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] p-8 rounded-3xl shadow-xl animate-bounce">
+          <div className="text-6xl">{aiResult.icon}</div>
         </div>
         <Sparkles className="absolute top-0 right-0 w-6 h-6 text-yellow-400 animate-pulse" />
-        <Sparkles
-          className="absolute bottom-0 left-0 w-5 h-5 text-pink-400 animate-pulse"
-          style={{ animationDelay: '0.5s' }}
-        />
+        <Sparkles className="absolute bottom-0 left-0 w-5 h-5 text-pink-400 animate-pulse" style={{ animationDelay:'0.5s' }} />
       </div>
-      <h1 className="text-3xl md:text-4xl font-bold mb-3 text-gray-900">{aiResult.title}</h1>
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{aiResult.title}</h1>
       <p className="text-lg text-gray-600 mb-8">Your personalized roadmap is ready!</p>
-      <div className="bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5 rounded-2xl p-6 mb-8 text-left border border-[#1DD1A1]/20">
-        <h3 className="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2">
-          <MapPin className="w-5 h-5" style={{ color: '#1DD1A1' }} />
-          Your Starting Point:
+      <div className="bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5 rounded-2xl p-6 mb-8 border border-[#1DD1A1]/20 text-left">
+        <h3 className="flex items-center gap-2 font-bold text-gray-800 mb-3">
+          <MapPin className="w-5 h-5" style={{ color:'#1DD1A1' }} /> Your Starting Point:
         </h3>
         <p className="text-gray-700 leading-relaxed">{aiResult.description}</p>
       </div>
       <button
         onClick={onBegin}
-        className="group bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 relative overflow-hidden"
+        className="group bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-10 rounded-full text-lg transition-transform transform hover:scale-105 shadow-xl inline-flex items-center gap-3 overflow-hidden"
       >
         <span className="relative z-10">View My Action Plan</span>
-        <ChevronRight className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+        <ChevronRight className="w-5 h-5 relative z-10 transition-transform group-hover:translate-x-1" />
+        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
       </button>
     </div>
   </div>
 );
 
+// --- Step Page ---
 const StepPage = ({ stepIndex, aiResult }) => {
-  const stepData = getExpandedStepContent(aiResult.title, stepIndex);
-  if (!stepData) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <Loader className="animate-spin text-[#B91372]" />
-      </div>
-    );
+  const data = getExpandedStepContent(aiResult.title, stepIndex);
+  if (!data) {
+    return <div className="flex items-center justify-center h-full"><Loader className="animate-spin text-[#B91372]" /></div>;
   }
-
-  const color1 = [29, 209, 161],
-    color2 = [185, 19, 114];
-  const rgb = interpolateColor(color1, color2, stepIndex / 3).join(',');
-  const lightBg = `rgba(${rgb}, 0.1)`;
-
+  const c1=[29,209,161], c2=[185,19,114];
+  const rgb = interpolateColor(c1,c2, stepIndex/3).join(',');
+  const bg  = `rgba(${rgb},0.1)`;
   return (
     <div className="w-full max-w-[800px] mx-auto">
       <div className="text-center mb-8">
-        <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4"
-          style={{ backgroundColor: lightBg, color: `rgb(${rgb})` }}
-        >
-          <ListChecks className="w-4 h-4" />
-          Step {stepIndex + 1} of 4
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-sm font-semibold" style={{ backgroundColor: bg, color:`rgb(${rgb})` }}>
+          <ListChecks className="w-4 h-4" /> Step {stepIndex+1} of 4
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{stepData.title}</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">{stepData.description}</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{data.title}</h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">{data.description}</p>
       </div>
-      <div
-        className="rounded-2xl p-6 mb-8 bg-gradient-to-br from-white to-gray-50 border shadow-lg"
-        style={{ borderColor: `rgba(${rgb}, 0.25)` }}
-      >
-        <h3 className="font-bold text-gray-900 mb-3 flex items-center text-lg">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center mr-3"
-            style={{ backgroundColor: lightBg }}
-          >
-            <Sparkles className="w-5 h-5" style={{ color: `rgb(${rgb})` }} />
+      <div className="rounded-2xl p-6 mb-8 bg-gradient-to-br from-white to-gray-50 border shadow-lg" style={{ borderColor:`rgba(${rgb},0.25)` }}>
+        <h3 className="flex items-center gap-2 font-bold text-gray-900 mb-3 text-lg">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: bg }}>
+            <Sparkles className="w-5 h-5" style={{ color:`rgb(${rgb})` }} />
           </div>
           Why This Matters
         </h3>
-        <p className="text-gray-700 leading-relaxed pl-13">{stepData.whyItMatters}</p>
+        <p className="text-gray-700 leading-relaxed pl-13">{data.whyItMatters}</p>
       </div>
       <div className="mb-8">
-        <h3 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-          <Target className="w-5 h-5" style={{ color: `rgb(${rgb})` }} />
-          Your Action Items:
+        <h3 className="flex items-center gap-2 text-xl font-bold text-gray-900 mb-5">
+          <Target className="w-5 h-5" style={{ color:`rgb(${rgb})` }} /> Your Action Items:
         </h3>
         <div className="space-y-3">
-          {stepData.actions.map((action, i) => (
-            <div
-              key={i}
-              className="flex items-start bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group"
-            >
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 mt-0.5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
-                style={{ backgroundColor: `rgb(${rgb})` }}
-              >
-                {i + 1}
-              </div>
-              <p className="text-gray-700 leading-relaxed flex-grow">{action}</p>
+          {data.actions.map((act,i) => (
+            <div key={i} className="flex items-start bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition">
+              <div className="w-8 h-8 flex items-center justify-center text-white font-bold rounded-full mr-4 mt-0.5" style={{ backgroundColor:`rgb(${rgb})` }}>{i+1}</div>
+              <p className="text-gray-700 flex-grow">{act}</p>
             </div>
           ))}
         </div>
       </div>
-      <div
-        className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 shadow-lg border border-gray-100"
-      >
-        <h3 className="font-bold text-gray-900 mb-4 text-lg flex items-center gap-2">
-          <div
-            className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1DD1A1] to-[#B91372] flex items-center justify-center"
-          >
+      <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 border shadow-lg">
+        <h3 className="flex items-center gap-2 font-bold text-gray-900 mb-4 text-lg">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#1DD1A1] to-[#B91372]">
             <Home className="w-4 h-4 text-white" />
           </div>
           HOME Resources for This Step:
         </h3>
         <div className="flex flex-wrap gap-2">
-          {stepData.homeResources.map((res, i) => (
-            <span
-              key={i}
-              className="px-4 py-2 rounded-lg text-sm font-medium border transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
-              style={{ backgroundColor: lightBg, color: `rgb(${rgb})`, borderColor: `rgb(${rgb})` }}
-            >
+          {data.homeResources.map((res,i) => (
+            <span key={i} className="px-4 py-2 rounded-lg text-sm font-medium border" style={{ backgroundColor: bg, color:`rgb(${rgb})`, borderColor:`rgb(${rgb})` }}>
               {res}
             </span>
           ))}
@@ -811,22 +709,21 @@ const StepPage = ({ stepIndex, aiResult }) => {
   );
 };
 
+// --- Final Summary Page ---
 const FinalPage = ({ responses, aiResult, onReset }) => {
-  const summarySteps = [...Array(4)]
-    .map((_, i) => getExpandedStepContent(aiResult.title, i)?.title)
+  const summary = [0,1,2,3]
+    .map(i => getExpandedStepContent(aiResult.title, i)?.title)
     .filter(Boolean);
 
   return (
     <div className="w-full max-w-[900px] mx-auto">
       <div className="text-center mb-10">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold mb-4">
-          <Rocket className="w-4 h-4" style={{ color: '#B91372' }} />
+          <Rocket className="w-4 h-4" style={{ color:'#B91372' }} />
           Ready to Execute
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Your Complete Roadmap</h1>
-        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-          Everything you need to transform your music career is here. Choose how you want to proceed.
-        </p>
+        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Everything you need to transform your music career is here.</p>
       </div>
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 mb-10 border shadow-xl">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Personalized Summary</h2>
@@ -836,7 +733,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
               <UserCheck className="w-8 h-8 text-white" />
             </div>
             <h3 className="font-bold text-gray-800 mb-1">Your Path</h3>
-            <p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p>
+            <p className="text-gray-600">{aiResult.title.replace(' Path','')}</p>
           </div>
           <div className="text-center">
             <div className="w-16 h-16 bg-gradient-to-br from-[#B91372]/70 to-[#B91372] rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
@@ -844,9 +741,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             </div>
             <h3 className="font-bold text-gray-800 mb-1">Your Stage</h3>
             <p className="text-gray-600">
-              {(responses['current-stage'] || '').charAt(0).toUpperCase() +
-                (responses['current-stage'] || '').slice(1)}{' '}
-              Stage
+              {responses['current-stage']?.charAt(0).toUpperCase() + responses['current-stage']?.slice(1)} Stage
             </p>
           </div>
           <div className="text-center">
@@ -854,7 +749,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
               <ListChecks className="w-8 h-8 text-white" />
             </div>
             <h3 className="font-bold text-gray-800 mb-1">Your Focus</h3>
-            <p className="text-gray-600 text-sm">{summarySteps[0]}</p>
+            <p className="text-gray-600 text-sm">{summary[0]}</p>
           </div>
         </div>
       </div>
@@ -863,10 +758,9 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
         <p className="text-gray-600">How would you like to implement your roadmap?</p>
       </div>
       <div className="grid md:grid-cols-2 gap-6 mb-12">
-        <div className="relative bg-white rounded-2xl p-6 border-2 border-[#B91372] shadow-xl transform hover:scale-105 transition-all duration-300">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">
-            RECOMMENDED
-          </div>
+        {/* Accelerated Path */}
+        <div className="relative bg-white rounded-2xl p-6 border-2 border-[#B91372] shadow-xl hover:scale-105 transition">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
           <div className="text-center mb-6 pt-4">
             <div className="w-16 h-16 bg-gradient-to-br from-[#B91372] to-[#B91372]/70 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
               <Rocket className="w-8 h-8 text-white" />
@@ -875,27 +769,19 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             <p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p>
           </div>
           <ul className="space-y-3 mb-6">
-            <li className="flex items-start">
-              <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-gray-700">Personal strategy session with our team</span>
-            </li>
-            <li className="flex items-start">
-              <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-gray-700">A fully custom roadmap for your goals</span>
-            </li>
-            <li className="flex items-start">
-              <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-gray-700">Priority access to HOME resources</span>
-            </li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5" /><span>Personal strategy session with our team</span></li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5" /><span>A fully custom roadmap for your goals</span></li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5" /><span>Priority access to HOME resources</span></li>
           </ul>
           <button
-            onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
-            className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg transform hover:scale-105"
+            onClick={() => window.open('https://homeformusic.org/consultation','_blank')}
+            className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition"
           >
             Book Free Consultation
           </button>
         </div>
-        <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-xl transform hover:scale-105 transition-all duration-300">
+        {/* Community Path */}
+        <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-xl hover:scale-105 transition">
           <div className="text-center mb-6 pt-4">
             <div className="w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#1DD1A1]/70 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
               <Home className="w-8 h-8 text-white" />
@@ -904,29 +790,20 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             <p className="text-gray-600 mt-2">Join our supportive network</p>
           </div>
           <ul className="space-y-3 mb-6">
-            <li className="flex items-start">
-              <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-gray-700">Access to HOME's online community</span>
-            </li>
-            <li className="flex items-start">
-              <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-gray-700">Weekly virtual workshops & events</span>
-            </li>
-            <li className="flex items-start">
-              <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-gray-700">Resource library & templates</span>
-            </li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5" /><span>Access to HOME's online community</span></li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5" /><span>Weekly virtual workshops & events</span></li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5" /><span>Resource library & templates</span></li>
           </ul>
           <button
-            onClick={() => window.open('https://homeformusic.org/community', '_blank')}
-            className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg transform hover:scale-105"
+            onClick={() => window.open('https://homeformusic.org/community','_blank')}
+            className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition"
           >
             Join Community Free
           </button>
         </div>
       </div>
       <div className="text-center">
-        <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium transition-colors">
+        <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium">
           Take Quiz Again →
         </button>
       </div>
