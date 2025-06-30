@@ -512,12 +512,36 @@ const HOMEQuizMVP = () => {
           @media only screen and (max-width: 768px) {
             .step:nth-child(odd),
             .step:nth-child(even) {
-              justify-content: center;
-              padding: 0;
+              justify-content: flex-start !important;
+              padding-left: 40px !important;
+              padding-right: 20px !important;
             }
             
             .step-content {
-              width: 260px;
+              width: 100%;
+              max-width: 100%;
+            }
+            
+            .progress-bar-container {
+              left: 15px !important;
+              transform: translateX(0) !important;
+            }
+            
+            .step::after {
+              left: 15px !important;
+              transform: translate(0, -50%) !important;
+            }
+            
+            .header {
+              padding: 30px 20px !important;
+            }
+            
+            .header h1 {
+              font-size: 2rem !important;
+            }
+            
+            .header .subtitle {
+              font-size: 1rem !important;
             }
           }
         `}</style>
@@ -570,11 +594,11 @@ const HOMEQuizMVP = () => {
                     <div 
                       key={index} 
                       className={`step relative mb-20 flex items-center ${
-                        index % 2 === 0 ? 'justify-end pr-[50px]' : 'justify-start pl-[50px]'
+                        index % 2 === 0 ? 'md:justify-end md:pr-[50px]' : 'md:justify-start md:pl-[50px]'
                       }`}
                     >
                       <div 
-                        className="step-content border rounded-2xl p-6 transition-all duration-300 w-[280px] relative hover:-translate-y-0.5 hover:shadow-md"
+                        className="step-content border rounded-2xl p-6 transition-all duration-300 w-full md:w-[280px] relative hover:-translate-y-0.5 hover:shadow-md"
                         style={{
                           backgroundColor: color.bg,
                           borderColor: color.border
@@ -639,9 +663,22 @@ const HOMEQuizMVP = () => {
               <h3 className="inline-block bg-[#B91372] text-white text-xl font-semibold px-6 py-4 rounded-2xl mb-4">
                 🏆 HOW HOME ACCELERATES YOUR SUCCESS
               </h3>
-              <p className="bg-gradient-to-br from-[#B91372]/85 to-[#B91372]/95 text-white px-5 py-4 rounded-2xl border border-[#B91372]/30 max-w-lg mx-auto mb-5">
-                {aiResult.homeConnection}
-              </p>
+              
+              {/* Breaking down the HOME connection into digestible parts */}
+              <div className="max-w-2xl mx-auto mb-8 space-y-4">
+                {aiResult.homeConnection.split('. ').map((sentence, index) => {
+                  if (sentence.trim()) {
+                    return (
+                      <div key={index} className="bg-white border border-[#B91372]/20 rounded-xl p-4 text-left">
+                        <p className="text-gray-700 leading-relaxed">
+                          {sentence.trim()}{sentence.trim().endsWith('.') ? '' : '.'}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
               
               {/* Actionable CTAs */}
               <div className="mt-8 space-y-6">
