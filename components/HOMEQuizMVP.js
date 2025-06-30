@@ -174,7 +174,7 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                                 <div className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold border-2 ${masterStage === i + 1 ? 'scale-110' : masterStage > i+1 ? 'text-white' : 'bg-gray-200 border-gray-300'}`}
                                 style={{
                                     borderColor: masterStage === i + 1 ? activeStageColor : masterStage > i+1 ? 'transparent' : '#d1d5db',
-                                    backgroundColor: masterStage > i+1 ? activeStageColor : '#e5e7eb'
+                                    backgroundColor: masterStage > i+1 ? activeStageColor : (masterStage === i + 1 ? 'white' : '#e5e7eb')
                                 }}
                                 >{i + 1}</div>
                                 <div className="text-[10px] leading-tight sm:text-xs">{title}</div>
