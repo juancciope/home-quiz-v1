@@ -504,100 +504,233 @@ const HOMEQuizMVP = () => {
     );
   }
 
-  // Results page
+ // Results page
   if (currentStep === 'results' && aiResult) {
     return (
       <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="w-full max-w-4xl mx-auto px-6 py-8 md:py-16">
-          {/* Results Header */}
-          <div className="text-center mb-8 md:mb-12">
-            <div className="text-4xl md:text-6xl mb-4">{aiResult.icon}</div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{aiResult.title}</h1>
-            <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-              {aiResult.description}
-            </p>
-            {aiResult.isPersonalized && (
-              <div className="inline-flex items-center mt-4 px-4 py-2 rounded-full text-sm font-medium" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)', color: '#B91372' }}>
-                <Star className="w-4 h-4 mr-2" />
-                AI-Personalized for You
-              </div>
-            )}
+        <style jsx>{`
+          @media only screen and (max-width: 768px) {
+            .step:nth-child(odd),
+            .step:nth-child(even) {
+              justify-content: center;
+              padding: 0;
+            }
+            
+            .step-content {
+              width: 260px;
+            }
+          }
+        `}</style>
+        
+        <div className="container max-w-[800px] mx-auto bg-white">
+          {/* Header */}
+          <div className="header bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-10 text-center rounded-2xl mx-6 mt-6">
+            <h1 className="text-5xl font-bold mb-3 tracking-tight">{aiResult.title.toUpperCase().replace('PATH', '')}</h1>
+            <p className="text-xl opacity-95 font-normal">Your Personalized Path to Music Success</p>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-8 md:mb-12">
-            {/* Next Steps */}
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <ArrowRight className="w-5 md:w-6 h-5 md:h-6 mr-3" style={{ color: '#1DD1A1' }} />
-                Your Next Steps
+          
+          {/* Journey Container */}
+          <div className="journey-container bg-white px-5 py-10 relative min-h-[800px]">
+            {/* Journey Start */}
+            <div className="journey-start text-center mb-16 relative">
+              <h3 className="inline-block bg-[#1DD1A1] text-white text-xl font-semibold px-6 py-4 rounded-2xl mb-4">
+                🎯 YOUR CURRENT POSITION
               </h3>
-              <div className="space-y-4">
-                {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => (
-                  <div key={index} className="flex items-start">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4" style={{ backgroundColor: '#B91372' }}>
-                      {typeof step === 'object' ? step.priority : index + 1}
+              <p className="bg-gradient-to-br from-[#1DD1A1]/85 to-[#1DD1A1]/95 text-white px-5 py-4 rounded-2xl border border-[#1DD1A1]/30 max-w-md mx-auto">
+                {aiResult.description}
+              </p>
+            </div>
+            
+            {/* Main Path Container */}
+            <div className="path-container relative max-w-[700px] mx-auto">
+              {/* Vertical Progress Bar */}
+              <div className="progress-bar-container absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1.5 z-[1]">
+                <div className="w-full h-full bg-gradient-to-b from-[#1DD1A1] to-[#B91372] rounded-[3px]"></div>
+              </div>
+              
+              {/* Steps Container */}
+              <div className="steps-container relative z-[5] py-5">
+                {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => {
+                  const stepText = typeof step === 'object' ? step.step : step;
+                  const priority = typeof step === 'object' ? step.priority : index + 1;
+                  
+                  // Color progression
+                  const colors = [
+                    { main: '#1DD1A1', border: 'rgba(29, 209, 161, 0.3)', bg: 'rgba(29, 209, 161, 0.05)' },
+                    { main: '#1BC49C', border: 'rgba(27, 196, 156, 0.3)', bg: 'rgba(27, 196, 156, 0.05)' },
+                    { main: '#19AA86', border: 'rgba(25, 170, 134, 0.3)', bg: 'rgba(25, 170, 134, 0.05)' },
+                    { main: '#178F70', border: 'rgba(23, 143, 112, 0.3)', bg: 'rgba(23, 143, 112, 0.05)' },
+                    { main: '#A85990', border: 'rgba(168, 89, 144, 0.3)', bg: 'rgba(168, 89, 144, 0.05)' },
+                    { main: '#B91372', border: 'rgba(185, 19, 114, 0.3)', bg: 'rgba(185, 19, 114, 0.05)' }
+                  ];
+                  
+                  const color = colors[index] || colors[colors.length - 1];
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className={`step relative mb-20 flex items-center ${
+                        index % 2 === 0 ? 'justify-end pr-[50px]' : 'justify-start pl-[50px]'
+                      }`}
+                    >
+                      <div 
+                        className="step-content border rounded-2xl p-6 transition-all duration-300 w-[280px] relative hover:-translate-y-0.5 hover:shadow-md"
+                        style={{
+                          backgroundColor: color.bg,
+                          borderColor: color.border
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = color.main;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = color.border;
+                        }}
+                      >
+                        <div className="step-header flex items-center mb-3">
+                          <div 
+                            className="step-indicator w-[45px] h-[45px] rounded-xl flex items-center justify-center text-xl font-bold text-white mr-3 flex-shrink-0"
+                            style={{ backgroundColor: color.main }}
+                          >
+                            {priority}
+                          </div>
+                          <h4 className="step-title text-lg font-semibold text-gray-900 leading-tight">
+                            Priority {priority}
+                          </h4>
+                        </div>
+                        <p className="step-description text-gray-700 text-sm leading-relaxed">
+                          {stepText}
+                        </p>
+                      </div>
+                      
+                      {/* Dot on progress bar */}
+                      <div 
+                        className="absolute w-4 h-4 rounded-full border-4 border-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[6]"
+                        style={{
+                          backgroundColor: color.main,
+                          boxShadow: `0 0 0 2px ${color.main}`
+                        }}
+                      ></div>
                     </div>
-                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-                      {typeof step === 'object' ? step.step : step}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
-
-            {/* Resources */}
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <Users className="w-5 md:w-6 h-5 md:h-6 mr-3" style={{ color: '#1DD1A1' }} />
-                Recommended Resources
+            
+            {/* Resources Section */}
+            <div className="mt-16 mb-16">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Resources Available at HOME
               </h3>
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[600px] mx-auto">
                 {aiResult.resources.map((resource, index) => (
-                  <div key={index} className="flex items-center">
-                    <div className="w-2 h-2 rounded-full mr-3" style={{ backgroundColor: '#1DD1A1' }}></div>
-                    <p className="text-gray-700 text-sm md:text-base">{resource}</p>
+                  <div 
+                    key={index} 
+                    className="flex items-center bg-gray-50 px-4 py-3 rounded-xl"
+                  >
+                    <div className="w-2 h-2 rounded-full mr-3 flex-shrink-0" style={{ backgroundColor: '#1DD1A1' }}></div>
+                    <p className="text-gray-700 text-sm">{resource}</p>
                   </div>
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* HOME Connection */}
-          <div className="rounded-2xl p-6 md:p-8 text-center mb-8 md:mb-12" style={{ background: 'linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%)' }}>
-            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">How HOME Supports Your Journey</h3>
-            <p className="text-gray-700 leading-relaxed text-base md:text-lg max-w-3xl mx-auto">
-              {aiResult.homeConnection}
-            </p>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center">
-            <p className="text-gray-600 mb-6">Ready to accelerate your music career?</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button 
-                className="w-full sm:w-auto text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:opacity-90"
-                style={{ backgroundColor: '#B91372' }}
-              >
-                Join HOME Community
-              </button>
-              <button 
-                onClick={() => {
-                  setCurrentStep('landing');
-                  setResponses({});
-                  setAiResult(null);
-                  setEmail('');
-                }}
-                className="w-full sm:w-auto text-gray-600 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 border border-gray-300 hover:border-gray-400"
-              >
-                Take Quiz Again
-              </button>
+            
+            {/* Journey End - How HOME Supports You */}
+            <div className="journey-end text-center mt-16 relative">
+              <h3 className="inline-block bg-[#B91372] text-white text-xl font-semibold px-6 py-4 rounded-2xl mb-4">
+                🏆 HOW HOME ACCELERATES YOUR SUCCESS
+              </h3>
+              <p className="bg-gradient-to-br from-[#B91372]/85 to-[#B91372]/95 text-white px-5 py-4 rounded-2xl border border-[#B91372]/30 max-w-lg mx-auto mb-5">
+                {aiResult.homeConnection}
+              </p>
+              
+              {/* Actionable CTAs */}
+              <div className="mt-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[600px] mx-auto">
+                  <button 
+                    className="bg-[#B91372] text-white font-bold py-4 px-6 rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-105 shadow-lg"
+                    onClick={() => window.open('https://homeformusic.org/tour', '_blank')}
+                  >
+                    <div className="text-lg mb-1">Schedule a Tour</div>
+                    <div className="text-sm opacity-90">Visit our Nashville facility</div>
+                  </button>
+                  
+                  <button 
+                    className="bg-[#1DD1A1] text-white font-bold py-4 px-6 rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-105 shadow-lg"
+                    onClick={() => window.open('https://homeformusic.org/book', '_blank')}
+                  >
+                    <div className="text-lg mb-1">Book Studio Time</div>
+                    <div className="text-sm opacity-90">24/7 access available</div>
+                  </button>
+                </div>
+                
+                <div className="bg-gray-50 rounded-2xl p-6 max-w-[600px] mx-auto">
+                  <h4 className="font-bold text-gray-900 mb-3">Connect with Our Community Leaders:</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
+                      <span className="text-gray-700">Sarah Chen - Artist Development</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
+                      <span className="text-gray-700">Marcus Williams - Studio Manager</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
+                      <span className="text-gray-700">Jessica Park - Community Lead</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
+                      <span className="text-gray-700">David Torres - A&R Director</span>
+                    </div>
+                  </div>
+                  <button 
+                    className="mt-4 text-[#B91372] font-semibold hover:underline"
+                    onClick={() => window.open('mailto:community@homeformusic.org', '_blank')}
+                  >
+                    Email: community@homeformusic.org →
+                  </button>
+                </div>
+                
+                <div className="success-grid flex flex-wrap gap-2 justify-center max-w-[500px] mx-auto">
+                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
+                    24/7 Studio Access
+                  </span>
+                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
+                    250-Capacity Venue
+                  </span>
+                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
+                    Monthly Showcases
+                  </span>
+                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
+                    Industry Connections
+                  </span>
+                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
+                    Collaboration Network
+                  </span>
+                </div>
+              </div>
             </div>
+          </div>
+          
+          {/* Footer */}
+          <div className="footer bg-gray-50 text-gray-600 text-center p-5 text-sm border-t border-gray-200">
+            <p>Your Personalized Music Creator Roadmap | HOME for Music | Nashville, TN</p>
+            <button 
+              onClick={() => {
+                setCurrentStep('landing');
+                setResponses({});
+                setAiResult(null);
+                setEmail('');
+              }}
+              className="mt-3 text-[#B91372] font-semibold hover:underline"
+            >
+              Take the Quiz Again →
+            </button>
           </div>
         </div>
       </div>
     );
   }
-
   // Loading state while generating results
   if (currentStep === 'results' && isSubmitting) {
     return (
