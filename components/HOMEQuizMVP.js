@@ -68,10 +68,10 @@ const HOMEQuizMVP = () => {
       baseDescription: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities.',
       icon: '🎤',
       nextSteps: [
-        'Priority 1: Build a compelling 45-60 minute setlist that showcases your range and gets audiences engaged',
-        'Priority 2: Book regular local shows to develop your stage presence and build a local fanbase',
-        'Priority 3: Create a professional EPK (Electronic Press Kit) to pitch to larger venues and booking agents',
-        'Priority 4: Connect with HOME\'s performance community and utilize our 24/7 rehearsal facilities to perfect your live show'
+        'Step 1: Build a compelling 45-60 minute setlist that showcases your range and gets audiences engaged',
+        'Step 2: Book regular local shows to develop your stage presence and build a local fanbase',
+        'Step 3: Create a professional EPK (Electronic Press Kit) to pitch to larger venues and booking agents',
+        'Step 4: Connect with HOME\'s performance community and utilize our 24/7 rehearsal facilities to perfect your live show'
       ],
       resources: [
         'Rehearsal Facility Access (24/7 at HOME)',
@@ -88,10 +88,10 @@ const HOMEQuizMVP = () => {
       baseDescription: 'You\'re driven by artistic expression and building an authentic online following. Your priority is developing a consistent brand and sustainable revenue streams.',
       icon: '🎨',
       nextSteps: [
-        'Priority 1: Define your unique artistic voice and visual brand identity that resonates with your target audience',
-        'Priority 2: Develop a consistent content strategy that showcases your music and creative process across platforms',
-        'Priority 3: Build multiple revenue streams through streaming, merchandise, fan subscriptions, and brand partnerships',
-        'Priority 4: Join HOME\'s artist community to collaborate and learn from other creative entrepreneurs'
+        'Step 1: Define your unique artistic voice and visual brand identity that resonates with your target audience',
+        'Step 2: Develop a consistent content strategy that showcases your music and creative process across platforms',
+        'Step 3: Build multiple revenue streams through streaming, merchandise, fan subscriptions, and brand partnerships',
+        'Step 4: Join HOME\'s artist community to collaborate and learn from other creative entrepreneurs'
       ],
       resources: [
         'Content Creation Studios & Equipment',
@@ -108,10 +108,10 @@ const HOMEQuizMVP = () => {
       baseDescription: 'You excel at collaboration and creating music for others. Your priority is building industry connections and developing multiple income streams through your technical skills.',
       icon: '🎹',
       nextSteps: [
-        'Priority 1: Master your craft and develop a signature sound that makes you indispensable to artists and labels',
-        'Priority 2: Build a diverse portfolio showcasing your range across genres and collaboration styles',
-        'Priority 3: Network strategically with artists, labels, and music supervisors to secure consistent placements',
-        'Priority 4: Learn the business side including publishing, sync licensing, and contracts to maximize your earnings'
+        'Step 1: Master your craft and develop a signature sound that makes you indispensable to artists and labels',
+        'Step 2: Build a diverse portfolio showcasing your range across genres and collaboration styles',
+        'Step 3: Network strategically with artists, labels, and music supervisors to secure consistent placements',
+        'Step 4: Learn the business side including publishing, sync licensing, and contracts to maximize your earnings'
       ],
       resources: [
         'Professional Recording Studios (24/7 access)',
