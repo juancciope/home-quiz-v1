@@ -1,198 +1,204 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Home, Mail, ArrowRight, Check, Users, Star, Loader, ChevronLeft, MapPin, UserCheck, ListChecks, PenSquare, Eye, Award, Rocket } from 'lucide-react';
 
-// Main Component
-const HOMEQuizMVP = () => {
-  const [currentStep, setCurrentStep] = useState('landing');
-  const [responses, setResponses] = useState({});
-  const [aiResult, setAiResult] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentResultStep, setCurrentResultStep] = useState(0); 
-  const [previousResultStep, setPreviousResultStep] = useState(0);
+// --- Data (Should be outside component to prevent re-creation on re-renders) ---
 
-  useEffect(() => {
-    setPreviousResultStep(currentResultStep);
-  }, [currentResultStep]);
-
-  const questions = [
+const questions = [
     { id: 'motivation', question: "What drives your music career ambitions?", options: [ { value: 'live-performance', label: 'The energy of a live audience and performing music from the stage' }, { value: 'artistic-expression', label: 'Artistic expression through recording music and building a loyal following online' }, { value: 'collaboration', label: 'Making great songs and collaborating with other talented creators' } ] },
     { id: 'ideal-day', question: "Describe your ideal workday as a music professional:", options: [ { value: 'performing-travel', label: 'Traveling to a new city to perform for a live audience' }, { value: 'releasing-music', label: 'Releasing a new song that you are really proud of' }, { value: 'writing-creating', label: 'Writing the best song that you have ever written' } ] },
     { id: 'success-vision', question: "When you imagine success 5 years from now, you see yourself:", options: [ { value: 'touring-headliner', label: 'Headlining major tours and playing sold out shows around the world' }, { value: 'passive-income-artist', label: 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions' }, { value: 'hit-songwriter', label: 'Having multiple major hit songs that you collaborated on and earning \'mailbox money\' through sync placements and other royalty streams' } ] },
     { id: 'current-stage', question: "Which best describes your current stage?", options: [ { value: 'planning', label: 'Planning Stage - Figuring out my path and building foundations' }, { value: 'production', label: 'Production Stage - Actively creating and releasing work' }, { value: 'scale', label: 'Scale Stage - Already making the majority of my income from music and looking to grow my business' } ] },
     { id: 'biggest-challenge', question: "What's the biggest thing holding your music journey back right now?", options: [ { value: 'performance-opportunities', label: 'I need more opportunities to perform and grow my live audience' }, { value: 'brand-audience', label: 'I\'m creating great content, but struggle to build a consistent brand and online audience' }, { value: 'collaboration-income', label: 'I work behind the scenes, but need better access to collaborators, placements, and consistent income' } ] }
-  ];
+];
+
+const expandedStepContent = {
+    'touring-performer': [
+        { title: "Build Your Signature Live Set", description: "Create a powerful performance that captivates audiences and leaves them wanting more", actions: ["Map out a 45-minute setlist with emotional peaks and valleys", "Record live rehearsal videos to analyze your stage presence", "Design smooth transitions between songs with stories or audience interaction", "Practice your set 3x this week in HOME's rehearsal space", "Get feedback from 5 fellow musicians on your performance energy"], whyItMatters: "A killer live set is your #1 tool for winning over new fans and booking better gigs. This is where you transform from someone who plays songs to an artist who creates experiences.", homeResources: ["24/7 Rehearsal Facility Access", "Performance Coaching Sessions", "Monthly Open Mics for Testing"] },
+        { title: "Master Your Stage Presence", description: "Develop the confidence and charisma that makes audiences remember you", actions: ["Film yourself performing and identify 3 movements that feel authentic", "Study 5 favorite performers and note their engagement techniques", "Practice talking between songs - write out 3 compelling stories", "Work with HOME's performance coach for personalized feedback", "Perform at 2 local venues this month to build confidence"], whyItMatters: "Great songs are only half the equation. Your stage presence determines whether people become fans or forget you. This skill directly impacts your booking fees and fan loyalty.", homeResources: ["Stage Presence Workshops", "Video Review Sessions", "Performance Psychology Training"] },
+        { title: "Create Your Professional EPK", description: "Build a booking package that gets venue owners and agents to say YES", actions: ["Shoot high-quality live performance videos (3-4 songs)", "Write a compelling artist bio that tells your story in 150 words", "Gather professional photos from recent shows", "Create a one-page PDF with all booking essentials", "Build a simple EPK website using HOME's templates"], whyItMatters: "Your EPK is often your only shot at landing bigger gigs. A professional package can be the difference between $200 bar gigs and $2,000 festival slots.", homeResources: ["EPK Templates & Examples", "Professional Photography Sessions", "Copywriting Support"] },
+        { title: "Book Your Next 10 Shows", description: "Build momentum with a strategic booking plan that grows your fanbase", actions: ["Research 20 venues that fit your genre and draw", "Send personalized booking emails using HOME's proven templates", "Follow up with 5 venues every week until booked", "Network at HOME showcases to meet booking agents", "Create a touring route that makes financial sense"], whyItMatters: "Consistent gigging builds your reputation, income, and fanbase faster than anything else. This systematic approach removes the guesswork from booking.", homeResources: ["Venue Database Access", "Booking Email Templates", "Agent Networking Events"] }
+    ],
+    'creative-artist': [
+        { title: "Define Your Unique Artist Brand", description: "Discover and articulate what makes you different from every other artist", actions: ["Complete HOME's Brand Discovery Worksheet to find your core values", "Create a mood board with 20 images that represent your vibe", "Write your artist mission statement in one powerful sentence", "Choose 3 primary colors and 2 fonts for visual consistency", "Design your logo or wordmark with HOME's design tools"], whyItMatters: "A clear brand helps you stand out in a sea of content. When fans can recognize your content instantly, they're more likely to engage, share, and buy.", homeResources: ["Brand Development Workshop", "Design Software Access", "1-on-1 Brand Coaching"] },
+        { title: "Launch Your Content Strategy", description: "Build a sustainable system for creating content that grows your audience", actions: ["Choose 3 content pillars (music, behind-scenes, lifestyle)", "Batch create 30 pieces of content in HOME's studios", "Set up scheduling tools to post consistently", "Start a weekly series that fans anticipate", "Track metrics to see what resonates with your audience"], whyItMatters: "Consistency beats perfection. A strategic content plan keeps you visible and helps the algorithm work in your favor, leading to exponential growth.", homeResources: ["Content Creation Studios", "Social Media Templates", "Analytics Training"] },
+        { title: "Build Revenue Streams", description: "Create multiple income sources beyond just streaming royalties", actions: ["Design 3 merchandise items that reflect your brand", "Set up fan subscription tiers with exclusive content", "Launch print-on-demand store with zero upfront costs", "Create sample packs or presets for producers", "Partner with brands aligned with your values"], whyItMatters: "Diversified income = creative freedom. When you're not dependent on one revenue source, you can take bigger artistic risks and weather industry changes.", homeResources: ["Merch Design Tools", "E-commerce Setup Support", "Revenue Strategy Sessions"] },
+        { title: "Grow Your Engaged Community", description: "Transform casual listeners into a loyal fanbase that supports your journey", actions: ["Start email list with lead magnet (free song, samples)", "Host monthly livestreams for your core fans", "Create fan-generated content campaigns", "Launch a Discord or community space", "Personally respond to DMs for 30 minutes daily"], whyItMatters: "1,000 true fans who spend $100/year = $100,000. Building genuine connections creates sustainable success that algorithms can't take away.", homeResources: ["Community Building Playbook", "Email Marketing Tools", "Fan Engagement Workshop"] }
+    ],
+    'writer-producer': [
+        { title: "Master Your Production Craft", description: "Develop the technical skills that make artists want to work with you", actions: ["Complete one new production technique tutorial daily", "Recreate 5 hit songs in your genre to understand their structure", "Build a template library for fast, professional workflows", "Master HOME's studio equipment through hands-on practice", "Get feedback on mixes from established producers in community"], whyItMatters: "Technical excellence opens doors. When artists trust your skills, they recommend you to others, creating a snowball effect of opportunities.", homeResources: ["Pro Studio Access 24/7", "Production Masterclasses", "Mixing/Mastering Workshops"] },
+        { title: "Build Your Producer Portfolio", description: "Showcase your versatility and unique sound across multiple genres", actions: ["Produce 10 diverse tracks showcasing your range", "Collaborate with 5 HOME artists on different projects", "Create before/after demos showing your production value", "Build a professional website with easy listening experience", "Share one production tip weekly to establish expertise"], whyItMatters: "Your portfolio is your calling card. A strong showcase leads to better clients, higher rates, and the ability to choose projects you're passionate about.", homeResources: ["Artist Collaboration Board", "Portfolio Website Templates", "Production Showcase Events"] },
+        { title: "Network with Industry Players", description: "Build relationships that lead to consistent work and bigger opportunities", actions: ["Attend HOME's monthly producer meetups", "Reach out to 3 artists weekly with collaboration ideas", "Connect with music supervisors through HOME's network", "Join sync licensing platforms with your best work", "Offer one free production monthly to build relationships"], whyItMatters: "The music industry runs on relationships. Your network determines your net worth - one connection can change your entire career trajectory.", homeResources: ["Industry Networking Events", "A&R Connections", "Sync Licensing Workshop"] },
+        { title: "Setup Your Business Systems", description: "Create the infrastructure for sustainable income and growth", actions: ["Register your publishing company and PRO membership", "Create contract templates for different project types", "Set up invoicing and payment systems", "Build packages and rate cards for your services", "Learn split sheets and copyright essentials at HOME"], whyItMatters: "Talent without business knowledge leads to exploitation. These systems ensure you get paid fairly and build long-term wealth from your creativity.", homeResources: ["Music Business Course", "Legal Templates", "Publishing Administration Support"] }
+    ]
+};
+
+const getExpandedStepContent = (pathway, stepIndex) => {
+    if (!pathway) return null;
+    const pathwayKey = pathway.toLowerCase().includes('touring') ? 'touring-performer' :
+                      pathway.toLowerCase().includes('creative') ? 'creative-artist' : 
+                      'writer-producer';
+    return expandedStepContent[pathwayKey]?.[stepIndex] || null;
+};
+
+// --- Main App Component ---
+
+const HOMEQuizMVP = () => {
+  const [currentScreen, setCurrentScreen] = useState('landing'); // landing, quiz, transition, email, results
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [responses, setResponses] = useState({});
+  const [aiResult, setAiResult] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState('');
+  const [resultStep, setResultStep] = useState(0); // For navigating within results
+  const [animationDirection, setAnimationDirection] = useState('forward');
 
   const questionIDs = questions.map(q => q.id);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
 
   const handleResponse = (questionId, value) => {
+    setAnimationDirection('forward');
     const newResponses = { ...responses, [questionId]: value };
     setResponses(newResponses);
     
     const currentIndex = questionIDs.indexOf(questionId);
     if (currentIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentIndex + 1);
+      setQuestionIndex(currentIndex + 1);
     } else {
-      setCurrentStep('email-capture-transition');
-      setTimeout(() => setCurrentStep('email-capture'), 2000); // Transition to email capture
-    }
-  };
-  
-  const handleNext = () => {
-    if (currentStep === 'results') {
-      if (currentResultStep < 5) {
-        setCurrentResultStep(currentResultStep + 1);
-      }
+      setCurrentScreen('transition');
+      setTimeout(() => setCurrentScreen('email'), 1500);
     }
   };
 
   const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    } else if (currentQuestionIndex === 0) {
-      setCurrentQuestionIndex(-1);
-      setCurrentStep('landing');
-    } else if (currentStep === 'results') {
-        if(currentResultStep > 0) {
-            setCurrentResultStep(currentResultStep - 1);
-        } else {
-            setCurrentStep('email-capture');
-        }
-    } else if(currentStep === 'email-capture') {
-        setCurrentStep('quiz');
-        setCurrentQuestionIndex(questions.length - 1);
+    setAnimationDirection('backward');
+    if (currentScreen === 'quiz' && questionIndex > 0) {
+      setQuestionIndex(questionIndex - 1);
+    } else if (currentScreen === 'quiz' && questionIndex === 0) {
+      setCurrentScreen('landing');
+    } else if (currentScreen === 'email') {
+      setCurrentScreen('quiz');
+    } else if (currentScreen === 'results' && resultStep > 0) {
+      setResultStep(resultStep - 1);
+    } else if (currentScreen === 'results' && resultStep === 0) {
+      setCurrentScreen('email');
     }
   };
+  
+  const handleNext = () => {
+      setAnimationDirection('forward');
+      if (currentScreen === 'results' && resultStep < 5) {
+          setResultStep(resultStep + 1);
+      }
+  }
 
-  // Logic to start the quiz
+  const handleEmailSubmit = async () => {
+    if (!email || isSubmitting) return;
+    setIsSubmitting(true);
+    setAnimationDirection('forward');
+
+    // Simulate API calls for now
+    const dummyResult = {
+        title: 'The Touring Performer Path',
+        icon: '🎤',
+        description: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities.',
+    };
+    setAiResult(dummyResult);
+    
+    setTimeout(() => {
+        setIsSubmitting(false);
+        setCurrentScreen('results');
+        setResultStep(0);
+    }, 1500);
+  };
+
   const startQuiz = () => {
-    setCurrentStep('quiz');
-    setCurrentQuestionIndex(0);
+    setAnimationDirection('forward');
+    setCurrentScreen('quiz');
+    setQuestionIndex(0);
   };
   
-  // Data fetching and submission logic remains the same...
-  const getExpandedStepContent = (pathway, stepIndex) => {
-    const pathwayKey = pathway.toLowerCase().includes('touring') ? 'touring-performer' :
-                      pathway.toLowerCase().includes('creative') ? 'creative-artist' : 
-                      'writer-producer';
-    return expandedStepContent[pathwayKey]?.[stepIndex] || null;
-  };
-  const handleEmailSubmit = async () => { /* ... same as before ... */ };
-  const generateAIResult = async (responses) => { /* ... same as before ... */ };
-  const determinePathwayFallback = (responses) => { /* ... same as before ... */ };
+  const resetQuiz = () => {
+      setCurrentScreen('landing');
+      setQuestionIndex(0);
+      setResponses({});
+      setAiResult(null);
+      setEmail('');
+      setResultStep(0);
+  }
 
-  // Determine master stage for navigator
   const getMasterStage = () => {
-    if (currentStep === 'quiz') return 1;
-    if (currentStep === 'email-capture-transition' || currentStep === 'email-capture') return 2;
-    if (currentStep === 'results' && currentResultStep > 0 && currentResultStep < 5) return 3;
-    if (currentStep === 'results' && currentResultStep === 5) return 4;
+    if (currentScreen === 'quiz') return 1;
+    if (currentScreen === 'transition' || currentScreen === 'email') return 2;
+    if (currentScreen === 'results' && resultStep >= 0 && resultStep < 5) return 3;
+    if (currentScreen === 'results' && resultStep === 5) return 4;
     return 0;
   };
   const masterStage = getMasterStage();
 
-  // Render landing page or the main journey layout
-  if (currentStep === 'landing') {
+  if (currentScreen === 'landing') {
     return <LandingPage onStartQuiz={startQuiz} />;
   }
 
   return (
-    <JourneyLayout masterStage={masterStage} onBack={handleBack} onNext={handleNext} currentStep={currentStep} currentResultStep={currentResultStep}>
-      <div className="relative w-full h-full overflow-hidden">
-        {/* Quiz Questions */}
-        {questions.map((q, index) => (
-            <StepContent key={q.id} isCurrent={currentStep === 'quiz' && currentQuestionIndex === index} isPrevious={currentStep === 'quiz' && currentQuestionIndex > index}>
-                <QuestionPage question={q} onResponse={handleResponse} />
-            </StepContent>
-        ))}
-        {/* Email Capture Transition */}
-        <StepContent isCurrent={currentStep === 'email-capture-transition'} isPrevious={currentStep === 'quiz'}>
-             <TransitionPage icon={<Loader className="animate-spin" />} title="Fantastic." subtitle="Analyzing your responses to pinpoint your place on the roadmap..." />
-        </StepContent>
-        {/* Email Capture */}
-        <StepContent isCurrent={currentStep === 'email-capture'} isPrevious={currentStep === 'email-capture-transition'}>
-             <EmailCapturePage email={email} setEmail={setEmail} onSubmit={handleEmailSubmit} isSubmitting={isSubmitting} />
-        </StepContent>
-        {/* Results */}
-        {aiResult && (
+    <JourneyLayout masterStage={masterStage} onBack={handleBack} onNext={handleNext} currentScreen={currentScreen} resultStep={resultStep}>
+      <AnimatedContent key={currentScreen + questionIndex + resultStep} direction={animationDirection}>
+        {currentScreen === 'quiz' && <QuestionPage question={questions[questionIndex]} onResponse={handleResponse} />}
+        {currentScreen === 'transition' && <TransitionPage icon={<Loader className="animate-spin" />} title="Fantastic." subtitle="Analyzing your responses to pinpoint your place on the roadmap..." />}
+        {currentScreen === 'email' && <EmailCapturePage email={email} setEmail={setEmail} onSubmit={handleEmailSubmit} isSubmitting={isSubmitting} />}
+        {currentScreen === 'results' && aiResult && (
             <>
-                <StepContent isCurrent={currentStep === 'results' && currentResultStep === 0} isPrevious={currentStep === 'email-capture'}>
-                    <ResultsLandingPage aiResult={aiResult} getExpandedStepContent={getExpandedStepContent} onBegin={() => setCurrentResultStep(1)} />
-                </StepContent>
-                {[...Array(4)].map((_, i) => (
-                    <StepContent key={i} isCurrent={currentStep === 'results' && currentResultStep === i + 1} isPrevious={currentStep === 'results' && currentResultStep > i+1}>
-                         <StepPage stepIndex={i} aiResult={aiResult} getExpandedStepContent={getExpandedStepContent} />
-                    </StepContent>
-                ))}
-                 <StepContent isCurrent={currentStep === 'results' && currentResultStep === 5} isPrevious={currentStep === 'results' && currentResultStep > 5}>
-                    <FinalPage responses={responses} aiResult={aiResult} getExpandedStepContent={getExpandedStepContent} />
-                </StepContent>
+              {resultStep === 0 && <ResultsLandingPage aiResult={aiResult} onBegin={() => { setAnimationDirection('forward'); setResultStep(1); }} />}
+              {resultStep > 0 && resultStep < 5 && <StepPage stepIndex={resultStep - 1} aiResult={aiResult} />}
+              {resultStep === 5 && <FinalPage responses={responses} aiResult={aiResult} onReset={resetQuiz} />}
             </>
         )}
-      </div>
+      </AnimatedContent>
     </JourneyLayout>
   );
 };
 
-// --- Sub-Components for Readability ---
+// --- Sub-Components ---
 
-const JourneyLayout = ({ children, masterStage, onBack, onNext, currentStep, currentResultStep }) => {
-    const stageTitles = ["Discovery", "Analysis", "Your Roadmap", "Next Steps"];
-    const showBackButton = masterStage > 0 && !(currentStep === 'results' && currentResultStep === 0);
-    const showNextButton = currentStep === 'results' && currentResultStep > 0 && currentResultStep < 5;
+const JourneyLayout = ({ children, masterStage, onBack, onNext, currentScreen, resultStep }) => {
+    const stageInfo = [
+        { title: "Discovery", icon: <PenSquare/> },
+        { title: "Analysis", icon: <Eye/> },
+        { title: "Your Roadmap", icon: <Award/> },
+        { title: "Next Steps", icon: <Rocket/> }
+    ];
     
+    const showBackButton = (currentScreen === 'quiz' && true) || (currentScreen === 'email') || (currentScreen === 'results' && resultStep > 0);
+    const showNextButton = currentScreen === 'results' && resultStep > 0 && resultStep < 5;
+
     return (
         <div className="min-h-[100svh] bg-gray-50 flex flex-col" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-            <style jsx global>{`
-                /* Animation styles */
-                .step-content {
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    inset: 0;
-                    transition: transform 0.5s cubic-bezier(0.45, 0, 0.55, 1), opacity 0.5s cubic-bezier(0.45, 0, 0.55, 1);
-                }
-                .step-content.is-current {
-                    transform: translateX(0%);
-                    opacity: 1;
-                    z-index: 10;
-                }
-                .step-content.is-previous {
-                    transform: translateX(-100%);
-                    opacity: 0;
-                }
-                .step-content.is-next {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            `}</style>
-             <header className="sticky top-0 bg-white/80 backdrop-blur-sm z-20 shadow-sm">
+            <header className="sticky top-0 bg-white/90 backdrop-blur-sm z-20 shadow-sm">
                 <div className="container max-w-4xl mx-auto px-6 py-3">
                     <div className="flex items-center justify-center">
-                        {[...Array(4)].map((_, i) => (
+                        {stageInfo.map((stage, i) => (
                             <React.Fragment key={i}>
-                                <div className={`text-center transition-all duration-300 ${masterStage >= i + 1 ? 'text-gray-900' : 'text-gray-400'}`}>
-                                    <div className="text-sm font-bold">{stageTitles[i]}</div>
+                                <div className={`text-center transition-all duration-500 ${masterStage >= i + 1 ? 'text-gray-900' : 'text-gray-400'}`}>
+                                    <div className={`mx-auto mb-1 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 ${masterStage >= i + 1 ? 'bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white' : 'bg-gray-200'}`}>
+                                        {stage.icon}
+                                    </div>
+                                    <div className="text-xs font-bold">{stage.title}</div>
                                 </div>
-                                {i < 3 && (
-                                <div className={`h-1 mx-4 flex-1 transition-all duration-300 rounded-full ${masterStage > i + 1 ? 'bg-gradient-to-r from-[#1DD1A1] to-[#B91372]' : 'bg-gray-200'}`}></div>
+                                {i < stageInfo.length - 1 && (
+                                <div className={`h-1 mx-4 flex-1 transition-all duration-500 rounded-full ${masterStage > i + 1 ? 'bg-gradient-to-r from-[#1DD1A1] to-[#B91372]' : 'bg-gray-200'}`}></div>
                                 )}
                             </React.Fragment>
                         ))}
                     </div>
                 </div>
             </header>
-            <main className="flex-grow w-full relative">
+            <main className="flex-grow w-full relative overflow-hidden">
                 {children}
             </main>
-            <footer className="sticky bottom-0 bg-white/80 backdrop-blur-sm z-20 border-t border-gray-200">
-                <div className="container max-w-4xl mx-auto px-6 py-3 flex justify-between items-center">
-                    <button onClick={onBack} className="text-gray-600 hover:text-gray-900 font-medium flex items-center transition-opacity" style={{opacity: showBackButton ? 1 : 0}}>
+            <footer className="sticky bottom-0 bg-white/90 backdrop-blur-sm z-20 border-t border-gray-200">
+                <div className="container max-w-4xl mx-auto px-6 py-3 flex justify-between items-center h-16">
+                    <button onClick={onBack} className="text-gray-600 hover:text-gray-900 font-medium flex items-center transition-opacity duration-300" style={{ opacity: showBackButton ? 1 : 0, pointerEvents: showBackButton ? 'auto' : 'none' }}>
                         <ChevronLeft className="w-5 h-5 mr-1" /> Back
                     </button>
-                    <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center" style={{opacity: showNextButton ? 1 : 0, pointerEvents: showNextButton ? 'auto' : 'none'}}>
+                    <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center" style={{ opacity: showNextButton ? 1 : 0, pointerEvents: showNextButton ? 'auto' : 'none' }}>
                         Next Step <ChevronRight className="w-5 h-5 ml-2" />
                     </button>
                 </div>
@@ -201,19 +207,106 @@ const JourneyLayout = ({ children, masterStage, onBack, onNext, currentStep, cur
     );
 };
 
-const StepContent = ({ isCurrent, isPrevious, children }) => {
-    const stateClass = isCurrent ? 'is-current' : isPrevious ? 'is-previous' : 'is-next';
-    return <div className={`step-content ${stateClass}`}>{children}</div>;
+const AnimatedContent = ({ children, direction }) => {
+    return (
+        <div className={`absolute inset-0 p-4 animate-on-load ${direction}`}>
+            {children}
+        </div>
+    )
 };
 
-const LandingPage = ({ onStartQuiz }) => ( /* ... same as before, but with onStartQuiz ... */ );
-const QuestionPage = ({ question, onResponse }) => ( /* ... render question and options ... */ );
-const TransitionPage = ({icon, title, subtitle}) => ( /* ... show loader and text ... */ );
-const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => ( /* ... render email form ... */ );
-const ResultsLandingPage = ({ aiResult, getExpandedStepContent, onBegin }) => {
-    const summarySteps = [...Array(4)].map((_,i) => getExpandedStepContent(aiResult.title, i)?.title);
+const LandingPage = ({ onStartQuiz }) => (
+    <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-full max-w-4xl mx-auto px-6">
+            <div className="text-center">
+              <div className="mb-12">
+                <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                  Find Your Path on the<br />
+                  <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Music Creator Roadmap
+                  </span>
+                </h1>
+                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  2-minute AI quiz to discover your personalized pathway in the music industry
+                </p>
+                <div className="flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
+                  <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>AI-Powered Results</div>
+                  <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>Nashville Community</div>
+                  <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>Personalized Roadmap</div>
+                </div>
+              </div>
+              <div className="mb-12">
+                <button onClick={onStartQuiz} className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4" style={{ backgroundColor: '#B91372' }}>
+                  Find My Path <ChevronRight className="w-5 h-5 ml-2" />
+                </button>
+                <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
+              </div>
+              <div>
+                <div className="mb-6"><img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" alt="HOME for Music" className="mx-auto" style={{ height: '70px', width: 'auto', maxWidth: '280px', objectFit: 'contain' }}/></div>
+                <div className="flex items-center justify-center text-sm text-gray-500">
+                  <div className="flex text-yellow-400 mr-2">{[...Array(5)].map((_, i) => (<Star key={i} className="w-4 h-4 fill-current" />))}</div>
+                  Trusted by 1,000+ music creators
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+);
+
+const QuestionPage = ({ question, onResponse }) => (
+    <div className="h-full flex items-center justify-center">
+        <div className="w-full max-w-3xl mx-auto">
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
+                <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center leading-tight">{question.question}</h2>
+                <div className="space-y-4">
+                    {question.options.map((option) => (
+                        <button key={option.value} onClick={() => onResponse(question.id, option.value)} className="w-full p-4 md:p-6 text-left rounded-xl border-2 border-gray-200 group cursor-pointer transition-all duration-300 hover:border-[#1DD1A1] hover:shadow-md hover:-translate-y-1 bg-gray-50">
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-900 leading-relaxed text-sm md:text-base">{option.label}</span>
+                                <ArrowRight className="w-4 md:w-5 h-4 md:h-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ color: '#1DD1A1' }} />
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+const TransitionPage = ({icon, title, subtitle}) => (
+    <div className="h-full flex items-center justify-center text-center">
+        <div>
+            <div className="w-16 h-16 text-[#B91372] mx-auto mb-4 flex items-center justify-center text-4xl">{icon}</div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{title}</h2>
+            <p className="text-gray-600">{subtitle}</p>
+        </div>
+    </div>
+);
+
+const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
+    <div className="h-full flex items-center justify-center">
+        <div className="w-full max-w-2xl mx-auto text-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Last Step Before Your Roadmap!</h1>
+            <p className="text-lg md:text-xl text-gray-600 mb-8">Enter your email to instantly unlock your personalized pathway.</p>
+            <div className="bg-white border-2 rounded-2xl p-6 md:p-8 shadow-sm" style={{ borderColor: '#1DD1A1' }}>
+                <div className="mb-6">
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" className="w-full px-4 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] text-lg mb-4"/>
+                    <button onClick={onSubmit} disabled={!email || isSubmitting} className="w-full text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 hover:opacity-90 text-lg flex items-center justify-center" style={{ backgroundColor: '#B91372' }}>
+                        {isSubmitting ? (<><Loader className="w-5 h-5 mr-2 animate-spin" />Unlocking...</>) : (<>Unlock My Roadmap</>)}
+                    </button>
+                </div>
+                <p className="text-sm text-gray-500">We'll email your results as well. No spam, ever.</p>
+            </div>
+        </div>
+    </div>
+);
+
+const ResultsLandingPage = ({ aiResult, onBegin }) => {
+    const summarySteps = [...Array(4)].map((_,i) => getExpandedStepContent(aiResult.title, i)?.title).filter(Boolean);
     return (
-        <div className="min-h-full flex items-center justify-center p-4">
+        <div className="h-full flex items-center justify-center">
             <div className="text-center bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-2xl">
                 <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-6 rounded-3xl mb-6 shadow-lg">
                     <div className="text-5xl md:text-6xl">{aiResult.icon}</div>
@@ -238,12 +331,90 @@ const ResultsLandingPage = ({ aiResult, getExpandedStepContent, onBegin }) => {
         </div>
     );
 };
-const StepPage = ({ stepIndex, aiResult, getExpandedStepContent }) => ( /* ... same as previous version ... */ );
-const FinalPage = ({ responses, aiResult, getExpandedStepContent }) => ( /* ... same as previous version ... */ );
 
+const StepPage = ({ stepIndex, aiResult }) => {
+    const stepData = getExpandedStepContent(aiResult.title, stepIndex);
+    if (!stepData) return <div className="h-full flex items-center justify-center"><Loader className="animate-spin text-[#B91372]"/></div>;
 
-// Full component definitions for brevity.
-// In a real app, these would be in separate files.
-const expandedStepContent = { /* ... same as before ... */ };
+    const colors = [ { main: '#1DD1A1', light: 'rgba(29, 209, 161, 0.1)' }, { main: '#18a88a', light: 'rgba(24, 168, 138, 0.1)' }, { main: '#147f73', light: 'rgba(20, 127, 115, 0.1)' }, { main: '#B91372', light: 'rgba(185, 19, 114, 0.1)' } ];
+    const color = colors[stepIndex] || colors[0];
+
+    return (
+        <div className="overflow-y-auto h-full">
+            <div className="container max-w-[800px] mx-auto px-6 py-8">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
+                    <p className="text-lg text-gray-600">{stepData.description}</p>
+                </div>
+                <div className="rounded-2xl p-6 mb-8 bg-white shadow">
+                    <h3 className="font-bold text-gray-900 mb-2 flex items-center text-lg"><span className="text-2xl mr-2">💡</span>Why This Matters</h3>
+                    <p className="text-gray-700 leading-relaxed">{stepData.whyItMatters}</p>
+                </div>
+                <div className="mb-8">
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
+                    <div className="space-y-3">
+                        {stepData.actions.map((action, index) => (
+                            <div key={index} className="flex items-start bg-white rounded-xl p-4 shadow-sm">
+                                <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0" style={{ backgroundColor: color.main }}>{index + 1}</div>
+                                <p className="text-gray-700 leading-relaxed">{action}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 mb-8 shadow">
+                    <h3 className="font-bold text-gray-900 mb-3 text-lg">🏡 HOME Resources for This Step:</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {stepData.homeResources.map((resource, index) => (
+                            <span key={index} className="px-3 py-1 rounded-lg text-sm font-medium" style={{ backgroundColor: color.light, color: color.main, border: `1px solid ${color.main}` }}>{resource}</span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const FinalPage = ({ responses, aiResult, onReset }) => {
+    const summarySteps = [...Array(4)].map((_,i) => getExpandedStepContent(aiResult.title, i)?.title).filter(Boolean);
+    return (
+        <div className="overflow-y-auto h-full">
+            <div className="container max-w-[900px] mx-auto px-6 py-12">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900">You've Identified Your Path.</h1>
+                    <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-2">Now, choose how you'll take the next steps on your journey.</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 md:p-8 mb-10 border border-gray-200 shadow-lg">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
+                    <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
+                        <div className="flex flex-col md:flex-row items-center gap-4"><UserCheck className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Who You Are</h3><p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p></div></div>
+                        <div className="flex flex-col md:flex-row items-center gap-4"><MapPin className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Where You Are</h3><p className="text-gray-600">{(responses['current-stage'] || '').charAt(0).toUpperCase() + (responses['current-stage'] || '').slice(1)} Stage</p></div></div>
+                        <div className="flex flex-col md:flex-row items-center gap-4"><ListChecks className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Next Priorities</h3><p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p></div></div>
+                    </div>
+                </div>
+                <div className="bg-gray-900 rounded-2xl overflow-hidden mb-10 aspect-video shadow-2xl"><iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="HOME for Music Overview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full"></iframe></div>
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900">Select Your Next Step</h2>
+                    <p className="text-lg text-gray-600 mt-2">Choose the level of support that's right for you.</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                        <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
+                        <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🚀</div><h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3><p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p></div>
+                        <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A dedicated strategy session with our team</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A fully custom roadmap for your goals</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Priority access to HOME resources & pros</span></li></ul>
+                        <button onClick={() => window.open('https://homeformusic.org/consultation', '_blank')} className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Book Free Consultation</button>
+                    </div>
+                    <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col transform hover:scale-105 transition-transform duration-300">
+                        <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🏡</div><h3 className="text-2xl font-bold text-gray-900">Community Path</h3><p className="text-gray-600 mt-2">Start your journey with our resources</p></div>
+                        <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Access to HOME's online community</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Weekly virtual workshops & events</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A full library of templates & resources</span></li></ul>
+                        <button onClick={() => window.open('https://homeformusic.org/community', '_blank')} className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Start for Free</button>
+                    </div>
+                </div>
+                <div className="mt-12 text-center">
+                    <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium">Start Over →</button>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default HOMEQuizMVP;
