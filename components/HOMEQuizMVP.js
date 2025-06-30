@@ -682,31 +682,14 @@ const HOMEQuizMVP = () => {
   // Results page - Multi-step journey
   if (currentStep === 'results' && aiResult) {
     const totalSteps = 4;
-    const progressPercentage = (currentResultStep / 5) * 100;
-
+    
     // Page 0: Current Position
     if (currentResultStep === 0) {
       return (
-        <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-          <div className="container max-w-[800px] mx-auto bg-white min-h-screen flex flex-col">
-            {/* Progress Bar */}
-            <div className="px-6 pt-6">
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div 
-                  className="h-2 rounded-full transition-all duration-500"
-                  style={{ 
-                    width: `${progressPercentage}%`,
-                    background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)'
-                  }}
-                ></div>
-              </div>
-              <p className="text-center text-sm text-gray-500">Checkpoint 1 of 3</p>
-            </div>
-
-            {/* Header */}
-            <div className="flex-grow flex items-center justify-center px-6">
+        <div className="min-h-[100svh] bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          <div className="container max-w-[800px] mx-auto bg-white min-h-[100svh] flex flex-col justify-center px-6 py-8">
               <div className="text-center">
-                <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-8 md:p-12 rounded-3xl mb-8">
+                <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-8 md:p-12 rounded-3xl mb-8 shadow-lg">
                   <div className="text-5xl md:text-6xl mb-4">{aiResult.icon}</div>
                   <h1 className="text-3xl md:text-4xl font-bold mb-4">{aiResult.title}</h1>
                   <p className="text-lg md:text-xl opacity-95">Your Starting Point</p>
@@ -721,32 +704,18 @@ const HOMEQuizMVP = () => {
                   </div>
 
                   <div className="mb-8">
-                    <p className="text-gray-600 mb-4">Your personalized journey includes:</p>
-                    <div className="flex justify-center gap-4 flex-wrap">
-                      {[1, 2, 3, 4].map((num) => (
-                        <div key={num} className="flex items-center">
-                          <div 
-                            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
-                            style={{ backgroundColor: '#1DD1A1' }}
-                          >
-                            {num}
-                          </div>
-                          <span className="ml-2 text-gray-600">Step {num}</span>
-                        </div>
-                      ))}
-                    </div>
+                    <p className="text-gray-600 mb-4">Your personalized journey includes these 4 steps:</p>
                   </div>
 
                   <button
                     onClick={() => setCurrentResultStep(1)}
                     className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
                   >
-                    Continue My Path
+                    Begin Your Journey
                     <ChevronRight className="w-5 h-5 ml-2" />
                   </button>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       );
@@ -756,56 +725,63 @@ const HOMEQuizMVP = () => {
     if (currentResultStep >= 1 && currentResultStep <= 4) {
       const stepIndex = currentResultStep - 1;
       const stepData = getExpandedStepContent(aiResult.title, stepIndex);
-      const originalStep = (aiResult.customNextSteps || aiResult.nextSteps || [])[stepIndex];
-      const stepText = typeof originalStep === 'object' ? originalStep.step : originalStep;
-
-      if (!stepData) return null;
+      
+      if (!stepData) return null; // Handle case where data might not be ready
 
       const colors = [
         { main: '#1DD1A1', light: 'rgba(29, 209, 161, 0.1)' },
-        { main: '#1BC49C', light: 'rgba(27, 196, 156, 0.1)' },
-        { main: '#178F70', light: 'rgba(23, 143, 112, 0.1)' },
+        { main: '#18a88a', light: 'rgba(24, 168, 138, 0.1)' },
+        { main: '#147f73', light: 'rgba(20, 127, 115, 0.1)' },
         { main: '#B91372', light: 'rgba(185, 19, 114, 0.1)' }
       ];
       const color = colors[stepIndex] || colors[0];
 
       return (
-        <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-          <div className="container max-w-[800px] mx-auto bg-white min-h-screen flex flex-col">
-            {/* Progress Bar */}
-            <div className="px-6 pt-6">
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div 
-                  className="h-2 rounded-full transition-all duration-500"
-                  style={{ 
-                    width: `${progressPercentage}%`,
-                    background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)'
-                  }}
-                ></div>
+        <div className="min-h-[100svh] bg-gray-50 flex flex-col" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          {/* Sticky Header */}
+          <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 shadow-sm">
+            <div className="container max-w-[800px] mx-auto px-6 py-4">
+              <h2 className="text-xl font-bold text-gray-800 text-center">{aiResult.icon} {aiResult.title}</h2>
+              {/* Roadmap Navigator */}
+              <div className="flex items-center justify-center mt-3">
+                {[...Array(4)].map((_, i) => (
+                  <React.Fragment key={i}>
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white transition-all duration-300 ${
+                          currentResultStep > i ? 'bg-gradient-to-br from-[#1DD1A1] to-[#B91372]' : 'bg-gray-300'
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+                    </div>
+                    {i < 3 && (
+                      <div
+                        className={`h-1 flex-1 transition-all duration-300 ${
+                          currentResultStep > i + 1 ? 'bg-gradient-to-r from-[#1DD1A1] to-[#B91372]' : 'bg-gray-300'
+                        }`}
+                      ></div>
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
-              <p className="text-center text-sm text-gray-500">Step {currentResultStep} of {totalSteps}</p>
             </div>
+          </div>
 
-            {/* Step Content */}
-            <div className="flex-grow px-6 py-8">
+          {/* Scrollable Content Area */}
+          <div className="flex-grow overflow-y-auto pb-24">
+            <div className="container max-w-[800px] mx-auto px-6 py-8">
               {/* Step Header */}
               <div className="text-center mb-8">
-                <div 
-                  className="inline-flex items-center justify-center w-20 h-20 rounded-2xl text-white text-3xl font-bold mb-4"
-                  style={{ backgroundColor: color.main }}
-                >
-                  {currentResultStep}
-                </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
                 <p className="text-lg text-gray-600">{stepData.description}</p>
               </div>
 
               {/* Why It Matters */}
               <div 
-                className="rounded-2xl p-6 mb-8"
-                style={{ backgroundColor: color.light }}
+                className="rounded-2xl p-6 mb-8 bg-white shadow"
               >
-                <h3 className="font-bold text-gray-900 mb-2 flex items-center">
+                <h3 className="font-bold text-gray-900 mb-2 flex items-center text-lg">
                   <span className="text-2xl mr-2">💡</span>
                   Why This Matters
                 </h3>
@@ -817,7 +793,7 @@ const HOMEQuizMVP = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
                 <div className="space-y-3">
                   {stepData.actions.map((action, index) => (
-                    <div key={index} className="flex items-start bg-gray-50 rounded-xl p-4">
+                    <div key={index} className="flex items-start bg-white rounded-xl p-4 shadow-sm">
                       <div 
                         className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0"
                         style={{ backgroundColor: color.main }}
@@ -831,8 +807,8 @@ const HOMEQuizMVP = () => {
               </div>
 
               {/* HOME Resources */}
-              <div className="bg-gray-50 rounded-2xl p-6 mb-8">
-                <h3 className="font-bold text-gray-900 mb-3">🏡 HOME Resources for This Step:</h3>
+              <div className="bg-white rounded-2xl p-6 mb-8 shadow">
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">🏡 HOME Resources for This Step:</h3>
                 <div className="flex flex-wrap gap-2">
                   {stepData.homeResources.map((resource, index) => (
                     <span 
@@ -849,61 +825,51 @@ const HOMEQuizMVP = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Navigation */}
-              <div className="flex justify-between items-center">
-                <button
-                  onClick={() => setCurrentResultStep(currentResultStep - 1)}
-                  className="text-gray-600 hover:text-gray-900 font-medium flex items-center"
-                >
-                  <ChevronLeft className="w-5 h-5 mr-1" />
-                  Previous
-                </button>
-                
-                <button
-                  onClick={() => setCurrentResultStep(currentResultStep + 1)}
-                  className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
-                >
-                  {currentResultStep === 4 ? 'Complete Journey' : 'Next Step'}
-                  <ChevronRight className="w-5 h-5 ml-2" />
-                </button>
-              </div>
-
-              {/* Visual Progress Indicator */}
-              <div className="mt-8 flex justify-center gap-2">
-                {[1, 2, 3, 4].map((num) => (
-                  <div
-                    key={num}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      num <= currentResultStep ? 'w-8' : ''
-                    }`}
-                    style={{
-                      backgroundColor: num <= currentResultStep ? color.main : '#e5e7eb'
-                    }}
-                  ></div>
-                ))}
-              </div>
+          {/* Sticky Footer Navigation */}
+          <div className="sticky bottom-0 bg-white/80 backdrop-blur-sm z-10 border-t border-gray-200">
+            <div className="container max-w-[800px] mx-auto px-6 py-4 flex justify-between items-center">
+              <button
+                onClick={() => setCurrentResultStep(currentResultStep - 1)}
+                className="text-gray-600 hover:text-gray-900 font-medium flex items-center"
+              >
+                <ChevronLeft className="w-5 h-5 mr-1" />
+                Previous
+              </button>
+              
+              <button
+                onClick={() => setCurrentResultStep(currentResultStep + 1)}
+                className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
+              >
+                {currentResultStep === 4 ? 'Finish Roadmap' : 'Next Step'}
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </button>
             </div>
           </div>
         </div>
       );
     }
 
+
     // Page 5: Video & CTAs
     if (currentResultStep === 5) {
       return (
-        <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-          <div className="container max-w-[900px] mx-auto px-6 py-8">
+        <div className="min-h-[100svh] bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          <div className="container max-w-[900px] mx-auto px-6 py-12">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white px-8 py-4 rounded-2xl mb-4">
-                <h1 className="text-2xl md:text-3xl font-bold">🎉 Checkpoint 3: You're Ready!</h1>
+               <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white px-6 py-3 rounded-2xl mb-4 shadow-lg">
+                <h1 className="text-2xl md:text-3xl font-bold">🎉 Your Journey Begins Now</h1>
               </div>
-              <p className="text-xl text-gray-600">See how HOME accelerates your success</p>
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                You've successfully built your roadmap. Watch this short video from the HOME team to see how we'll support you on the exciting journey ahead.
+              </p>
             </div>
 
             {/* Video Section */}
-            <div className="bg-gray-900 rounded-2xl overflow-hidden mb-8 aspect-video">
+            <div className="bg-gray-900 rounded-2xl overflow-hidden mb-8 aspect-video shadow-2xl">
               <iframe
                 width="100%"
                 height="100%"
@@ -919,14 +885,14 @@ const HOMEQuizMVP = () => {
             {/* Two Paths Forward */}
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {/* Premium Path */}
-              <div className="bg-gradient-to-br from-[#B91372]/10 to-[#B91372]/5 rounded-2xl p-6 border-2 border-[#B91372]/20">
+              <div className="bg-gradient-to-br from-[#B91372]/10 to-[#B91372]/5 rounded-2xl p-6 border-2 border-[#B91372]/20 flex flex-col">
                 <div className="text-center mb-4">
                   <div className="text-4xl mb-2">🚀</div>
                   <h3 className="text-2xl font-bold text-gray-900">Fast Track Your Success</h3>
                   <p className="text-gray-600 mt-2">Get personalized guidance</p>
                 </div>
                 
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3 mb-6 flex-grow">
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">1-on-1 strategy session with our team</span>
@@ -939,14 +905,14 @@ const HOMEQuizMVP = () => {
                     <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Priority access to HOME resources</span>
                   </li>
-                  <li className="flex items-start">
+                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Direct connections to industry professionals</span>
                   </li>
                 </ul>
                 
                 <button 
-                  className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg mt-auto"
                   onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
                 >
                   Book Free Consultation
@@ -954,14 +920,14 @@ const HOMEQuizMVP = () => {
               </div>
 
               {/* Self-Serve Path */}
-              <div className="bg-gradient-to-br from-[#1DD1A1]/10 to-[#1DD1A1]/5 rounded-2xl p-6 border-2 border-[#1DD1A1]/20">
+              <div className="bg-gradient-to-br from-[#1DD1A1]/10 to-[#1DD1A1]/5 rounded-2xl p-6 border-2 border-[#1DD1A1]/20 flex flex-col">
                 <div className="text-center mb-4">
                   <div className="text-4xl mb-2">🏡</div>
                   <h3 className="text-2xl font-bold text-gray-900">Join Our Community</h3>
                   <p className="text-gray-600 mt-2">Start your journey today</p>
                 </div>
                 
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3 mb-6 flex-grow">
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Access to HOME's online community</span>
@@ -974,14 +940,14 @@ const HOMEQuizMVP = () => {
                     <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Resource library & templates</span>
                   </li>
-                  <li className="flex items-start">
+                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Connect with 1,000+ music creators</span>
                   </li>
                 </ul>
                 
                 <button 
-                  className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg mt-auto"
                   onClick={() => window.open('https://homeformusic.org/community', '_blank')}
                 >
                   Start for Free
@@ -1100,16 +1066,16 @@ const HOMEQuizMVP = () => {
                   backgroundColor: '#f9fafb'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)';
-                  e.target.style.borderColor = '#1DD1A1';
-                  e.target.style.transform = 'translateY(-2px)';
-                  e.target.style.boxShadow = '0 4px 12px rgba(29, 209, 161, 0.2)';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%)';
+                  e.currentTarget.style.borderColor = '#1DD1A1';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(29, 209, 161, 0.2)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = '#f9fafb';
-                  e.target.style.borderColor = '#e5e7eb';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = 'none';
+                  e.currentTarget.style.background = '#f9fafb';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
                 }}
               >
                 <div className="flex items-center justify-between">
