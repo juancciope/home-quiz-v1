@@ -257,7 +257,7 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                 </div>
             </header>
             
-            <main ref={mainContentRef} className="flex-grow overflow-y-auto">{children}</main>
+            <main ref={mainRef} className="flex-grow overflow-y-auto">{children}</main>
             
             <footer className="flex-shrink-0 bg-white border-t mt-auto">
                 <div className="container max-w-5xl mx-auto px-4 py-4">
