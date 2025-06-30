@@ -74,7 +74,7 @@ const HOMEQuizMVP = () => {
     setIsSubmitting(true);
     setAnimationDirection('forward');
     const dummyResult = {
-        title: 'The Touring Performer Path', icon: '�',
+        title: 'The Touring Performer Path', icon: '🎤',
         description: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities. This means focusing on your craft as a live act, creating an unforgettable show, and strategically booking gigs that expand your audience and income.',
     };
     setAiResult(dummyResult);
@@ -482,4 +482,3 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
 };
 
 export default HOMEQuizMVP;
-�
