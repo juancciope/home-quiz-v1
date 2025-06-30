@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronRight, Home, Mail, ArrowRight, Check, Users, Star, Loader, ChevronLeft, MapPin, UserCheck, ListChecks } from 'lucide-react';
 
 const HOMEQuizMVP = () => {
@@ -9,6 +9,12 @@ const HOMEQuizMVP = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentResultStep, setCurrentResultStep] = useState(0); // 0 = position, 1-4 = steps, 5 = video/cta
+  const [previousResultStep, setPreviousResultStep] = useState(0);
+
+  // Add a state to manage animation direction
+  useEffect(() => {
+    setPreviousResultStep(currentResultStep);
+  }, [currentResultStep]);
 
   const questions = [
     {
@@ -557,6 +563,24 @@ const HOMEQuizMVP = () => {
                   text-align: center;
               }
           }
+          .slide-enter {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          .slide-enter-active {
+            transform: translateX(0%);
+            opacity: 1;
+            transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+          }
+          .slide-exit {
+            transform: translateX(0%);
+            opacity: 1;
+          }
+          .slide-exit-active {
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+          }
         `}</style>
         
         {/* Full screen centered container */}
@@ -682,319 +706,155 @@ const HOMEQuizMVP = () => {
   // Results page - Multi-step journey
   if (currentStep === 'results' && aiResult) {
     const totalSteps = 4;
-    
+    const summarySteps = [1, 2, 3, 4].map(step => getExpandedStepContent(aiResult.title, step - 1)?.title);
+    const animationClass = currentResultStep > previousResultStep ? 'animate-slide-in' : 'animate-slide-in-reverse';
+
     // Page 0: Current Position
     if (currentResultStep === 0) {
       return (
-        <div className="min-h-[100svh] bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-          <div className="container max-w-[800px] mx-auto bg-white min-h-[100svh] flex flex-col justify-center px-6 py-8">
-              <div className="text-center">
-                <div className="inline-block bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 p-8 md:p-12 rounded-3xl mb-8 border border-gray-200">
-                  <div className="text-5xl md:text-6xl mb-4">{aiResult.icon}</div>
-                  <h1 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#1DD1A1] to-[#B91372]">{aiResult.title}</h1>
+        <div className="min-h-[100svh] bg-gray-50" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          <div className="container max-w-[800px] mx-auto min-h-[100svh] flex flex-col justify-center px-6 py-8">
+              <div className="text-center bg-white p-8 md:p-12 rounded-3xl shadow-xl">
+                <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-6 rounded-3xl mb-6 shadow-lg">
+                  <div className="text-5xl md:text-6xl">{aiResult.icon}</div>
                 </div>
 
-                <div className="max-w-2xl mx-auto">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Roadmap Begins Here</h2>
-                   <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                      Based on your answers, you've unlocked the first steps of your personalized journey. Let's explore what's next.
-                    </p>
+                <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{aiResult.title}</h1>
+                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                    Based on your answers, you've unlocked the first steps of your personalized journey.
+                </p>
 
-                  <button
-                    onClick={() => setCurrentResultStep(1)}
-                    className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
-                  >
-                    Start My First Step
-                    <ChevronRight className="w-5 h-5 ml-2" />
-                  </button>
+                <div className="bg-gray-50 rounded-2xl p-6 mb-8 text-left">
+                  <h3 className="font-bold text-lg text-gray-800 mb-4">Here's What You've Unlocked:</h3>
+                  <div className="space-y-3">
+                    {summarySteps.map((title, index) => (
+                      <div key={index} className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white flex items-center justify-center font-bold mr-4">{index + 1}</div>
+                        <span className="font-semibold text-gray-700">{title}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                <button
+                  onClick={() => setCurrentResultStep(1)}
+                  className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
+                >
+                  Begin Your Journey
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </button>
               </div>
           </div>
         </div>
       );
     }
 
-    // Pages 1-4: Individual Steps
-    if (currentResultStep >= 1 && currentResultStep <= 4) {
-      const stepIndex = currentResultStep - 1;
-      const stepData = getExpandedStepContent(aiResult.title, stepIndex);
-      
-      if (!stepData) return null; // Handle case where data might not be ready
-
-      const colors = [
-        { main: '#1DD1A1', light: 'rgba(29, 209, 161, 0.1)' },
-        { main: '#18a88a', light: 'rgba(24, 168, 138, 0.1)' },
-        { main: '#147f73', light: 'rgba(20, 127, 115, 0.1)' },
-        { main: '#B91372', light: 'rgba(185, 19, 114, 0.1)' }
-      ];
-      const color = colors[stepIndex] || colors[0];
-
-      return (
+    // Main Results View (Steps 1-5)
+    return (
         <div className="min-h-[100svh] bg-gray-50 flex flex-col" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-          {/* Sticky Header */}
-          <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 shadow-sm">
-            <div className="container max-w-[800px] mx-auto px-6 py-4">
-              <h2 className="text-xl font-bold text-gray-800 text-center">{aiResult.icon} {aiResult.title}</h2>
-              {/* Roadmap Navigator */}
-              <div className="flex items-center justify-center mt-3">
-                {[...Array(4)].map((_, i) => (
-                  <React.Fragment key={i}>
-                    <div className="flex flex-col items-center">
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white transition-all duration-300 ${
-                          currentResultStep > i ? 'bg-gradient-to-br from-[#1DD1A1] to-[#B91372]' : 'bg-gray-300'
-                        }`}
-                      >
-                        {i + 1}
-                      </div>
+             <style jsx>{`
+                .step-content {
+                    animation-duration: 400ms;
+                    animation-timing-function: ease-in-out;
+                    animation-fill-mode: both;
+                }
+                .slide-in-forward { animation-name: slideInForward; }
+                .slide-out-forward { animation-name: slideOutForward; }
+                .slide-in-backward { animation-name: slideInBackward; }
+                .slide-out-backward { animation-name: slideOutBackward; }
+                
+                @keyframes slideInForward {
+                    from { opacity: 0; transform: translateX(50px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                @keyframes slideOutForward {
+                    from { opacity: 1; transform: translateX(0); }
+                    to { opacity: 0; transform: translateX(-50px); }
+                }
+                @keyframes slideInBackward {
+                    from { opacity: 0; transform: translateX(-50px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                @keyframes slideOutBackward {
+                    from { opacity: 1; transform: translateX(0); }
+                    to { opacity: 0; transform: translateX(50px); }
+                }
+             `}</style>
+            {/* Sticky Header */}
+            <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-10 shadow-sm">
+                <div className="container max-w-[900px] mx-auto px-6 py-4">
+                    {/* Roadmap Navigator */}
+                    <div className="hidden md:flex items-center justify-center">
+                        {[...Array(5)].map((_, i) => (
+                            <React.Fragment key={i}>
+                                <div className={`text-center transition-all duration-300 ${currentResultStep === i + 1 ? 'text-gray-900' : 'text-gray-400'}`}>
+                                    <div className="text-sm font-bold">
+                                      {i < 4 ? `Step ${i+1}` : 'Next Steps'}
+                                    </div>
+                                    <div className="text-xs">
+                                      {i < 4 ? summarySteps[i]?.split(' ').slice(0, 2).join(' ') : 'Choose Your Path'}
+                                    </div>
+                                </div>
+                                {i < 4 && (
+                                <div className={`h-1 mx-4 flex-1 transition-all duration-300 rounded-full ${currentResultStep > i + 1 ? 'bg-gradient-to-r from-[#1DD1A1] to-[#B91372]' : 'bg-gray-200'}`}></div>
+                                )}
+                            </React.Fragment>
+                        ))}
                     </div>
-                    {i < 3 && (
-                      <div
-                        className={`h-1 flex-1 transition-all duration-300 ${
-                          currentResultStep > i + 1 ? 'bg-gradient-to-r from-[#1DD1A1] to-[#B91372]' : 'bg-gray-300'
-                        }`}
-                      ></div>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Scrollable Content Area */}
-          <div className="flex-grow overflow-y-auto pb-24">
-            <div className="container max-w-[800px] mx-auto px-6 py-8">
-              {/* Step Header */}
-              <div className="text-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
-                <p className="text-lg text-gray-600">{stepData.description}</p>
-              </div>
-
-              {/* Why It Matters */}
-              <div 
-                className="rounded-2xl p-6 mb-8 bg-white shadow"
-              >
-                <h3 className="font-bold text-gray-900 mb-2 flex items-center text-lg">
-                  <span className="text-2xl mr-2">💡</span>
-                  Why This Matters
-                </h3>
-                <p className="text-gray-700 leading-relaxed">{stepData.whyItMatters}</p>
-              </div>
-
-              {/* Action Items */}
-              <div className="mb-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
-                <div className="space-y-3">
-                  {stepData.actions.map((action, index) => (
-                    <div key={index} className="flex items-start bg-white rounded-xl p-4 shadow-sm">
-                      <div 
-                        className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0"
-                        style={{ backgroundColor: color.main }}
-                      >
-                        {index + 1}
-                      </div>
-                      <p className="text-gray-700 leading-relaxed">{action}</p>
+                     <div className="md:hidden text-center text-xl font-bold text-gray-800">
+                        {aiResult.icon} {aiResult.title}
                     </div>
-                  ))}
                 </div>
-              </div>
+            </div>
 
-              {/* HOME Resources */}
-              <div className="bg-white rounded-2xl p-6 mb-8 shadow">
-                <h3 className="font-bold text-gray-900 mb-3 text-lg">🏡 HOME Resources for This Step:</h3>
-                <div className="flex flex-wrap gap-2">
-                  {stepData.homeResources.map((resource, index) => (
-                    <span 
-                      key={index}
-                      className="px-3 py-1 rounded-lg text-sm font-medium"
-                      style={{ 
-                        backgroundColor: color.light,
-                        color: color.main,
-                        border: `1px solid ${color.main}`
-                      }}
+            {/* Animated Content Area */}
+            <div className="flex-grow overflow-x-hidden relative">
+                {[...Array(5)].map((_, i) => {
+                    const stepIndex = i;
+                    const isCurrent = currentResultStep === stepIndex + 1;
+                    let animationClass = '';
+                    if (isCurrent) {
+                        animationClass = previousResultStep < currentResultStep ? 'slide-in-forward' : 'slide-in-backward';
+                    } else if (previousResultStep === stepIndex + 1) {
+                        animationClass = previousResultStep < currentResultStep ? 'slide-out-forward' : 'slide-out-backward';
+                    }
+
+                    return (
+                        <div key={i} className={`step-content absolute w-full h-full ${animationClass}`} style={{ pointerEvents: isCurrent ? 'auto' : 'none' }}>
+                             {isCurrent && (stepIndex < 4 ? (
+                                <StepPage stepIndex={stepIndex} aiResult={aiResult} getExpandedStepContent={getExpandedStepContent} />
+                            ) : (
+                                <FinalPage responses={responses} aiResult={aiResult} summarySteps={summarySteps} />
+                            ))}
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Sticky Footer Navigation */}
+            <div className="sticky bottom-0 bg-white/80 backdrop-blur-sm z-10 border-t border-gray-200">
+                <div className="container max-w-[800px] mx-auto px-6 py-4 flex justify-between items-center">
+                    <button
+                        onClick={() => setCurrentResultStep(currentResultStep - 1)}
+                        className="text-gray-600 hover:text-gray-900 font-medium flex items-center disabled:opacity-50"
+                        disabled={currentResultStep <= 1}
                     >
-                      {resource}
-                    </span>
-                  ))}
+                        <ChevronLeft className="w-5 h-5 mr-1" />
+                        Previous
+                    </button>
+                    {currentResultStep <= 4 && (
+                        <button
+                            onClick={() => setCurrentResultStep(currentResultStep + 1)}
+                            className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
+                        >
+                            {currentResultStep === 4 ? "See My Next Steps" : 'Next Step'}
+                            <ChevronRight className="w-5 h-5 ml-2" />
+                        </button>
+                    )}
                 </div>
-              </div>
             </div>
-          </div>
-
-          {/* Sticky Footer Navigation */}
-          <div className="sticky bottom-0 bg-white/80 backdrop-blur-sm z-10 border-t border-gray-200">
-            <div className="container max-w-[800px] mx-auto px-6 py-4 flex justify-between items-center">
-              <button
-                onClick={() => setCurrentResultStep(currentResultStep - 1)}
-                className="text-gray-600 hover:text-gray-900 font-medium flex items-center"
-              >
-                <ChevronLeft className="w-5 h-5 mr-1" />
-                Previous
-              </button>
-              
-              <button
-                onClick={() => setCurrentResultStep(currentResultStep + 1)}
-                className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
-              >
-                {currentResultStep === 4 ? 'Choose Your Path Forward' : 'Next Step'}
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </button>
-            </div>
-          </div>
         </div>
-      );
-    }
-
-
-    // Page 5: Video & CTAs
-    if (currentResultStep === 5) {
-      const summarySteps = [1, 2, 3, 4].map(step => getExpandedStepContent(aiResult.title, step - 1)?.title);
-      
-      return (
-        <div className="min-h-[100svh] bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-          <div className="container max-w-[900px] mx-auto px-6 py-12">
-            {/* Header */}
-            <div className="text-center mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">You've Identified Your Path.</h1>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-2">
-                Now, choose how you'll take the next steps on your journey.
-              </p>
-            </div>
-
-            {/* Roadmap Summary */}
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8 mb-10 border border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
-              <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
-                <div className="flex flex-col md:flex-row items-center gap-4">
-                  <UserCheck className="w-10 h-10 text-[#1DD1A1]" />
-                  <div>
-                    <h3 className="font-bold text-gray-800">Who You Are</h3>
-                    <p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p>
-                  </div>
-                </div>
-                 <div className="flex flex-col md:flex-row items-center gap-4">
-                  <MapPin className="w-10 h-10 text-[#1DD1A1]" />
-                  <div>
-                    <h3 className="font-bold text-gray-800">Where You Are</h3>
-                    <p className="text-gray-600">{responses['current-stage'].charAt(0).toUpperCase() + responses['current-stage'].slice(1)} Stage</p>
-                  </div>
-                </div>
-                 <div className="flex flex-col md:flex-row items-center gap-4">
-                  <ListChecks className="w-10 h-10 text-[#1DD1A1]" />
-                  <div>
-                    <h3 className="font-bold text-gray-800">Your Next Priorities</h3>
-                    <p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Video Section */}
-            <div className="bg-gray-900 rounded-2xl overflow-hidden mb-10 aspect-video shadow-2xl">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="HOME for Music Overview"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              ></iframe>
-            </div>
-            
-            <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900">Select Your Next Step</h2>
-                <p className="text-lg text-gray-600 mt-2">Choose the level of support that's right for you.</p>
-            </div>
-
-            {/* Two Paths Forward */}
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Premium Path */}
-              <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl">
-                <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
-                <div className="text-center mb-4 pt-4">
-                  <div className="text-4xl mb-2">🚀</div>
-                  <h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3>
-                  <p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p>
-                </div>
-                
-                <ul className="space-y-3 mb-6 flex-grow">
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">A dedicated strategy session with our team</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">A fully custom roadmap for your goals</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Priority access to HOME resources & pros</span>
-                  </li>
-                </ul>
-                
-                <button 
-                  className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg mt-auto"
-                  onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
-                >
-                  Book Free Consultation
-                </button>
-              </div>
-
-              {/* Self-Serve Path */}
-              <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col">
-                <div className="text-center mb-4 pt-4">
-                  <div className="text-4xl mb-2">🏡</div>
-                  <h3 className="text-2xl font-bold text-gray-900">Community Path</h3>
-                  <p className="text-gray-600 mt-2">Start your journey with our resources</p>
-                </div>
-                
-                <ul className="space-y-3 mb-6 flex-grow">
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Access to HOME's online community</span>
-                  </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Weekly virtual workshops & events</span>
-                  </li>
-                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">A full library of templates & resources</span>
-                  </li>
-                </ul>
-                
-                <button 
-                  className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg mt-auto"
-                  onClick={() => window.open('https://homeformusic.org/community', '_blank')}
-                >
-                  Start for Free
-                </button>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-12 text-center">
-              <button 
-                onClick={() => {
-                  setCurrentStep('landing');
-                  setResponses({});
-                  setAiResult(null);
-                  setEmail('');
-                  setCurrentResultStep(0);
-                }}
-                className="text-gray-500 hover:text-gray-700 font-medium"
-              >
-                Start Over →
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    return null;
+    );
   }
 
   // Loading state while generating results
@@ -1088,6 +948,143 @@ const HOMEQuizMVP = () => {
       </div>
     </div>
   );
+};
+
+// Step Page Component
+const StepPage = ({ stepIndex, aiResult, getExpandedStepContent }) => {
+    const stepData = getExpandedStepContent(aiResult.title, stepIndex);
+    if (!stepData) return null;
+
+    const colors = [
+        { main: '#1DD1A1', light: 'rgba(29, 209, 161, 0.1)' },
+        { main: '#18a88a', light: 'rgba(24, 168, 138, 0.1)' },
+        { main: '#147f73', light: 'rgba(20, 127, 115, 0.1)' },
+        { main: '#B91372', light: 'rgba(185, 19, 114, 0.1)' }
+    ];
+    const color = colors[stepIndex] || colors[0];
+
+    return (
+        <div className="overflow-y-auto h-full pb-24">
+            <div className="container max-w-[800px] mx-auto px-6 py-8">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
+                    <p className="text-lg text-gray-600">{stepData.description}</p>
+                </div>
+
+                <div className="rounded-2xl p-6 mb-8 bg-white shadow">
+                    <h3 className="font-bold text-gray-900 mb-2 flex items-center text-lg">
+                        <span className="text-2xl mr-2">💡</span>Why This Matters
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">{stepData.whyItMatters}</p>
+                </div>
+
+                <div className="mb-8">
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
+                    <div className="space-y-3">
+                        {stepData.actions.map((action, index) => (
+                            <div key={index} className="flex items-start bg-white rounded-xl p-4 shadow-sm">
+                                <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0" style={{ backgroundColor: color.main }}>
+                                    {index + 1}
+                                </div>
+                                <p className="text-gray-700 leading-relaxed">{action}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 mb-8 shadow">
+                    <h3 className="font-bold text-gray-900 mb-3 text-lg">🏡 HOME Resources for This Step:</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {stepData.homeResources.map((resource, index) => (
+                            <span key={index} className="px-3 py-1 rounded-lg text-sm font-medium" style={{ backgroundColor: color.light, color: color.main, border: `1px solid ${color.main}` }}>
+                                {resource}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Final Page Component
+const FinalPage = ({ responses, aiResult, summarySteps }) => {
+    return (
+        <div className="overflow-y-auto h-full pb-12">
+            <div className="container max-w-[900px] mx-auto px-6 py-12">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900">You've Identified Your Path.</h1>
+                    <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-2">Now, choose how you'll take the next steps on your journey.</p>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 md:p-8 mb-10 border border-gray-200 shadow-lg">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
+                    <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
+                        <div className="flex flex-col md:flex-row items-center gap-4">
+                            <UserCheck className="w-10 h-10 text-[#1DD1A1]" />
+                            <div>
+                                <h3 className="font-bold text-gray-800">Who You Are</h3>
+                                <p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col md:flex-row items-center gap-4">
+                            <MapPin className="w-10 h-10 text-[#1DD1A1]" />
+                            <div>
+                                <h3 className="font-bold text-gray-800">Where You Are</h3>
+                                <p className="text-gray-600">{responses['current-stage'].charAt(0).toUpperCase() + responses['current-stage'].slice(1)} Stage</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col md:flex-row items-center gap-4">
+                            <ListChecks className="w-10 h-10 text-[#1DD1A1]" />
+                            <div>
+                                <h3 className="font-bold text-gray-800">Your Next Priorities</h3>
+                                <p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-gray-900 rounded-2xl overflow-hidden mb-10 aspect-video shadow-2xl">
+                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="HOME for Music Overview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full h-full"></iframe>
+                </div>
+
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900">Select Your Next Step</h2>
+                    <p className="text-lg text-gray-600 mt-2">Choose the level of support that's right for you.</p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                        <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
+                        <div className="text-center mb-4 pt-4">
+                            <div className="text-4xl mb-2">🚀</div>
+                            <h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3>
+                            <p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p>
+                        </div>
+                        <ul className="space-y-3 mb-6 flex-grow">
+                            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A dedicated strategy session with our team</span></li>
+                            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A fully custom roadmap for your goals</span></li>
+                            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Priority access to HOME resources & pros</span></li>
+                        </ul>
+                        <button onClick={() => window.open('https://homeformusic.org/consultation', '_blank')} className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Book Free Consultation</button>
+                    </div>
+                    <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col transform hover:scale-105 transition-transform duration-300">
+                        <div className="text-center mb-4 pt-4">
+                            <div className="text-4xl mb-2">🏡</div>
+                            <h3 className="text-2xl font-bold text-gray-900">Community Path</h3>
+                            <p className="text-gray-600 mt-2">Start your journey with our resources</p>
+                        </div>
+                        <ul className="space-y-3 mb-6 flex-grow">
+                            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Access to HOME's online community</span></li>
+                            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Weekly virtual workshops & events</span></li>
+                            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A full library of templates & resources</span></li>
+                        </ul>
+                        <button onClick={() => window.open('https://homeformusic.org/community', '_blank')} className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Start for Free</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default HOMEQuizMVP;
