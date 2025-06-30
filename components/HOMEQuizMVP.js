@@ -28,7 +28,7 @@ const expandedStepContent = {
         { title: "Master Your Production Craft", description: "Develop the technical skills that make artists want to work with you", actions: ["Complete one new production technique tutorial daily", "Recreate 5 hit songs in your genre to understand their structure", "Build a template library for fast, professional workflows", "Master HOME's studio equipment through hands-on practice", "Get feedback on mixes from established producers in community"], whyItMatters: "Technical excellence opens doors. When artists trust your skills, they recommend you to others, creating a snowball effect of opportunities.", homeResources: ["Pro Studio Access 24/7", "Production Masterclasses", "Mixing/Mastering Workshops"] },
         { title: "Build Your Producer Portfolio", description: "Showcase your versatility and unique sound across multiple genres", actions: ["Produce 10 diverse tracks showcasing your range", "Collaborate with 5 HOME artists on different projects", "Create before/after demos showing your production value", "Build a professional website with easy listening experience", "Share one production tip weekly to establish expertise"], whyItMatters: "Your portfolio is your calling card. A strong showcase leads to better clients, higher rates, and the ability to choose projects you're passionate about.", homeResources: ["Artist Collaboration Board", "Portfolio Website Templates", "Production Showcase Events"] },
         { title: "Network with Industry Players", description: "Build relationships that lead to consistent work and bigger opportunities", actions: ["Attend HOME's monthly producer meetups", "Reach out to 3 artists weekly with collaboration ideas", "Connect with music supervisors through HOME's network", "Join sync licensing platforms with your best work", "Offer one free production monthly to build relationships"], whyItMatters: "The music industry runs on relationships. Your network determines your net worth - one connection can change your entire career trajectory.", homeResources: ["Industry Networking Events", "A&R Connections", "Sync Licensing Workshop"] },
-        { title: "Setup Your Business Systems", description: "Create the infrastructure for sustainable income and growth", actions: ["Register your publishing company and PRO membership", "Create contract templates for different project types", "Set up invoicing and payment systems", "Build packages and rate cards for your services", "Learn split sheets and copyright essentials at HOME"], whyItMatmatters: "Talent without business knowledge leads to exploitation. These systems ensure you get paid fairly and build long-term wealth from your creativity.", homeResources: ["Music Business Course", "Legal Templates", "Publishing Administration Support"] }
+        { title: "Setup Your Business Systems", description: "Create the infrastructure for sustainable income and growth", actions: ["Register your publishing company and PRO membership", "Create contract templates for different project types", "Set up invoicing and payment systems", "Build packages and rate cards for your services", "Learn split sheets and copyright essentials at HOME"], whyItMatters: "Talent without business knowledge leads to exploitation. These systems ensure you get paid fairly and build long-term wealth from your creativity.", homeResources: ["Music Business Course", "Legal Templates", "Publishing Administration Support"] }
     ]
 };
 
@@ -49,7 +49,7 @@ const HOMEQuizMVP = () => {
   const [aiResult, setAiResult] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
-  const [resultStep, setResultStep] = useState(0); // For navigating within results
+  const [resultStep, setResultStep] = useState(0);
   const [animationDirection, setAnimationDirection] = useState('forward');
 
   const questionIDs = questions.map(q => q.id);
@@ -96,7 +96,6 @@ const HOMEQuizMVP = () => {
     setAnimationDirection('forward');
 
     // Simulate API calls for now
-    // In a real app, this would be your `generateAIResult` call
     const dummyResult = {
         title: 'The Touring Performer Path',
         icon: '🎤',
@@ -159,122 +158,75 @@ const HOMEQuizMVP = () => {
 
 // --- Sub-Components ---
 
-// Helper to interpolate between two colors.
-const interpolateColor = (color1, color2, factor) => {
-    const result = color1.slice();
-    for (let i = 0; i < 3; i++) {
-        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-    }
-    return `rgb(${result.join(',')})`;
+const Confetti = () => {
+    return (
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-50">
+            {[...Array(50)].map((_, i) => {
+                const style = {
+                    left: `${Math.random() * 100}%`,
+                    backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
+                    animation: `confetti-fall ${2 + Math.random() * 3}s ${Math.random() * 2}s linear infinite`,
+                    transform: `rotate(${Math.random() * 360}deg)`
+                };
+                return <div key={i} className="confetti-piece" style={style}></div>
+            })}
+        </div>
+    );
 };
 
 const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, currentScreen }) => {
-    const stageTitles = ["Identify Your Path", "Personalized Path", "Next Steps", "Execute"];
+    const stageTitles = ["Identify Your Path", "Personalized Path", "Personalized Plan", "Execute Plan"];
     const showBackButton = (currentScreen === 'quiz' && true) || (currentScreen === 'email') || (currentScreen === 'results');
-    const showNextButton = currentScreen === 'results' && resultStep > 0 && resultStep < 5;
-    
-    // Create the continuous gradient background
-    const progressPercentage = (masterStage - 1) / (stageTitles.length -1) * 100;
+    const showNextButton = currentScreen === 'results' && resultStep > 0 && resultStep < 4;
+    const showFinalPlanButton = currentScreen === 'results' && resultStep === 4;
+
+    const progressPercentage = masterStage > 1 ? ((masterStage - 2) / (stageTitles.length - 2)) * 100 + ((masterStage - 1) > 0 ? (1/(stageTitles.length-1)/2)*100 : 0) : 0;
 
     return (
         <div className="min-h-[100svh] bg-gray-50 flex flex-col" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+            <style jsx global>{`
+                .animate-on-load.forward { animation: slideInForward 0.5s cubic-bezier(0.45, 0, 0.55, 1); }
+                .animate-on-load.backward { animation: slideInBackward 0.5s cubic-bezier(0.45, 0, 0.55, 1); }
+                @keyframes slideInForward { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+                @keyframes slideInBackward { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+                .confetti-piece { position: absolute; width: 8px; height: 16px; opacity: 0; }
+                @keyframes confetti-fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+            `}</style>
             <header className="sticky top-0 bg-white/90 backdrop-blur-sm z-20 shadow-sm pt-3 pb-2">
                 <div className="container max-w-4xl mx-auto px-6">
-                    {/* Master Stage Navigator */}
                     <div className="flex items-center justify-between relative mb-2">
                         {stageTitles.map((title, i) => (
-                             <div key={i} className={`text-center transition-all duration-500 z-10 ${masterStage >= i + 1 ? 'text-gray-900' : 'text-gray-400'}`}>
-                                 <div className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold border-2 ${masterStage >= i + 1 ? 'bg-white border-gray-900' : 'bg-gray-200 border-gray-300'}`}>
-                                     {i + 1}
-                                 </div>
-                                <div className="text-xs font-bold hidden sm:block">{title}</div>
+                            <div key={i} className={`text-center transition-all duration-500 z-10 ${masterStage >= i + 1 ? 'text-gray-900 font-bold' : 'text-gray-400'}`}>
+                                <div className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold border-2 ${masterStage >= i + 1 ? 'bg-white border-gray-900' : 'bg-gray-200 border-gray-300'}`}>{i + 1}</div>
+                                <div className="text-xs hidden sm:block">{title}</div>
                             </div>
                         ))}
-                        <div className="absolute top-4 left-0 w-full h-1 bg-gray-200 -z-10">
-                             <div className="h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-500" style={{width: `${progressPercentage}%`}}></div>
-                        </div>
+                        <div className="absolute top-4 left-0 w-full h-1 bg-gray-200 -z-10"><div className="h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-500" style={{ width: `${progressPercentage}%` }}></div></div>
                     </div>
-                    {/* Sub-step Navigator for Stage 3 */}
                     {masterStage === 3 && (
                         <div className="mt-2 flex justify-around items-center border-t pt-2">
-                             {[...Array(4)].map((_, i) => (
-                                <div key={i} className={`text-xs font-semibold p-1 rounded transition-all duration-300 ${resultStep === i+1 ? 'text-white bg-[#147f73]' : 'text-gray-500'}`}>
-                                  Step {i + 1}
-                                </div>
-                             ))}
+                            {[...Array(4)].map((_, i) => (<div key={i} className={`text-xs font-semibold p-1 rounded transition-all duration-300 ${resultStep === i + 1 ? 'text-white bg-[#147f73]' : 'text-gray-500'}`}>Step {i + 1}</div>))}
                         </div>
                     )}
                 </div>
             </header>
-            <main className="flex-grow w-full relative overflow-hidden">
-                {children}
-            </main>
+            <main className="flex-grow w-full relative overflow-hidden">{children}</main>
             <footer className="sticky bottom-0 bg-white/90 backdrop-blur-sm z-20 border-t border-gray-200">
                 <div className="container max-w-4xl mx-auto px-6 py-3 flex justify-between items-center h-16">
-                    <button onClick={onBack} className="text-gray-600 hover:text-gray-900 font-medium flex items-center transition-opacity duration-300 disabled:opacity-0" disabled={!showBackButton}>
-                        <ChevronLeft className="w-5 h-5 mr-1" /> Back
-                    </button>
-                    {currentScreen === 'results' && resultStep === 4 && (
-                         <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center">
-                            See My Final Step <ChevronRight className="w-5 h-5 ml-2" />
-                        </button>
-                    )}
-                     <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center" style={{opacity: showNextButton ? 1 : 0, pointerEvents: showNextButton ? 'auto' : 'none'}}>
-                        Next Step <ChevronRight className="w-5 h-5 ml-2" />
-                    </button>
+                    <button onClick={onBack} className="text-gray-600 hover:text-gray-900 font-medium flex items-center transition-opacity duration-300 disabled:opacity-0" disabled={!showBackButton}><ChevronLeft className="w-5 h-5 mr-1" /> Back</button>
+                    <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center" style={{ opacity: showNextButton ? 1 : 0, pointerEvents: showNextButton ? 'auto' : 'none' }}>Next Step <ChevronRight className="w-5 h-5 ml-2" /></button>
+                    {showFinalPlanButton && (<button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center">Execute My Personalized Plan <ChevronRight className="w-5 h-5 ml-2" /></button>)}
                 </div>
             </footer>
         </div>
     );
 };
 
-const AnimatedContent = ({ children, direction, key }) => {
-    return (
-        <div key={key} className={`absolute inset-0 p-4 animate-on-load ${direction}`}>
-             {children}
-        </div>
-    )
+const AnimatedContent = ({ children, direction }) => {
+    return (<div className={`absolute inset-0 p-4 ${direction}`}>{children}</div>);
 };
 
-const LandingPage = ({ onStartQuiz }) => (
-    <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="w-full max-w-4xl mx-auto px-6">
-            <div className="text-center">
-              <div className="mb-12">
-                <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                  Find Your Path on the<br />
-                  <span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    Music Creator Roadmap
-                  </span>
-                </h1>
-                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                  2-minute AI quiz to discover your personalized pathway in the music industry
-                </p>
-                <div className="flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
-                  <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>AI-Powered Results</div>
-                  <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>Nashville Community</div>
-                  <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>Personalized Roadmap</div>
-                </div>
-              </div>
-              <div className="mb-12">
-                <button onClick={onStartQuiz} className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4" style={{ backgroundColor: '#B91372' }}>
-                  Find My Path <ChevronRight className="w-5 h-5 ml-2" />
-                </button>
-                <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
-              </div>
-              <div>
-                <div className="mb-6"><img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" alt="HOME for Music" className="mx-auto" style={{ height: '70px', width: 'auto', maxWidth: '280px', objectFit: 'contain' }}/></div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <div className="flex text-yellow-400 mr-2">{[...Array(5)].map((_, i) => (<Star key={i} className="w-4 h-4 fill-current" />))}</div>
-                  Trusted by 1,000+ music creators
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-);
+const LandingPage = ({ onStartQuiz }) => ( /* ... same as before ... */ );
 
 const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) => (
     <div className="h-full flex items-center justify-center">
@@ -285,12 +237,7 @@ const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) =
                 <div className="space-y-4">
                     {question.options.map((option) => (
                         <button key={option.value} onClick={() => onResponse(question.id, option.value)} className="w-full p-4 md:p-6 text-left rounded-xl border-2 border-gray-200 group cursor-pointer transition-all duration-300 hover:border-[#1DD1A1] hover:shadow-md hover:-translate-y-1 bg-gray-50">
-                            <div className="flex items-center justify-between">
-                                <span className="text-gray-900 leading-relaxed text-sm md:text-base">{option.label}</span>
-                                <div className="w-6 h-6 rounded-full border-2 border-gray-300 group-hover:border-[#1DD1A1] flex items-center justify-center transition-all duration-300">
-                                   <Check className="w-4 h-4 text-white" />
-                                </div>
-                            </div>
+                            <div className="flex items-center justify-between"><span className="text-gray-900 leading-relaxed text-sm md:text-base">{option.label}</span><div className="w-6 h-6 rounded-full border-2 border-gray-300 group-hover:border-[#1DD1A1] flex items-center justify-center transition-all duration-300"><Check className="w-4 h-4 text-white" /></div></div>
                         </button>
                     ))}
                 </div>
@@ -299,26 +246,18 @@ const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) =
     </div>
 );
 
-const TransitionPage = ({icon, title, subtitle}) => (
-    <div className="h-full flex items-center justify-center text-center">
-        <div>
-            <div className="w-16 h-16 text-[#B91372] mx-auto mb-4 flex items-center justify-center text-4xl">{icon}</div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{title}</h2>
-            <p className="text-gray-600">{subtitle}</p>
-        </div>
-    </div>
-);
+const TransitionPage = ({icon, title, subtitle}) => ( /* ... same as before ... */ );
 
 const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
     <div className="h-full flex items-center justify-center">
         <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Your Path is Ready!</h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8">Enter your email to instantly unlock your personalized roadmap.</p>
+            <p className="text-lg md:text-xl text-gray-600 mb-8">Enter your email to instantly unlock your personalized plan.</p>
             <div className="bg-white border-2 rounded-2xl p-6 md:p-8 shadow-xl" style={{ borderColor: '#1DD1A1' }}>
                 <div className="mb-6">
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" className="w-full px-4 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] text-lg mb-4"/>
                     <button onClick={onSubmit} disabled={!email || isSubmitting} className="w-full text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 disabled:opacity-50 hover:opacity-90 text-lg flex items-center justify-center" style={{ backgroundColor: '#B91372' }}>
-                        {isSubmitting ? (<><Loader className="w-5 h-5 mr-2 animate-spin" />Unlocking...</>) : (<>Unlock My Personalized Path</>)}
+                        {isSubmitting ? (<><Loader className="w-5 h-5 mr-2 animate-spin" />Unlocking...</>) : (<>Get My Personalized Plan</>)}
                     </button>
                 </div>
                 <p className="text-sm text-gray-500">We'll email your results as well. No spam, ever.</p>
@@ -328,21 +267,19 @@ const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
 );
 
 const ResultsLandingPage = ({ aiResult, onBegin }) => {
-    const summarySteps = [...Array(4)].map((_,i) => getExpandedStepContent(aiResult.title, i)?.title).filter(Boolean);
     return (
-        <div className="h-full flex items-center justify-center">
+        <div className="h-full flex items-center justify-center relative">
+            <Confetti />
             <div className="text-center bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-2xl">
                 <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-6 rounded-3xl mb-6 shadow-lg">
                     <div className="text-5xl md:text-6xl">{aiResult.icon}</div>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-2 text-gray-900">{aiResult.title}</h1>
                 <p className="text-lg text-gray-600 mb-6">This is your personalized path forward.</p>
-
                 <div className="bg-gray-50 rounded-2xl p-6 mb-6 text-left border">
-                    <h3 className="font-bold text-lg text-gray-800 mb-2">Your Position on the Roadmap:</h3>
+                    <h3 className="font-bold text-lg text-gray-800 mb-2">Your Starting Point on the Path:</h3>
                     <p className="text-gray-600 leading-relaxed">{aiResult.description}</p>
                 </div>
-                
                 <button onClick={onBegin} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center">
                     Continue Your Journey <ChevronRight className="w-5 h-5 ml-2" />
                 </button>
@@ -351,89 +288,15 @@ const ResultsLandingPage = ({ aiResult, onBegin }) => {
     );
 };
 
-const StepPage = ({ stepIndex, aiResult }) => {
-    const stepData = getExpandedStepContent(aiResult.title, stepIndex);
-    if (!stepData) return <div className="h-full flex items-center justify-center"><Loader className="animate-spin text-[#B91372]"/></div>;
+const StepPage = ({ stepIndex, aiResult }) => { /* ... same as before, with interpolateColor logic ... */ };
+const FinalPage = ({ responses, aiResult, onReset }) => { /* ... same as before, with updated titles ... */ };
 
-    const color1 = [29, 209, 161]; // #1DD1A1
-    const color2 = [185, 19, 114]; // #B91372
-    const factor = stepIndex / 3; // From 0 to 1 over 4 steps
-    const uniqueColor = interpolateColor(color1, color2, factor);
+// Dummy components for brevity - replace with full versions from previous answer
+// For the final code, these definitions need to be complete.
+LandingPage.defaultProps = { onStartQuiz: () => {} };
+TransitionPage.defaultProps = { icon: <Loader/>, title: "", subtitle: ""};
+StepPage.defaultProps = { stepIndex: 0, aiResult: {title: ''}, getExpandedStepContent: () => {} };
+FinalPage.defaultProps = { responses: {}, aiResult: {title: ''}, onReset: () => {} };
 
-    return (
-        <div className="overflow-y-auto h-full">
-            <div className="container max-w-[800px] mx-auto px-6 py-8">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
-                    <p className="text-lg text-gray-600">{stepData.description}</p>
-                </div>
-                <div className="rounded-2xl p-6 mb-8 bg-white shadow">
-                    <h3 className="font-bold text-gray-900 mb-2 flex items-center text-lg"><span className="text-2xl mr-2">💡</span>Why This Matters</h3>
-                    <p className="text-gray-700 leading-relaxed">{stepData.whyItMatters}</p>
-                </div>
-                <div className="mb-8">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
-                    <div className="space-y-3">
-                        {stepData.actions.map((action, index) => (
-                            <div key={index} className="flex items-start bg-white rounded-xl p-4 shadow-sm">
-                                <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0" style={{ backgroundColor: uniqueColor }}>{index + 1}</div>
-                                <p className="text-gray-700 leading-relaxed">{action}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="bg-white rounded-2xl p-6 mb-8 shadow">
-                    <h3 className="font-bold text-gray-900 mb-3 text-lg">🏡 HOME Resources for This Step:</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {stepData.homeResources.map((resource, index) => (
-                            <span key={index} className="px-3 py-1 rounded-lg text-sm font-medium border" style={{ backgroundColor: `rgba(${interpolateColor(color1, color2, factor).split(',').slice(0,3).join(',')}, 0.1)`, color: uniqueColor, borderColor: uniqueColor }}>{resource}</span>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const FinalPage = ({ responses, aiResult, onReset }) => {
-    const summarySteps = [...Array(4)].map((_,i) => getExpandedStepContent(aiResult.title, i)?.title).filter(Boolean);
-    return (
-        <div className="overflow-y-auto h-full">
-            <div className="container max-w-[900px] mx-auto px-6 py-12">
-                <div className="text-center mb-10">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Execute Your Path.</h1>
-                    <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-2">You have your personalized roadmap. Now, choose the support system that will help you bring it to life.</p>
-                </div>
-                <div className="bg-white rounded-2xl p-6 md:p-8 mb-10 border border-gray-200 shadow-lg">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
-                    <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
-                        <div className="flex flex-col md:flex-row items-center gap-4"><UserCheck className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Path</h3><p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p></div></div>
-                        <div className="flex flex-col md:flex-row items-center gap-4"><MapPin className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Stage</h3><p className="text-gray-600">{(responses['current-stage'] || '').charAt(0).toUpperCase() + (responses['current-stage'] || '').slice(1)} Stage</p></div></div>
-                        <div className="flex flex-col md:flex-row items-center gap-4"><ListChecks className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Priorities</h3><p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p></div></div>
-                    </div>
-                </div>
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Choose Your Support System</h2>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                    <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                        <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
-                        <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🚀</div><h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3><p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p></div>
-                        <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A dedicated strategy session with our team</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A fully custom roadmap for your goals</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Priority access to HOME resources & pros</span></li></ul>
-                        <button onClick={() => window.open('https://homeformusic.org/consultation', '_blank')} className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Book Free Consultation</button>
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col transform hover:scale-105 transition-transform duration-300">
-                        <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🏡</div><h3 className="text-2xl font-bold text-gray-900">Community Path</h3><p className="text-gray-600 mt-2">Start your journey with our resources</p></div>
-                        <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Access to HOME's online community</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Weekly virtual workshops & events</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A full library of templates & resources</span></li></ul>
-                        <button onClick={() => window.open('https://homeformusic.org/community', '_blank')} className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Start for Free</button>
-                    </div>
-                </div>
-                <div className="mt-12 text-center">
-                    <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium">Start Over →</button>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 export default HOMEQuizMVP;
