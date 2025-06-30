@@ -8,6 +8,7 @@ const HOMEQuizMVP = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentResultStep, setCurrentResultStep] = useState(0); // 0 = position, 1-4 = steps, 5 = video/cta
 
   const questions = [
     {
@@ -62,16 +63,188 @@ const HOMEQuizMVP = () => {
     }
   ];
 
+  const expandedStepContent = {
+    'touring-performer': [
+      {
+        title: "Build Your Signature Live Set",
+        description: "Create a powerful performance that captivates audiences and leaves them wanting more",
+        actions: [
+          "Map out a 45-minute setlist with emotional peaks and valleys",
+          "Record live rehearsal videos to analyze your stage presence",
+          "Design smooth transitions between songs with stories or audience interaction",
+          "Practice your set 3x this week in HOME's rehearsal space",
+          "Get feedback from 5 fellow musicians on your performance energy"
+        ],
+        whyItMatters: "A killer live set is your #1 tool for winning over new fans and booking better gigs. This is where you transform from someone who plays songs to an artist who creates experiences.",
+        homeResources: ["24/7 Rehearsal Facility Access", "Performance Coaching Sessions", "Monthly Open Mics for Testing"]
+      },
+      {
+        title: "Master Your Stage Presence",
+        description: "Develop the confidence and charisma that makes audiences remember you",
+        actions: [
+          "Film yourself performing and identify 3 movements that feel authentic",
+          "Study 5 favorite performers and note their engagement techniques",
+          "Practice talking between songs - write out 3 compelling stories",
+          "Work with HOME's performance coach for personalized feedback",
+          "Perform at 2 local venues this month to build confidence"
+        ],
+        whyItMatters: "Great songs are only half the equation. Your stage presence determines whether people become fans or forget you. This skill directly impacts your booking fees and fan loyalty.",
+        homeResources: ["Stage Presence Workshops", "Video Review Sessions", "Performance Psychology Training"]
+      },
+      {
+        title: "Create Your Professional EPK",
+        description: "Build a booking package that gets venue owners and agents to say YES",
+        actions: [
+          "Shoot high-quality live performance videos (3-4 songs)",
+          "Write a compelling artist bio that tells your story in 150 words",
+          "Gather professional photos from recent shows",
+          "Create a one-page PDF with all booking essentials",
+          "Build a simple EPK website using HOME's templates"
+        ],
+        whyItMatters: "Your EPK is often your only shot at landing bigger gigs. A professional package can be the difference between $200 bar gigs and $2,000 festival slots.",
+        homeResources: ["EPK Templates & Examples", "Professional Photography Sessions", "Copywriting Support"]
+      },
+      {
+        title: "Book Your Next 10 Shows",
+        description: "Build momentum with a strategic booking plan that grows your fanbase",
+        actions: [
+          "Research 20 venues that fit your genre and draw",
+          "Send personalized booking emails using HOME's proven templates",
+          "Follow up with 5 venues every week until booked",
+          "Network at HOME showcases to meet booking agents",
+          "Create a touring route that makes financial sense"
+        ],
+        whyItMatters: "Consistent gigging builds your reputation, income, and fanbase faster than anything else. This systematic approach removes the guesswork from booking.",
+        homeResources: ["Venue Database Access", "Booking Email Templates", "Agent Networking Events"]
+      }
+    ],
+    'creative-artist': [
+      {
+        title: "Define Your Unique Artist Brand",
+        description: "Discover and articulate what makes you different from every other artist",
+        actions: [
+          "Complete HOME's Brand Discovery Worksheet to find your core values",
+          "Create a mood board with 20 images that represent your vibe",
+          "Write your artist mission statement in one powerful sentence",
+          "Choose 3 primary colors and 2 fonts for visual consistency",
+          "Design your logo or wordmark with HOME's design tools"
+        ],
+        whyItMatters: "A clear brand helps you stand out in a sea of content. When fans can recognize your content instantly, they're more likely to engage, share, and buy.",
+        homeResources: ["Brand Development Workshop", "Design Software Access", "1-on-1 Brand Coaching"]
+      },
+      {
+        title: "Launch Your Content Strategy",
+        description: "Build a sustainable system for creating content that grows your audience",
+        actions: [
+          "Choose 3 content pillars (music, behind-scenes, lifestyle)",
+          "Batch create 30 pieces of content in HOME's studios",
+          "Set up scheduling tools to post consistently",
+          "Start a weekly series that fans anticipate",
+          "Track metrics to see what resonates with your audience"
+        ],
+        whyItMatters: "Consistency beats perfection. A strategic content plan keeps you visible and helps the algorithm work in your favor, leading to exponential growth.",
+        homeResources: ["Content Creation Studios", "Social Media Templates", "Analytics Training"]
+      },
+      {
+        title: "Build Revenue Streams",
+        description: "Create multiple income sources beyond just streaming royalties",
+        actions: [
+          "Design 3 merchandise items that reflect your brand",
+          "Set up fan subscription tiers with exclusive content",
+          "Launch print-on-demand store with zero upfront costs",
+          "Create sample packs or presets for producers",
+          "Partner with brands aligned with your values"
+        ],
+        whyItMatters: "Diversified income = creative freedom. When you're not dependent on one revenue source, you can take bigger artistic risks and weather industry changes.",
+        homeResources: ["Merch Design Tools", "E-commerce Setup Support", "Revenue Strategy Sessions"]
+      },
+      {
+        title: "Grow Your Engaged Community",
+        description: "Transform casual listeners into a loyal fanbase that supports your journey",
+        actions: [
+          "Start email list with lead magnet (free song, samples)",
+          "Host monthly livestreams for your core fans",
+          "Create fan-generated content campaigns",
+          "Launch a Discord or community space",
+          "Personally respond to DMs for 30 minutes daily"
+        ],
+        whyItMatters: "1,000 true fans who spend $100/year = $100,000. Building genuine connections creates sustainable success that algorithms can't take away.",
+        homeResources: ["Community Building Playbook", "Email Marketing Tools", "Fan Engagement Workshop"]
+      }
+    ],
+    'writer-producer': [
+      {
+        title: "Master Your Production Craft",
+        description: "Develop the technical skills that make artists want to work with you",
+        actions: [
+          "Complete one new production technique tutorial daily",
+          "Recreate 5 hit songs in your genre to understand their structure",
+          "Build a template library for fast, professional workflows",
+          "Master HOME's studio equipment through hands-on practice",
+          "Get feedback on mixes from established producers in community"
+        ],
+        whyItMatters: "Technical excellence opens doors. When artists trust your skills, they recommend you to others, creating a snowball effect of opportunities.",
+        homeResources: ["Pro Studio Access 24/7", "Production Masterclasses", "Mixing/Mastering Workshops"]
+      },
+      {
+        title: "Build Your Producer Portfolio",
+        description: "Showcase your versatility and unique sound across multiple genres",
+        actions: [
+          "Produce 10 diverse tracks showcasing your range",
+          "Collaborate with 5 HOME artists on different projects",
+          "Create before/after demos showing your production value",
+          "Build a professional website with easy listening experience",
+          "Share one production tip weekly to establish expertise"
+        ],
+        whyItMatters: "Your portfolio is your calling card. A strong showcase leads to better clients, higher rates, and the ability to choose projects you're passionate about.",
+        homeResources: ["Artist Collaboration Board", "Portfolio Website Templates", "Production Showcase Events"]
+      },
+      {
+        title: "Network with Industry Players",
+        description: "Build relationships that lead to consistent work and bigger opportunities",
+        actions: [
+          "Attend HOME's monthly producer meetups",
+          "Reach out to 3 artists weekly with collaboration ideas",
+          "Connect with music supervisors through HOME's network",
+          "Join sync licensing platforms with your best work",
+          "Offer one free production monthly to build relationships"
+        ],
+        whyItMatters: "The music industry runs on relationships. Your network determines your net worth - one connection can change your entire career trajectory.",
+        homeResources: ["Industry Networking Events", "A&R Connections", "Sync Licensing Workshop"]
+      },
+      {
+        title: "Setup Your Business Systems",
+        description: "Create the infrastructure for sustainable income and growth",
+        actions: [
+          "Register your publishing company and PRO membership",
+          "Create contract templates for different project types",
+          "Set up invoicing and payment systems",
+          "Build packages and rate cards for your services",
+          "Learn split sheets and copyright essentials at HOME"
+        ],
+        whyItMatters: "Talent without business knowledge leads to exploitation. These systems ensure you get paid fairly and build long-term wealth from your creativity.",
+        homeResources: ["Music Business Course", "Legal Templates", "Publishing Administration Support"]
+      }
+    ]
+  };
+
+  const getExpandedStepContent = (pathway, stepIndex) => {
+    const pathwayKey = pathway.toLowerCase().includes('touring') ? 'touring-performer' :
+                      pathway.toLowerCase().includes('creative') ? 'creative-artist' : 
+                      'writer-producer';
+    return expandedStepContent[pathwayKey]?.[stepIndex] || null;
+  };
+
   const pathwayTemplates = {
     'touring-performer': {
       title: 'The Touring Performer Path',
       baseDescription: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities.',
       icon: '🎤',
       nextSteps: [
-        'Step 1: Build a compelling 45-60 minute setlist that showcases your range and gets audiences engaged',
-        'Step 2: Book regular local shows to develop your stage presence and build a local fanbase',
-        'Step 3: Create a professional EPK (Electronic Press Kit) to pitch to larger venues and booking agents',
-        'Step 4: Connect with HOME\'s performance community and utilize our 24/7 rehearsal facilities to perfect your live show'
+        'Priority 1: Build a compelling 45-60 minute setlist that showcases your range and gets audiences engaged',
+        'Priority 2: Book regular local shows to develop your stage presence and build a local fanbase',
+        'Priority 3: Create a professional EPK (Electronic Press Kit) to pitch to larger venues and booking agents',
+        'Priority 4: Connect with HOME\'s performance community and utilize our 24/7 rehearsal facilities to perfect your live show'
       ],
       resources: [
         'Rehearsal Facility Access (24/7 at HOME)',
@@ -88,10 +261,10 @@ const HOMEQuizMVP = () => {
       baseDescription: 'You\'re driven by artistic expression and building an authentic online following. Your priority is developing a consistent brand and sustainable revenue streams.',
       icon: '🎨',
       nextSteps: [
-        'Step 1: Define your unique artistic voice and visual brand identity that resonates with your target audience',
-        'Step 2: Develop a consistent content strategy that showcases your music and creative process across platforms',
-        'Step 3: Build multiple revenue streams through streaming, merchandise, fan subscriptions, and brand partnerships',
-        'Step 4: Join HOME\'s artist community to collaborate and learn from other creative entrepreneurs'
+        'Priority 1: Define your unique artistic voice and visual brand identity that resonates with your target audience',
+        'Priority 2: Develop a consistent content strategy that showcases your music and creative process across platforms',
+        'Priority 3: Build multiple revenue streams through streaming, merchandise, fan subscriptions, and brand partnerships',
+        'Priority 4: Join HOME\'s artist community to collaborate and learn from other creative entrepreneurs'
       ],
       resources: [
         'Content Creation Studios & Equipment',
@@ -108,10 +281,10 @@ const HOMEQuizMVP = () => {
       baseDescription: 'You excel at collaboration and creating music for others. Your priority is building industry connections and developing multiple income streams through your technical skills.',
       icon: '🎹',
       nextSteps: [
-        'Step 1: Master your craft and develop a signature sound that makes you indispensable to artists and labels',
-        'Step 2: Build a diverse portfolio showcasing your range across genres and collaboration styles',
-        'Step 3: Network strategically with artists, labels, and music supervisors to secure consistent placements',
-        'Step 4: Learn the business side including publishing, sync licensing, and contracts to maximize your earnings'
+        'Priority 1: Master your craft and develop a signature sound that makes you indispensable to artists and labels',
+        'Priority 2: Build a diverse portfolio showcasing your range across genres and collaboration styles',
+        'Priority 3: Network strategically with artists, labels, and music supervisors to secure consistent placements',
+        'Priority 4: Learn the business side including publishing, sync licensing, and contracts to maximize your earnings'
       ],
       resources: [
         'Professional Recording Studios (24/7 access)',
@@ -316,10 +489,12 @@ const HOMEQuizMVP = () => {
       console.log('✅ Submit result:', submitResult);
       
       setCurrentStep('results');
+      setCurrentResultStep(0);
       
     } catch (error) {
       console.error('Error in email submit process:', error);
       setCurrentStep('results');
+      setCurrentResultStep(0);
     }
     
     setIsSubmitting(false);
@@ -504,7 +679,7 @@ const HOMEQuizMVP = () => {
     );
   }
 
-// Results page - Multi-step journey
+  // Results page - Multi-step journey
   if (currentStep === 'results' && aiResult) {
     const totalSteps = 4;
     const progressPercentage = (currentResultStep / 5) * 100;
@@ -858,216 +1033,7 @@ const HOMEQuizMVP = () => {
 
     return null;
   }
-                🎯 YOUR CURRENT POSITION
-              </h3>
-              <p className="bg-gradient-to-br from-[#1DD1A1]/85 to-[#1DD1A1]/95 text-white px-5 py-4 rounded-2xl border border-[#1DD1A1]/30 max-w-md mx-auto">
-                {aiResult.description}
-              </p>
-            </div>
-            
-            {/* Main Path Container */}
-            <div className="path-container relative max-w-[700px] mx-auto">
-              {/* Vertical Progress Bar */}
-              <div className="progress-bar-container absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1.5 z-[1]">
-                <div className="w-full h-full bg-gradient-to-b from-[#1DD1A1] to-[#B91372] rounded-[3px]"></div>
-              </div>
-              
-              {/* Steps Container */}
-              <div className="steps-container relative z-[5] py-5">
-                {(aiResult.customNextSteps || aiResult.nextSteps || []).map((step, index) => {
-                  const stepText = typeof step === 'object' ? step.step : step;
-                  const priority = typeof step === 'object' ? step.priority : index + 1;
-                  
-                  // Color progression
-                  const colors = [
-                    { main: '#1DD1A1', border: 'rgba(29, 209, 161, 0.3)', bg: 'rgba(29, 209, 161, 0.05)' },
-                    { main: '#1BC49C', border: 'rgba(27, 196, 156, 0.3)', bg: 'rgba(27, 196, 156, 0.05)' },
-                    { main: '#19AA86', border: 'rgba(25, 170, 134, 0.3)', bg: 'rgba(25, 170, 134, 0.05)' },
-                    { main: '#178F70', border: 'rgba(23, 143, 112, 0.3)', bg: 'rgba(23, 143, 112, 0.05)' },
-                    { main: '#A85990', border: 'rgba(168, 89, 144, 0.3)', bg: 'rgba(168, 89, 144, 0.05)' },
-                    { main: '#B91372', border: 'rgba(185, 19, 114, 0.3)', bg: 'rgba(185, 19, 114, 0.05)' }
-                  ];
-                  
-                  const color = colors[index] || colors[colors.length - 1];
-                  
-                  return (
-                    <div 
-                      key={index} 
-                      className={`step relative mb-20 flex items-center ${
-                        index % 2 === 0 ? 'md:justify-end md:pr-[50px]' : 'md:justify-start md:pl-[50px]'
-                      }`}
-                    >
-                      <div 
-                        className="step-content border rounded-2xl p-6 transition-all duration-300 w-full md:w-[280px] relative hover:-translate-y-0.5 hover:shadow-md"
-                        style={{
-                          backgroundColor: color.bg,
-                          borderColor: color.border
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = color.main;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = color.border;
-                        }}
-                      >
-                        <div className="step-header flex items-center mb-3">
-                          <div 
-                            className="step-indicator w-[45px] h-[45px] rounded-xl flex items-center justify-center text-xl font-bold text-white mr-3 flex-shrink-0"
-                            style={{ backgroundColor: color.main }}
-                          >
-                            {priority}
-                          </div>
-                          <h4 className="step-title text-lg font-semibold text-gray-900 leading-tight">
-                            Priority {priority}
-                          </h4>
-                        </div>
-                        <p className="step-description text-gray-700 text-sm leading-relaxed">
-                          {stepText}
-                        </p>
-                      </div>
-                      
-                      {/* Dot on progress bar */}
-                      <div 
-                        className="absolute w-4 h-4 rounded-full border-4 border-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[6]"
-                        style={{
-                          backgroundColor: color.main,
-                          boxShadow: `0 0 0 2px ${color.main}`
-                        }}
-                      ></div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {/* Resources Section */}
-            <div className="mt-16 mb-16">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                Resources Available at HOME
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[600px] mx-auto">
-                {aiResult.resources.map((resource, index) => (
-                  <div 
-                    key={index} 
-                    className="flex items-center bg-gray-50 px-4 py-3 rounded-xl"
-                  >
-                    <div className="w-2 h-2 rounded-full mr-3 flex-shrink-0" style={{ backgroundColor: '#1DD1A1' }}></div>
-                    <p className="text-gray-700 text-sm">{resource}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Journey End - How HOME Supports You */}
-            <div className="journey-end text-center mt-16 relative">
-              <h3 className="inline-block bg-[#B91372] text-white text-xl font-semibold px-6 py-4 rounded-2xl mb-4">
-                🏆 HOW HOME ACCELERATES YOUR SUCCESS
-              </h3>
-              
-              {/* Breaking down the HOME connection into digestible parts */}
-              <div className="max-w-2xl mx-auto mb-8 space-y-4">
-                {aiResult.homeConnection.split('. ').map((sentence, index) => {
-                  if (sentence.trim()) {
-                    return (
-                      <div key={index} className="bg-white border border-[#B91372]/20 rounded-xl p-4 text-left">
-                        <p className="text-gray-700 leading-relaxed">
-                          {sentence.trim()}{sentence.trim().endsWith('.') ? '' : '.'}
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-              
-              {/* Actionable CTAs */}
-              <div className="mt-8 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[600px] mx-auto">
-                  <button 
-                    className="bg-[#B91372] text-white font-bold py-4 px-6 rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-105 shadow-lg"
-                    onClick={() => window.open('https://homeformusic.org/tour', '_blank')}
-                  >
-                    <div className="text-lg mb-1">Schedule a Tour</div>
-                    <div className="text-sm opacity-90">Visit our Nashville facility</div>
-                  </button>
-                  
-                  <button 
-                    className="bg-[#1DD1A1] text-white font-bold py-4 px-6 rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-105 shadow-lg"
-                    onClick={() => window.open('https://homeformusic.org/book', '_blank')}
-                  >
-                    <div className="text-lg mb-1">Book Studio Time</div>
-                    <div className="text-sm opacity-90">24/7 access available</div>
-                  </button>
-                </div>
-                
-                <div className="bg-gray-50 rounded-2xl p-6 max-w-[600px] mx-auto">
-                  <h4 className="font-bold text-gray-900 mb-3">Connect with Our Community Leaders:</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
-                      <span className="text-gray-700">Sarah Chen - Artist Development</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
-                      <span className="text-gray-700">Marcus Williams - Studio Manager</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
-                      <span className="text-gray-700">Jessica Park - Community Lead</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-[#1DD1A1] rounded-full mr-2"></div>
-                      <span className="text-gray-700">David Torres - A&R Director</span>
-                    </div>
-                  </div>
-                  <button 
-                    className="mt-4 text-[#B91372] font-semibold hover:underline"
-                    onClick={() => window.open('mailto:community@homeformusic.org', '_blank')}
-                  >
-                    Email: community@homeformusic.org →
-                  </button>
-                </div>
-                
-                <div className="success-grid flex flex-wrap gap-2 justify-center max-w-[500px] mx-auto">
-                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
-                    24/7 Studio Access
-                  </span>
-                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
-                    250-Capacity Venue
-                  </span>
-                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
-                    Monthly Showcases
-                  </span>
-                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
-                    Industry Connections
-                  </span>
-                  <span className="bg-[#B91372]/15 text-[#B91372] px-3 py-2 rounded-lg text-xs font-medium border border-[#B91372]/30">
-                    Collaboration Network
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Footer */}
-          <div className="footer bg-gray-50 text-gray-600 text-center p-5 text-sm border-t border-gray-200">
-            <p>Your Personalized Music Creator Roadmap | HOME for Music | Nashville, TN</p>
-            <button 
-              onClick={() => {
-                setCurrentStep('landing');
-                setResponses({});
-                setAiResult(null);
-                setEmail('');
-              }}
-              className="mt-3 text-[#B91372] font-semibold hover:underline"
-            >
-              Take the Quiz Again →
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
   // Loading state while generating results
   if (currentStep === 'results' && isSubmitting) {
     return (
