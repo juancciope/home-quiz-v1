@@ -158,21 +158,19 @@ const HOMEQuizMVP = () => {
 
 // --- Sub-Components ---
 
-const Confetti = () => {
-    return (
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-50">
-            {[...Array(50)].map((_, i) => {
-                const style = {
-                    left: `${Math.random() * 100}%`,
-                    backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
-                    animation: `confetti-fall ${2 + Math.random() * 3}s ${Math.random() * 2}s linear infinite`,
-                    transform: `rotate(${Math.random() * 360}deg)`
-                };
-                return <div key={i} className="confetti-piece" style={style}></div>
-            })}
-        </div>
-    );
-};
+const Confetti = () => (
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-50">
+        {[...Array(50)].map((_, i) => {
+            const style = {
+                left: `${Math.random() * 100}%`,
+                backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
+                animation: `confetti-fall ${2 + Math.random() * 3}s ${Math.random() * 2}s linear infinite`,
+                transform: `rotate(${Math.random() * 360}deg)`
+            };
+            return <div key={i} className="confetti-piece" style={style}></div>
+        })}
+    </div>
+);
 
 const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, currentScreen }) => {
     const stageTitles = ["Identify Your Path", "Personalized Path", "Personalized Plan", "Execute Plan"];
@@ -214,7 +212,7 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
             <footer className="sticky bottom-0 bg-white/90 backdrop-blur-sm z-20 border-t border-gray-200">
                 <div className="container max-w-4xl mx-auto px-6 py-3 flex justify-between items-center h-16">
                     <button onClick={onBack} className="text-gray-600 hover:text-gray-900 font-medium flex items-center transition-opacity duration-300 disabled:opacity-0" disabled={!showBackButton}><ChevronLeft className="w-5 h-5 mr-1" /> Back</button>
-                    <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center" style={{ opacity: showNextButton ? 1 : 0, pointerEvents: showNextButton ? 'auto' : 'none' }}>Next Step <ChevronRight className="w-5 h-5 ml-2" /></button>
+                    {showNextButton && <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center">Next Step <ChevronRight className="w-5 h-5 ml-2" /></button>}
                     {showFinalPlanButton && (<button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center">Execute My Personalized Plan <ChevronRight className="w-5 h-5 ml-2" /></button>)}
                 </div>
             </footer>
@@ -222,11 +220,39 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
     );
 };
 
-const AnimatedContent = ({ children, direction }) => {
-    return (<div className={`absolute inset-0 p-4 ${direction}`}>{children}</div>);
-};
+const AnimatedContent = ({ children, direction }) => (
+    <div className={`absolute inset-0 p-4 animate-on-load ${direction}`}>
+        {children}
+    </div>
+);
 
-const LandingPage = ({ onStartQuiz }) => ( /* ... same as before ... */ );
+const LandingPage = ({ onStartQuiz }) => (
+    <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="w-full max-w-4xl mx-auto px-6">
+                <div className="text-center">
+                    <div className="mb-12">
+                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">Find Your Path on the<br /><span style={{ background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Music Creator Roadmap</span></h1>
+                        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">2-minute AI quiz to discover your personalized pathway in the music industry</p>
+                        <div className="flex items-center justify-center gap-8 mb-10 text-sm text-gray-600 flex-wrap">
+                            <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>AI-Powered Results</div>
+                            <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>Nashville Community</div>
+                            <div className="flex items-center"><div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#1DD1A1' }}></div>Personalized Roadmap</div>
+                        </div>
+                    </div>
+                    <div className="mb-12">
+                        <button onClick={onStartQuiz} className="text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center hover:opacity-90 mb-4" style={{ backgroundColor: '#B91372' }}>Find My Path <ChevronRight className="w-5 h-5 ml-2" /></button>
+                        <p className="text-sm text-gray-500">Takes 2 minutes • Completely free</p>
+                    </div>
+                    <div>
+                        <div className="mb-6"><img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png" alt="HOME for Music" className="mx-auto" style={{ height: '70px', width: 'auto', maxWidth: '280px', objectFit: 'contain' }}/></div>
+                        <div className="flex items-center justify-center text-sm text-gray-500"><div className="flex text-yellow-400 mr-2">{[...Array(5)].map((_, i) => (<Star key={i} className="w-4 h-4 fill-current" />))}</div>Trusted by 1,000+ music creators</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+);
 
 const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) => (
     <div className="h-full flex items-center justify-center">
@@ -246,7 +272,15 @@ const QuestionPage = ({ question, onResponse, questionIndex, totalQuestions }) =
     </div>
 );
 
-const TransitionPage = ({icon, title, subtitle}) => ( /* ... same as before ... */ );
+const TransitionPage = ({icon, title, subtitle}) => (
+    <div className="h-full flex items-center justify-center text-center">
+        <div>
+            <div className="w-16 h-16 text-[#B91372] mx-auto mb-4 flex items-center justify-center text-4xl">{icon}</div>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{title}</h2>
+            <p className="text-gray-600">{subtitle}</p>
+        </div>
+    </div>
+);
 
 const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
     <div className="h-full flex items-center justify-center">
@@ -288,15 +322,99 @@ const ResultsLandingPage = ({ aiResult, onBegin }) => {
     );
 };
 
-const StepPage = ({ stepIndex, aiResult }) => { /* ... same as before, with interpolateColor logic ... */ };
-const FinalPage = ({ responses, aiResult, onReset }) => { /* ... same as before, with updated titles ... */ };
+const interpolateColor = (color1, color2, factor) => {
+    const result = color1.slice();
+    for (let i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - result[i]));
+    }
+    return `rgb(${result.join(',')})`;
+};
 
-// Dummy components for brevity - replace with full versions from previous answer
-// For the final code, these definitions need to be complete.
-LandingPage.defaultProps = { onStartQuiz: () => {} };
-TransitionPage.defaultProps = { icon: <Loader/>, title: "", subtitle: ""};
-StepPage.defaultProps = { stepIndex: 0, aiResult: {title: ''}, getExpandedStepContent: () => {} };
-FinalPage.defaultProps = { responses: {}, aiResult: {title: ''}, onReset: () => {} };
+const StepPage = ({ stepIndex, aiResult }) => {
+    const stepData = getExpandedStepContent(aiResult.title, stepIndex);
+    if (!stepData) return <div className="h-full flex items-center justify-center"><Loader className="animate-spin text-[#B91372]"/></div>;
+
+    const color1 = [29, 209, 161]; // #1DD1A1
+    const color2 = [185, 19, 114]; // #B91372
+    const factor = stepIndex / 3;
+    const uniqueColor = interpolateColor(color1, color2, factor);
+    const lightColor = `rgba(${interpolateColor(color1, color2, factor).replace('rgb(','').replace(')','').split(',').join(',')}, 0.1)`;
+
+    return (
+        <div className="overflow-y-auto h-full">
+            <div className="container max-w-[800px] mx-auto px-6 py-8">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
+                    <p className="text-lg text-gray-600">{stepData.description}</p>
+                </div>
+                <div className="rounded-2xl p-6 mb-8 bg-white shadow">
+                    <h3 className="font-bold text-gray-900 mb-2 flex items-center text-lg"><span className="text-2xl mr-2">💡</span>Why This Matters</h3>
+                    <p className="text-gray-700 leading-relaxed">{stepData.whyItMatters}</p>
+                </div>
+                <div className="mb-8">
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
+                    <div className="space-y-3">
+                        {stepData.actions.map((action, index) => (
+                            <div key={index} className="flex items-start bg-white rounded-xl p-4 shadow-sm">
+                                <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0" style={{ backgroundColor: uniqueColor }}>{index + 1}</div>
+                                <p className="text-gray-700 leading-relaxed">{action}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 mb-8 shadow">
+                    <h3 className="font-bold text-gray-900 mb-3 text-lg">🏡 HOME Resources for This Step:</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {stepData.homeResources.map((resource, index) => (
+                            <span key={index} className="px-3 py-1 rounded-lg text-sm font-medium border" style={{ backgroundColor: lightColor, color: uniqueColor, borderColor: uniqueColor }}>{resource}</span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const FinalPage = ({ responses, aiResult, onReset }) => {
+    const summarySteps = [...Array(4)].map((_,i) => getExpandedStepContent(aiResult.title, i)?.title).filter(Boolean);
+    return (
+        <div className="overflow-y-auto h-full">
+            <div className="container max-w-[900px] mx-auto px-6 py-12">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Execute Your Plan.</h1>
+                    <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-2">You have your personalized plan. Now, choose the support system that will help you bring it to life.</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 md:p-8 mb-10 border border-gray-200 shadow-lg">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
+                    <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
+                        <div className="flex flex-col md:flex-row items-center gap-4"><UserCheck className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Path</h3><p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p></div></div>
+                        <div className="flex flex-col md:flex-row items-center gap-4"><MapPin className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Stage</h3><p className="text-gray-600">{(responses['current-stage'] || '').charAt(0).toUpperCase() + (responses['current-stage'] || '').slice(1)} Stage</p></div></div>
+                        <div className="flex flex-col md:flex-row items-center gap-4"><ListChecks className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Priorities</h3><p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p></div></div>
+                    </div>
+                </div>
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900">Choose Your Support System</h2>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                        <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
+                        <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🚀</div><h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3><p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p></div>
+                        <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A dedicated strategy session with our team</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A fully custom roadmap for your goals</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Priority access to HOME resources & pros</span></li></ul>
+                        <button onClick={() => window.open('https://homeformusic.org/consultation', '_blank')} className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Book Free Consultation</button>
+                    </div>
+                    <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col transform hover:scale-105 transition-transform duration-300">
+                        <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🏡</div><h3 className="text-2xl font-bold text-gray-900">Community Path</h3><p className="text-gray-600 mt-2">Start your journey with our resources</p></div>
+                        <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Access to HOME's online community</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Weekly virtual workshops & events</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A full library of templates & resources</span></li></ul>
+                        <button onClick={() => window.open('https://homeformusic.org/community', '_blank')} className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Start for Free</button>
+                    </div>
+                </div>
+                <div className="mt-12 text-center">
+                    <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium">Start Over →</button>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 
 export default HOMEQuizMVP;
