@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import {
   ChevronRight,
   ChevronLeft,
@@ -15,7 +15,7 @@ import {
   Home
 } from 'lucide-react';
 
-// --- Quiz Questions Data ---
+// --- Quiz Questions ---
 const questions = [
   {
     id: 'motivation',
@@ -64,7 +64,7 @@ const questions = [
   }
 ];
 
-// --- Expanded Step Content Data ---
+// --- Expanded Steps Data ---
 const expandedStepContent = {
   'touring-performer': [
     {
@@ -183,17 +183,18 @@ const expandedStepContent = {
 };
 
 // --- Helpers ---
-const getExpandedStepContent = (pathway, index) => {
+const getExpandedStepContent = (pathway, idx) => {
   if (!pathway) return null;
   const key = pathway.toLowerCase().includes('touring')
     ? 'touring-performer'
     : 'creative-artist';
-  return expandedStepContent[key]?.[index] || null;
+  return expandedStepContent[key]?.[idx] || null;
 };
 
 // Linear interpolation between two RGB arrays
-const interpolateColor = (c1, c2, factor) =>
-  c1.map((v, i) => Math.round(v + factor * (c2[i] - v)));
+const interpolateColor = (c1, c2, f) =>
+  c1.map((v, i) => Math.round(v + f * (c2[i] - v)));
+
 
 // --- Main Component ---
 const HOMEQuizMVP = () => {
@@ -204,36 +205,44 @@ const HOMEQuizMVP = () => {
   const [email, setEmail]             = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
   const [step, setStep]               = useState(0);
-  const [direction, setDirection]     = useState('forward');
+  const [dir, setDir]                 = useState('forward');
   const [confetti, setConfetti]       = useState(false);
 
-  // Scroll reset on every change
   const mainRef = useRef(null);
-  useEffect(() => {
-    mainRef.current?.scrollTo({ top: 0 });
+
+  useLayoutEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [screen, qIndex, step]);
 
+  const scrollToTop = () => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
+
   const handleAnswer = (id, val) => {
-    setDirection('forward');
+    setDir('forward');
     setResponses(r => ({ ...r, [id]: val }));
     if (qIndex < questions.length - 1) {
       setQIndex(i => i + 1);
+      scrollToTop();
     } else {
       setScreen('transition');
-      setTimeout(() => setScreen('email'), 1500);
+      setTimeout(() => {
+        setScreen('email');
+        scrollToTop();
+      }, 1500);
     }
   };
 
-  const handleEmail = () => {
+  const handleEmailSubmit = () => {
     if (!email || isSubmitting) return;
     setSubmitting(true);
-    setDirection('forward');
-    // Simulate AI response
+    setDir('forward');
     const dummy = {
       title: 'The Touring Performer Path',
       icon: '🎤',
-      description:
-        'You thrive on stage energy and live connections. Focus on building a powerful live presence and strategic bookings.'
+      description: 'You thrive on stage energy and live connections. Focus on building a powerful live presence and strategic bookings.'
     };
     setAiResult(dummy);
     setTimeout(() => {
@@ -242,26 +251,38 @@ const HOMEQuizMVP = () => {
       setStep(0);
       setConfetti(true);
       setTimeout(() => setConfetti(false), 4000);
+      scrollToTop();
     }, 1500);
   };
 
   const goBack = () => {
-    setDirection('backward');
-    if (screen === 'quiz' && qIndex > 0) setQIndex(i => i - 1);
-    else if (screen === 'quiz') setScreen('landing');
-    else if (screen === 'email') setScreen('quiz');
-    else if (screen === 'results' && step > 0) setStep(i => i - 1);
-    else if (screen === 'results') setScreen('email');
+    setDir('backward');
+    if (screen === 'quiz' && qIndex > 0) {
+      setQIndex(i => i - 1);
+    } else if (screen === 'quiz') {
+      setScreen('landing');
+    } else if (screen === 'email') {
+      setScreen('quiz');
+    } else if (screen === 'results' && step > 0) {
+      setStep(i => i - 1);
+    } else if (screen === 'results') {
+      setScreen('email');
+    }
+    scrollToTop();
   };
 
   const goNext = () => {
-    setDirection('forward');
-    if (screen === 'results' && step < 5) setStep(i => i + 1);
+    setDir('forward');
+    if (screen === 'results' && step < 5) {
+      setStep(i => i + 1);
+      scrollToTop();
+    }
   };
 
   const startQuiz = () => {
-    setDirection('forward');
+    setDir('forward');
     setScreen('quiz');
+    scrollToTop();
   };
 
   const resetAll = () => {
@@ -271,11 +292,12 @@ const HOMEQuizMVP = () => {
     setAiResult(null);
     setEmail('');
     setStep(0);
+    scrollToTop();
   };
 
   const getStage = () => {
     if (screen === 'quiz') return 1;
-    if (['transition', 'email'].includes(screen)) return 2;
+    if (['transition','email'].includes(screen)) return 2;
     if (screen === 'results' && step < 5) return 3;
     if (screen === 'results' && step === 5) return 4;
     return 0;
@@ -285,12 +307,12 @@ const HOMEQuizMVP = () => {
     return <LandingPage onStart={startQuiz} />;
   }
 
-  const stage = getStage();
-  const key   = `${screen}-${qIndex}-${step}`;
+  const masterStage = getStage();
+  const key         = `${screen}-${qIndex}-${step}`;
 
   return (
     <JourneyLayout
-      masterStage={stage}
+      masterStage={masterStage}
       resultStep={step}
       onBack={goBack}
       onNext={goNext}
@@ -298,7 +320,7 @@ const HOMEQuizMVP = () => {
       questionIndex={qIndex}
       mainRef={mainRef}
     >
-      <AnimatedContent key={key} direction={direction}>
+      <AnimatedContent key={key} direction={dir}>
         {screen === 'quiz' && (
           <QuestionPage
             question={questions[qIndex]}
@@ -318,7 +340,7 @@ const HOMEQuizMVP = () => {
           <EmailCapturePage
             email={email}
             setEmail={setEmail}
-            onSubmit={handleEmail}
+            onSubmit={handleEmailSubmit}
             isSubmitting={isSubmitting}
           />
         )}
@@ -327,12 +349,16 @@ const HOMEQuizMVP = () => {
             {step === 0 && (
               <ResultsLandingPage
                 aiResult={aiResult}
-                onBegin={() => { setDirection('forward'); setStep(1); }}
+                onBegin={() => { setDir('forward'); setStep(1); scrollToTop(); }}
                 showConfetti={confetti}
               />
             )}
-            {step > 0 && step < 5 && <StepPage stepIndex={step - 1} aiResult={aiResult} />}
-            {step === 5 && <FinalPage responses={responses} aiResult={aiResult} onReset={resetAll} />}
+            {step > 0 && step < 5 && (
+              <StepPage stepIndex={step - 1} aiResult={aiResult} />
+            )}
+            {step === 5 && (
+              <FinalPage responses={responses} aiResult={aiResult} onReset={resetAll} />
+            )}
           </>
         )}
       </AnimatedContent>
@@ -340,7 +366,8 @@ const HOMEQuizMVP = () => {
   );
 };
 
-// --- Layout & Navigation ---
+
+// --- Layout & Progress Bar ---
 const JourneyLayout = ({
   masterStage,
   resultStep,
@@ -352,49 +379,47 @@ const JourneyLayout = ({
   children
 }) => {
   const stages = [
-    { id: 1, title: 'Identify Your Path', icon: <Target className="w-4 h-4" /> },
-    { id: 2, title: 'Personalized Path',  icon: <MapPin className="w-4 h-4" /> },
-    { id: 3, title: 'Personalized Plan',  icon: <ListChecks className="w-4 h-4" /> },
-    { id: 4, title: 'Execute Plan',       icon: <Rocket className="w-4 h-4" /> }
+    { id:1, title:'Identify Your Path',    icon:<Target className="w-4 h-4"/> },
+    { id:2, title:'Personalized Path',     icon:<MapPin className="w-4 h-4"/> },
+    { id:3, title:'Personalized Plan',     icon:<ListChecks className="w-4 h-4"/> },
+    { id:4, title:'Execute Plan',          icon:<Rocket className="w-4 h-4"/> }
   ];
-
-  const showBack      = ['quiz','email','results'].includes(currentScreen);
-  const showNextStep  = currentScreen === 'results' && resultStep > 0 && resultStep < 4;
-  const showExecute   = currentScreen === 'results' && resultStep === 4;
-  const color1 = [29,209,161], color2=[185,19,114];
+  const showBack     = ['quiz','email','results'].includes(currentScreen);
+  const showNextStep = currentScreen==='results' && resultStep>0 && resultStep<4;
+  const showExecute  = currentScreen==='results' && resultStep===4;
+  const color1=[29,209,161], color2=[185,19,114];
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Sticky Header */}
-      <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm pt-2 pb-1">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap items-start justify-around relative mb-2 text-center">
+      {/* Sticky Header, single line */}
+      <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm">
+        <div className="container mx-auto px-4 py-2 relative">
+          <div className="flex items-center justify-between whitespace-nowrap overflow-x-auto pb-2">
             {stages.map(s => {
-              const isActive    = masterStage === s.id;
-              const isCompleted = masterStage > s.id;
-              const rgb          = interpolateColor(color1, color2, (s.id - 1) / 3).join(',');
+              const isActive    = masterStage===s.id;
+              const isCompleted = masterStage> s.id;
+              const rgb          = interpolateColor(color1,color2,(s.id-1)/3).join(',');
               return (
-                <div key={s.id} className="w-1/2 sm:w-auto mb-1">
+                <div key={s.id} className="inline-block text-center px-3">
                   <div
-                    className={`mx-auto mb-1 w-8 h-8 rounded-full flex items-center justify-center ${
-                      isActive ? 'scale-110' : ''
-                    } font-bold border-2 transition`}
+                    className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center transition-transform ${isActive?'scale-110':''}`}
                     style={{
-                      borderColor: isActive||isCompleted ? `rgb(${rgb})` : '#d1d5db',
-                      backgroundColor: isCompleted ? `rgb(${rgb})` : 'white',
-                      color: isCompleted ? 'white' : isActive ? `rgb(${rgb})` : '#a0aec0'
+                      border: '2px solid',
+                      borderColor: isActive||isCompleted?`rgb(${rgb})`:'#d1d5db',
+                      backgroundColor: isCompleted?`rgb(${rgb})`:'white',
+                      color: isCompleted?'white':isActive?`rgb(${rgb})`:'#a0aec0'
                     }}
                   >
-                    {isCompleted ? <Check className="w-4 h-4" /> : s.id}
+                    {isCompleted ? <Check className="w-4 h-4"/> : s.id}
                   </div>
-                  <div className="text-xs sm:text-[10px] leading-snug">{s.title}</div>
+                  <div className="mt-1 text-xs leading-snug">{s.title}</div>
                 </div>
               );
             })}
-            <div className="absolute top-4 left-0 w-full h-1 bg-gray-200 -z-10">
+            <div className="absolute bottom-0 left-4 right-4 h-1 bg-gray-200 z-0">
               <div
-                className="h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
-                style={{ width: `calc(${((masterStage - 1) / 3) * 100}% - 2rem)` }}
+                className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
+                style={{ width:`calc(${((masterStage-1)/3)*100}% - 2rem)` }}
               />
             </div>
           </div>
@@ -410,22 +435,21 @@ const JourneyLayout = ({
           <button
             onClick={onBack}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
-              showBack ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'invisible'
+              showBack?'text-gray-600 hover:text-gray-900 hover:bg-gray-100':'invisible'
             }`}
           >
-            <ChevronLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">Back</span>
+            <ChevronLeft className="w-5 h-5"/> <span className="hidden sm:inline">Back</span>
           </button>
           <div className="text-sm text-gray-500">
-            {currentScreen === 'quiz' && `Question ${questionIndex + 1} of ${questions.length}`}
-            {currentScreen === 'results' && resultStep > 0 && resultStep < 5 && `Step ${resultStep} of 4`}
+            {currentScreen==='quiz'   && `Question ${questionIndex+1} of ${questions.length}`}
+            {currentScreen==='results'&& resultStep>0 && `Step ${resultStep} of 4`}
           </div>
           {showNextStep && (
             <button
               onClick={onNext}
               className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-1"
             >
-              Next <ChevronRight className="w-5 h-5" />
+              Next <ChevronRight className="w-5 h-5"/>
             </button>
           )}
           {showExecute && (
@@ -433,10 +457,10 @@ const JourneyLayout = ({
               onClick={onNext}
               className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-1"
             >
-              Execute <Rocket className="w-5 h-5" />
+              Execute <Rocket className="w-5 h-5"/>
             </button>
           )}
-          {(!showNextStep && !showExecute) && <div className="w-16" />}
+          {(!showNextStep && !showExecute) && <div className="w-16"/>}
         </div>
       </footer>
     </div>
@@ -476,7 +500,7 @@ const LandingPage = ({ onStart }) => (
       </div>
       <button
         onClick={onStart}
-        className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-transform duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
+        className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-transform transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
         style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
       >
         <span className="relative z-10">Start Your Journey</span>
@@ -633,7 +657,7 @@ const ResultsLandingPage = ({ aiResult, onBegin, showConfetti }) => (
       <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{aiResult.title}</h1>
       <p className="text-lg text-gray-600 mb-8">Your personalized roadmap is ready!</p>
       <div className="bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5 rounded-2xl p-6 mb-8 border border-[#1DD1A1]/20 text-left">
-        <h3 className="flex items-center gap-2 font-bold text-gray-800 mb-3">
+        <h3 className="flex items-center gap-2 font-bold text-gray-800 mb-3 text-lg">
           <MapPin className="w-5 h-5" style={{ color:'#1DD1A1' }} /> Your Starting Point:
         </h3>
         <p className="text-gray-700 leading-relaxed">{aiResult.description}</p>
@@ -662,7 +686,7 @@ const StepPage = ({ stepIndex, aiResult }) => {
   return (
     <div className="w-full max-w-[800px] mx-auto">
       <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-sm font-semibold" style={{ backgroundColor: bg, color:`rgb(${rgb})` }}>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-sm font-semibold" style={{ backgroundColor:bg, color:`rgb(${rgb})` }}>
           <ListChecks className="w-4 h-4" /> Step {stepIndex+1} of 4
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{data.title}</h1>
@@ -670,7 +694,7 @@ const StepPage = ({ stepIndex, aiResult }) => {
       </div>
       <div className="rounded-2xl p-6 mb-8 bg-gradient-to-br from-white to-gray-50 border shadow-lg" style={{ borderColor:`rgba(${rgb},0.25)` }}>
         <h3 className="flex items-center gap-2 font-bold text-gray-900 mb-3 text-lg">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: bg }}>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor:bg }}>
             <Sparkles className="w-5 h-5" style={{ color:`rgb(${rgb})` }} />
           </div>
           Why This Matters
@@ -699,7 +723,7 @@ const StepPage = ({ stepIndex, aiResult }) => {
         </h3>
         <div className="flex flex-wrap gap-2">
           {data.homeResources.map((res,i) => (
-            <span key={i} className="px-4 py-2 rounded-lg text-sm font-medium border" style={{ backgroundColor: bg, color:`rgb(${rgb})`, borderColor:`rgb(${rgb})` }}>
+            <span key={i} className="px-4 py-2 rounded-lg text-sm font-medium border" style={{ backgroundColor:bg, color:`rgb(${rgb})`, borderColor:`rgb(${rgb})` }}>
               {res}
             </span>
           ))}
@@ -758,7 +782,6 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
         <p className="text-gray-600">How would you like to implement your roadmap?</p>
       </div>
       <div className="grid md:grid-cols-2 gap-6 mb-12">
-        {/* Accelerated Path */}
         <div className="relative bg-white rounded-2xl p-6 border-2 border-[#B91372] shadow-xl hover:scale-105 transition">
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
           <div className="text-center mb-6 pt-4">
@@ -780,7 +803,6 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             Book Free Consultation
           </button>
         </div>
-        {/* Community Path */}
         <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-xl hover:scale-105 transition">
           <div className="text-center mb-6 pt-4">
             <div className="w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#1DD1A1]/70 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
