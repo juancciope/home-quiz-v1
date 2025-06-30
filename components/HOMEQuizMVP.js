@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Home, Mail, ArrowRight, Check, Users, Star, Loader, ChevronLeft } from 'lucide-react';
+import { ChevronRight, Home, Mail, ArrowRight, Check, Users, Star, Loader, ChevronLeft, MapPin, UserCheck, ListChecks } from 'lucide-react';
 
 const HOMEQuizMVP = () => {
   const [currentStep, setCurrentStep] = useState('landing');
@@ -689,29 +689,22 @@ const HOMEQuizMVP = () => {
         <div className="min-h-[100svh] bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
           <div className="container max-w-[800px] mx-auto bg-white min-h-[100svh] flex flex-col justify-center px-6 py-8">
               <div className="text-center">
-                <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-8 md:p-12 rounded-3xl mb-8 shadow-lg">
+                <div className="inline-block bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 p-8 md:p-12 rounded-3xl mb-8 border border-gray-200">
                   <div className="text-5xl md:text-6xl mb-4">{aiResult.icon}</div>
-                  <h1 className="text-3xl md:text-4xl font-bold mb-4">{aiResult.title}</h1>
-                  <p className="text-lg md:text-xl opacity-95">Your Starting Point</p>
+                  <h1 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#1DD1A1] to-[#B91372]">{aiResult.title}</h1>
                 </div>
 
                 <div className="max-w-2xl mx-auto">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">📍 Where You Are Now</h2>
-                  <div className="bg-gray-50 rounded-2xl p-6 md:p-8 mb-8">
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      {aiResult.description}
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Roadmap Begins Here</h2>
+                   <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                      Based on your answers, you've unlocked the first steps of your personalized journey. Let's explore what's next.
                     </p>
-                  </div>
-
-                  <div className="mb-8">
-                    <p className="text-gray-600 mb-4">Your personalized journey includes these 4 steps:</p>
-                  </div>
 
                   <button
                     onClick={() => setCurrentResultStep(1)}
                     className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
                   >
-                    Begin Your Journey
+                    Start My First Step
                     <ChevronRight className="w-5 h-5 ml-2" />
                   </button>
                 </div>
@@ -843,7 +836,7 @@ const HOMEQuizMVP = () => {
                 onClick={() => setCurrentResultStep(currentResultStep + 1)}
                 className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
               >
-                {currentResultStep === 4 ? 'Finish Roadmap' : 'Next Step'}
+                {currentResultStep === 4 ? 'Choose Your Path Forward' : 'Next Step'}
                 <ChevronRight className="w-5 h-5 ml-2" />
               </button>
             </div>
@@ -855,21 +848,49 @@ const HOMEQuizMVP = () => {
 
     // Page 5: Video & CTAs
     if (currentResultStep === 5) {
+      const summarySteps = [1, 2, 3, 4].map(step => getExpandedStepContent(aiResult.title, step - 1)?.title);
+      
       return (
         <div className="min-h-[100svh] bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
           <div className="container max-w-[900px] mx-auto px-6 py-12">
             {/* Header */}
-            <div className="text-center mb-8">
-               <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white px-6 py-3 rounded-2xl mb-4 shadow-lg">
-                <h1 className="text-2xl md:text-3xl font-bold">🎉 Your Journey Begins Now</h1>
-              </div>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                You've successfully built your roadmap. Watch this short video from the HOME team to see how we'll support you on the exciting journey ahead.
+            <div className="text-center mb-10">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">You've Identified Your Path.</h1>
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mt-2">
+                Now, choose how you'll take the next steps on your journey.
               </p>
             </div>
 
+            {/* Roadmap Summary */}
+            <div className="bg-gray-50 rounded-2xl p-6 md:p-8 mb-10 border border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
+              <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
+                <div className="flex flex-col md:flex-row items-center gap-4">
+                  <UserCheck className="w-10 h-10 text-[#1DD1A1]" />
+                  <div>
+                    <h3 className="font-bold text-gray-800">Who You Are</h3>
+                    <p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p>
+                  </div>
+                </div>
+                 <div className="flex flex-col md:flex-row items-center gap-4">
+                  <MapPin className="w-10 h-10 text-[#1DD1A1]" />
+                  <div>
+                    <h3 className="font-bold text-gray-800">Where You Are</h3>
+                    <p className="text-gray-600">{responses['current-stage'].charAt(0).toUpperCase() + responses['current-stage'].slice(1)} Stage</p>
+                  </div>
+                </div>
+                 <div className="flex flex-col md:flex-row items-center gap-4">
+                  <ListChecks className="w-10 h-10 text-[#1DD1A1]" />
+                  <div>
+                    <h3 className="font-bold text-gray-800">Your Next Priorities</h3>
+                    <p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Video Section */}
-            <div className="bg-gray-900 rounded-2xl overflow-hidden mb-8 aspect-video shadow-2xl">
+            <div className="bg-gray-900 rounded-2xl overflow-hidden mb-10 aspect-video shadow-2xl">
               <iframe
                 width="100%"
                 height="100%"
@@ -881,33 +902,35 @@ const HOMEQuizMVP = () => {
                 className="w-full h-full"
               ></iframe>
             </div>
+            
+            <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900">Select Your Next Step</h2>
+                <p className="text-lg text-gray-600 mt-2">Choose the level of support that's right for you.</p>
+            </div>
 
             {/* Two Paths Forward */}
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {/* Premium Path */}
-              <div className="bg-gradient-to-br from-[#B91372]/10 to-[#B91372]/5 rounded-2xl p-6 border-2 border-[#B91372]/20 flex flex-col">
-                <div className="text-center mb-4">
+              <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl">
+                <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
+                <div className="text-center mb-4 pt-4">
                   <div className="text-4xl mb-2">🚀</div>
-                  <h3 className="text-2xl font-bold text-gray-900">Fast Track Your Success</h3>
-                  <p className="text-gray-600 mt-2">Get personalized guidance</p>
+                  <h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3>
+                  <p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p>
                 </div>
                 
                 <ul className="space-y-3 mb-6 flex-grow">
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">1-on-1 strategy session with our team</span>
+                    <span className="text-gray-700">A dedicated strategy session with our team</span>
                   </li>
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Custom roadmap for your specific goals</span>
+                    <span className="text-gray-700">A fully custom roadmap for your goals</span>
                   </li>
                   <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Priority access to HOME resources</span>
-                  </li>
-                   <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Direct connections to industry professionals</span>
+                    <span className="text-gray-700">Priority access to HOME resources & pros</span>
                   </li>
                 </ul>
                 
@@ -920,11 +943,11 @@ const HOMEQuizMVP = () => {
               </div>
 
               {/* Self-Serve Path */}
-              <div className="bg-gradient-to-br from-[#1DD1A1]/10 to-[#1DD1A1]/5 rounded-2xl p-6 border-2 border-[#1DD1A1]/20 flex flex-col">
-                <div className="text-center mb-4">
+              <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col">
+                <div className="text-center mb-4 pt-4">
                   <div className="text-4xl mb-2">🏡</div>
-                  <h3 className="text-2xl font-bold text-gray-900">Join Our Community</h3>
-                  <p className="text-gray-600 mt-2">Start your journey today</p>
+                  <h3 className="text-2xl font-bold text-gray-900">Community Path</h3>
+                  <p className="text-gray-600 mt-2">Start your journey with our resources</p>
                 </div>
                 
                 <ul className="space-y-3 mb-6 flex-grow">
@@ -936,13 +959,9 @@ const HOMEQuizMVP = () => {
                     <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Weekly virtual workshops & events</span>
                   </li>
-                  <li className="flex items-start">
-                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Resource library & templates</span>
-                  </li>
                    <li className="flex items-start">
                     <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Connect with 1,000+ music creators</span>
+                    <span className="text-gray-700">A full library of templates & resources</span>
                   </li>
                 </ul>
                 
@@ -952,28 +971,6 @@ const HOMEQuizMVP = () => {
                 >
                   Start for Free
                 </button>
-              </div>
-            </div>
-
-            {/* Success Metrics */}
-            <div className="text-center">
-              <p className="text-gray-600 mb-4">Join creators who've achieved:</p>
-              <div className="flex flex-wrap gap-3 justify-center">
-                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
-                  1M+ Streams
-                </span>
-                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
-                  $10K+ Monthly Revenue
-                </span>
-                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
-                  Label Deals
-                </span>
-                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
-                  Sync Placements
-                </span>
-                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
-                  World Tours
-                </span>
               </div>
             </div>
 
