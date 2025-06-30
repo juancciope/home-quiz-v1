@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Mail, ArrowRight, Check, Star, Loader, ChevronLeft } from 'lucide-react';
+import { ChevronRight, Star, Loader, ChevronLeft, MapPin, UserCheck, ListChecks, Check } from 'lucide-react';
 
 // --- Data ---
 const questions = [
@@ -18,10 +18,10 @@ const expandedStepContent = {
         { title: "Book Your Next 10 Shows", description: "Build momentum with a strategic booking plan that grows your fanbase", actions: ["Research 20 venues that fit your genre and draw", "Send personalized booking emails using HOME's proven templates", "Follow up with 5 venues every week until booked", "Network at HOME showcases to meet booking agents", "Create a touring route that makes financial sense"], whyItMatters: "Consistent gigging builds your reputation, income, and fanbase faster than anything else. This systematic approach removes the guesswork from booking.", homeResources: ["Venue Database Access", "Booking Email Templates", "Agent Networking Events"] }
     ],
     'creative-artist': [
-        // ... Creative Artist data ...
+        { title: "Define Your Unique Artist Brand", description: "Discover and articulate what makes you different from every other artist", actions: ["Complete HOME's Brand Discovery Worksheet to find your core values", "Create a mood board with 20 images that represent your vibe", "Write your artist mission statement in one powerful sentence", "Choose 3 primary colors and 2 fonts for visual consistency", "Design your logo or wordmark with HOME's design tools"], whyItMatters: "A clear brand helps you stand out in a sea of content. When fans can recognize your content instantly, they're more likely to engage, share, and buy.", homeResources: ["Brand Development Workshop", "Design Software Access", "1-on-1 Brand Coaching"] },
     ],
     'writer-producer': [
-        // ... Writer-Producer data ...
+        { title: "Master Your Production Craft", description: "Develop the technical skills that make artists want to work with you", actions: ["Complete one new production technique tutorial daily", "Recreate 5 hit songs in your genre to understand their structure", "Build a template library for fast, professional workflows", "Master HOME's studio equipment through hands-on practice", "Get feedback on mixes from established producers in community"], whyItMatters: "Technical excellence opens doors. When artists trust your skills, they recommend you to others, creating a snowball effect of opportunities.", homeResources: ["Pro Studio Access 24/7", "Production Masterclasses", "Mixing/Mastering Workshops"] },
     ]
 };
 
@@ -72,7 +72,6 @@ const HOMEQuizMVP = () => {
     if (!email || isSubmitting) return;
     setIsSubmitting(true);
     setAnimationDirection('forward');
-    // In a real app, this would be your `generateAIResult` call
     const dummyResult = {
         title: 'The Touring Performer Path', icon: '🎤',
         description: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities. This means focusing on your craft as a live act, creating an unforgettable show, and strategically booking gigs that expand your audience and income.',
@@ -133,10 +132,18 @@ const Confetti = () => (
                 backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
                 animation: `confetti-fall ${2 + Math.random() * 3}s ${Math.random() * 2}s linear infinite`,
             };
-            return <div key={i} className="w-2 h-4 opacity-0" style={style}></div>
+            return <div key={i} className="absolute w-2 h-4 opacity-0" style={style}></div>
         })}
     </div>
 );
+
+const interpolateColor = (color1, color2, factor) => {
+    const result = color1.slice();
+    for (let i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - result[i]));
+    }
+    return `rgb(${result.join(',')})`;
+};
 
 const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, currentScreen }) => {
     const stageTitles = ["Identify Your Path", "Personalized Path", "Personalized Plan", "Execute Plan"];
@@ -146,6 +153,10 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
 
     const progressPercentage = masterStage > 1 ? (((masterStage - 1) / (stageTitles.length -1)) * 100) - (100 / (stageTitles.length-1) / 2) : 0;
     
+    const color1 = [29, 209, 161]; // #1DD1A1
+    const color2 = [185, 19, 114]; // #B91372
+    const activeStageColor = interpolateColor(color1, color2, (masterStage - 1) / (stageTitles.length - 1));
+
     return (
         <div className="h-[100svh] bg-gray-50 flex flex-col" style={{ fontFamily: 'Montserrat, sans-serif' }}>
             <style jsx global>{`
@@ -160,7 +171,12 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                     <div className="flex items-start justify-between relative mb-2 text-center">
                         {stageTitles.map((title, i) => (
                             <div key={i} className={`flex-1 transition-all duration-500 z-10 ${masterStage >= i + 1 ? 'text-gray-900 font-bold' : 'text-gray-400'}`}>
-                                <div className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold border-2 ${masterStage === i + 1 ? 'border-gray-900 scale-110' : masterStage > i+1 ? 'bg-gray-900 border-gray-900 text-white' : 'bg-gray-200 border-gray-300'}`}>{i + 1}</div>
+                                <div className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold border-2 ${masterStage === i + 1 ? 'scale-110' : masterStage > i+1 ? 'text-white' : 'bg-gray-200 border-gray-300'}`}
+                                style={{
+                                    borderColor: masterStage === i + 1 ? activeStageColor : masterStage > i+1 ? 'transparent' : '#d1d5db',
+                                    backgroundColor: masterStage > i+1 ? activeStageColor : '#e5e7eb'
+                                }}
+                                >{i + 1}</div>
                                 <div className="text-[10px] leading-tight sm:text-xs">{title}</div>
                             </div>
                         ))}
@@ -168,7 +184,9 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                     </div>
                     {masterStage === 3 && (
                         <div className="mt-2 flex justify-around items-center border-t pt-2">
-                            {[...Array(4)].map((_, i) => (<div key={i} className={`text-xs font-semibold p-1 rounded transition-all duration-300 ${resultStep === i + 1 ? 'text-white bg-[#147f73]' : 'text-gray-500'}`}>Step {i + 1}</div>))}
+                            {[...Array(4)].map((_, i) => (<div key={i} className={`text-xs font-semibold p-1 rounded transition-all duration-300 ${resultStep === i + 1 ? 'text-white' : 'text-gray-500'}`}
+                            style={{backgroundColor: resultStep === i+1 ? interpolateColor(color1, color2, i/3) : 'transparent'}}
+                            >Step {i + 1}</div>))}
                         </div>
                     )}
                 </div>
@@ -273,14 +291,6 @@ const ResultsLandingPage = ({ aiResult, onBegin }) => (
     </div>
 );
 
-const interpolateColor = (color1, color2, factor) => {
-    const result = color1.slice();
-    for (let i = 0; i < 3; i++) {
-        result[i] = Math.round(result[i] + factor * (color2[i] - result[i]));
-    }
-    return `rgb(${result.join(',')})`;
-};
-
 const StepPage = ({ stepIndex, aiResult }) => {
     const stepData = getExpandedStepContent(aiResult.title, stepIndex);
     if (!stepData) return <div className="h-full flex items-center justify-center"><Loader className="animate-spin text-[#B91372]"/></div>;
@@ -334,9 +344,31 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             </div>
             <div className="bg-white rounded-2xl p-6 md:p-8 mb-10 border shadow-lg">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Roadmap Summary</h2>
-                {/* ... other content */}
+                <div className="grid md:grid-cols-3 gap-6 text-center md:text-left">
+                    <div className="flex flex-col md:flex-row items-center gap-4"><UserCheck className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Path</h3><p className="text-gray-600">{aiResult.title.replace(' Path', '')}</p></div></div>
+                    <div className="flex flex-col md:flex-row items-center gap-4"><MapPin className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Stage</h3><p className="text-gray-600">{(responses['current-stage'] || '').charAt(0).toUpperCase() + (responses['current-stage'] || '').slice(1)} Stage</p></div></div>
+                    <div className="flex flex-col md:flex-row items-center gap-4"><ListChecks className="w-10 h-10 text-[#1DD1A1]" /><div><h3 className="font-bold text-gray-800">Your Priorities</h3><p className="text-gray-600">{summarySteps.slice(0, 2).join(', ')}</p></div></div>
+                </div>
             </div>
-            {/* ... other content */}
+            <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900">Choose Your Support System</h2>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-white rounded-2xl p-6 border-2 border-[#B91372] flex flex-col relative shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                    <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
+                    <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🚀</div><h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3><p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p></div>
+                    <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A dedicated strategy session with our team</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A fully custom roadmap for your goals</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Priority access to HOME resources & pros</span></li></ul>
+                    <button onClick={() => window.open('https://homeformusic.org/consultation', '_blank')} className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Book Free Consultation</button>
+                </div>
+                <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 flex flex-col transform hover:scale-105 transition-transform duration-300">
+                    <div className="text-center mb-4 pt-4"><div className="text-4xl mb-2">🏡</div><h3 className="text-2xl font-bold text-gray-900">Community Path</h3><p className="text-gray-600 mt-2">Start your journey with our resources</p></div>
+                    <ul className="space-y-3 mb-6 flex-grow"><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Access to HOME's online community</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">Weekly virtual workshops & events</span></li><li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" /><span className="text-gray-700">A full library of templates & resources</span></li></ul>
+                    <button onClick={() => window.open('https://homeformusic.org/community', '_blank')} className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg mt-auto">Start for Free</button>
+                </div>
+            </div>
+            <div className="mt-12 text-center">
+                <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium">Start Over →</button>
+            </div>
         </div>
     );
 };
