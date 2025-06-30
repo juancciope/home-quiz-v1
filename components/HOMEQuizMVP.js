@@ -504,57 +504,360 @@ const HOMEQuizMVP = () => {
     );
   }
 
- // Results page
+// Results page - Multi-step journey
   if (currentStep === 'results' && aiResult) {
-    return (
-      <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-        <style jsx>{`
-          @media only screen and (max-width: 768px) {
-            .step:nth-child(odd),
-            .step:nth-child(even) {
-              justify-content: flex-start !important;
-              padding-left: 40px !important;
-              padding-right: 20px !important;
-            }
-            
-            .step-content {
-              width: 100%;
-              max-width: 100%;
-            }
-            
-            .progress-bar-container {
-              left: 15px !important;
-              transform: translateX(0) !important;
-            }
-            
-            .step::after {
-              left: 15px !important;
-              transform: translate(0, -50%) !important;
-            }
-            
-            .header {
-              padding: 30px 20px !important;
-            }
-            
-            .header h1 {
-              font-size: 2rem !important;
-            }
-            
-            .header .subtitle {
-              font-size: 1rem !important;
-            }
-          }
-        `}</style>
-        
-        <div className="container max-w-[800px] mx-auto bg-white">
-          {/* Header */}
-          <div className="header bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-10 text-center rounded-2xl mx-6 mt-6">
-            <h1 className="text-5xl font-bold mb-3 tracking-tight">{aiResult.title.toUpperCase().replace('PATH', '')}</h1>
-            <p className="text-xl opacity-95 font-normal">Your Personalized Path to Music Success</p>
+    const totalSteps = 4;
+    const progressPercentage = (currentResultStep / 5) * 100;
+
+    // Page 0: Current Position
+    if (currentResultStep === 0) {
+      return (
+        <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          <div className="container max-w-[800px] mx-auto bg-white min-h-screen flex flex-col">
+            {/* Progress Bar */}
+            <div className="px-6 pt-6">
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div 
+                  className="h-2 rounded-full transition-all duration-500"
+                  style={{ 
+                    width: `${progressPercentage}%`,
+                    background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)'
+                  }}
+                ></div>
+              </div>
+              <p className="text-center text-sm text-gray-500">Checkpoint 1 of 3</p>
+            </div>
+
+            {/* Header */}
+            <div className="flex-grow flex items-center justify-center px-6">
+              <div className="text-center">
+                <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white p-8 md:p-12 rounded-3xl mb-8">
+                  <div className="text-5xl md:text-6xl mb-4">{aiResult.icon}</div>
+                  <h1 className="text-3xl md:text-4xl font-bold mb-4">{aiResult.title}</h1>
+                  <p className="text-lg md:text-xl opacity-95">Your Starting Point</p>
+                </div>
+
+                <div className="max-w-2xl mx-auto">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">📍 Where You Are Now</h2>
+                  <div className="bg-gray-50 rounded-2xl p-6 md:p-8 mb-8">
+                    <p className="text-lg text-gray-700 leading-relaxed">
+                      {aiResult.description}
+                    </p>
+                  </div>
+
+                  <div className="mb-8">
+                    <p className="text-gray-600 mb-4">Your personalized journey includes:</p>
+                    <div className="flex justify-center gap-4 flex-wrap">
+                      {[1, 2, 3, 4].map((num) => (
+                        <div key={num} className="flex items-center">
+                          <div 
+                            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
+                            style={{ backgroundColor: '#1DD1A1' }}
+                          >
+                            {num}
+                          </div>
+                          <span className="ml-2 text-gray-600">Step {num}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentResultStep(1)}
+                    className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
+                  >
+                    Continue My Path
+                    <ChevronRight className="w-5 h-5 ml-2" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          {/* Journey Container */}
-          <div className="journey-container bg-white px-5 py-10 relative min-h-[800px]">
+        </div>
+      );
+    }
+
+    // Pages 1-4: Individual Steps
+    if (currentResultStep >= 1 && currentResultStep <= 4) {
+      const stepIndex = currentResultStep - 1;
+      const stepData = getExpandedStepContent(aiResult.title, stepIndex);
+      const originalStep = (aiResult.customNextSteps || aiResult.nextSteps || [])[stepIndex];
+      const stepText = typeof originalStep === 'object' ? originalStep.step : originalStep;
+
+      if (!stepData) return null;
+
+      const colors = [
+        { main: '#1DD1A1', light: 'rgba(29, 209, 161, 0.1)' },
+        { main: '#1BC49C', light: 'rgba(27, 196, 156, 0.1)' },
+        { main: '#178F70', light: 'rgba(23, 143, 112, 0.1)' },
+        { main: '#B91372', light: 'rgba(185, 19, 114, 0.1)' }
+      ];
+      const color = colors[stepIndex] || colors[0];
+
+      return (
+        <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          <div className="container max-w-[800px] mx-auto bg-white min-h-screen flex flex-col">
+            {/* Progress Bar */}
+            <div className="px-6 pt-6">
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div 
+                  className="h-2 rounded-full transition-all duration-500"
+                  style={{ 
+                    width: `${progressPercentage}%`,
+                    background: 'linear-gradient(135deg, #1DD1A1 0%, #B91372 100%)'
+                  }}
+                ></div>
+              </div>
+              <p className="text-center text-sm text-gray-500">Step {currentResultStep} of {totalSteps}</p>
+            </div>
+
+            {/* Step Content */}
+            <div className="flex-grow px-6 py-8">
+              {/* Step Header */}
+              <div className="text-center mb-8">
+                <div 
+                  className="inline-flex items-center justify-center w-20 h-20 rounded-2xl text-white text-3xl font-bold mb-4"
+                  style={{ backgroundColor: color.main }}
+                >
+                  {currentResultStep}
+                </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stepData.title}</h1>
+                <p className="text-lg text-gray-600">{stepData.description}</p>
+              </div>
+
+              {/* Why It Matters */}
+              <div 
+                className="rounded-2xl p-6 mb-8"
+                style={{ backgroundColor: color.light }}
+              >
+                <h3 className="font-bold text-gray-900 mb-2 flex items-center">
+                  <span className="text-2xl mr-2">💡</span>
+                  Why This Matters
+                </h3>
+                <p className="text-gray-700 leading-relaxed">{stepData.whyItMatters}</p>
+              </div>
+
+              {/* Action Items */}
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Your Action Items:</h3>
+                <div className="space-y-3">
+                  {stepData.actions.map((action, index) => (
+                    <div key={index} className="flex items-start bg-gray-50 rounded-xl p-4">
+                      <div 
+                        className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold mr-3 mt-0.5 flex-shrink-0"
+                        style={{ backgroundColor: color.main }}
+                      >
+                        {index + 1}
+                      </div>
+                      <p className="text-gray-700 leading-relaxed">{action}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* HOME Resources */}
+              <div className="bg-gray-50 rounded-2xl p-6 mb-8">
+                <h3 className="font-bold text-gray-900 mb-3">🏡 HOME Resources for This Step:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {stepData.homeResources.map((resource, index) => (
+                    <span 
+                      key={index}
+                      className="px-3 py-1 rounded-lg text-sm font-medium"
+                      style={{ 
+                        backgroundColor: color.light,
+                        color: color.main,
+                        border: `1px solid ${color.main}`
+                      }}
+                    >
+                      {resource}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => setCurrentResultStep(currentResultStep - 1)}
+                  className="text-gray-600 hover:text-gray-900 font-medium flex items-center"
+                >
+                  <ChevronLeft className="w-5 h-5 mr-1" />
+                  Previous
+                </button>
+                
+                <button
+                  onClick={() => setCurrentResultStep(currentResultStep + 1)}
+                  className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center"
+                >
+                  {currentResultStep === 4 ? 'Complete Journey' : 'Next Step'}
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </button>
+              </div>
+
+              {/* Visual Progress Indicator */}
+              <div className="mt-8 flex justify-center gap-2">
+                {[1, 2, 3, 4].map((num) => (
+                  <div
+                    key={num}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      num <= currentResultStep ? 'w-8' : ''
+                    }`}
+                    style={{
+                      backgroundColor: num <= currentResultStep ? color.main : '#e5e7eb'
+                    }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Page 5: Video & CTAs
+    if (currentResultStep === 5) {
+      return (
+        <div className="min-h-screen bg-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          <div className="container max-w-[900px] mx-auto px-6 py-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="inline-block bg-gradient-to-br from-[#1DD1A1] to-[#B91372] text-white px-8 py-4 rounded-2xl mb-4">
+                <h1 className="text-2xl md:text-3xl font-bold">🎉 Checkpoint 3: You're Ready!</h1>
+              </div>
+              <p className="text-xl text-gray-600">See how HOME accelerates your success</p>
+            </div>
+
+            {/* Video Section */}
+            <div className="bg-gray-900 rounded-2xl overflow-hidden mb-8 aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                title="HOME for Music Overview"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+
+            {/* Two Paths Forward */}
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Premium Path */}
+              <div className="bg-gradient-to-br from-[#B91372]/10 to-[#B91372]/5 rounded-2xl p-6 border-2 border-[#B91372]/20">
+                <div className="text-center mb-4">
+                  <div className="text-4xl mb-2">🚀</div>
+                  <h3 className="text-2xl font-bold text-gray-900">Fast Track Your Success</h3>
+                  <p className="text-gray-600 mt-2">Get personalized guidance</p>
+                </div>
+                
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">1-on-1 strategy session with our team</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Custom roadmap for your specific goals</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Priority access to HOME resources</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Direct connections to industry professionals</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  className="w-full bg-[#B91372] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
+                >
+                  Book Free Consultation
+                </button>
+              </div>
+
+              {/* Self-Serve Path */}
+              <div className="bg-gradient-to-br from-[#1DD1A1]/10 to-[#1DD1A1]/5 rounded-2xl p-6 border-2 border-[#1DD1A1]/20">
+                <div className="text-center mb-4">
+                  <div className="text-4xl mb-2">🏡</div>
+                  <h3 className="text-2xl font-bold text-gray-900">Join Our Community</h3>
+                  <p className="text-gray-600 mt-2">Start your journey today</p>
+                </div>
+                
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Access to HOME's online community</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Weekly virtual workshops & events</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Resource library & templates</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Connect with 1,000+ music creators</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  className="w-full bg-[#1DD1A1] text-white font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  onClick={() => window.open('https://homeformusic.org/community', '_blank')}
+                >
+                  Start for Free
+                </button>
+              </div>
+            </div>
+
+            {/* Success Metrics */}
+            <div className="text-center">
+              <p className="text-gray-600 mb-4">Join creators who've achieved:</p>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+                  1M+ Streams
+                </span>
+                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+                  $10K+ Monthly Revenue
+                </span>
+                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+                  Label Deals
+                </span>
+                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+                  Sync Placements
+                </span>
+                <span className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+                  World Tours
+                </span>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-12 text-center">
+              <button 
+                onClick={() => {
+                  setCurrentStep('landing');
+                  setResponses({});
+                  setAiResult(null);
+                  setEmail('');
+                  setCurrentResultStep(0);
+                }}
+                className="text-gray-500 hover:text-gray-700 font-medium"
+              >
+                Start Over →
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
+  } bg-white px-5 py-10 relative min-h-[800px]">
             {/* Journey Start */}
             <div className="journey-start text-center mb-16 relative">
               <h3 className="inline-block bg-[#1DD1A1] text-white text-xl font-semibold px-6 py-4 rounded-2xl mb-4">
