@@ -73,7 +73,7 @@ const HOMEQuizMVP = () => {
     setIsSubmitting(true);
     setAnimationDirection('forward');
     const dummyResult = {
-        title: 'The Touring Performer Path', icon: '🎤',
+        title: 'The Touring Performer Path', icon: '�',
         description: 'You thrive on stage energy and live connections. Your priority is building a powerful live presence and growing your touring opportunities. This means focusing on your craft as a live act, creating an unforgettable show, and strategically booking gigs that expand your audience and income.',
     };
     setAiResult(dummyResult);
@@ -166,7 +166,7 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                 @keyframes slideInBackward { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
                 @keyframes confetti-fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
             `}</style>
-            <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm pt-3 pb-2">
+            <header className="flex-shrink-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm pt-3 pb-2">
                 <div className="container max-w-4xl mx-auto px-4">
                     <div className="flex items-start justify-between relative mb-2 text-center">
                         {stageTitles.map((title, i) => (
@@ -174,7 +174,8 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                                 <div className={`mx-auto mb-1 w-8 h-8 text-sm rounded-full flex items-center justify-center transition-all duration-500 font-bold border-2 ${masterStage === i + 1 ? 'scale-110' : masterStage > i+1 ? 'text-white' : 'bg-gray-200 border-gray-300'}`}
                                 style={{
                                     borderColor: masterStage === i + 1 ? activeStageColor : masterStage > i+1 ? 'transparent' : '#d1d5db',
-                                    backgroundColor: masterStage > i+1 ? activeStageColor : (masterStage === i + 1 ? 'white' : '#e5e7eb')
+                                    backgroundColor: masterStage > i+1 ? activeStageColor : (masterStage === i + 1 ? 'white' : '#e5e7eb'),
+                                    color: masterStage === i + 1 ? activeStageColor : (masterStage > i + 1 ? 'white' : 'inherit')
                                 }}
                                 >{i + 1}</div>
                                 <div className="text-[10px] leading-tight sm:text-xs">{title}</div>
@@ -191,8 +192,8 @@ const JourneyLayout = ({ children, masterStage, resultStep, onBack, onNext, curr
                     )}
                 </div>
             </header>
-            <main className="flex-grow overflow-y-auto">{children}</main>
-            <footer className="sticky bottom-0 bg-white/95 backdrop-blur-sm z-20 border-t">
+            <main className="flex-grow overflow-y-auto relative">{children}</main>
+            <footer className="flex-shrink-0 bg-white/95 backdrop-blur-sm z-20 border-t">
                 <div className="container max-w-4xl mx-auto px-4 flex justify-between items-center h-16">
                     <button onClick={onBack} className="text-gray-600 hover:text-gray-900 font-medium flex items-center transition-opacity duration-300 disabled:opacity-0" disabled={!showBackButton}><ChevronLeft className="w-5 h-5 mr-1" /> Back</button>
                     {showNextButton && <button onClick={onNext} className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center">Next Step <ChevronRight className="w-5 h-5 ml-2" /></button>}
@@ -374,3 +375,4 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
 };
 
 export default HOMEQuizMVP;
+�
