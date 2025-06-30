@@ -857,10 +857,7 @@ const HOMEQuizMVP = () => {
     }
 
     return null;
-  } bg-white px-5 py-10 relative min-h-[800px]">
-            {/* Journey Start */}
-            <div className="journey-start text-center mb-16 relative">
-              <h3 className="inline-block bg-[#1DD1A1] text-white text-xl font-semibold px-6 py-4 rounded-2xl mb-4">
+  }
                 🎯 YOUR CURRENT POSITION
               </h3>
               <p className="bg-gradient-to-br from-[#1DD1A1]/85 to-[#1DD1A1]/95 text-white px-5 py-4 rounded-2xl border border-[#1DD1A1]/30 max-w-md mx-auto">
