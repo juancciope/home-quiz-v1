@@ -887,7 +887,7 @@ const HOMEQuizMVP = () => {
             </button>
             
             <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
-              Free • 2 minutes • No credit card
+              Free • 2 minutes
             </p>
           </div>
           
