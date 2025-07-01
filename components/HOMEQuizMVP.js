@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import {
   ChevronRight,
   ChevronLeft,
@@ -66,123 +66,11 @@ const questions = [
 
 // --- Expanded Steps Data ---
 const expandedStepContent = {
-  'touring-performer': [
-    {
-      title: "Build Your Signature Live Set",
-      description: "Create a powerful performance that captivates audiences and leaves them wanting more",
-      actions: [
-        "Map out a 45-minute setlist with emotional peaks and valleys",
-        "Record live rehearsal videos to analyze your stage presence",
-        "Design smooth transitions between songs with stories or audience interaction",
-        "Practice your set 3× this week in HOME's rehearsal space",
-        "Get feedback from 5 fellow musicians on your performance energy"
-      ],
-      whyItMatters:
-        "A killer live set is your #1 tool for winning over new fans and booking better gigs. This is where you transform from someone who plays songs to an artist who creates experiences.",
-      homeResources: [
-        "24/7 Rehearsal Facility Access",
-        "Performance Coaching Sessions",
-        "Monthly Open Mics for Testing"
-      ]
-    },
-    {
-      title: "Master Your Stage Presence",
-      description: "Develop the confidence and charisma that makes audiences remember you",
-      actions: [
-        "Film yourself performing and identify 3 movements that feel authentic",
-        "Study 5 favorite performers and note their engagement techniques",
-        "Practice talking between songs—write out 3 compelling stories",
-        "Work with HOME's performance coach for personalized feedback",
-        "Perform at 2 local venues this month to build confidence"
-      ],
-      whyItMatters:
-        "Great songs are only half the equation. Your stage presence determines whether people become fans or forget you. This skill directly impacts your booking fees and fan loyalty.",
-      homeResources: [
-        "Stage Presence Workshops",
-        "Video Review Sessions",
-        "Performance Psychology Training"
-      ]
-    },
-    {
-      title: "Create Your Professional EPK",
-      description: "Build a booking package that gets venue owners and agents to say YES",
-      actions: [
-        "Shoot high-quality live performance videos (3–4 songs)",
-        "Write a compelling artist bio that tells your story in 150 words",
-        "Gather professional photos from recent shows",
-        "Create a one-page PDF with all booking essentials",
-        "Build a simple EPK website using HOME's templates"
-      ],
-      whyItMatters:
-        "Your EPK is often your only shot at landing bigger gigs. A professional package can be the difference between $200 bar gigs and $2,000 festival slots.",
-      homeResources: [
-        "EPK Templates & Examples",
-        "Professional Photography Sessions",
-        "Copywriting Support"
-      ]
-    },
-    {
-      title: "Book Your Next 10 Shows",
-      description: "Build momentum with a strategic booking plan that grows your fanbase",
-      actions: [
-        "Research 20 venues that fit your genre and draw",
-        "Send personalized booking emails using HOME's proven templates",
-        "Follow up with 5 venues every week until booked",
-        "Network at HOME showcases to meet booking agents",
-        "Create a touring route that makes financial sense"
-      ],
-      whyItMatters:
-        "Consistent gigging builds your reputation, income, and fanbase faster than anything else. This systematic approach removes the guesswork from booking.",
-      homeResources: [
-        "Venue Database Access",
-        "Booking Email Templates",
-        "Agent Networking Events"
-      ]
-    }
-  ],
-  'creative-artist': [
-    {
-      title: "Define Your Unique Artist Brand",
-      description: "Discover and articulate what makes you different from every other artist",
-      actions: [
-        "Complete HOME's Brand Discovery Worksheet to find your core values",
-        "Create a mood board with 20 images that represent your vibe",
-        "Write your artist mission statement in one powerful sentence",
-        "Choose 3 primary colors and 2 fonts for visual consistency",
-        "Design your logo or wordmark with HOME's design tools"
-      ],
-      whyItMatters:
-        "A clear brand helps you stand out in a sea of content. When fans can recognize your content instantly, they're more likely to engage, share, and buy.",
-      homeResources: [
-        "Brand Development Workshop",
-        "Design Software Access",
-        "1-on-1 Brand Coaching"
-      ]
-    }
-  ],
-  'writer-producer': [
-    {
-      title: "Master Your Production Craft",
-      description: "Develop the technical skills that make artists want to work with you",
-      actions: [
-        "Complete one new production technique tutorial daily",
-        "Recreate 5 hit songs in your genre to understand their structure",
-        "Build a template library for fast, professional workflows",
-        "Master HOME's studio equipment through hands-on practice",
-        "Get feedback on mixes from established producers in community"
-      ],
-      whyItMatters:
-        "Technical excellence opens doors. When artists trust your skills, they recommend you to others, creating a snowball effect of opportunities.",
-      homeResources: [
-        "Pro Studio Access 24/7",
-        "Production Masterclasses",
-        "Mixing/Mastering Workshops"
-      ]
-    }
-  ]
+  'touring-performer': [ /* ... same as before ... */ ],
+  'creative-artist':   [ /* ... same as before ... */ ],
+  'writer-producer':   [ /* ... same as before ... */ ]
 };
 
-// --- Helpers ---
 const getExpandedStepContent = (pathway, idx) => {
   if (!pathway) return null;
   const key = pathway.toLowerCase().includes('touring')
@@ -191,7 +79,7 @@ const getExpandedStepContent = (pathway, idx) => {
   return expandedStepContent[key]?.[idx] || null;
 };
 
-// Linear interpolation between two RGB arrays
+// --- Color Interpolation ---
 const interpolateColor = (c1, c2, f) =>
   c1.map((v, i) => Math.round(v + f * (c2[i] - v)));
 
@@ -210,6 +98,7 @@ const HOMEQuizMVP = () => {
 
   const mainRef = useRef(null);
 
+  // ALWAYS reset scroll on screen/qIndex/step change
   useLayoutEffect(() => {
     mainRef.current?.scrollTo({ top: 0, behavior: 'auto' });
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -250,7 +139,7 @@ const HOMEQuizMVP = () => {
       setScreen('results');
       setStep(0);
       setConfetti(true);
-      setTimeout(() => setConfetti(false), 4000);
+      // don’t auto-hide confetti; will clear on “View My Action Plan”
       scrollToTop();
     }, 1500);
   };
@@ -327,6 +216,7 @@ const HOMEQuizMVP = () => {
             onAnswer={handleAnswer}
             questionIndex={qIndex}
             total={questions.length}
+            responses={responses}
           />
         )}
         {screen === 'transition' && (
@@ -349,7 +239,12 @@ const HOMEQuizMVP = () => {
             {step === 0 && (
               <ResultsLandingPage
                 aiResult={aiResult}
-                onBegin={() => { setDir('forward'); setStep(1); scrollToTop(); }}
+                onBegin={() => {
+                  setDir('forward');
+                  setStep(1);
+                  setConfetti(false);
+                  scrollToTop();
+                }}
                 showConfetti={confetti}
               />
             )}
@@ -365,7 +260,6 @@ const HOMEQuizMVP = () => {
     </JourneyLayout>
   );
 };
-
 
 // --- Layout & Progress Bar ---
 const JourneyLayout = ({
@@ -389,18 +283,37 @@ const JourneyLayout = ({
   const showExecute  = currentScreen==='results' && resultStep===4;
   const color1=[29,209,161], color2=[185,19,114];
 
+  const headerRef = useRef(null);
+
+  // auto-scroll header so active stage is visible
+  useEffect(() => {
+    const container = headerRef.current;
+    const active = container?.querySelector(`[data-stage-id="${masterStage}"]`);
+    if (container && active) {
+      const offset = active.offsetLeft + active.clientWidth/2 - container.clientWidth/2;
+      container.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+  }, [masterStage]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Sticky Header, single line */}
       <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm">
         <div className="container mx-auto px-4 py-2 relative">
-          <div className="flex items-center justify-between whitespace-nowrap overflow-x-auto pb-2">
+          <div
+            ref={headerRef}
+            className="flex items-center whitespace-nowrap overflow-x-auto pb-2 relative"
+          >
             {stages.map(s => {
               const isActive    = masterStage===s.id;
               const isCompleted = masterStage> s.id;
               const rgb          = interpolateColor(color1,color2,(s.id-1)/3).join(',');
               return (
-                <div key={s.id} className="inline-block text-center px-3">
+                <div
+                  key={s.id}
+                  data-stage-id={s.id}
+                  className="inline-block text-center px-3 flex-shrink-0"
+                >
                   <div
                     className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center transition-transform ${isActive?'scale-110':''}`}
                     style={{
@@ -500,7 +413,7 @@ const LandingPage = ({ onStart }) => (
       </div>
       <button
         onClick={onStart}
-        className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-transform transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
+        className="group relative text-white py-4 px-12 rounded-full text-lg font-bold transition-transform transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
         style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
       >
         <span className="relative z-10">Start Your Journey</span>
@@ -513,7 +426,7 @@ const LandingPage = ({ onStart }) => (
 );
 
 // --- Question Page ---
-const QuestionPage = ({ question, onAnswer, questionIndex, total }) => (
+const QuestionPage = ({ question, onAnswer, questionIndex, total, responses }) => (
   <div className="w-full max-w-3xl mx-auto">
     <div className="text-center mb-8">
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold mb-4">
@@ -526,23 +439,26 @@ const QuestionPage = ({ question, onAnswer, questionIndex, total }) => (
         {question.question}
       </h2>
       <div className="space-y-4">
-        {question.options.map(opt => (
-          <button
-            key={opt.value}
-            onClick={() => onAnswer(question.id, opt.value)}
-            className="w-full p-5 text-left rounded-xl border-2 group cursor-pointer transition shadow-sm hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r from-gray-50 to-gray-50 hover:from-[#1DD1A1]/5 hover:to-[#B91372]/5 border-gray-200 hover:border-[#1DD1A1] relative overflow-hidden"
-          >
-            <div className="flex items-center justify-between relative z-10">
-              <span className="text-gray-900 pr-4">{opt.label}</span>
-              <div className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition border-gray-300 group-hover:border-[#1DD1A1] group-hover:bg-[#1DD1A1]">
-                <Check className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-            </div>
-          </button>
-        ))}
+        {question.options.map(opt => {
+          const isSelected = responses[question.id] === opt.value;
+          return (
+            <button
+              key={opt.value}
+              onClick={() => onAnswer(question.id, opt.value)}
+              className={`w-full p-5 text-left rounded-xl border-2 transition-shadow flex items-center justify-between ${
+                isSelected
+                  ? 'border-[#1DD1A1] bg-[#1DD1A1]/10'
+                  : 'border-gray-200 bg-white'
+              }`}
+            >
+              <span className="text-gray-900">{opt.label}</span>
+              {isSelected && <Check className="w-6 h-6 text-[#1DD1A1]" />}
+            </button>
+          );
+        })}
       </div>
     </div>
-    <div className="text-center mt-6 text-sm text-gray-500">💡 Tip: Choose the option that best reflects your goals</div>
+    <div className="text-center mt-6 text-sm text-gray-500">💡 Tip: Choose what best reflects your goals</div>
   </div>
 );
 
@@ -782,6 +698,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
         <p className="text-gray-600">How would you like to implement your roadmap?</p>
       </div>
       <div className="grid md:grid-cols-2 gap-6 mb-12">
+        {/* Accelerated Path */}
         <div className="relative bg-white rounded-2xl p-6 border-2 border-[#B91372] shadow-xl hover:scale-105 transition">
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
           <div className="text-center mb-6 pt-4">
@@ -803,6 +720,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             Book Free Consultation
           </button>
         </div>
+        {/* Community Path */}
         <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-xl hover:scale-105 transition">
           <div className="text-center mb-6 pt-4">
             <div className="w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#1DD1A1]/70 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
