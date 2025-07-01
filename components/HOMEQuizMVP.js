@@ -670,9 +670,18 @@ const JourneyLayout = ({
         <div className="w-full px-3 sm:px-4 py-2 sm:py-3">
           <div
             ref={headerRef}
-            className="flex items-center whitespace-nowrap overflow-x-auto relative pb-2 scrollbar-hide"
-            style={{ WebkitOverflowScrolling: 'touch' }}
+            className="flex items-center whitespace-nowrap overflow-x-auto relative pb-2"
+            style={{ 
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none'
+            }}
           >
+            <style jsx>{`
+              div::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
             {stages.map(s => {
               const isActive    = masterStage===s.id;
               const isCompleted = masterStage> s.id;
@@ -751,8 +760,53 @@ const JourneyLayout = ({
 
 // --- Animated Wrapper ---
 const AnimatedContent = ({ children, direction }) => (
-  <div className={`h-full w-full p-4 md:p-8 flex items-start justify-center animate-on-load ${direction}`}>
+  <div 
+    className={`h-full w-full p-4 md:p-8 flex items-start justify-center transition-all duration-300 ${
+      direction === 'forward' ? 'animate-slideInRight' : 
+      direction === 'backward' ? 'animate-slideInLeft' : 
+      'animate-slideIn'
+    }`}
+    style={{
+      animation: direction === 'forward' ? 'slideInRight 0.3s ease-out' :
+                 direction === 'backward' ? 'slideInLeft 0.3s ease-out' :
+                 'slideIn 0.3s ease-out'
+    }}
+  >
     {children}
+    <style jsx>{`
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    `}</style>
   </div>
 );
 
@@ -826,7 +880,7 @@ const LandingPage = ({ onStart }) => (
       
       <button
         onClick={onStart}
-        className="btn-primary inline-flex items-center text-base sm:text-lg"
+        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg inline-flex items-center text-base sm:text-lg"
       >
         Start Your Roadmap Quiz
         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
@@ -853,7 +907,7 @@ const QuestionPage = ({ question, onAnswer, questionIndex, total, responses }) =
           <button
             key={opt.value}
             onClick={() => onAnswer(question.id, opt.value)}
-            className={`quiz-option ${
+            className={`w-full p-4 sm:p-5 text-left rounded-xl border-2 flex items-center justify-between transition-all duration-300 ${
               isSelected
                 ? 'border-[#1DD1A1] bg-[#1DD1A1]/10'
                 : 'border-gray-200 bg-white hover:border-gray-300'
@@ -1154,77 +1208,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
   );
 };
 
-// Add these styles to make the quiz work properly
-const styles = `
-  .animate-on-load {
-    animation: slideIn 0.3s ease-out;
-  }
-  
-  .animate-on-load.forward {
-    animation: slideInRight 0.3s ease-out;
-  }
-  
-  .animate-on-load.backward {
-    animation: slideInLeft 0.3s ease-out;
-  }
-  
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg;
-  }
-  
-  .quiz-option {
-    @apply w-full p-4 sm:p-5 text-left rounded-xl border-2 flex items-center justify-between transition-all duration-300;
-  }
-  
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-// Create a style element to inject the CSS
-if (typeof document !== 'undefined') {
-  const styleElement = document.createElement('style');
-  styleElement.textContent = styles;
-  document.head.appendChild(styleElement);
-}className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Your Path</h3>
+export default HOMEQuizMVP;
             <p className="text-gray-600 text-xs sm:text-sm">{aiResult.title.replace(' Path','')}</p>
           </div>
           <div className="text-center">
