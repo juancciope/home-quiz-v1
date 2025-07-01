@@ -1255,8 +1255,8 @@ const HOMEQuizMVP = () => {
         </div>
       )}
 
-      {screen === 'execute' && pathway && (
-        <div className="screen-height bg-black flex items-center justify-center px-6">
+{screen === 'execute' && pathway && (
+  <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6">
           <div className="max-w-4xl w-full">
             {/* Navigation */}
             <button
