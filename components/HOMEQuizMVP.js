@@ -510,9 +510,9 @@ const ProgressBar = ({ currentCheckpoint }) => {
         <div className="relative flex items-center justify-between">
           {/* HOME Logo */}
           <img 
-            src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+            src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
             alt="HOME"
-            className="h-6 w-auto brightness-0 invert opacity-60"
+            className="h-6 w-auto"
           />
           
           {/* Progress Dots - Mobile */}
@@ -587,6 +587,7 @@ const HOMEQuizMVP = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const currentCheckpoint = getCurrentCheckpoint(screen, questionIndex, currentStep);
   const showProgress = screen !== 'landing';
@@ -619,13 +620,26 @@ const HOMEQuizMVP = () => {
     };
   }, []);
 
-  // Smooth screen transitions
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Force scroll to top on screen/question changes
+  useEffect(() => {
+    // Force scroll to top immediately
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Find the app container and scroll it to top too
+    const appContainer = document.querySelector('.app-container');
+    if (appContainer) {
+      appContainer.scrollTop = 0;
+    }
+    
+    // Clear selected option when question changes
+    setSelectedOption(null);
   }, [screen, questionIndex, currentStep]);
 
   // Handle quiz answer
   const handleAnswer = (questionId, value) => {
+    setSelectedOption(value);
     setResponses(prev => ({ ...prev, [questionId]: value }));
     
     setTimeout(() => {
@@ -841,7 +855,7 @@ const HOMEQuizMVP = () => {
             <div className="flex-1 flex items-center justify-center">
               <div className="max-w-4xl w-full text-center">
                 <div className="mb-12 animate-fadeIn">
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight text-white">
                     Find Your Path on the
                     <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
                       Music Creator Roadmap
@@ -863,7 +877,7 @@ const HOMEQuizMVP = () => {
                       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
                         <feature.icon className="w-8 h-8 text-white/60 mb-3 mx-auto" />
-                        <h3 className="font-semibold mb-1">{feature.title}</h3>
+                        <h3 className="font-semibold mb-1 text-white">{feature.title}</h3>
                         <p className="text-sm text-gray-500">{feature.desc}</p>
                       </div>
                     </div>
@@ -873,7 +887,7 @@ const HOMEQuizMVP = () => {
                 {/* CTA Button */}
                 <button
                   onClick={() => setScreen('quiz')}
-                  className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn delay-400"
+                  className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn delay-400 text-white"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full" />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
@@ -890,9 +904,9 @@ const HOMEQuizMVP = () => {
             {/* Footer */}
             <div className="text-center animate-fadeIn delay-500">
               <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
                 alt="HOME"
-                className="h-8 mx-auto mb-3 brightness-0 invert opacity-40"
+                className="h-8 mx-auto mb-3 opacity-40"
               />
               <p className="text-xs text-gray-600">
                 Made with ❤️ by HOME for Music
@@ -930,7 +944,7 @@ const HOMEQuizMVP = () => {
             
             {/* Question */}
             <div className="animate-fadeIn">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center text-white">
                 {questions[questionIndex].question}
               </h2>
               
@@ -941,17 +955,17 @@ const HOMEQuizMVP = () => {
                     key={option.value}
                     onClick={() => handleAnswer(questions[questionIndex].id, option.value)}
                     className={`
-                      w-full p-6 rounded-2xl border border-white/10 
-                      bg-white/[0.02] backdrop-blur-sm
-                      hover:bg-white/[0.05] hover:border-white/20
-                      transition-all duration-300 text-left
-                      animate-slideUp
+                      w-full p-6 rounded-2xl border transition-all duration-300 text-left animate-slideUp
+                      ${selectedOption === option.value 
+                        ? 'border-[#1DD1A1] bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10' 
+                        : 'border-white/10 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.05] hover:border-white/20'
+                      }
                     `}
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className="flex items-center gap-4">
                       <span className="text-3xl">{option.emoji}</span>
-                      <span className="flex-1 text-lg">{option.label}</span>
+                      <span className="flex-1 text-lg text-white">{option.label}</span>
                       <ChevronRight className="w-5 h-5 text-gray-500" />
                     </div>
                   </button>
@@ -972,7 +986,7 @@ const HOMEQuizMVP = () => {
               </div>
             </div>
             
-            <h2 className="text-2xl font-semibold mb-3">
+            <h2 className="text-2xl font-semibold mb-3 text-white">
               AI is analyzing your responses...
             </h2>
             <p className="text-gray-500">
@@ -1000,13 +1014,13 @@ const HOMEQuizMVP = () => {
                   <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-6 shadow-2xl shadow-[#B91372]/20">
                     <span className="text-5xl">{pathway?.icon}</span>
                   </div>
-                  <h2 className="text-3xl font-bold mb-3">Your Path is Ready</h2>
+                  <h2 className="text-3xl font-bold mb-3 text-white">Your Path is Ready</h2>
                   <p className="text-gray-400">{pathway?.title}</p>
                 </div>
                 
                 {/* Email Form */}
                 <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
-                  <h3 className="text-xl font-semibold mb-6 text-center">
+                  <h3 className="text-xl font-semibold mb-6 text-center text-white">
                     Get Your Personalized Roadmap
                   </h3>
                   
@@ -1027,7 +1041,7 @@ const HOMEQuizMVP = () => {
                              rounded-2xl font-medium transition-all duration-300
                              hover:shadow-lg hover:shadow-[#B91372]/20 hover:scale-[1.02]
                              disabled:opacity-50 disabled:cursor-not-allowed
-                             flex items-center justify-center gap-3"
+                             flex items-center justify-center gap-3 text-white"
                   >
                     <span>Continue</span>
                     <Mail className="w-5 h-5" />
@@ -1047,7 +1061,7 @@ const HOMEQuizMVP = () => {
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-semibold mb-3">Creating Your Roadmap</h2>
+                <h2 className="text-2xl font-semibold mb-3 text-white">Creating Your Roadmap</h2>
                 <p className="text-gray-500 mb-8">Personalizing your action plan...</p>
                 
                 <div className="max-w-xs mx-auto">
@@ -1077,12 +1091,12 @@ const HOMEQuizMVP = () => {
                   <span className="text-6xl">{pathway.icon}</span>
                 </div>
                 
-                <h1 className="text-5xl sm:text-6xl font-bold mb-6">{pathway.title}</h1>
+                <h1 className="text-5xl sm:text-6xl font-bold mb-6 text-white">{pathway.title}</h1>
                 <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">{pathway.description}</p>
                 
                 <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                   <MapPin className="w-5 h-5 text-[#B91372]" />
-                  <span className="font-medium">
+                  <span className="font-medium text-white">
                     You're at the <span className="text-[#B91372]">
                       {responses['stage-level'] === 'planning' ? 'Planning' : 
                        responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
@@ -1093,19 +1107,19 @@ const HOMEQuizMVP = () => {
               
               {/* Action Plan Preview */}
               <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-300">
-                <h2 className="text-2xl font-bold mb-8 text-center">Your Personalized 4-Step Action Plan</h2>
+                <h2 className="text-2xl font-bold mb-8 text-center text-white">Your Personalized 4-Step Action Plan</h2>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                   {pathway.planPreview.map((step, index) => (
                     <div key={index} className="flex items-start gap-4 group">
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity" />
-                        <div className="relative w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl flex items-center justify-center font-bold">
+                        <div className="relative w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl flex items-center justify-center font-bold text-white">
                           {index + 1}
                         </div>
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold mb-1">{step}</h3>
+                        <h3 className="font-semibold mb-1 text-white">{step}</h3>
                         <p className="text-sm text-gray-500">Tailored specifically to your journey</p>
                       </div>
                     </div>
@@ -1114,7 +1128,7 @@ const HOMEQuizMVP = () => {
                 
                 <button
                   onClick={goNext}
-                  className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-[1.02] flex items-center justify-center gap-3"
+                  className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-[1.02] flex items-center justify-center gap-3 text-white"
                 >
                   <span>View Full Plan</span>
                   <ChevronRight className="w-5 h-5" />
@@ -1124,9 +1138,9 @@ const HOMEQuizMVP = () => {
               {/* HOME Logo */}
               <div className="text-center mt-8 animate-fadeIn delay-500">
                 <img 
-                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
                   alt="HOME"
-                  className="h-6 mx-auto brightness-0 invert opacity-30"
+                  className="h-6 mx-auto opacity-30"
                 />
               </div>
             </div>
@@ -1165,9 +1179,9 @@ const HOMEQuizMVP = () => {
               {/* Step Header */}
               <div className="text-center mb-12">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-6 shadow-2xl shadow-[#B91372]/20 animate-float">
-                  <span className="text-2xl font-bold">{currentStep + 1}</span>
+                  <span className="text-2xl font-bold text-white">{currentStep + 1}</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-bold mb-4">{pathway.steps[currentStep].title}</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">{pathway.steps[currentStep].title}</h2>
                 <p className="text-xl text-gray-400 max-w-3xl mx-auto">{pathway.steps[currentStep].description}</p>
               </div>
               
@@ -1177,7 +1191,7 @@ const HOMEQuizMVP = () => {
                 <div className="relative group animate-slideUp delay-100">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#B91372]/10 to-transparent rounded-3xl blur-xl" />
                   <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
-                    <h3 className="flex items-center gap-3 text-2xl font-bold mb-4">
+                    <h3 className="flex items-center gap-3 text-2xl font-bold mb-4 text-white">
                       <Sparkles className="w-6 h-6 text-[#B91372]" />
                       Why This Matters
                     </h3>
@@ -1187,7 +1201,7 @@ const HOMEQuizMVP = () => {
                 
                 {/* Action Items */}
                 <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-200">
-                  <h3 className="flex items-center gap-3 text-2xl font-bold mb-6">
+                  <h3 className="flex items-center gap-3 text-2xl font-bold mb-6 text-white">
                     <Target className="w-6 h-6 text-[#1DD1A1]" />
                     Your Action Items
                   </h3>
@@ -1196,7 +1210,7 @@ const HOMEQuizMVP = () => {
                       <div key={index} className="flex items-start gap-4 group">
                         <div className="relative mt-1">
                           <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity" />
-                          <div className="relative w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-sm font-medium">
+                          <div className="relative w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-sm font-medium text-white">
                             {index + 1}
                           </div>
                         </div>
@@ -1210,16 +1224,16 @@ const HOMEQuizMVP = () => {
                 <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#B91372]/5 to-[#1DD1A1]/5 p-8 animate-slideUp delay-300">
                   <div className="absolute top-4 right-4">
                     <img 
-                      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
                       alt="HOME"
-                      className="h-6 w-auto brightness-0 invert opacity-20"
+                      className="h-6 w-auto opacity-20"
                     />
                   </div>
-                  <h3 className="text-2xl font-bold mb-6">HOME Resources for This Step</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-white">HOME Resources for This Step</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {pathway.steps[currentStep].homeResources.map((resource, index) => (
                       <div key={index} className="bg-white/5 rounded-2xl p-4 backdrop-blur border border-white/10">
-                        <p className="font-medium">{resource}</p>
+                        <p className="font-medium text-white">{resource}</p>
                       </div>
                     ))}
                   </div>
@@ -1230,7 +1244,7 @@ const HOMEQuizMVP = () => {
               <div className="flex justify-center mt-12">
                 <button
                   onClick={goNext}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105 text-white"
                 >
                   <span>{currentStep < 3 ? 'Next Step' : 'Execute Plan'}</span>
                   <ChevronRight className="w-5 h-5" />
@@ -1255,7 +1269,7 @@ const HOMEQuizMVP = () => {
             
             {/* Header */}
             <div className="text-center mb-12 animate-fadeIn">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4">Ready to Execute Your Plan?</h1>
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">Ready to Execute Your Plan?</h1>
               <p className="text-xl text-gray-400">Choose how you want to start your journey with HOME</p>
             </div>
             
@@ -1263,13 +1277,13 @@ const HOMEQuizMVP = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {/* Accelerated Growth */}
               <div className="relative group animate-slideUp">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-sm font-bold z-10">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-sm font-bold z-10 text-white">
                   RECOMMENDED
                 </div>
                 <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 pt-12 group-hover:border-white/20 transition-all duration-500">
                   <div className="text-center mb-6">
                     <Rocket className="w-16 h-16 text-[#B91372] mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Accelerated Growth</h3>
+                    <h3 className="text-2xl font-bold mb-2 text-white">Accelerated Growth</h3>
                     <p className="text-gray-500">Start with 1-on-1 consultation</p>
                   </div>
                   
@@ -1289,7 +1303,7 @@ const HOMEQuizMVP = () => {
                   
                   <button 
                     onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
-                    className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#B91372]/20"
+                    className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#B91372]/20 text-white"
                   >
                     Book Free Consultation
                   </button>
@@ -1301,7 +1315,7 @@ const HOMEQuizMVP = () => {
                 <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 group-hover:border-white/20 transition-all duration-500">
                   <div className="text-center mb-6">
                     <Users className="w-16 h-16 text-[#1DD1A1] mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Community Growth</h3>
+                    <h3 className="text-2xl font-bold mb-2 text-white">Community Growth</h3>
                     <p className="text-gray-500">Start with free account</p>
                   </div>
                   
@@ -1321,7 +1335,7 @@ const HOMEQuizMVP = () => {
                   
                   <button 
                     onClick={() => window.open('https://homeformusic.org/community', '_blank')}
-                    className="w-full py-4 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20"
+                    className="w-full py-4 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20 text-white"
                   >
                     Join Free Community
                   </button>
@@ -1337,9 +1351,9 @@ const HOMEQuizMVP = () => {
             {/* HOME Logo */}
             <div className="text-center mt-8">
               <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
                 alt="HOME"
-                className="h-6 mx-auto brightness-0 invert opacity-20"
+                className="h-6 mx-auto opacity-20"
               />
             </div>
           </div>
