@@ -910,7 +910,7 @@ const HOMEQuizMVP = () => {
           {/* Desktop-only detailed cards */}
           <div className="hidden sm:grid grid-cols-3 gap-6 mt-12 max-w-3xl mx-auto animate-slideUp delay-300">
             {[
-              { icon: Sparkles, title: 'AI-Powered', desc: 'Personalized recommendations' },
+              { icon: Sparkles, title: 'AI-Powered', desc: 'Personalized plan' },
               { icon: Users, title: 'Nashville Community', desc: '1,000+ music creators' },
               { icon: ListChecks, title: 'Action Plan', desc: 'Clear steps to success' }
             ].map((feature, i) => (
