@@ -26,10 +26,9 @@ const questions = [
     question: "What drives your music career ambitions?",
     icon: <Heart className="w-6 h-6" />,
     options: [
-      { value: 'stage-energy', label: 'The energy of live performance and connecting with audiences', emoji: '🎤' },
-      { value: 'creative-expression', label: 'Artistic expression and building something uniquely mine', emoji: '🎨' },
-      { value: 'behind-scenes', label: 'Creating music for others and collaborating with artists', emoji: '🎹' },
-      { value: 'business-building', label: 'Building a sustainable music business and brand', emoji: '📈' }
+      { value: 'stage-energy', label: 'The energy of a live audience and performing music from the stage', emoji: '🎤' },
+      { value: 'creative-expression', label: 'Artistic expression through recording music and building a loyal following online', emoji: '🎨' },
+      { value: 'behind-scenes', label: 'Making great songs and collaborating with other talented creators', emoji: '🎹' }
     ]
   },
   {
@@ -37,10 +36,9 @@ const questions = [
     question: "Describe your ideal workday as a music professional:",
     icon: <Zap className="w-6 h-6" />,
     options: [
-      { value: 'performing', label: 'Rehearsing, soundchecking, and performing for live audiences', emoji: '🎸' },
-      { value: 'creating-content', label: 'Writing, recording, and creating content for my brand', emoji: '📸' },
-      { value: 'studio-work', label: 'In the studio producing tracks and collaborating with other artists', emoji: '🎧' },
-      { value: 'strategy-networking', label: 'Planning releases, networking, and growing my business', emoji: '🚀' }
+      { value: 'performing', label: 'Traveling to a new city to perform for a live audience', emoji: '🎸' },
+      { value: 'creating-content', label: 'Releasing a new song that you are really proud of', emoji: '📸' },
+      { value: 'studio-work', label: 'Writing the best song that you have ever written', emoji: '🎧' }
     ]
   },
   {
@@ -48,9 +46,9 @@ const questions = [
     question: "When you imagine success 3 years from now, you see yourself:",
     icon: <Star className="w-6 h-6" />,
     options: [
-      { value: 'touring-artist', label: 'Headlining tours and playing major venues with a dedicated fanbase', emoji: '🏟️' },
-      { value: 'creative-brand', label: 'Having multiple revenue streams from my creative work and personal brand', emoji: '💎' },
-      { value: 'in-demand-producer', label: 'Being the go-to producer/writer that artists seek out for collaborations', emoji: '🏆' }
+      { value: 'touring-artist', label: 'Headlining major tours and playing sold out shows around the world', emoji: '🏟️' },
+      { value: 'creative-brand', label: 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions', emoji: '💎' },
+      { value: 'in-demand-producer', label: 'Having multiple major hit songs that you collaborated on and earning 'mailbox money' through sync placements and other royalty streams', emoji: '🏆' }
     ]
   },
   {
@@ -58,9 +56,9 @@ const questions = [
     question: "Which best describes your current stage in HOME's framework?",
     icon: <MapPin className="w-6 h-6" />,
     options: [
-      { value: 'planning', label: 'Planning Stage - Figuring out my path and building foundations', emoji: '🌱' },
-      { value: 'production', label: 'Production Stage - Actively creating and releasing work', emoji: '🎵' },
-      { value: 'scale', label: 'Scale Stage - Ready to grow and expand my existing success', emoji: '📊' }
+      { value: 'planning', label: 'Figuring out my path and building foundations', emoji: '🌱' },
+      { value: 'production', label: 'Actively creating and releasing work', emoji: '🎵' },
+      { value: 'scale', label: 'Ready to grow and expand my existing success', emoji: '📊' }
     ]
   },
   {
