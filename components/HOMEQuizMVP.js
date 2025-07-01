@@ -1425,3 +1425,8 @@ const HOMEQuizMVP = () => {
           `}</style>
         </div>
       )}
+    </div>
+  );
+};
+
+export default HOMEQuizMVP;
