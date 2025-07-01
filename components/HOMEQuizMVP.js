@@ -48,7 +48,7 @@ const questions = [
     options: [
       { value: 'touring-artist', label: 'Headlining major tours and playing sold out shows around the world', emoji: '🏟️' },
       { value: 'creative-brand', label: 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions', emoji: '💎' },
-      { value: 'in-demand-producer', label: 'Having multiple major hit songs that you collaborated on and earning 'mailbox money' through sync placements and other royalty streams', emoji: '🏆' }
+      { value: 'in-demand-producer', label: 'Having multiple major hit songs that you collaborated on and earning "mailbox money" through sync placements and other royalty streams', emoji: '🏆' }
     ]
   },
   {
