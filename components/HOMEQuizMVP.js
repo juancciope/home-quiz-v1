@@ -1079,11 +1079,11 @@ const HOMEQuizMVP = () => {
         </div>
       )}
 
-      {screen === 'celebration' && pathway && (
-        <div className="screen-height bg-black relative overflow-hidden">
-          <PremiumConfetti show={showConfetti} />
-          
-          <div className="h-full flex items-center justify-center px-6">
+{screen === 'celebration' && pathway && (
+  <div className="screen-height bg-black relative overflow-hidden pt-20 sm:pt-24">
+    <PremiumConfetti show={showConfetti} />
+    
+    <div className="h-full flex items-center justify-center px-6">
             <div className="max-w-4xl w-full">
               {/* Path Result */}
               <div className="text-center mb-12 animate-scaleIn">
