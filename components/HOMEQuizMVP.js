@@ -843,78 +843,99 @@ const HOMEQuizMVP = () => {
       {showProgress && <ProgressBar currentCheckpoint={currentCheckpoint} />}
       
       {screen === 'landing' && (
-        <div className="screen-height bg-black relative overflow-hidden flex flex-col">
-          {/* Subtle gradient background */}
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-10" />
-            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
+  <div className="screen-height bg-black relative overflow-hidden flex flex-col">
+    {/* Subtle gradient background */}
+    <div className="absolute inset-0">
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-10" />
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
+    </div>
+    
+    <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8">
+      {/* Logo at top */}
+      <div className="text-center mb-8 sm:mb-12">
+        <img 
+          src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+          alt="HOME"
+          className="h-8 mx-auto opacity-60"
+        />
+      </div>
+      
+      {/* Main Content - Centered */}
+      <div className="flex-1 flex items-center justify-center -mt-20 sm:mt-0">
+        <div className="max-w-4xl w-full text-center">
+          {/* Title - Smaller on mobile */}
+          <div className="mb-8 sm:mb-12 animate-fadeIn">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
+              Find Your Path on the
+              <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
+                Music Creator Roadmap
+              </span>
+            </h1>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-xl mx-auto">
+              5-minute AI quiz to discover your personalized pathway
+            </p>
           </div>
           
-          <div className="relative z-10 flex-1 flex flex-col justify-between p-6 sm:p-8">
-            {/* Main Content */}
-            <div className="flex-1 flex items-center justify-center">
-              <div className="max-w-4xl w-full text-center">
-                <div className="mb-12 animate-fadeIn">
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight text-white">
-                    Find Your Path on the
-                    <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
-                      Music Creator Roadmap
-                    </span>
-                  </h1>
-                  <p className="text-xl sm:text-2xl text-gray-400 max-w-2xl mx-auto">
-                    5-minute AI quiz to discover your personalized pathway in the music industry
-                  </p>
-                </div>
-                
-                {/* Feature Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 max-w-3xl mx-auto animate-slideUp delay-200">
-                  {[
-                    { icon: Sparkles, title: 'AI-Powered', desc: 'Personalized recommendations' },
-                    { icon: Users, title: 'Nashville Community', desc: '1,000+ music creators' },
-                    { icon: ListChecks, title: 'Action Plan', desc: 'Clear steps to success' }
-                  ].map((feature, i) => (
-                    <div key={i} className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
-                        <feature.icon className="w-8 h-8 text-white/60 mb-3 mx-auto" />
-                        <h3 className="font-semibold mb-1 text-white">{feature.title}</h3>
-                        <p className="text-sm text-gray-500">{feature.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* CTA Button */}
-                <button
-                  onClick={() => setScreen('quiz')}
-                  className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn delay-400 text-white"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
-                  <span className="relative">Find My Path</span>
-                  <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
-                
-                <p className="text-sm text-gray-600 mt-6 animate-fadeIn delay-500">
-                  Takes 5 minutes • Completely free • No credit card required
-                </p>
-              </div>
-            </div>
+          {/* CTA Button - Prominent */}
+          <div className="mb-8 sm:mb-12">
+            <button
+              onClick={() => setScreen('quiz')}
+              className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
+              <span className="relative">Find My Path</span>
+              <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
             
-            {/* Footer */}
-            <div className="text-center animate-fadeIn delay-500">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                alt="HOME"
-                className="h-8 mx-auto mb-3 opacity-40"
-              />
-              <p className="text-xs text-gray-600">
-                Made with ❤️ by HOME for Music
-              </p>
-            </div>
+            <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
+              Free • 5 minutes • No credit card
+            </p>
+          </div>
+          
+          {/* Feature Pills - Compact for mobile */}
+          <div className="flex flex-wrap justify-center gap-3 animate-slideUp delay-200">
+            {[
+              { icon: Sparkles, label: 'AI-Powered' },
+              { icon: Users, label: '1,000+ Creators' },
+              { icon: ListChecks, label: 'Action Plan' }
+            ].map((feature, i) => (
+              <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                <feature.icon className="w-4 h-4 text-white/60" />
+                <span className="text-sm font-medium text-white/80">{feature.label}</span>
+              </div>
+            ))}
+          </div>
+          
+          {/* Desktop-only detailed cards */}
+          <div className="hidden sm:grid grid-cols-3 gap-6 mt-12 max-w-3xl mx-auto animate-slideUp delay-300">
+            {[
+              { icon: Sparkles, title: 'AI-Powered', desc: 'Personalized recommendations' },
+              { icon: Users, title: 'Nashville Community', desc: '1,000+ music creators' },
+              { icon: ListChecks, title: 'Action Plan', desc: 'Clear steps to success' }
+            ].map((feature, i) => (
+              <div key={i} className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                  <feature.icon className="w-8 h-8 text-white/60 mb-3 mx-auto" />
+                  <h3 className="font-semibold mb-1 text-white">{feature.title}</h3>
+                  <p className="text-sm text-gray-500">{feature.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      )}
+      </div>
+      
+      {/* Footer - Smaller on mobile */}
+      <div className="text-center mt-8 animate-fadeIn delay-500">
+        <p className="text-xs text-gray-600">
+          Made with ❤️ by HOME for Music
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
       {screen === 'quiz' && (
         <div className="screen-height bg-black pt-20 sm:pt-24">
