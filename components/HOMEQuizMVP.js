@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import {
   ChevronRight,
   ChevronLeft,
-  Star,
   Loader,
   MapPin,
   UserCheck,
@@ -15,7 +14,7 @@ import {
   Home
 } from 'lucide-react';
 
-// --- Quiz Questions Data ---
+// --- Quiz Questions ---
 const questions = [
   {
     id: 'motivation',
@@ -64,7 +63,7 @@ const questions = [
   }
 ];
 
-// --- Expanded Step Content Data ---
+// --- Expanded Step Content ---
 const expandedStepContent = {
   'touring-performer': [
     {
@@ -183,15 +182,15 @@ const expandedStepContent = {
 };
 
 // --- Helpers ---
-const getExpandedStepContent = (pathway, index) => {
+const getExpandedStepContent = (pathway, idx) => {
   if (!pathway) return null;
   const key = pathway.toLowerCase().includes('touring')
     ? 'touring-performer'
     : 'creative-artist';
-  return expandedStepContent[key]?.[index] || null;
+  return expandedStepContent[key]?.[idx] || null;
 };
-const interpolateColor = (c1, c2, factor) =>
-  c1.map((v, i) => Math.round(v + factor * (c2[i] - v)));
+const interpolateColor = (c1, c2, f) =>
+  c1.map((v, i) => Math.round(v + f * (c2[i] - v)));
 
 // --- Main Component ---
 const HOMEQuizMVP = () => {
@@ -205,10 +204,11 @@ const HOMEQuizMVP = () => {
   const [direction, setDirection]     = useState('forward');
   const [confetti, setConfetti]       = useState(false);
 
-  // Scroll reset on every screen/step change
+  // scroll to top before paint on screen/qIndex/step change
   const mainRef = useRef(null);
-  useEffect(() => {
-    mainRef.current?.scrollTo({ top: 0 });
+  useLayoutEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [screen, qIndex, step]);
 
   const handleAnswer = (id, val) => {
@@ -218,7 +218,8 @@ const HOMEQuizMVP = () => {
       setQIndex(i => i + 1);
     } else {
       setScreen('transition');
-      setTimeout(() => setScreen('email'), 1500);
+      // keep sparkles 3s instead of 1.5s
+      setTimeout(() => setScreen('email'), 3000);
     }
   };
 
@@ -272,7 +273,7 @@ const HOMEQuizMVP = () => {
 
   const getStage = () => {
     if (screen === 'quiz') return 1;
-    if (['transition', 'email'].includes(screen)) return 2;
+    if (['transition','email'].includes(screen)) return 2;
     if (screen === 'results' && step < 5) return 3;
     if (screen === 'results' && step === 5) return 4;
     return 0;
@@ -282,12 +283,12 @@ const HOMEQuizMVP = () => {
     return <LandingPage onStart={startQuiz} />;
   }
 
-  const stage = getStage();
-  const key   = `${screen}-${qIndex}-${step}`;
+  const masterStage = getStage();
+  const key         = `${screen}-${qIndex}-${step}`;
 
   return (
     <JourneyLayout
-      masterStage={stage}
+      masterStage={masterStage}
       resultStep={step}
       onBack={goBack}
       onNext={goNext}
@@ -302,6 +303,7 @@ const HOMEQuizMVP = () => {
             onAnswer={handleAnswer}
             questionIndex={qIndex}
             total={questions.length}
+            responses={responses}
           />
         )}
         {screen === 'transition' && (
@@ -324,12 +326,20 @@ const HOMEQuizMVP = () => {
             {step === 0 && (
               <ResultsLandingPage
                 aiResult={aiResult}
-                onBegin={() => { setDirection('forward'); setStep(1); }}
                 showConfetti={confetti}
+                onBegin={() => { setDirection('forward'); setStep(1); }}
               />
             )}
-            {step > 0 && step < 5 && <StepPage stepIndex={step - 1} aiResult={aiResult} />}
-            {step === 5 && <FinalPage responses={responses} aiResult={aiResult} onReset={resetAll} />}
+            {step > 0 && step < 5 && (
+              <StepPage stepIndex={step - 1} aiResult={aiResult} />
+            )}
+            {step === 5 && (
+              <FinalPage
+                responses={responses}
+                aiResult={aiResult}
+                onReset={resetAll}
+              />
+            )}
           </>
         )}
       </AnimatedContent>
@@ -337,7 +347,7 @@ const HOMEQuizMVP = () => {
   );
 };
 
-// --- Layout & Navigation ---
+// --- Layout & Header/Footer ---
 const JourneyLayout = ({
   masterStage,
   resultStep,
@@ -349,72 +359,88 @@ const JourneyLayout = ({
   children
 }) => {
   const stages = [
-    { id: 1, title: 'Identify Your Path', icon: <Target className="w-4 h-4" /> },
-    { id: 2, title: 'Personalized Path',  icon: <MapPin className="w-4 h-4" /> },
-    { id: 3, title: 'Personalized Plan',  icon: <ListChecks className="w-4 h-4" /> },
-    { id: 4, title: 'Execute Plan',       icon: <Rocket className="w-4 h-4" /> }
+    { id:1, title:'Identify Your Path',    icon:<Target className="w-4 h-4"/> },
+    { id:2, title:'Personalized Path',     icon:<MapPin className="w-4 h-4"/> },
+    { id:3, title:'Personalized Plan',     icon:<ListChecks className="w-4 h-4"/> },
+    { id:4, title:'Execute Plan',          icon:<Rocket className="w-4 h-4"/> }
   ];
   const showBack     = ['quiz','email','results'].includes(currentScreen);
-  const showNextStep = currentScreen === 'results' && resultStep > 0 && resultStep < 4;
-  const showExecute  = currentScreen === 'results' && resultStep === 4;
-  const color1 = [29,209,161], color2 = [185,19,114];
+  const showNextStep = currentScreen==='results' && resultStep>0 && resultStep<4;
+  const showExecute  = currentScreen==='results' && resultStep===4;
+  const color1=[29,209,161], color2=[185,19,114];
+
+  // auto-scroll header so active step is centered
+  const headerRef = useRef(null);
+  useEffect(() => {
+    const c = headerRef.current;
+    const active = c?.querySelector(`[data-stage-id="${masterStage}"]`);
+    if (c && active) {
+      const offset = active.offsetLeft + active.clientWidth/2 - c.clientWidth/2;
+      c.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+  }, [masterStage]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Sticky Header */}
-      <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm pt-2 pb-1">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap items-start justify-around relative mb-2 text-center">
+      {/* Header */}
+      <header className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 shadow-sm">
+        <div className="w-full px-4 py-2">
+          <div
+            ref={headerRef}
+            className="flex items-center whitespace-nowrap overflow-x-auto relative pb-2"
+          >
             {stages.map(s => {
-              const isActive    = masterStage === s.id;
-              const isCompleted = masterStage > s.id;
-              const rgb          = interpolateColor(color1, color2, (s.id - 1) / 3).join(',');
+              const isActive    = masterStage===s.id;
+              const isCompleted = masterStage> s.id;
+              const rgb = interpolateColor(color1,color2,(s.id-1)/3).join(',');
               return (
-                <div key={s.id} className="w-1/2 sm:w-auto mb-1">
+                <div
+                  key={s.id}
+                  data-stage-id={s.id}
+                  className="inline-block text-center px-3 flex-shrink-0"
+                >
                   <div
-                    className={`mx-auto mb-1 w-8 h-8 rounded-full flex items-center justify-center ${
-                      isActive ? 'scale-110' : ''
-                    } font-bold border-2 transition`}
+                    className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center transition-transform ${isActive?'scale-110':''}`}
                     style={{
-                      borderColor: isActive||isCompleted ? `rgb(${rgb})` : '#d1d5db',
-                      backgroundColor: isCompleted ? `rgb(${rgb})` : 'white',
-                      color: isCompleted ? 'white' : isActive ? `rgb(${rgb})` : '#a0aec0'
+                      border: '2px solid',
+                      borderColor: isActive||isCompleted?`rgb(${rgb})`:'#d1d5db',
+                      backgroundColor: isCompleted?`rgb(${rgb})`:'white',
+                      color: isCompleted?'white':isActive?`rgb(${rgb})`:'#a0aec0'
                     }}
                   >
-                    {isCompleted ? <Check className="w-4 h-4" /> : s.id}
+                    {isCompleted ? <Check className="w-4 h-4"/> : s.id}
                   </div>
-                  <div className="text-xs sm:text-[10px] leading-snug">{s.title}</div>
+                  <div className="mt-1 text-xs leading-snug">{s.title}</div>
                 </div>
               );
             })}
-            <div className="absolute top-4 left-0 w-full h-1 bg-gray-200 -z-10">
+            <div className="absolute bottom-0 left-4 right-4 h-1 bg-gray-200 z-0">
               <div
-                className="h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
-                style={{ width: `calc(${((masterStage - 1) / 3) * 100}% - 2rem)` }}
+                className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
+                style={{ width:`calc(${((masterStage-1)/3)*100}% - 2rem)` }}
               />
             </div>
           </div>
         </div>
       </header>
 
-      {/* Scrollable Content */}
+      {/* Content */}
       <main ref={mainRef} className="flex-grow overflow-y-auto">{children}</main>
 
-      {/* Sticky Footer */}
+      {/* Footer */}
       <footer className="sticky bottom-0 bg-white border-t z-20 shadow-inner">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div className="w-full px-4 py-3 flex justify-between items-center max-w-screen-xl mx-auto">
           <button
             onClick={onBack}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
-              showBack ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' : 'invisible'
+              showBack?'text-gray-600 hover:text-gray-900 hover:bg-gray-100':'invisible'
             }`}
           >
-            <ChevronLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">Back</span>
+            <ChevronLeft className="w-5 h-5" /> <span className="hidden sm:inline">Back</span>
           </button>
           <div className="text-sm text-gray-500">
-            {currentScreen === 'quiz' && `Question ${questionIndex + 1} of ${questions.length}`}
-            {currentScreen === 'results' && resultStep > 0 && resultStep < 5 && `Step ${resultStep} of 4`}
+            {currentScreen==='quiz'   && `Question ${questionIndex+1} of ${questions.length}`}
+            {currentScreen==='results'&& resultStep>0 && `Step ${resultStep} of 4`}
           </div>
           {showNextStep && (
             <button
@@ -439,7 +465,7 @@ const JourneyLayout = ({
   );
 };
 
-// --- Animated Wrapper (⚡ UPDATED) ---
+// --- Animated Wrapper (pins to top) ---
 const AnimatedContent = ({ children, direction }) => (
   <div className={`h-full w-full p-4 md:p-8 flex items-start justify-center animate-on-load ${direction}`}>
     {children}
@@ -448,8 +474,8 @@ const AnimatedContent = ({ children, direction }) => (
 
 // --- Landing Page ---
 const LandingPage = ({ onStart }) => (
-  <div className="min-h-screen bg-white flex items-center justify-center p-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-    <div className="w-full max-w-4xl text-center">
+  <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="w-full max-w-2xl text-center">
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold text-gray-700 mb-6">
           <Sparkles className="w-4 h-4" style={{ color: '#B91372' }} />
@@ -466,30 +492,16 @@ const LandingPage = ({ onStart }) => (
           Music Creator Roadmap
         </span>
       </h1>
-      <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+      <p className="text-lg md:text-xl text-gray-600 mb-8">
         Answer 5 simple questions and get your personalized action plan to build a sustainable music career
       </p>
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-10 text-sm text-gray-600">
-        <div className="flex items-center">
-          <Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />
-          2-Minute Quiz
-        </div>
-        <div className="flex items-center">
-          <Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />
-          Personalized Roadmap
-        </div>
-        <div className="flex items-center">
-          <Check className="w-5 h-5 mr-2 text-[#1DD1A1]" />
-          Actionable Steps
-        </div>
-      </div>
       <button
         onClick={onStart}
-        className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-transform duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center gap-3 overflow-hidden"
+        className="group relative text-white font-bold py-4 px-12 rounded-full text-lg transition-transform transform hover:scale-105 shadow-xl inline-flex items-center gap-3 overflow-hidden"
         style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
       >
         <span className="relative z-10">Start Your Journey</span>
-        <ChevronRight className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+        <ChevronRight className="w-5 h-5 relative z-10 transition-transform group-hover:translate-x-1" />
         <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
       </button>
       <p className="text-sm text-gray-500 mt-3">No email required • 100% free</p>
@@ -497,33 +509,34 @@ const LandingPage = ({ onStart }) => (
   </div>
 );
 
-// --- Question Page ---
-const QuestionPage = ({ question, onAnswer, questionIndex, total }) => (
+// --- Question Page (with selection state) ---
+const QuestionPage = ({ question, onAnswer, questionIndex, total, responses }) => (
   <div className="w-full max-w-3xl mx-auto">
     <div className="text-center mb-8">
       <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full text-sm font-semibold mb-4">
         <Target className="w-4 h-4" style={{ color: '#1DD1A1' }} />
         Question {questionIndex + 1} of {total}
       </div>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{question.question}</h2>
     </div>
-    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-xl">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center leading-tight">
-        {question.question}
-      </h2>
-      <div className="space-y-4">
-        {question.options.map(opt => (
+    <div className="space-y-4">
+      {question.options.map(opt => {
+        const isSelected = responses[question.id] === opt.value;
+        return (
           <button
             key={opt.value}
             onClick={() => onAnswer(question.id, opt.value)}
-            className="w-full p-5 text-left rounded-xl border-2 group cursor-pointer transition shadow-sm hover:shadow-lg hover:-translate-y-1 bg-gradient-to-r from-gray-50 to-gray-50 hover:from-[#1DD1A1]/5 hover:to-[#B91372]/5 border-gray-200 hover:border-[#1DD1A1]"
+            className={`w-full p-5 text-left rounded-xl border-2 flex items-center justify-between transition ${
+              isSelected
+                ? 'border-[#1DD1A1] bg-[#1DD1A1]/10'
+                : 'border-gray-200 bg-white'
+            }`}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-gray-900">{opt.label}</span>
-              <Check className="w-6 h-6 text-[#1DD1A1] opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
+            <span className="text-gray-900">{opt.label}</span>
+            {isSelected && <Check className="w-6 h-6 text-[#1DD1A1]" />}
           </button>
-        ))}
-      </div>
+        );
+      })}
     </div>
     <div className="text-center mt-6 text-sm text-gray-500">
       💡 Tip: Choose the option that best reflects your goals
@@ -537,9 +550,9 @@ const TransitionPage = ({ icon, title, subtitle }) => (
     <div className="w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
       <div className="text-white text-3xl">{icon}</div>
     </div>
-    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{title}</h2>
-    <p className="text-lg text-gray-600">{subtitle}</p>
-    <div className="mt-8 flex justify-center gap-2">
+    <h2 className="text-2xl font-bold text-gray-900 mb-3">{title}</h2>
+    <p className="text-lg text-gray-600 mb-8">{subtitle}</p>
+    <div className="flex justify-center gap-2">
       {[...Array(3)].map((_, i) => (
         <div
           key={i}
@@ -560,38 +573,30 @@ const EmailCapturePage = ({ email, setEmail, onSubmit, isSubmitting }) => (
         Final Step
       </div>
     </div>
-    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Your Personalized Path is Ready!</h1>
-    <p className="text-lg md:text-xl text-gray-600 mb-8">
-      Enter your email to unlock your complete action plan
-    </p>
+    <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Personalized Path is Ready!</h1>
+    <p className="text-lg text-gray-600 mb-8">Enter your email to unlock your complete action plan</p>
     <div className="bg-white border-2 rounded-2xl p-8 shadow-xl" style={{ borderColor: '#1DD1A1' }}>
-      <div className="mb-6">
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          className="w-full px-6 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] text-lg transition"
-        />
-        <button
-          onClick={onSubmit}
-          disabled={!email || isSubmitting}
-          className="w-full mt-4 text-white font-bold px-8 py-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 flex items-center justify-center text-lg shadow-lg"
-          style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
-        >
-          {isSubmitting
-            ? <><Loader className="w-5 h-5 mr-2 animate-spin" />Creating Your Plan…</>
-            : <>Get My Plan <ChevronRight className="w-5 h-5 ml-2" /></>
-          }
-        </button>
-      </div>
-      <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
-        <div className="flex items-center gap-1">
-          <Check className="w-4 h-4 text-[#1DD1A1]" /> Instant access
-        </div>
-        <div className="flex items-center gap-1">
-          <Check className="w-4 h-4 text-[#1DD1A1]" /> No spam ever
-        </div>
+      <input
+        type="email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        placeholder="you@example.com"
+        className="w-full px-6 py-4 rounded-xl border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1DD1A1] text-lg mb-4"
+      />
+      <button
+        onClick={onSubmit}
+        disabled={!email || isSubmitting}
+        className="w-full text-white font-bold px-8 py-4 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 flex items-center justify-center text-lg shadow-lg"
+        style={{ background: 'linear-gradient(135deg,#1DD1A1 0%,#B91372 100%)' }}
+      >
+        {isSubmitting
+          ? <><Loader className="w-5 h-5 mr-2 animate-spin" />Creating Your Plan...</>
+          : <>Get My Plan <ChevronRight className="w-5 h-5 ml-2" /></>
+        }
+      </button>
+      <div className="flex items-center justify-center gap-6 text-sm text-gray-500 mt-4">
+        <div className="flex items-center gap-1"><Check className="w-4 h-4 text-[#1DD1A1]" />Instant access</div>
+        <div className="flex items-center gap-1"><Check className="w-4 h-4 text-[#1DD1A1]" />No spam ever</div>
       </div>
     </div>
   </div>
@@ -645,7 +650,7 @@ const ResultsLandingPage = ({ aiResult, onBegin, showConfetti }) => (
         <Sparkles className="absolute top-0 right-0 w-6 h-6 text-yellow-400 animate-pulse" />
         <Sparkles className="absolute bottom-0 left-0 w-5 h-5 text-pink-400 animate-pulse" style={{ animationDelay:'0.5s' }} />
       </div>
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{aiResult.title}</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-3">{aiResult.title}</h1>
       <p className="text-lg text-gray-600 mb-8">Your personalized roadmap is ready!</p>
       <div className="bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5 rounded-2xl p-6 mb-8 border border-[#1DD1A1]/20 text-left">
         <h3 className="flex items-center gap-2 font-bold text-gray-800 mb-3">
@@ -671,8 +676,8 @@ const StepPage = ({ stepIndex, aiResult }) => {
   if (!data) {
     return <div className="flex items-center justify-center h-full"><Loader className="animate-spin text-[#B91372]" /></div>;
   }
-  const c1 = [29,209,161], c2 = [185,19,114];
-  const rgb = interpolateColor(c1, c2, stepIndex/3).join(',');
+  const c1=[29,209,161], c2=[185,19,114];
+  const rgb = interpolateColor(c1,c2, stepIndex/3).join(',');
   const bg  = `rgba(${rgb},0.1)`;
 
   return (
@@ -681,24 +686,21 @@ const StepPage = ({ stepIndex, aiResult }) => {
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-sm font-semibold" style={{ backgroundColor: bg, color:`rgb(${rgb})` }}>
           <ListChecks className="w-4 h-4" /> Step {stepIndex+1} of 4
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{data.title}</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-3">{data.title}</h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">{data.description}</p>
       </div>
       <div className="rounded-2xl p-6 mb-8 bg-gradient-to-br from-white to-gray-50 border shadow-lg" style={{ borderColor:`rgba(${rgb},0.25)` }}>
         <h3 className="flex items-center gap-2 font-bold text-gray-900 mb-3 text-lg">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: bg }}>
-            <Sparkles className="w-5 h-5" style={{ color:`rgb(${rgb})` }} />
-          </div>
-          Why This Matters
+          <Sparkles className="w-5 h-5" style={{ color:`rgb(${rgb})` }} /> Why This Matters
         </h3>
-        <p className="text-gray-700 leading-relaxed pl-13">{data.whyItMatters}</p>
+        <p className="text-gray-700 leading-relaxed">{data.whyItMatters}</p>
       </div>
       <div className="mb-8">
         <h3 className="flex items-center gap-2 text-xl font-bold text-gray-900 mb-5">
           <Target className="w-5 h-5" style={{ color:`rgb(${rgb})` }} /> Your Action Items:
         </h3>
         <div className="space-y-3">
-          {data.actions.map((act, i) => (
+          {data.actions.map((act,i) => (
             <div key={i} className="flex items-start bg-white rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition">
               <div className="w-8 h-8 flex items-center justify-center text-white font-bold rounded-full mr-4 mt-0.5" style={{ backgroundColor:`rgb(${rgb})` }}>{i+1}</div>
               <p className="text-gray-700 flex-grow">{act}</p>
@@ -708,15 +710,12 @@ const StepPage = ({ stepIndex, aiResult }) => {
       </div>
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 border shadow-lg">
         <h3 className="flex items-center gap-2 font-bold text-gray-900 mb-4 text-lg">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#1DD1A1] to-[#B91372]">
-            <Home className="w-4 h-4 text-white" />
-          </div>
-          HOME Resources for This Step:
+          <Home className="w-5 h-5 text-[#1DD1A1]" /> HOME Resources for This Step:
         </h3>
         <div className="flex flex-wrap gap-2">
-          {data.homeResources.map((res, i) => (
+          {data.homeResources.map((r,i)=>(
             <span key={i} className="px-4 py-2 rounded-lg text-sm font-medium border" style={{ backgroundColor: bg, color:`rgb(${rgb})`, borderColor:`rgb(${rgb})` }}>
-              {res}
+              {r}
             </span>
           ))}
         </div>
@@ -738,8 +737,8 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
           <Rocket className="w-4 h-4" style={{ color:'#B91372' }} />
           Ready to Execute
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Your Complete Roadmap</h1>
-        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Everything you need to transform your music career is here.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">Your Complete Roadmap</h1>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">Everything you need to transform your music career is here.</p>
       </div>
       <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 mb-10 border shadow-xl">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Your Personalized Summary</h2>
@@ -769,25 +768,19 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
           </div>
         </div>
       </div>
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">Choose Your Support System</h2>
-        <p className="text-gray-600">How would you like to implement your roadmap?</p>
-      </div>
       <div className="grid md:grid-cols-2 gap-6 mb-12">
         {/* Accelerated Path */}
         <div className="relative bg-white rounded-2xl p-6 border-2 border-[#B91372] shadow-xl hover:scale-105 transition">
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#B91372] text-white px-4 py-1 rounded-full text-sm font-bold">RECOMMENDED</div>
           <div className="text-center mb-6 pt-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#B91372] to-[#B91372]/70 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-              <Rocket className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900">Accelerated Path</h3>
-            <p className="text-gray-600 mt-2">Get 1-on-1 expert guidance</p>
+            <Rocket className="w-8 h-8 text-[#B91372] mx-auto mb-2"/>
+            <h3 className="text-xl font-bold mb-1">Accelerated Path</h3>
+            <p className="text-gray-600">Get 1-on-1 expert guidance</p>
           </div>
           <ul className="space-y-3 mb-6">
-            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5" /><span>Personal strategy session with our team</span></li>
-            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5" /><span>A fully custom roadmap for your goals</span></li>
-            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5" /><span>Priority access to HOME resources</span></li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5"/>Personal strategy session</li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5"/>A fully custom roadmap</li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#B91372] mr-2 mt-0.5"/>Priority HOME resources</li>
           </ul>
           <button
             onClick={() => window.open('https://homeformusic.org/consultation','_blank')}
@@ -799,16 +792,14 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
         {/* Community Path */}
         <div className="bg-white rounded-2xl p-6 border-2 border-gray-200 shadow-xl hover:scale-105 transition">
           <div className="text-center mb-6 pt-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#1DD1A1]/70 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-              <Home className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900">Community Path</h3>
-            <p className="text-gray-600 mt-2">Join our supportive network</p>
+            <Home className="w-8 h-8 text-[#1DD1A1] mx-auto mb-2"/>
+            <h3 className="text-xl font-bold mb-1">Community Path</h3>
+            <p className="text-gray-600">Join our supportive network</p>
           </div>
           <ul className="space-y-3 mb-6">
-            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5" /><span>Access to HOME's online community</span></li>
-            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5" /><span>Weekly virtual workshops & events</span></li>
-            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5" /><span>Resource library & templates</span></li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5"/>Access to HOME's community</li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5"/>Weekly virtual events</li>
+            <li className="flex items-start"><Check className="w-5 h-5 text-[#1DD1A1] mr-2 mt-0.5"/>Resource library & templates</li>
           </ul>
           <button
             onClick={() => window.open('https://homeformusic.org/community','_blank')}
@@ -818,7 +809,7 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
           </button>
         </div>
       </div>
-      <div className="text-center">
+      <div className="text-center mb-8">
         <button onClick={onReset} className="text-gray-500 hover:text-gray-700 font-medium">
           Take Quiz Again →
         </button>
