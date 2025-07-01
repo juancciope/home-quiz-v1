@@ -905,23 +905,6 @@ const HOMEQuizMVP = () => {
             ))}
           </div>
           
-          {/* Desktop-only detailed cards */}
-          <div className="hidden sm:grid grid-cols-3 gap-6 mt-12 max-w-3xl mx-auto animate-slideUp delay-300">
-            {[
-              { icon: Sparkles, title: 'AI-Powered', desc: 'Personalized plan' },
-              { icon: Users, title: 'Nashville Community', desc: '1,000+ music creators' },
-              { icon: ListChecks, title: 'Action Plan', desc: 'Clear steps to success' }
-            ].map((feature, i) => (
-              <div key={i} className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
-                  <feature.icon className="w-8 h-8 text-white/60 mb-3 mx-auto" />
-                  <h3 className="font-semibold mb-1 text-white">{feature.title}</h3>
-                  <p className="text-sm text-gray-500">{feature.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
       
