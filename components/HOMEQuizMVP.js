@@ -872,7 +872,7 @@ const HOMEQuizMVP = () => {
               </span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-xl mx-auto">
-              5-minute AI quiz to discover your personalized pathway
+              Smart AI insights that define your style, rank your top priorities, and map out your next moves.
             </p>
           </div>
           
@@ -889,7 +889,7 @@ const HOMEQuizMVP = () => {
             </button>
             
             <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
-              Free • 5 minutes • No credit card
+              Free • 2 minutes • No credit card
             </p>
           </div>
           
