@@ -1164,6 +1164,44 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#1DD1A1] to-[#1DD1A1]/70 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg">
               <UserCheck className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
+            <h3 className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Your Path</h3>
+            <p className="text-gray-600 text-xs sm:text-sm">{aiResult.title.replace(' Path','')}</p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#B91372]/70 to-[#B91372] rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg">
+              <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Your Stage</h3>
+            <p className="text-gray-600 text-xs sm:text-sm">
+              {responses['stage-level']?.charAt(0).toUpperCase() + responses['stage-level']?.slice(1)} Stage
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg">
+              <ListChecks className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Your Focus</h3>
+            <p className="text-gray-600 text-xs sm:text-sm">{summary[0]}</p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Action Steps Summary */}
+      <div className="bg-blue-600 rounded-xl p-6 sm:p-8 text-white text-center mb-8 sm:mb-12">
+        <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">How HOME Can Help</h3>
+        <p className="text-blue-100 text-base sm:text-lg mb-4 sm:mb-6">{aiResult.homeConnection}</p>
+        <div className="flex items-center justify-center">
+          <Users className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
+          <span className="text-sm sm:text-base">Join 1,000+ creators in our community</span>
+        </div>
+      </div>
+      
+      <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+        {/* Complete Roadmap CTA */}
+        <div className="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-blue-600 shadow-xl hover:scale-105 transition">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold">RECOMMENDED</div>
+          <div className="text-center mb-4 sm:mb-6 pt-3 sm:pt-4">
+            <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 mx-auto mb-2"/>
             <h3 className="text-lg sm:text-xl font-bold mb-1">Get Your Complete Roadmap</h3>
             <p className="text-gray-600 text-sm sm:text-base">Join our monthly webinar</p>
           </div>
@@ -1209,41 +1247,3 @@ const FinalPage = ({ responses, aiResult, onReset }) => {
 };
 
 export default HOMEQuizMVP;
-            <p className="text-gray-600 text-xs sm:text-sm">{aiResult.title.replace(' Path','')}</p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#B91372]/70 to-[#B91372] rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg">
-              <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-            </div>
-            <h3 className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Your Stage</h3>
-            <p className="text-gray-600 text-xs sm:text-sm">
-              {responses['stage-level']?.charAt(0).toUpperCase() + responses['stage-level']?.slice(1)} Stage
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-lg">
-              <ListChecks className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-            </div>
-            <h3 className="font-bold text-gray-800 mb-1 text-sm sm:text-base">Your Focus</h3>
-            <p className="text-gray-600 text-xs sm:text-sm">{summary[0]}</p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Action Steps Summary */}
-      <div className="bg-blue-600 rounded-xl p-6 sm:p-8 text-white text-center mb-8 sm:mb-12">
-        <h3 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">How HOME Can Help</h3>
-        <p className="text-blue-100 text-base sm:text-lg mb-4 sm:mb-6">{aiResult.homeConnection}</p>
-        <div className="flex items-center justify-center">
-          <Users className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
-          <span className="text-sm sm:text-base">Join 1,000+ creators in our community</span>
-        </div>
-      </div>
-      
-      <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
-        {/* Complete Roadmap CTA */}
-        <div className="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-blue-600 shadow-xl hover:scale-105 transition">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold">RECOMMENDED</div>
-          <div className="text-center mb-4 sm:mb-6 pt-3 sm:pt-4">
-            <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 mx-auto mb-2"/>
-            <h3
