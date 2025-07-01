@@ -398,84 +398,104 @@ const getCurrentCheckpoint = (screen, questionIndex, currentStep) => {
   return 0;
 };
 
-// --- Elegant Streamers Component ---
-const ElegantStreamers = ({ show }) => {
+// --- Premium Confetti Animation ---
+const PremiumConfetti = ({ show }) => {
   if (!show) return null;
+  
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
       <style jsx>{`
-        @keyframes float-down {
+        @keyframes confetti-fall {
           0% {
             transform: translateY(-100vh) translateX(0) rotate(0deg) scale(0);
             opacity: 0;
           }
           10% {
-            transform: translateY(-80vh) translateX(10px) rotate(45deg) scale(1);
             opacity: 1;
-          }
-          90% {
-            opacity: 1;
+            transform: translateY(-80vh) translateX(20px) rotate(90deg) scale(1);
           }
           100% {
-            transform: translateY(100vh) translateX(30px) rotate(180deg) scale(0.5);
+            transform: translateY(100vh) translateX(50px) rotate(720deg) scale(0.5);
             opacity: 0;
           }
         }
         
-        @keyframes shimmer {
-          0%, 100% { opacity: 0.8; }
-          50% { opacity: 1; }
+        @keyframes sparkle {
+          0%, 100% { 
+            opacity: 0.7;
+            transform: scale(1);
+          }
+          50% { 
+            opacity: 1;
+            transform: scale(1.2);
+          }
         }
         
-        .elegant-streamer {
+        .confetti-piece {
           position: absolute;
-          background: linear-gradient(180deg, var(--color1), var(--color2));
-          animation: float-down var(--duration) ease-in-out forwards;
+          animation: confetti-fall var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
           animation-delay: var(--delay);
-          filter: blur(0.5px);
-          border-radius: 50px;
         }
         
-        .elegant-streamer::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: inherit;
-          filter: blur(10px);
-          opacity: 0.6;
-          animation: shimmer 2s ease-in-out infinite;
+        .confetti-inner {
+          width: 100%;
+          height: 100%;
+          background: var(--gradient);
+          border-radius: var(--radius);
+          animation: sparkle 2s ease-in-out infinite;
+          animation-delay: var(--sparkle-delay);
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
       `}</style>
-      {[...Array(50)].map((_, i) => {
-        const colors = [
-          ['#1DD1A1', '#40E0D0'],
-          ['#B91372', '#FF1493'],
-          ['#FFD93D', '#FFA500'],
-          ['#6BCB77', '#32CD32'],
-          ['#4D96FF', '#1E90FF'],
-          ['#FF6B6B', '#FF4500']
-        ];
-        const [color1, color2] = colors[Math.floor(Math.random() * colors.length)];
+      
+      {[...Array(80)].map((_, i) => {
+        const shapes = ['circle', 'square', 'triangle', 'star'];
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const size = 8 + Math.random() * 12;
         const left = Math.random() * 100;
-        const width = 2 + Math.random() * 4;
-        const height = 50 + Math.random() * 100;
-        const duration = 5 + Math.random() * 3;
-        const delay = Math.random() * 4;
+        const duration = 4 + Math.random() * 3;
+        const delay = Math.random() * 2;
+        const sparkleDelay = Math.random() * 2;
+        
+        const gradients = [
+          'linear-gradient(45deg, #1DD1A1, #40E0D0)',
+          'linear-gradient(45deg, #B91372, #FF1493)',
+          'linear-gradient(45deg, #FFD93D, #FFA500)',
+          'linear-gradient(45deg, #6BCB77, #32CD32)',
+          'linear-gradient(45deg, #4D96FF, #1E90FF)',
+          'linear-gradient(45deg, #FF6B6B, #FF4500)'
+        ];
+        
+        const gradient = gradients[Math.floor(Math.random() * gradients.length)];
+        let radius = '2px';
+        
+        if (shape === 'circle') radius = '50%';
+        if (shape === 'star') radius = '0';
         
         return (
           <div
             key={i}
-            className="elegant-streamer"
+            className="confetti-piece"
             style={{
-              '--color1': color1,
-              '--color2': color2,
+              left: `${left}%`,
+              width: `${size}px`,
+              height: `${size}px`,
               '--duration': `${duration}s`,
               '--delay': `${delay}s`,
-              left: `${left}%`,
-              width: `${width}px`,
-              height: `${height}px`,
+              '--sparkle-delay': `${sparkleDelay}s`
             }}
-          />
+          >
+            <div 
+              className="confetti-inner"
+              style={{
+                '--gradient': gradient,
+                '--radius': radius,
+                clipPath: shape === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : 
+                         shape === 'star' ? 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' : 
+                         'none'
+              }}
+            />
+          </div>
         );
       })}
     </div>
@@ -485,19 +505,18 @@ const ElegantStreamers = ({ show }) => {
 // --- Progress Bar Component ---
 const ProgressBar = ({ currentCheckpoint }) => {
   return (
-    <div className="fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-xl z-40 border-b border-white/10">
+    <div className="fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-2xl z-40 border-b border-white/10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-        <div className="relative">
-          {/* Progress Line */}
-          <div className="absolute top-5 left-0 right-0 h-0.5 bg-white/10 hidden sm:block">
-            <div 
-              className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
-              style={{ width: `${(currentCheckpoint + 1) / checkpoints.length * 100}%` }}
-            />
-          </div>
+        <div className="relative flex items-center justify-between">
+          {/* HOME Logo */}
+          <img 
+            src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+            alt="HOME"
+            className="h-6 w-auto brightness-0 invert opacity-60"
+          />
           
-          {/* Checkpoints - Mobile */}
-          <div className="flex justify-center gap-2 sm:hidden">
+          {/* Progress Dots - Mobile */}
+          <div className="flex gap-2 sm:hidden">
             {checkpoints.map((checkpoint, index) => {
               const isActive = index === currentCheckpoint;
               const isCompleted = index < currentCheckpoint;
@@ -507,7 +526,7 @@ const ProgressBar = ({ currentCheckpoint }) => {
                   key={checkpoint.id}
                   className={`w-2 h-2 rounded-full transition-all duration-500 ${
                     isCompleted ? 'bg-gradient-to-r from-[#1DD1A1] to-[#B91372]' : 
-                    isActive ? 'bg-white w-8' : 
+                    isActive ? 'bg-white w-6' : 
                     'bg-white/20'
                   }`}
                 />
@@ -515,38 +534,30 @@ const ProgressBar = ({ currentCheckpoint }) => {
             })}
           </div>
           
-          {/* Checkpoints - Desktop */}
-          <div className="hidden sm:flex justify-between relative">
+          {/* Progress Steps - Desktop */}
+          <div className="hidden sm:flex items-center gap-8">
             {checkpoints.map((checkpoint, index) => {
               const isActive = index === currentCheckpoint;
               const isCompleted = index < currentCheckpoint;
               const Icon = checkpoint.icon;
               
               return (
-                <div key={checkpoint.id} className="flex flex-col items-center">
-                  {/* Circle */}
+                <div key={checkpoint.id} className="flex items-center gap-2">
                   <div className={`
-                    relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500
+                    relative w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500
                     ${isCompleted ? 'bg-gradient-to-br from-[#1DD1A1] to-[#B91372]' : 
-                      isActive ? 'bg-black border-2 border-transparent bg-clip-padding' : 
-                      'bg-black/50 border border-white/20'}
+                      isActive ? 'bg-white/10 border border-white/30' : 
+                      'bg-black/50 border border-white/10'}
                   `}>
-                    {isActive && (
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#1DD1A1] to-[#B91372] animate-pulse" />
+                    {isCompleted ? (
+                      <Check className="w-4 h-4 text-white" />
+                    ) : (
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-white/40'}`} />
                     )}
-                    <div className="relative z-10">
-                      {isCompleted ? (
-                        <Check className="w-5 h-5 text-white" />
-                      ) : (
-                        <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-white/40'}`} />
-                      )}
-                    </div>
                   </div>
-                  
-                  {/* Label */}
                   <span className={`
-                    mt-2 text-xs font-medium transition-all
-                    ${isActive ? 'text-white' : isCompleted ? 'text-white/80' : 'text-white/40'}
+                    text-xs font-medium transition-all hidden lg:block
+                    ${isActive ? 'text-white' : isCompleted ? 'text-white/60' : 'text-white/30'}
                   `}>
                     {checkpoint.label}
                   </span>
@@ -554,6 +565,9 @@ const ProgressBar = ({ currentCheckpoint }) => {
               );
             })}
           </div>
+          
+          {/* Spacer for balance */}
+          <div className="w-16 hidden sm:block" />
         </div>
       </div>
     </div>
@@ -571,27 +585,41 @@ const HOMEQuizMVP = () => {
   const [progress, setProgress] = useState(0);
   const [showResults, setShowResults] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [showStreamers, setShowStreamers] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const currentCheckpoint = getCurrentCheckpoint(screen, questionIndex, currentStep);
   const showProgress = screen !== 'landing';
 
-  // Prevent mobile Chrome jumping
+  // Prevent mobile bounce and set viewport height
   useEffect(() => {
-    // Set viewport height CSS variable
-    const setVH = () => {
+    // Set CSS variables for viewport height
+    const setViewportHeight = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
     
-    setVH();
-    window.addEventListener('resize', setVH);
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
     
-    return () => window.removeEventListener('resize', setVH);
+    // Prevent bounce on iOS
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+      window.removeEventListener('orientationchange', setViewportHeight);
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+    };
   }, []);
 
-  // Smooth animations
+  // Smooth screen transitions
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [screen, questionIndex, currentStep]);
@@ -620,7 +648,7 @@ const HOMEQuizMVP = () => {
     }, 300);
   };
 
-  // Handle email submission with beautiful loading
+  // Handle email submission
   const handleEmailSubmit = async () => {
     if (!email || isProcessing) return;
     
@@ -638,10 +666,10 @@ const HOMEQuizMVP = () => {
           setIsProcessing(false);
           setShowResults(true);
           setScreen('celebration');
-          setShowStreamers(true);
+          setShowConfetti(true);
           setTimeout(() => {
-            setShowStreamers(false);
-          }, 6000);
+            setShowConfetti(false);
+          }, 8000);
         }
       }, i * stepDuration);
     }
@@ -695,18 +723,99 @@ const HOMEQuizMVP = () => {
     }
   };
 
-  // Global styles for mobile viewport
+  // Global styles
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
-      .min-h-screen-mobile {
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      html, body {
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .app-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        background: #000;
+      }
+      
+      .screen-height {
         min-height: 100vh;
         min-height: calc(var(--vh, 1vh) * 100);
       }
-      body {
-        background: #000;
-        overscroll-behavior: none;
+      
+      @supports (-webkit-touch-callout: none) {
+        .screen-height {
+          min-height: -webkit-fill-available;
+        }
       }
+      
+      /* Elegant animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      @keyframes slideUp {
+        from { 
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to { 
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes scaleIn {
+        from { 
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to { 
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      
+      .animate-fadeIn {
+        animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      
+      .animate-slideUp {
+        animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      
+      .animate-scaleIn {
+        animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      
+      /* Delay classes */
+      .delay-100 { animation-delay: 100ms; }
+      .delay-200 { animation-delay: 200ms; }
+      .delay-300 { animation-delay: 300ms; }
+      .delay-400 { animation-delay: 400ms; }
+      .delay-500 { animation-delay: 500ms; }
     `;
     document.head.appendChild(style);
     return () => {
@@ -714,298 +823,190 @@ const HOMEQuizMVP = () => {
     };
   }, []);
 
-  // Render screens
+  // Render
   return (
-    <div className="min-h-screen-mobile bg-black text-white">
+    <div className="app-container">
       {showProgress && <ProgressBar currentCheckpoint={currentCheckpoint} />}
       
       {screen === 'landing' && (
-        <div className="min-h-screen-mobile bg-black relative overflow-hidden flex flex-col">
-          {/* Background Effects */}
+        <div className="screen-height bg-black relative overflow-hidden flex flex-col">
+          {/* Subtle gradient background */}
           <div className="absolute inset-0">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#1DD1A1] rounded-full filter blur-[150px] opacity-20" />
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#B91372] rounded-full filter blur-[150px] opacity-20" />
+            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-10" />
+            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
           </div>
           
-          <div className="relative z-10 flex-1 flex flex-col">
-            {/* Header */}
-            <div className="p-6 sm:p-8 text-center">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
-                alt="HOME"
-                className="h-10 mx-auto"
-              />
-            </div>
-            
+          <div className="relative z-10 flex-1 flex flex-col justify-between p-6 sm:p-8">
             {/* Main Content */}
-            <div className="flex-1 flex items-center justify-center px-6 pb-8">
+            <div className="flex-1 flex items-center justify-center">
               <div className="max-w-4xl w-full text-center">
-                <div className="mb-8 sm:mb-12 animate-fade-in">
-                  <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight">
-                    Find Your Path<br className="sm:hidden" /> on the<br/>
-                    <span className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
-                      Music Creator<br className="sm:hidden" /> Roadmap
+                <div className="mb-12 animate-fadeIn">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight">
+                    Find Your Path on the
+                    <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
+                      Music Creator Roadmap
                     </span>
                   </h1>
-                  <p className="text-lg sm:text-xl text-gray-400 mb-2">
-                    5-minute AI quiz to discover your<br className="sm:hidden" /> personalized pathway in the music<br className="sm:hidden" /> industry
+                  <p className="text-xl sm:text-2xl text-gray-400 max-w-2xl mx-auto">
+                    5-minute AI quiz to discover your personalized pathway in the music industry
                   </p>
                 </div>
                 
-                {/* Features - Mobile Scroll */}
-                <div className="flex sm:grid sm:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-12 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 -mx-6 px-6 sm:mx-0 sm:px-0 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                  <div className="flex-shrink-0 w-72 sm:w-auto">
-                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#1DD1A1]/50 transition-all hover:transform hover:scale-105 h-full">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#40E0D0] rounded-xl flex items-center justify-center mb-4 mx-auto">
-                        <Sparkles className="w-6 h-6 text-white" />
+                {/* Feature Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 max-w-3xl mx-auto animate-slideUp delay-200">
+                  {[
+                    { icon: Sparkles, title: 'AI-Powered', desc: 'Personalized recommendations' },
+                    { icon: Users, title: 'Nashville Community', desc: '1,000+ music creators' },
+                    { icon: ListChecks, title: 'Action Plan', desc: 'Clear steps to success' }
+                  ].map((feature, i) => (
+                    <div key={i} className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="relative p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                        <feature.icon className="w-8 h-8 text-white/60 mb-3 mx-auto" />
+                        <h3 className="font-semibold mb-1">{feature.title}</h3>
+                        <p className="text-sm text-gray-500">{feature.desc}</p>
                       </div>
-                      <h3 className="font-semibold mb-2">AI-Powered Results</h3>
-                      <p className="text-sm text-gray-400">Personalized recommendations based on your unique goals</p>
                     </div>
-                  </div>
-                  
-                  <div className="flex-shrink-0 w-72 sm:w-auto">
-                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#B91372]/50 transition-all hover:transform hover:scale-105 h-full">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#B91372] to-[#FF1493] rounded-xl flex items-center justify-center mb-4 mx-auto">
-                        <Target className="w-6 h-6 text-white" />
-                      </div>
-                      <h3 className="font-semibold mb-2">Nashville Community</h3>
-                      <p className="text-sm text-gray-400">Join 1,000+ music creators on their journey</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex-shrink-0 w-72 sm:w-auto">
-                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#FFD93D]/50 transition-all hover:transform hover:scale-105 h-full">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#FFD93D] to-[#FFA500] rounded-xl flex items-center justify-center mb-4 mx-auto">
-                        <ListChecks className="w-6 h-6 text-white" />
-                      </div>
-                      <h3 className="font-semibold mb-2">Personalized Roadmap</h3>
-                      <p className="text-sm text-gray-400">Clear action steps tailored to your current stage</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
                 
                 {/* CTA Button */}
-                <div className="animate-slide-up" style={{ animationDelay: '0.4s' }}>
-                  <button
-                    onClick={() => setScreen('quiz')}
-                    className="group relative inline-flex items-center justify-center px-10 sm:px-12 py-4 sm:py-5 text-base sm:text-lg font-semibold overflow-hidden rounded-full transition-all duration-300 hover:scale-105"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-0 group-hover:opacity-100 blur-xl transition-opacity" />
-                    <span className="relative z-10 flex items-center gap-3">
-                      Find My Path
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </button>
-                  
-                  <p className="text-sm text-gray-500 mt-4">
-                    Takes 5 minutes • Completely free
-                  </p>
-                </div>
+                <button
+                  onClick={() => setScreen('quiz')}
+                  className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn delay-400"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
+                  <span className="relative">Find My Path</span>
+                  <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <p className="text-sm text-gray-600 mt-6 animate-fadeIn delay-500">
+                  Takes 5 minutes • Completely free • No credit card required
+                </p>
               </div>
             </div>
             
-            {/* Footer - Made with Love */}
-            <div className="p-6 sm:p-8 text-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <p className="text-sm text-gray-500 mb-4">
-                Made with ❤️ by
-              </p>
+            {/* Footer */}
+            <div className="text-center animate-fadeIn delay-500">
               <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/685b3b45958e7f525884f62d.png"
-                alt="HOME for Music"
-                className="h-20 sm:h-24 mx-auto opacity-80 hover:opacity-100 transition-opacity"
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                alt="HOME"
+                className="h-8 mx-auto mb-3 brightness-0 invert opacity-40"
               />
+              <p className="text-xs text-gray-600">
+                Made with ❤️ by HOME for Music
+              </p>
             </div>
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            
-            @keyframes slide-up {
-              from { 
-                opacity: 0;
-                transform: translateY(30px);
-              }
-              to { 
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 1s ease-out forwards;
-            }
-            
-            .animate-slide-up {
-              opacity: 0;
-              animation: slide-up 1s ease-out forwards;
-            }
-          `}</style>
         </div>
       )}
 
       {screen === 'quiz' && (
-        <div className="min-h-screen-mobile bg-black pt-20 sm:pt-24 pb-12">
-          <div className="max-w-4xl mx-auto px-6">
-            {/* Back Button */}
+        <div className="screen-height bg-black pt-20 sm:pt-24">
+          <div className="max-w-4xl mx-auto px-6 pb-12">
+            {/* Navigation */}
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 sm:mb-8"
+              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
             </button>
             
-            {/* Question Progress */}
-            <div className="mb-8 sm:mb-12">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-gray-400">Question {questionIndex + 1} of {questions.length}</span>
-                <span className="text-sm text-gray-400">{Math.round(((questionIndex + 1) / questions.length) * 100)}%</span>
+            {/* Progress */}
+            <div className="mb-12">
+              <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                <span>Question {questionIndex + 1} of {questions.length}</span>
+                <span>{Math.round(((questionIndex + 1) / questions.length) * 100)}%</span>
               </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
                   style={{ width: `${((questionIndex + 1) / questions.length) * 100}%` }}
                 />
               </div>
             </div>
             
             {/* Question */}
-            <div className="animate-fade-in">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-12 text-center">
+            <div className="animate-fadeIn">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
                 {questions[questionIndex].question}
               </h2>
               
               {/* Options */}
-              <div className="grid gap-3 sm:gap-4">
+              <div className="space-y-4">
                 {questions[questionIndex].options.map((option, index) => (
                   <button
                     key={option.value}
                     onClick={() => handleAnswer(questions[questionIndex].id, option.value)}
-                    className="group relative p-4 sm:p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#1DD1A1]/50 transition-all duration-300 hover:scale-[1.02] text-left animate-slide-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    className={`
+                      w-full p-6 rounded-2xl border border-white/10 
+                      bg-white/[0.02] backdrop-blur-sm
+                      hover:bg-white/[0.05] hover:border-white/20
+                      transition-all duration-300 text-left
+                      animate-slideUp
+                    `}
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <div className="flex items-center justify-between gap-3 sm:gap-4">
-                      <div className="flex items-center gap-3 sm:gap-4 flex-1">
-                        <span className="text-2xl sm:text-3xl flex-shrink-0">{option.emoji}</span>
-                        <span className="text-base sm:text-lg">{option.label}</span>
-                      </div>
-                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-all group-hover:translate-x-1 flex-shrink-0" />
+                    <div className="flex items-center gap-4">
+                      <span className="text-3xl">{option.emoji}</span>
+                      <span className="flex-1 text-lg">{option.label}</span>
+                      <ChevronRight className="w-5 h-5 text-gray-500" />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity" />
                   </button>
                 ))}
               </div>
             </div>
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            
-            @keyframes slide-up {
-              from { 
-                opacity: 0;
-                transform: translateY(20px);
-              }
-              to { 
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 0.5s ease-out;
-            }
-            
-            .animate-slide-up {
-              opacity: 0;
-              animation: slide-up 0.5s ease-out forwards;
-            }
-          `}</style>
         </div>
       )}
 
       {screen === 'transition' && (
-        <div className="min-h-screen-mobile bg-black flex items-center justify-center px-6 pt-20 sm:pt-24">
-          <div className="text-center animate-fade-in">
-            {/* Animation */}
-            <div className="mb-8">
-              <div className="relative w-32 h-32 mx-auto">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full animate-ping" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full animate-pulse" />
-                <div className="absolute inset-2 bg-black rounded-full flex items-center justify-center">
-                  <Sparkles className="w-12 h-12 text-white animate-spin-slow" />
-                </div>
+        <div className="screen-height bg-black flex items-center justify-center px-6">
+          <div className="text-center animate-scaleIn">
+            <div className="relative w-32 h-32 mx-auto mb-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
+              <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center">
+                <Sparkles className="w-16 h-16 text-white animate-float" />
               </div>
             </div>
             
-            <h2 className="text-2xl font-bold mb-3">
+            <h2 className="text-2xl font-semibold mb-3">
               AI is analyzing your responses...
             </h2>
-            <p className="text-gray-400">
+            <p className="text-gray-500">
               Creating your personalized music creator pathway
             </p>
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { opacity: 0; transform: scale(0.9); }
-              to { opacity: 1; transform: scale(1); }
-            }
-            
-            @keyframes spin-slow {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 0.5s ease-out;
-            }
-            
-            .animate-spin-slow {
-              animation: spin-slow 3s linear infinite;
-            }
-          `}</style>
         </div>
       )}
 
       {screen === 'email' && (
-        <div className="min-h-screen-mobile bg-black flex items-center justify-center px-6 pt-20 sm:pt-24">
-          <div className="max-w-lg w-full">
+        <div className="screen-height bg-black flex items-center justify-center px-6">
+          <div className="max-w-md w-full">
             {!isProcessing ? (
-              <div className="animate-fade-in">
-                {/* Back Button */}
+              <div className="animate-fadeIn">
                 <button
                   onClick={goBack}
-                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 sm:mb-8"
+                  className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                   <span>Back</span>
                 </button>
                 
                 {/* Pathway Preview */}
-                <div className="text-center mb-6 sm:mb-8">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-4 sm:mb-6 shadow-2xl">
-                    <span className="text-4xl">{pathway?.icon}</span>
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-6 shadow-2xl shadow-[#B91372]/20">
+                    <span className="text-5xl">{pathway?.icon}</span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">
-                    Your Path is Ready
-                  </h2>
-                  <p className="text-gray-400">
-                    {pathway?.title}
-                  </p>
+                  <h2 className="text-3xl font-bold mb-3">Your Path is Ready</h2>
+                  <p className="text-gray-400">{pathway?.title}</p>
                 </div>
                 
                 {/* Email Form */}
-                <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-6 sm:p-8">
-                  <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-center">
+                <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
+                  <h3 className="text-xl font-semibold mb-6 text-center">
                     Get Your Personalized Roadmap
                   </h3>
                   
@@ -1014,415 +1015,334 @@ const HOMEQuizMVP = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
-                    className="w-full px-5 sm:px-6 py-3 sm:py-4 text-base sm:text-lg bg-white/5 border border-white/10 rounded-2xl focus:border-[#1DD1A1] focus:bg-white/10 transition-all outline-none mb-4 sm:mb-6 text-white placeholder-gray-500"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl 
+                             focus:bg-white/10 focus:border-white/20 focus:outline-none
+                             transition-all duration-300 text-white placeholder-gray-600"
                   />
                   
                   <button
                     onClick={handleEmailSubmit}
                     disabled={!email || isProcessing}
-                    className="w-full py-3 sm:py-4 text-base sm:text-lg font-medium bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl transition-all hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="w-full mt-4 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] 
+                             rounded-2xl font-medium transition-all duration-300
+                             hover:shadow-lg hover:shadow-[#B91372]/20 hover:scale-[1.02]
+                             disabled:opacity-50 disabled:cursor-not-allowed
+                             flex items-center justify-center gap-3"
                   >
                     <span>Continue</span>
                     <Mail className="w-5 h-5" />
                   </button>
                   
-                  <p className="text-center text-gray-500 text-sm mt-4">
+                  <p className="text-center text-gray-600 text-sm mt-6">
                     We'll never spam. Unsubscribe anytime.
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="text-center animate-fade-in">
-                {/* Processing Animation */}
-                <div className="mb-8">
-                  <div className="relative w-32 h-32 mx-auto">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full animate-pulse" />
-                    <div className="absolute inset-2 bg-black rounded-full flex items-center justify-center">
-                      <Sparkles className="w-12 h-12 text-white animate-spin-slow" />
-                    </div>
+              <div className="text-center animate-fadeIn">
+                <div className="relative w-32 h-32 mx-auto mb-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
+                  <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center">
+                    <Sparkles className="w-16 h-16 text-white animate-float" />
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-bold mb-3">
-                  Creating Your Roadmap
-                </h2>
-                <p className="text-gray-400 mb-8">
-                  Personalizing your action plan...
-                </p>
+                <h2 className="text-2xl font-semibold mb-3">Creating Your Roadmap</h2>
+                <p className="text-gray-500 mb-8">Personalizing your action plan...</p>
                 
-                {/* Progress Bar */}
                 <div className="max-w-xs mx-auto">
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-                  <p className="text-sm text-gray-500 mt-3">
-                    {Math.round(progress)}% Complete
-                  </p>
+                  <p className="text-sm text-gray-600 mt-3">{Math.round(progress)}% Complete</p>
                 </div>
               </div>
             )}
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            
-            @keyframes spin-slow {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 0.5s ease-out;
-            }
-            
-            .animate-spin-slow {
-              animation: spin-slow 3s linear infinite;
-            }
-          `}</style>
         </div>
       )}
 
       {screen === 'celebration' && pathway && (
-        <div className="min-h-screen-mobile bg-black flex items-center justify-center px-6 pt-20 sm:pt-24">
-          <ElegantStreamers show={showStreamers} />
+        <div className="screen-height bg-black relative overflow-hidden">
+          <PremiumConfetti show={showConfetti} />
           
-          <div className="max-w-4xl w-full text-center animate-fade-in">
-            {/* Path Result */}
-            <div className="mb-8 sm:mb-12">
-              <div className="inline-flex items-center justify-center w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full mb-6 sm:mb-8 shadow-2xl animate-bounce">
-                <span className="text-5xl sm:text-6xl">{pathway.icon}</span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6">
-                {pathway.title}
-              </h1>
-              
-              <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto mb-6 sm:mb-8">
-                {pathway.description}
-              </p>
-              
-              {/* Current Position */}
-              <div className="inline-flex items-center gap-3 px-5 sm:px-6 py-2 sm:py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-8 sm:mb-12">
-                <MapPin className="w-5 h-5 text-[#B91372]" />
-                <span className="font-medium text-sm sm:text-base">
-                  You're at the <span className="text-[#B91372]">
-                    {responses['stage-level'] === 'planning' ? 'Planning' : 
-                     responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
+          <div className="h-full flex items-center justify-center px-6">
+            <div className="max-w-4xl w-full">
+              {/* Path Result */}
+              <div className="text-center mb-12 animate-scaleIn">
+                <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full mb-8 shadow-2xl shadow-[#B91372]/30 animate-float">
+                  <span className="text-6xl">{pathway.icon}</span>
+                </div>
+                
+                <h1 className="text-5xl sm:text-6xl font-bold mb-6">{pathway.title}</h1>
+                <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">{pathway.description}</p>
+                
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                  <MapPin className="w-5 h-5 text-[#B91372]" />
+                  <span className="font-medium">
+                    You're at the <span className="text-[#B91372]">
+                      {responses['stage-level'] === 'planning' ? 'Planning' : 
+                       responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
+                    </span>
                   </span>
-                </span>
+                </div>
               </div>
-            </div>
-            
-            {/* Next Steps Preview */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10">
-              <h2 className="text-xl sm:text-2xl font-bold mb-6">
-                Your Personalized 4-Step Action Plan
-              </h2>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                {pathway.planPreview.map((step, index) => (
-                  <div key={index} className="flex items-center gap-3 text-left">
-                    <div className="w-10 h-10 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center font-bold flex-shrink-0">
-                      {index + 1}
+              {/* Action Plan Preview */}
+              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-300">
+                <h2 className="text-2xl font-bold mb-8 text-center">Your Personalized 4-Step Action Plan</h2>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                  {pathway.planPreview.map((step, index) => (
+                    <div key={index} className="flex items-start gap-4 group">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <div className="relative w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl flex items-center justify-center font-bold">
+                          {index + 1}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-1">{step}</h3>
+                        <p className="text-sm text-gray-500">Tailored specifically to your journey</p>
+                      </div>
                     </div>
-                    <p className="text-sm sm:text-base">{step}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                
+                <button
+                  onClick={goNext}
+                  className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-[1.02] flex items-center justify-center gap-3"
+                >
+                  <span>View Full Plan</span>
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
               
-              <button
-                onClick={goNext}
-                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full hover:shadow-xl hover:scale-105 transition-all"
-              >
-                View My Plan
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </button>
-            </div>
-            
-            {/* HOME Logo */}
-            <div className="mt-8 sm:mt-12">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
-                alt="HOME"
-                className="h-8 mx-auto opacity-50"
-              />
+              {/* HOME Logo */}
+              <div className="text-center mt-8 animate-fadeIn delay-500">
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                  alt="HOME"
+                  className="h-6 mx-auto brightness-0 invert opacity-30"
+                />
+              </div>
             </div>
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { opacity: 0; transform: scale(0.9); }
-              to { opacity: 1; transform: scale(1); }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 0.8s ease-out;
-            }
-          `}</style>
         </div>
       )}
 
       {screen === 'plan' && pathway && (
-        <div className="min-h-screen-mobile bg-black pt-20 sm:pt-24 pb-12">
-          <div className="max-w-4xl mx-auto px-6">
-            {/* Back Button */}
+        <div className="screen-height bg-black pt-20 sm:pt-24 overflow-y-auto">
+          <div className="max-w-4xl mx-auto px-6 pb-12">
+            {/* Navigation */}
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 sm:mb-8"
+              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
             </button>
             
             {/* Step Progress */}
-            <div className="mb-6 sm:mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-gray-400">Step {currentStep + 1} of 4</span>
-                <span className="text-sm text-gray-400">{Math.round(((currentStep + 1) / 4) * 100)}%</span>
+            <div className="mb-8">
+              <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                <span>Step {currentStep + 1} of 4</span>
+                <span>{Math.round(((currentStep + 1) / 4) * 100)}%</span>
               </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
                   style={{ width: `${((currentStep + 1) / 4) * 100}%` }}
                 />
               </div>
             </div>
             
             {/* Step Content */}
-            <div className="animate-fade-in">
+            <div className="animate-fadeIn">
               {/* Step Header */}
-              <div className="text-center mb-8 sm:mb-12">
-                <div className="inline-flex items-center justify-center w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-4 sm:mb-6 font-bold text-xl sm:text-2xl">
-                  {currentStep + 1}
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-6 shadow-2xl shadow-[#B91372]/20 animate-float">
+                  <span className="text-2xl font-bold">{currentStep + 1}</span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-                  {pathway.steps[currentStep].title}
-                </h2>
-                <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto">
-                  {pathway.steps[currentStep].description}
-                </p>
+                <h2 className="text-3xl sm:text-4xl font-bold mb-4">{pathway.steps[currentStep].title}</h2>
+                <p className="text-xl text-gray-400 max-w-3xl mx-auto">{pathway.steps[currentStep].description}</p>
               </div>
               
-              {/* Why This Matters */}
-              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10 mb-6 sm:mb-8">
-                <h3 className="flex items-center gap-3 text-xl sm:text-2xl font-bold mb-4">
-                  <Sparkles className="w-5 sm:w-6 h-5 sm:h-6 text-[#B91372]" />
-                  Why This Matters
-                </h3>
-                <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
-                  {pathway.steps[currentStep].whyItMatters}
-                </p>
-              </div>
-              
-              {/* Action Items */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10 mb-6 sm:mb-8">
-                <h3 className="flex items-center gap-3 text-xl sm:text-2xl font-bold mb-6">
-                  <Target className="w-5 sm:w-6 h-5 sm:h-6 text-[#1DD1A1]" />
-                  Your Action Items
-                </h3>
-                <div className="space-y-3 sm:space-y-4">
-                  {pathway.steps[currentStep].actions.map((action, index) => (
-                    <div key={index} className="flex items-start gap-3 sm:gap-4">
-                      <div className="w-7 sm:w-8 h-7 sm:h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center font-medium flex-shrink-0 text-sm">
-                        {index + 1}
+              {/* Content Cards */}
+              <div className="space-y-6">
+                {/* Why This Matters */}
+                <div className="relative group animate-slideUp delay-100">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#B91372]/10 to-transparent rounded-3xl blur-xl" />
+                  <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
+                    <h3 className="flex items-center gap-3 text-2xl font-bold mb-4">
+                      <Sparkles className="w-6 h-6 text-[#B91372]" />
+                      Why This Matters
+                    </h3>
+                    <p className="text-lg text-gray-300 leading-relaxed">{pathway.steps[currentStep].whyItMatters}</p>
+                  </div>
+                </div>
+                
+                {/* Action Items */}
+                <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-200">
+                  <h3 className="flex items-center gap-3 text-2xl font-bold mb-6">
+                    <Target className="w-6 h-6 text-[#1DD1A1]" />
+                    Your Action Items
+                  </h3>
+                  <div className="space-y-4">
+                    {pathway.steps[currentStep].actions.map((action, index) => (
+                      <div key={index} className="flex items-start gap-4 group">
+                        <div className="relative mt-1">
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity" />
+                          <div className="relative w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-sm font-medium">
+                            {index + 1}
+                          </div>
+                        </div>
+                        <p className="flex-1 text-gray-300 text-lg">{action}</p>
                       </div>
-                      <p className="text-gray-300 text-base sm:text-lg">{action}</p>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-              
-              {/* HOME Resources */}
-              <div className="bg-gradient-to-br from-[#B91372]/20 to-[#1DD1A1]/20 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10 mb-8 sm:mb-12">
-                <h3 className="flex items-center gap-3 text-xl sm:text-2xl font-bold mb-6">
-                  <img 
-                    src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
-                    alt="HOME"
-                    className="h-5 sm:h-6 w-auto brightness-0 invert"
-                  />
-                  HOME Resources for This Step
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                  {pathway.steps[currentStep].homeResources.map((resource, index) => (
-                    <div key={index} className="bg-white/10 rounded-2xl p-4 backdrop-blur border border-white/10">
-                      <p className="font-medium text-sm sm:text-base">{resource}</p>
-                    </div>
-                  ))}
+                
+                {/* HOME Resources */}
+                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#B91372]/5 to-[#1DD1A1]/5 p-8 animate-slideUp delay-300">
+                  <div className="absolute top-4 right-4">
+                    <img 
+                      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                      alt="HOME"
+                      className="h-6 w-auto brightness-0 invert opacity-20"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-6">HOME Resources for This Step</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {pathway.steps[currentStep].homeResources.map((resource, index) => (
+                      <div key={index} className="bg-white/5 rounded-2xl p-4 backdrop-blur border border-white/10">
+                        <p className="font-medium">{resource}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               
               {/* Navigation */}
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-12">
                 <button
                   onClick={goNext}
-                  className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-medium bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full hover:shadow-xl hover:scale-105 transition-all"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105"
                 >
-                  {currentStep < 3 ? 'Next Step' : 'Execute Plan'}
-                  <ChevronRight className="w-5 h-5 ml-2" />
+                  <span>{currentStep < 3 ? 'Next Step' : 'Execute Plan'}</span>
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { 
-                opacity: 0;
-                transform: translateY(20px);
-              }
-              to { 
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 0.6s ease-out;
-            }
-          `}</style>
         </div>
       )}
 
       {screen === 'execute' && pathway && (
-        <div className="min-h-screen-mobile bg-black flex items-center justify-center px-6 pt-20 sm:pt-24">
+        <div className="screen-height bg-black flex items-center justify-center px-6">
           <div className="max-w-4xl w-full">
-            {/* Back Button */}
+            {/* Navigation */}
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 sm:mb-8"
+              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
             </button>
             
             {/* Header */}
-            <div className="text-center mb-8 sm:mb-12 animate-fade-in">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-                Ready to Execute Your Plan?
-              </h1>
-              <p className="text-lg sm:text-xl text-gray-400">
-                Choose how you want to start your journey with HOME
-              </p>
+            <div className="text-center mb-12 animate-fadeIn">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4">Ready to Execute Your Plan?</h1>
+              <p className="text-xl text-gray-400">Choose how you want to start your journey with HOME</p>
             </div>
             
             {/* Options */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 animate-slide-up">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {/* Accelerated Growth */}
-              <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10 hover:border-[#B91372]/50 hover:scale-105 transition-all">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 sm:px-6 py-1 sm:py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-xs sm:text-sm font-bold">
+              <div className="relative group animate-slideUp">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-sm font-bold z-10">
                   RECOMMENDED
                 </div>
-                
-                <div className="text-center mb-4 sm:mb-6 pt-2 sm:pt-4">
-                  <Rocket className="w-12 sm:w-16 h-12 sm:h-16 text-[#B91372] mx-auto mb-3 sm:mb-4" />
-                  <h3 className="text-xl sm:text-2xl font-bold mb-2">
-                    Accelerated Growth
-                  </h3>
-                  <p className="text-gray-400 text-sm sm:text-base">Start with 1-on-1 consultation</p>
+                <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 pt-12 group-hover:border-white/20 transition-all duration-500">
+                  <div className="text-center mb-6">
+                    <Rocket className="w-16 h-16 text-[#B91372] mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Accelerated Growth</h3>
+                    <p className="text-gray-500">Start with 1-on-1 consultation</p>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8">
+                    {[
+                      'Personal strategy session with experts',
+                      'Custom roadmap tailored to your goals',
+                      'Priority access to HOME resources',
+                      'Fast-track your music career'
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-[#1DD1A1] mt-0.5" />
+                        <span className="text-gray-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <button 
+                    onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
+                    className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#B91372]/20"
+                  >
+                    Book Free Consultation
+                  </button>
                 </div>
-                
-                <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Personal strategy session with experts</span>
-                  </li>
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Custom roadmap tailored to your goals</span>
-                  </li>
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Priority access to HOME resources</span>
-                  </li>
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Fast-track your music career</span>
-                  </li>
-                </ul>
-                
-                <button 
-                  onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
-                  className="w-full py-3 sm:py-4 text-base sm:text-lg font-medium bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl hover:shadow-lg transition-all"
-                >
-                  Book Free Consultation
-                </button>
               </div>
               
               {/* Community Growth */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/10 hover:border-[#1DD1A1]/50 hover:scale-105 transition-all">
-                <div className="text-center mb-4 sm:mb-6">
-                  <Users className="w-12 sm:w-16 h-12 sm:h-16 text-[#1DD1A1] mx-auto mb-3 sm:mb-4" />
-                  <h3 className="text-xl sm:text-2xl font-bold mb-2">
-                    Community Growth
-                  </h3>
-                  <p className="text-gray-400 text-sm sm:text-base">Start with free account</p>
+              <div className="relative group animate-slideUp delay-200">
+                <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 group-hover:border-white/20 transition-all duration-500">
+                  <div className="text-center mb-6">
+                    <Users className="w-16 h-16 text-[#1DD1A1] mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Community Growth</h3>
+                    <p className="text-gray-500">Start with free account</p>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8">
+                    {[
+                      'Access to HOME community platform',
+                      'Weekly virtual events & workshops',
+                      'Connect with 1,000+ music creators',
+                      'Learn at your own pace'
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-[#1DD1A1] mt-0.5" />
+                        <span className="text-gray-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <button 
+                    onClick={() => window.open('https://homeformusic.org/community', '_blank')}
+                    className="w-full py-4 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20"
+                  >
+                    Join Free Community
+                  </button>
                 </div>
-                
-                <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Access to HOME community platform</span>
-                  </li>
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Weekly virtual events & workshops</span>
-                  </li>
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Connect with 1,000+ music creators</span>
-                  </li>
-                  <li className="flex items-start gap-2 sm:gap-3">
-                    <Check className="w-4 sm:w-5 h-4 sm:h-5 text-[#1DD1A1] flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-300 text-sm sm:text-base">Learn at your own pace</span>
-                  </li>
-                </ul>
-                
-                <button 
-                  onClick={() => window.open('https://homeformusic.org/community', '_blank')}
-                  className="w-full py-3 sm:py-4 text-base sm:text-lg font-medium bg-white/10 backdrop-blur rounded-2xl hover:bg-white/20 transition-all"
-                >
-                  Join Free Community
-                </button>
               </div>
             </div>
             
-            {/* Footer Note */}
-            <p className="text-center text-gray-500 mt-8 sm:mt-12 text-sm">
+            {/* Footer */}
+            <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.
             </p>
+            
+            {/* HOME Logo */}
+            <div className="text-center mt-8">
+              <img 
+                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/6848b80e27f5920f6ea9a532.png"
+                alt="HOME"
+                className="h-6 mx-auto brightness-0 invert opacity-20"
+              />
+            </div>
           </div>
-          
-          <style jsx>{`
-            @keyframes fade-in {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            
-            @keyframes slide-up {
-              from { 
-                opacity: 0;
-                transform: translateY(20px);
-              }
-              to { 
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            
-            .animate-fade-in {
-              animation: fade-in 0.6s ease-out;
-            }
-            
-            .animate-slide-up {
-              animation: slide-up 0.6s ease-out;
-            }
-          `}</style>
         </div>
       )}
     </div>
