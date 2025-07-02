@@ -637,29 +637,182 @@ const HOMEQuizMVP = () => {
   }, [screen, questionIndex, currentStep]);
 
   // Handle quiz answer
-  const handleAnswer = (questionId, value) => {
-    setSelectedOption(value);
-    setResponses(prev => ({ ...prev, [questionId]: value }));
-    
-    setTimeout(() => {
-      if (questionIndex < questions.length - 1) {
-        setQuestionIndex(prev => prev + 1);
-      } else {
-        // Calculate pathway
-        const finalResponses = { ...responses, [questionId]: value };
+const handleAnswer = async (questionId, value) => {
+  setSelectedOption(value);
+  setResponses(prev => ({ ...prev, [questionId]: value }));
+  
+  setTimeout(async () => {
+    if (questionIndex < questions.length - 1) {
+      setQuestionIndex(prev => prev + 1);
+    } else {
+      // Calculate pathway
+      const finalResponses = { ...responses, [questionId]: value };
+      setScreen('transition');
+      
+      // Simulate AI generation
+      setIsGenerating(true);
+      
+      try {
+        // Call AI endpoint for personalized pathway
+        const aiResponse = await fetch('/api/generate-pathway', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ responses: finalResponses })
+        });
+        
+        if (aiResponse.ok) {
+          const aiPathway = await aiResponse.json();
+          
+          // Transform AI response to match component structure
+          const transformedPathway = {
+            title: aiPathway.title,
+            icon: aiPathway.icon,
+            color: 'from-[#1DD1A1] to-[#B91372]',
+            description: aiPathway.description,
+            baseDescription: aiPathway.description,
+            homeConnection: aiPathway.homeConnection,
+            planPreview: aiPathway.nextSteps?.slice(0, 4).map(step => 
+              typeof step === 'object' ? step.step : step
+            ),
+            steps: transformAIStepsToComponentFormat(aiPathway),
+            isPersonalized: aiPathway.isPersonalized
+          };
+          
+          setPathway(transformedPathway);
+          console.log('✅ AI pathway generated:', transformedPathway);
+        } else {
+          // Fallback to template if AI fails
+          console.warn('AI generation failed, using fallback');
+          const pathwayKey = determinePathway(finalResponses);
+          setPathway(pathwayTemplates[pathwayKey]);
+        }
+      } catch (error) {
+        console.error('Error generating AI pathway:', error);
+        // Fallback to template
         const pathwayKey = determinePathway(finalResponses);
         setPathway(pathwayTemplates[pathwayKey]);
-        setScreen('transition');
-        
-        // Simulate AI generation
-        setIsGenerating(true);
-        setTimeout(() => {
-          setIsGenerating(false);
-          setScreen('email');
-        }, 3000);
       }
-    }, 300);
+      
+      setIsGenerating(false);
+      setScreen('email');
+    }
+  }, 300);
+};
+// Transform AI steps to component format
+const transformAIStepsToComponentFormat = (aiPathway) => {
+  const steps = aiPathway.nextSteps || [];
+  const resources = aiPathway.resources || [];
+  
+  // Take first 4 steps and create detailed step objects
+  return steps.slice(0, 4).map((step, index) => {
+    const stepObj = typeof step === 'object' ? step : { step: step };
+    const stepText = stepObj.step;
+    const stepParts = stepText.split(':');
+    const title = stepParts[0] || stepText;
+    const description = stepObj.detail || stepParts[1] || 'Take action on this important step in your music career journey';
+    
+    return {
+      title: title.trim(),
+      description: description.trim(),
+      actions: generateActionsForStep(title, index, aiPathway),
+      whyItMatters: generateWhyItMatters(title, aiPathway),
+      homeResources: selectResourcesForStep(resources, index)
+    };
+  });
+};
+
+// Generate authentic action items (no HOME mentions)
+const generateActionsForStep = (stepTitle, stepIndex, pathway) => {
+  // Generic action templates based on step type
+  const actionTemplates = {
+    performance: [
+      "Create a setlist that tells a story from start to finish",
+      "Record yourself performing and identify areas for improvement",
+      "Study 5 artists you admire and note their stage techniques",
+      "Practice transitions between songs until they're seamless",
+      "Develop 3 authentic stories to share between songs"
+    ],
+    brand: [
+      "Define your unique value proposition in one sentence",
+      "Create a mood board with 20 images representing your brand",
+      "Choose a consistent color palette and visual style",
+      "Write your artist bio from three different perspectives",
+      "Identify your target audience demographics and psychographics"
+    ],
+    content: [
+      "Map out 30 days of content aligned with your brand",
+      "Create content templates for different post types",
+      "Develop a signature format your fans will recognize",
+      "Set up a sustainable content creation schedule",
+      "Track engagement metrics to understand what resonates"
+    ],
+    production: [
+      "Study the arrangement of 5 hit songs in your genre",
+      "Build templates for faster workflow in your DAW",
+      "Create a sample library of your signature sounds",
+      "Collaborate with artists in complementary genres",
+      "Document your production process for educational content"
+    ],
+    business: [
+      "Set specific, measurable goals for the next 90 days",
+      "Create multiple revenue streams beyond just music sales",
+      "Build an email list of your most engaged fans",
+      "Develop standard contracts and pricing structures",
+      "Network with 5 new industry professionals monthly"
+    ]
   };
+  
+  // Select appropriate actions based on step title keywords
+  const lowerTitle = stepTitle.toLowerCase();
+  if (lowerTitle.includes('perform') || lowerTitle.includes('stage') || lowerTitle.includes('live')) {
+    return actionTemplates.performance;
+  } else if (lowerTitle.includes('brand') || lowerTitle.includes('identity')) {
+    return actionTemplates.brand;
+  } else if (lowerTitle.includes('content') || lowerTitle.includes('social')) {
+    return actionTemplates.content;
+  } else if (lowerTitle.includes('produc') || lowerTitle.includes('studio')) {
+    return actionTemplates.production;
+  } else {
+    return actionTemplates.business;
+  }
+};
+
+// Generate why it matters (pathway-specific)
+const generateWhyItMatters = (stepTitle, pathway) => {
+  const pathwayType = pathway.title.toLowerCase();
+  
+  if (pathwayType.includes('touring') || pathwayType.includes('performer')) {
+    return "This step builds the foundation for a sustainable touring career. Master this now to command higher fees and create memorable experiences that turn casual listeners into lifelong fans.";
+  } else if (pathwayType.includes('creative') || pathwayType.includes('artist')) {
+    return "This step is crucial for building a loyal fanbase and multiple revenue streams. Artists who master this create sustainable careers independent of traditional industry gatekeepers.";
+  } else {
+    return "This step separates professional producers from hobbyists. Master this to attract high-quality clients and build a reputation that generates consistent opportunities.";
+  }
+};
+
+// Select HOME resources for each step
+const selectResourcesForStep = (allResources, stepIndex) => {
+  // Ensure we have resources to work with
+  if (!allResources || allResources.length === 0) {
+    return [
+      "24/7 Studio Access",
+      "Professional Equipment",
+      "Community Network"
+    ];
+  }
+  
+  // Rotate through resources for each step
+  const resourcesPerStep = 3;
+  const startIndex = (stepIndex * resourcesPerStep) % allResources.length;
+  const selectedResources = [];
+  
+  for (let i = 0; i < resourcesPerStep; i++) {
+    const index = (startIndex + i) % allResources.length;
+    selectedResources.push(allResources[index]);
+  }
+  
+  return selectedResources;
+};
 
   // Handle email submission
   const handleEmailSubmit = async () => {
