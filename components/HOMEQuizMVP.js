@@ -849,14 +849,6 @@ const HOMEQuizMVP = () => {
     </div>
     
     <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8">
-      {/* Logo at top */}
-      <div className="text-center mb-8 sm:mb-12">
-        <img 
-          src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-          alt="HOME"
-          className="h-8 mx-auto opacity-60"
-        />
-      </div>
       
       {/* Main Content - Centered */}
       <div className="flex-1 flex items-center justify-center -mt-20 sm:mt-0">
@@ -908,12 +900,20 @@ const HOMEQuizMVP = () => {
         </div>
       </div>
       
-      {/* Footer - Smaller on mobile */}
-      <div className="text-center mt-8 animate-fadeIn delay-500">
-        <p className="text-xs text-gray-600">
-          Made by HOME for Music
-        </p>
-      </div>
+      {/* Footer - Logo with glow effect above text */}
+<div className="text-center mt-8 animate-fadeIn delay-500">
+  <div className="relative inline-block mb-3 group">
+    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
+    <img 
+      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+      alt="HOME"
+      className="h-8 relative z-10"
+    />
+  </div>
+  <p className="text-xs text-gray-600">
+    Made by HOME for Music
+  </p>
+</div>
     </div>
   </div>
 )}
