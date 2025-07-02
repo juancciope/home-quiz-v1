@@ -400,3 +400,84 @@ export default async function handler(req, res) {
         isPersonalized: results.isPersonalized,
         assistantUsed: results.assistantUsed
       } : null
+    });
+
+    // Format response data for GHL webhook
+    const formattedResponses = Object.entries(responses || {})
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+
+    const webhookData = {
+      email,
+      pathway: results?.title || pathway || 'Unknown Pathway',
+      source: source || 'music-creator-roadmap-quiz',
+      quiz_responses: formattedResponses,
+      next_steps: formatNextStepsWithDetails(results?.nextSteps || []),
+      next_steps_simple: formatNextStepsSimple(results?.nextSteps || []),
+      recommended_resources: results?.resources?.join(', ') || 'Standard HOME Resources',
+      home_connection: results?.homeConnection || 'HOME provides the perfect environment to accelerate your music career journey.',
+      stage: responses?.['stage-level'] || 'Unknown',
+      motivation: responses?.motivation || 'Unknown',
+      success_vision: responses?.['success-vision'] || 'Unknown',
+      is_personalized: results?.isPersonalized ? 'Yes' : 'No',
+      assistant_used: results?.assistantUsed ? 'Yes' : 'No',
+      timestamp: new Date().toISOString()
+    };
+    
+    console.log('📤 Sending to GHL webhook:', {
+      url: process.env.GHL_WEBHOOK_URL ? 'SET' : 'NOT SET',
+      email: webhookData.email,
+      pathway: webhookData.pathway
+    });
+
+    // Send to GHL webhook
+    let ghlResult = { success: false, message: 'Webhook not configured' };
+    if (process.env.GHL_WEBHOOK_URL) {
+      try {
+        const ghlResponse = await fetch(process.env.GHL_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookData)
+        });
+        
+        ghlResult = {
+          success: ghlResponse.ok,
+          status: ghlResponse.status,
+          message: ghlResponse.ok ? 'Lead sent to GHL' : 'GHL webhook failed'
+        };
+        
+        console.log('✅ GHL webhook response:', ghlResult);
+      } catch (error) {
+        console.error('❌ GHL webhook error:', error);
+        ghlResult = {
+          success: false,
+          error: error.message
+        };
+      }
+    }
+
+    // Create Circle post
+    let circleResult = { success: false, message: 'Circle not configured' };
+    if (process.env.CIRCLE_API_TOKEN) {
+      circleResult = await createCirclePost(email, pathway, responses, results);
+    }
+
+    // Return success even if webhooks fail
+    res.status(200).json({ 
+      success: true,
+      message: 'Lead data received',
+      data: {
+        ghl: ghlResult,
+        circle: circleResult
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Submit lead error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to process lead submission',
+      error: error.message 
+    });
+  }
+}
