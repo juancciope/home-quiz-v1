@@ -339,7 +339,6 @@ const pathwayTemplates = {
     ]
   }
 };
-
 // --- Helpers ---
 const determinePathway = (responses) => {
   const scores = {
@@ -397,13 +396,129 @@ const getCurrentCheckpoint = (screen, questionIndex, currentStep) => {
   return 0;
 };
 
+// Transform AI steps to component format
+const transformAIStepsToComponentFormat = (aiPathway) => {
+  const steps = aiPathway.nextSteps || [];
+  const resources = aiPathway.resources || [];
+  
+  // Take first 4 steps and create detailed step objects
+  return steps.slice(0, 4).map((step, index) => {
+    const stepObj = typeof step === 'object' ? step : { step: step };
+    const stepText = stepObj.step;
+    const stepParts = stepText.split(':');
+    const title = stepParts[0] || stepText;
+    const description = stepObj.detail || stepParts[1] || 'Take action on this important step in your music career journey';
+    
+    return {
+      title: title.trim(),
+      description: description.trim(),
+      actions: generateActionsForStep(title, index, aiPathway),
+      whyItMatters: generateWhyItMatters(title, aiPathway),
+      homeResources: selectResourcesForStep(resources, index)
+    };
+  });
+};
+
+// Generate authentic action items (no HOME mentions)
+const generateActionsForStep = (stepTitle, stepIndex, pathway) => {
+  // Generic action templates based on step type
+  const actionTemplates = {
+    performance: [
+      "Create a setlist that tells a story from start to finish",
+      "Record yourself performing and identify areas for improvement",
+      "Study 5 artists you admire and note their stage techniques",
+      "Practice transitions between songs until they're seamless",
+      "Develop 3 authentic stories to share between songs"
+    ],
+    brand: [
+      "Define your unique value proposition in one sentence",
+      "Create a mood board with 20 images representing your brand",
+      "Choose a consistent color palette and visual style",
+      "Write your artist bio from three different perspectives",
+      "Identify your target audience demographics and psychographics"
+    ],
+    content: [
+      "Map out 30 days of content aligned with your brand",
+      "Create content templates for different post types",
+      "Develop a signature format your fans will recognize",
+      "Set up a sustainable content creation schedule",
+      "Track engagement metrics to understand what resonates"
+    ],
+    production: [
+      "Study the arrangement of 5 hit songs in your genre",
+      "Build templates for faster workflow in your DAW",
+      "Create a sample library of your signature sounds",
+      "Collaborate with artists in complementary genres",
+      "Document your production process for educational content"
+    ],
+    business: [
+      "Set specific, measurable goals for the next 90 days",
+      "Create multiple revenue streams beyond just music sales",
+      "Build an email list of your most engaged fans",
+      "Develop standard contracts and pricing structures",
+      "Network with 5 new industry professionals monthly"
+    ]
+  };
+  
+  // Select appropriate actions based on step title keywords
+  const lowerTitle = stepTitle.toLowerCase();
+  if (lowerTitle.includes('perform') || lowerTitle.includes('stage') || lowerTitle.includes('live')) {
+    return actionTemplates.performance;
+  } else if (lowerTitle.includes('brand') || lowerTitle.includes('identity')) {
+    return actionTemplates.brand;
+  } else if (lowerTitle.includes('content') || lowerTitle.includes('social')) {
+    return actionTemplates.content;
+  } else if (lowerTitle.includes('produc') || lowerTitle.includes('studio')) {
+    return actionTemplates.production;
+  } else {
+    return actionTemplates.business;
+  }
+};
+
+// Generate why it matters (pathway-specific)
+const generateWhyItMatters = (stepTitle, pathway) => {
+  const pathwayType = pathway.title ? pathway.title.toLowerCase() : '';
+  
+  if (pathwayType.includes('touring') || pathwayType.includes('performer')) {
+    return "This step builds the foundation for a sustainable touring career. Master this now to command higher fees and create memorable experiences that turn casual listeners into lifelong fans.";
+  } else if (pathwayType.includes('creative') || pathwayType.includes('artist')) {
+    return "This step is crucial for building a loyal fanbase and multiple revenue streams. Artists who master this create sustainable careers independent of traditional industry gatekeepers.";
+  } else {
+    return "This step separates professional producers from hobbyists. Master this to attract high-quality clients and build a reputation that generates consistent opportunities.";
+  }
+};
+
+// Select HOME resources for each step
+const selectResourcesForStep = (allResources, stepIndex) => {
+  // Ensure we have resources to work with
+  if (!allResources || allResources.length === 0) {
+    return [
+      "24/7 Studio Access",
+      "Professional Equipment",
+      "Community Network"
+    ];
+  }
+  
+  // Rotate through resources for each step
+  const resourcesPerStep = 3;
+  const startIndex = (stepIndex * resourcesPerStep) % allResources.length;
+  const selectedResources = [];
+  
+  for (let i = 0; i < resourcesPerStep; i++) {
+    const index = (startIndex + i) % allResources.length;
+    selectedResources.push(allResources[index]);
+  }
+  
+  return selectedResources;
+};
+
 // --- Premium Confetti Animation ---
 const PremiumConfetti = ({ show }) => {
   if (!show) return null;
   
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-<style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes confetti-fall {
           0% {
             transform: translateY(-100vh) translateX(0) rotate(0deg) scale(0);
@@ -587,6 +702,7 @@ const HOMEQuizMVP = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [aiGeneratedPathway, setAiGeneratedPathway] = useState(null);
 
   const currentCheckpoint = getCurrentCheckpoint(screen, questionIndex, currentStep);
   const showProgress = screen !== 'landing';
@@ -637,273 +753,178 @@ const HOMEQuizMVP = () => {
   }, [screen, questionIndex, currentStep]);
 
   // Handle quiz answer
-const handleAnswer = async (questionId, value) => {
-  setSelectedOption(value);
-  setResponses(prev => ({ ...prev, [questionId]: value }));
-  
-  setTimeout(async () => {
-    if (questionIndex < questions.length - 1) {
-      setQuestionIndex(prev => prev + 1);
-    } else {
-      // Calculate pathway
-      const finalResponses = { ...responses, [questionId]: value };
-      setScreen('transition');
-      
-      // Simulate AI generation
-      setIsGenerating(true);
-      
-      try {
-        // Call AI endpoint for personalized pathway
-        const aiResponse = await fetch('/api/generate-pathway', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ responses: finalResponses })
-        });
+  const handleAnswer = async (questionId, value) => {
+    setSelectedOption(value);
+    setResponses(prev => ({ ...prev, [questionId]: value }));
+    
+    setTimeout(async () => {
+      if (questionIndex < questions.length - 1) {
+        setQuestionIndex(prev => prev + 1);
+      } else {
+        // Calculate pathway
+        const finalResponses = { ...responses, [questionId]: value };
+        setScreen('transition');
         
-        if (aiResponse.ok) {
-          const aiPathway = await aiResponse.json();
+        // Simulate AI generation
+        setIsGenerating(true);
+        
+        try {
+          console.log('🤖 Calling AI endpoint with responses:', finalResponses);
           
-          // Transform AI response to match component structure
-          const transformedPathway = {
-            title: aiPathway.title,
-            icon: aiPathway.icon,
-            color: 'from-[#1DD1A1] to-[#B91372]',
-            description: aiPathway.description,
-            baseDescription: aiPathway.description,
-            homeConnection: aiPathway.homeConnection,
-            planPreview: aiPathway.nextSteps?.slice(0, 4).map(step => 
-              typeof step === 'object' ? step.step : step
-            ),
-            steps: transformAIStepsToComponentFormat(aiPathway),
-            isPersonalized: aiPathway.isPersonalized
-          };
+          // Call AI endpoint for personalized pathway
+          const aiResponse = await fetch('/api/generate-pathway', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ responses: finalResponses })
+          });
           
-          setPathway(transformedPathway);
-          console.log('✅ AI pathway generated:', transformedPathway);
-        } else {
-          // Fallback to template if AI fails
-          console.warn('AI generation failed, using fallback');
+          if (aiResponse.ok) {
+            const aiPathway = await aiResponse.json();
+            console.log('✅ AI pathway received:', aiPathway);
+            
+            // Store the AI-generated pathway data
+            setAiGeneratedPathway(aiPathway);
+            
+            // Transform AI response to match component structure
+            const transformedPathway = {
+              ...aiPathway,
+              title: aiPathway.title,
+              icon: aiPathway.icon,
+              color: 'from-[#1DD1A1] to-[#B91372]',
+              description: aiPathway.description,
+              baseDescription: aiPathway.description,
+              homeConnection: aiPathway.homeConnection,
+              planPreview: aiPathway.nextSteps?.slice(0, 4).map(step => 
+                typeof step === 'object' ? step.step : step
+              ),
+              steps: transformAIStepsToComponentFormat(aiPathway),
+              isPersonalized: aiPathway.isPersonalized,
+              assistantUsed: aiPathway.assistantUsed,
+              // Store original AI data
+              originalNextSteps: aiPathway.nextSteps,
+              originalResources: aiPathway.resources
+            };
+            
+            setPathway(transformedPathway);
+            console.log('✅ AI pathway transformed:', transformedPathway);
+          } else {
+            // Fallback to template if AI fails
+            console.warn('❌ AI generation failed, using fallback');
+            const pathwayKey = determinePathway(finalResponses);
+            setPathway(pathwayTemplates[pathwayKey]);
+          }
+        } catch (error) {
+          console.error('❌ Error generating AI pathway:', error);
+          // Fallback to template
           const pathwayKey = determinePathway(finalResponses);
           setPathway(pathwayTemplates[pathwayKey]);
         }
-      } catch (error) {
-        console.error('Error generating AI pathway:', error);
-        // Fallback to template
-        const pathwayKey = determinePathway(finalResponses);
-        setPathway(pathwayTemplates[pathwayKey]);
+        
+        setIsGenerating(false);
+        setScreen('email');
       }
-      
-      setIsGenerating(false);
-      setScreen('email');
-    }
-  }, 300);
-};
-// Transform AI steps to component format
-const transformAIStepsToComponentFormat = (aiPathway) => {
-  const steps = aiPathway.nextSteps || [];
-  const resources = aiPathway.resources || [];
-  
-  // Take first 4 steps and create detailed step objects
-  return steps.slice(0, 4).map((step, index) => {
-    const stepObj = typeof step === 'object' ? step : { step: step };
-    const stepText = stepObj.step;
-    const stepParts = stepText.split(':');
-    const title = stepParts[0] || stepText;
-    const description = stepObj.detail || stepParts[1] || 'Take action on this important step in your music career journey';
-    
-    return {
-      title: title.trim(),
-      description: description.trim(),
-      actions: generateActionsForStep(title, index, aiPathway),
-      whyItMatters: generateWhyItMatters(title, aiPathway),
-      homeResources: selectResourcesForStep(resources, index)
-    };
-  });
-};
-
-// Generate authentic action items (no HOME mentions)
-const generateActionsForStep = (stepTitle, stepIndex, pathway) => {
-  // Generic action templates based on step type
-  const actionTemplates = {
-    performance: [
-      "Create a setlist that tells a story from start to finish",
-      "Record yourself performing and identify areas for improvement",
-      "Study 5 artists you admire and note their stage techniques",
-      "Practice transitions between songs until they're seamless",
-      "Develop 3 authentic stories to share between songs"
-    ],
-    brand: [
-      "Define your unique value proposition in one sentence",
-      "Create a mood board with 20 images representing your brand",
-      "Choose a consistent color palette and visual style",
-      "Write your artist bio from three different perspectives",
-      "Identify your target audience demographics and psychographics"
-    ],
-    content: [
-      "Map out 30 days of content aligned with your brand",
-      "Create content templates for different post types",
-      "Develop a signature format your fans will recognize",
-      "Set up a sustainable content creation schedule",
-      "Track engagement metrics to understand what resonates"
-    ],
-    production: [
-      "Study the arrangement of 5 hit songs in your genre",
-      "Build templates for faster workflow in your DAW",
-      "Create a sample library of your signature sounds",
-      "Collaborate with artists in complementary genres",
-      "Document your production process for educational content"
-    ],
-    business: [
-      "Set specific, measurable goals for the next 90 days",
-      "Create multiple revenue streams beyond just music sales",
-      "Build an email list of your most engaged fans",
-      "Develop standard contracts and pricing structures",
-      "Network with 5 new industry professionals monthly"
-    ]
+    }, 300);
   };
-  
-  // Select appropriate actions based on step title keywords
-  const lowerTitle = stepTitle.toLowerCase();
-  if (lowerTitle.includes('perform') || lowerTitle.includes('stage') || lowerTitle.includes('live')) {
-    return actionTemplates.performance;
-  } else if (lowerTitle.includes('brand') || lowerTitle.includes('identity')) {
-    return actionTemplates.brand;
-  } else if (lowerTitle.includes('content') || lowerTitle.includes('social')) {
-    return actionTemplates.content;
-  } else if (lowerTitle.includes('produc') || lowerTitle.includes('studio')) {
-    return actionTemplates.production;
-  } else {
-    return actionTemplates.business;
-  }
-};
 
-// Generate why it matters (pathway-specific)
-const generateWhyItMatters = (stepTitle, pathway) => {
-  const pathwayType = pathway.title.toLowerCase();
-  
-  if (pathwayType.includes('touring') || pathwayType.includes('performer')) {
-    return "This step builds the foundation for a sustainable touring career. Master this now to command higher fees and create memorable experiences that turn casual listeners into lifelong fans.";
-  } else if (pathwayType.includes('creative') || pathwayType.includes('artist')) {
-    return "This step is crucial for building a loyal fanbase and multiple revenue streams. Artists who master this create sustainable careers independent of traditional industry gatekeepers.";
-  } else {
-    return "This step separates professional producers from hobbyists. Master this to attract high-quality clients and build a reputation that generates consistent opportunities.";
-  }
-};
-
-// Select HOME resources for each step
-const selectResourcesForStep = (allResources, stepIndex) => {
-  // Ensure we have resources to work with
-  if (!allResources || allResources.length === 0) {
-    return [
-      "24/7 Studio Access",
-      "Professional Equipment",
-      "Community Network"
-    ];
-  }
-  
-  // Rotate through resources for each step
-  const resourcesPerStep = 3;
-  const startIndex = (stepIndex * resourcesPerStep) % allResources.length;
-  const selectedResources = [];
-  
-  for (let i = 0; i < resourcesPerStep; i++) {
-    const index = (startIndex + i) % allResources.length;
-    selectedResources.push(allResources[index]);
-  }
-  
-  return selectedResources;
-};
-
-// Handle email submission
-const handleEmailSubmit = async () => {
-  console.log('🟢 handleEmailSubmit called');
-  console.log('📧 Email:', email);
-  console.log('🎯 Pathway data:', pathway);
-  
-  if (!email || isProcessing) return;
-  
-  setIsProcessing(true);
-  
-  // Simulate processing with progress
-  const duration = 3000;
-  const steps = 30;
-  const stepDuration = duration / steps;
-  
-  for (let i = 0; i <= steps; i++) {
-    setTimeout(() => {
-      setProgress((i / steps) * 100);
-      if (i === steps) {
-        setIsProcessing(false);
-        setShowResults(true);
-        setScreen('celebration');
-        setShowConfetti(true);
-        setTimeout(() => {
-          setShowConfetti(false);
-        }, 8000);
-      }
-    }, i * stepDuration);
-  }
-
-  // Actually submit
-  try {
-    console.log('🚀 Calling submit-lead API...');
+  // Handle email submission
+  const handleEmailSubmit = async () => {
+    console.log('🟢 handleEmailSubmit called');
+    console.log('📧 Email:', email);
+    console.log('🎯 Pathway data:', pathway);
+    console.log('🤖 AI Generated data:', aiGeneratedPathway);
     
-    // Prepare the results object with AI-generated content
-    const results = {
-      pathway: pathway?.pathway || determinePathway(responses),
-      title: pathway?.title || 'Your Music Creator Path',
-      description: pathway?.description || pathway?.baseDescription || '',
-      icon: pathway?.icon || '🎵',
-      nextSteps: pathway?.steps?.slice(0, 4).map((step, index) => ({
-        priority: index + 1,
-        step: step.title,
-        detail: step.description
-      })) || [],
-      resources: pathway?.steps?.[0]?.homeResources || [
-        "24/7 Studio Access",
-        "Professional Equipment", 
-        "Community Network",
-        "Educational Workshops",
-        "Industry Connections",
-        "Business Resources"
-      ],
-      homeConnection: pathway?.homeConnection || '',
-      isPersonalized: pathway?.isPersonalized || false,
-      assistantUsed: pathway?.assistantUsed || false
-    };
+    if (!email || isProcessing) {
+      console.log('❌ Returning early - no email or already processing');
+      return;
+    }
     
-    console.log('📤 Sending to API:', {
-      email,
-      pathway: pathway?.title,
-      hasResults: true,
-      nextStepsCount: results.nextSteps.length,
-      resourcesCount: results.resources.length
-    });
+    setIsProcessing(true);
     
-    const response = await fetch('/api/submit-lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    // Simulate processing with progress
+    const duration = 3000;
+    const steps = 30;
+    const stepDuration = duration / steps;
+    
+    for (let i = 0; i <= steps; i++) {
+      setTimeout(() => {
+        setProgress((i / steps) * 100);
+        if (i === steps) {
+          setIsProcessing(false);
+          setShowResults(true);
+          setScreen('celebration');
+          setShowConfetti(true);
+          setTimeout(() => {
+            setShowConfetti(false);
+          }, 8000);
+        }
+      }, i * stepDuration);
+    }
+
+    // Actually submit
+    try {
+      console.log('🚀 Preparing to call submit-lead API...');
+      
+      // Prepare the results object with AI-generated content or fallback data
+      const results = {
+        pathway: aiGeneratedPathway?.pathway || pathway?.pathway || determinePathway(responses),
+        title: pathway?.title || 'Your Music Creator Path',
+        description: pathway?.description || pathway?.baseDescription || '',
+        icon: pathway?.icon || '🎵',
+        nextSteps: aiGeneratedPathway?.nextSteps || pathway?.originalNextSteps || pathway?.steps?.slice(0, 4).map((step, index) => ({
+          priority: index + 1,
+          step: step.title,
+          detail: step.description
+        })) || [],
+        resources: aiGeneratedPathway?.resources || pathway?.originalResources || pathway?.steps?.[0]?.homeResources || [
+          "24/7 Studio Access",
+          "Professional Equipment", 
+          "Community Network",
+          "Educational Workshops",
+          "Industry Connections",
+          "Business Resources"
+        ],
+        homeConnection: aiGeneratedPathway?.homeConnection || pathway?.homeConnection || '',
+        isPersonalized: aiGeneratedPathway?.isPersonalized || pathway?.isPersonalized || false,
+        assistantUsed: aiGeneratedPathway?.assistantUsed || pathway?.assistantUsed || false
+      };
+      
+      const submitData = {
         email,
         pathway: pathway?.title,
         responses,
         source: 'music-creator-roadmap-quiz',
-        results: results // ← THIS IS THE KEY ADDITION!
-      })
-    });
-    
-    const responseData = await response.json();
-    console.log('📨 API Response:', responseData);
-    
-    if (!response.ok) {
-      console.error('❌ Submit failed:', responseData);
-    } else {
-      console.log('✅ Lead submitted successfully');
+        results: results
+      };
+      
+      console.log('📤 Sending to API:', {
+        email: submitData.email,
+        pathway: submitData.pathway,
+        hasResults: true,
+        nextStepsCount: results.nextSteps.length,
+        resourcesCount: results.resources.length,
+        isPersonalized: results.isPersonalized
+      });
+      
+      const response = await fetch('/api/submit-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submitData)
+      });
+      
+      const responseData = await response.json();
+      console.log('📨 API Response:', responseData);
+      
+      if (!response.ok) {
+        console.error('❌ Submit failed:', responseData);
+      } else {
+        console.log('✅ Lead submitted successfully');
+        console.log('🎉 GHL webhook status:', responseData.data?.ghl);
+        console.log('📝 Circle post status:', responseData.data?.circle);
+      }
+    } catch (error) {
+      console.error('❌ Error submitting:', error);
     }
-  } catch (error) {
-    console.error('❌ Error submitting:', error);
-  }
-};
+  };
 
   // Navigation
   const goBack = () => {
@@ -1007,85 +1028,87 @@ const handleEmailSubmit = async () => {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
       }
+      
       /* 3D Liquid animations */
-@keyframes liquid-rotate {
-  0% { transform: translateZ(-5px) rotate(0deg); }
-  100% { transform: translateZ(-5px) rotate(360deg); }
-}
+      @keyframes liquid-rotate {
+        0% { transform: translateZ(-5px) rotate(0deg); }
+        100% { transform: translateZ(-5px) rotate(360deg); }
+      }
 
-@keyframes liquid-blob {
-  0%, 100% {
-    transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
-  }
-  25% {
-    transform: translate(20px, -30px) scale(1.2) rotateX(45deg) rotateY(45deg);
-  }
-  50% {
-    transform: translate(-20px, 20px) scale(0.8) rotateX(-45deg) rotateY(-45deg);
-  }
-  75% {
-    transform: translate(30px, 10px) scale(1.1) rotateX(30deg) rotateY(-30deg);
-  }
-}
+      @keyframes liquid-blob {
+        0%, 100% {
+          transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
+        }
+        25% {
+          transform: translate(20px, -30px) scale(1.2) rotateX(45deg) rotateY(45deg);
+        }
+        50% {
+          transform: translate(-20px, 20px) scale(0.8) rotateX(-45deg) rotateY(-45deg);
+        }
+        75% {
+          transform: translate(30px, 10px) scale(1.1) rotateX(30deg) rotateY(-30deg);
+        }
+      }
 
-@keyframes liquid-blob-reverse {
-  0%, 100% {
-    transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
-  }
-  25% {
-    transform: translate(-30px, 20px) scale(0.9) rotateX(-30deg) rotateY(30deg);
-  }
-  50% {
-    transform: translate(20px, -20px) scale(1.3) rotateX(45deg) rotateY(-45deg);
-  }
-  75% {
-    transform: translate(-10px, -30px) scale(1.1) rotateX(-45deg) rotateY(45deg);
-  }
-}
+      @keyframes liquid-blob-reverse {
+        0%, 100% {
+          transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
+        }
+        25% {
+          transform: translate(-30px, 20px) scale(0.9) rotateX(-30deg) rotateY(30deg);
+        }
+        50% {
+          transform: translate(20px, -20px) scale(1.3) rotateX(45deg) rotateY(-45deg);
+        }
+        75% {
+          transform: translate(-10px, -30px) scale(1.1) rotateX(-45deg) rotateY(45deg);
+        }
+      }
 
-@keyframes liquid-blob-slow {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
-  33% {
-    transform: translate(-50%, -50%) scale(1.3) rotateZ(180deg);
-  }
-  66% {
-    transform: translate(-50%, -50%) scale(0.7) rotateZ(360deg);
-  }
-}
+      @keyframes liquid-blob-slow {
+        0%, 100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        33% {
+          transform: translate(-50%, -50%) scale(1.3) rotateZ(180deg);
+        }
+        66% {
+          transform: translate(-50%, -50%) scale(0.7) rotateZ(360deg);
+        }
+      }
 
-.animate-liquid-rotate {
-  animation: liquid-rotate 20s linear infinite;
-}
+      .animate-liquid-rotate {
+        animation: liquid-rotate 20s linear infinite;
+      }
 
-.animate-liquid-blob {
-  animation: liquid-blob 8s ease-in-out infinite;
-}
+      .animate-liquid-blob {
+        animation: liquid-blob 8s ease-in-out infinite;
+      }
 
-.animate-liquid-blob-reverse {
-  animation: liquid-blob-reverse 10s ease-in-out infinite;
-}
+      .animate-liquid-blob-reverse {
+        animation: liquid-blob-reverse 10s ease-in-out infinite;
+      }
 
-.animate-liquid-blob-slow {
-  animation: liquid-blob-slow 15s ease-in-out infinite;
-}
+      .animate-liquid-blob-slow {
+        animation: liquid-blob-slow 15s ease-in-out infinite;
+      }
 
-/* Enable GPU acceleration */
-.transform-gpu {
-  transform: translateZ(0);
-  will-change: transform;
-}
+      /* Enable GPU acceleration */
+      .transform-gpu {
+        transform: translateZ(0);
+        will-change: transform;
+      }
+      
       /* Add this after the other @keyframes animations */
-@keyframes gradient-x {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
+      @keyframes gradient-x {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
 
-.animate-gradient-x {
-  animation: gradient-x 3s ease-in-out infinite;
-  background-size: 200% 100%;
-}
+      .animate-gradient-x {
+        animation: gradient-x 3s ease-in-out infinite;
+        background-size: 200% 100%;
+      }
       
       .animate-fadeIn {
         animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1115,113 +1138,111 @@ const handleEmailSubmit = async () => {
       document.head.removeChild(style);
     };
   }, []);
-
   // Render
   return (
     <div className="app-container">
       {showProgress && <ProgressBar currentCheckpoint={currentCheckpoint} />}
+      
       {screen === 'landing' && (
-  <div className="screen-height bg-black relative overflow-hidden flex flex-col">
-    {/* Subtle gradient background */}
-    <div className="absolute inset-0">
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-10" />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
-    </div>
-    
-    <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8">
-      
-{/* Main Content - Centered */}
-<div className="flex-1 flex items-center justify-center">
-  <div className="max-w-4xl w-full text-center">
-          {/* Title - Smaller on mobile */}
-          <div className="mb-8 sm:mb-12 animate-fadeIn">
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
-              Find Your Path on the
-              <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
-                Music Creator Roadmap
-              </span>
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-xl mx-auto">
-             AI-driven insights that rank your top priorities and map your next moves.
-            </p>
+        <div className="screen-height bg-black relative overflow-hidden flex flex-col">
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0">
+            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-10" />
+            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
           </div>
           
-{/* CTA Button - Prominent */}
-<div className="mb-8 sm:mb-12">
-  <button
-    onClick={() => setScreen('quiz')}
-    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
-    style={{ transformStyle: 'preserve-3d' }}
-  >
-    {/* 3D Liquid layers */}
-    <div className="absolute inset-0 rounded-full" style={{ transform: 'translateZ(-10px)' }}>
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full" />
-    </div>
-    
-    {/* Animated liquid blobs */}
-    <div className="absolute inset-0 rounded-full animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#1DD1A1] rounded-full filter blur-2xl opacity-70 animate-liquid-blob" />
-        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#B91372] rounded-full filter blur-2xl opacity-70 animate-liquid-blob-reverse" />
-        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-[#40E0D0] rounded-full filter blur-xl opacity-60 animate-liquid-blob-slow" />
-      </div>
-    </div>
-    
-    {/* Glass effect overlay */}
-    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-full" style={{ transform: 'translateZ(0px)' }} />
-    
-    {/* Shine effect */}
-    <div className="absolute inset-0 rounded-full overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
-      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
-    </div>
-    
-    {/* Outer glow */}
-    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
-    
-    {/* Content */}
-    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Find My Path</span>
-    <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
-  </button>
-  
-  <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
-    2-minute flow • instant results
-  </p>
-</div>
-          
-          {/* Feature Pills - Compact for mobile */}
-          <div className="flex flex-wrap justify-center gap-3 animate-slideUp delay-200">
-            {[
-              { icon: User, label: 'Artist Profile' },
-              { icon: Target, label: 'Priority Lens' },
-              { icon: ListChecks, label: 'Action Plan' }
-            ].map((feature, i) => (
-              <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                <feature.icon className="w-4 h-4 text-white/60" />
-                <span className="text-sm font-medium text-white/80">{feature.label}</span>
+          <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8">
+            {/* Main Content - Centered */}
+            <div className="flex-1 flex items-center justify-center">
+              <div className="max-w-4xl w-full text-center">
+                {/* Title - Smaller on mobile */}
+                <div className="mb-8 sm:mb-12 animate-fadeIn">
+                  <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
+                    Find Your Path on the
+                    <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
+                      Music Creator Roadmap
+                    </span>
+                  </h1>
+                  <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-xl mx-auto">
+                   AI-driven insights that rank your top priorities and map your next moves.
+                  </p>
+                </div>
+                
+                {/* CTA Button - Prominent */}
+                <div className="mb-8 sm:mb-12">
+                  <button
+                    onClick={() => setScreen('quiz')}
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
+                    style={{ transformStyle: 'preserve-3d' }}
+                  >
+                    {/* 3D Liquid layers */}
+                    <div className="absolute inset-0 rounded-full" style={{ transform: 'translateZ(-10px)' }}>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full" />
+                    </div>
+                    
+                    {/* Animated liquid blobs */}
+                    <div className="absolute inset-0 rounded-full animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+                      <div className="absolute top-0 left-0 w-full h-full">
+                        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#1DD1A1] rounded-full filter blur-2xl opacity-70 animate-liquid-blob" />
+                        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#B91372] rounded-full filter blur-2xl opacity-70 animate-liquid-blob-reverse" />
+                        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-[#40E0D0] rounded-full filter blur-xl opacity-60 animate-liquid-blob-slow" />
+                      </div>
+                    </div>
+                    
+                    {/* Glass effect overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-full" style={{ transform: 'translateZ(0px)' }} />
+                    
+                    {/* Shine effect */}
+                    <div className="absolute inset-0 rounded-full overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+                      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                    </div>
+                    
+                    {/* Outer glow */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+                    
+                    {/* Content */}
+                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Find My Path</span>
+                    <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+                  </button>
+                  
+                  <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
+                    2-minute flow • instant results
+                  </p>
+                </div>
+                
+                {/* Feature Pills - Compact for mobile */}
+                <div className="flex flex-wrap justify-center gap-3 animate-slideUp delay-200">
+                  {[
+                    { icon: User, label: 'Artist Profile' },
+                    { icon: Target, label: 'Priority Lens' },
+                    { icon: ListChecks, label: 'Action Plan' }
+                  ].map((feature, i) => (
+                    <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                      <feature.icon className="w-4 h-4 text-white/60" />
+                      <span className="text-sm font-medium text-white/80">{feature.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            </div>
+            
+            {/* Footer - Logo with glow effect above text */}
+            <div className="text-center mt-8 animate-fadeIn delay-500">
+              <div className="relative inline-block mb-3 group">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+                  alt="HOME"
+                  className="h-8 relative z-10"
+                />
+              </div>
+              <p className="text-xs text-gray-600">
+                homeformusic.org
+              </p>
+            </div>
           </div>
-          
         </div>
-      </div>
-      
-      {/* Footer - Logo with glow effect above text */}
-<div className="text-center mt-8 animate-fadeIn delay-500">
-  <div className="relative inline-block mb-3 group">
-    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-    <img 
-      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-      alt="HOME"
-      className="h-8 relative z-10"
-    />
-  </div>
-  <p className="text-xs text-gray-600">
-    homeformusic.org
-  </p>
-</div>
-    </div>
-  </div>
-)}
+      )}
 
       {screen === 'quiz' && (
         <div className="screen-height bg-black pt-20 sm:pt-24">
@@ -1277,11 +1298,11 @@ const handleEmailSubmit = async () => {
                     </div>
                   </button>
                 ))}
-                {/* Footer */}
-          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-            <p className="text-xs text-gray-600">homeformusic.org</p>
-          </div>
               </div>
+            </div>
+            {/* Footer */}
+            <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+              <p className="text-xs text-gray-600">homeformusic.org</p>
             </div>
           </div>
         </div>
@@ -1304,9 +1325,9 @@ const handleEmailSubmit = async () => {
               Creating your personalized music creator pathway
             </p>
             {/* Footer */}
-          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-            <p className="text-xs text-gray-600">homeformusic.org</p>
-          </div>
+            <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+              <p className="text-xs text-gray-600">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
@@ -1390,19 +1411,19 @@ const handleEmailSubmit = async () => {
                 </div>
               </div>
             )}
-                      {/* Footer */}
-          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-            <p className="text-xs text-gray-600">homeformusic.org</p>
-          </div>
+            {/* Footer */}
+            <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+              <p className="text-xs text-gray-600">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
 
-{screen === 'celebration' && pathway && (
-  <div className="screen-height bg-black relative overflow-hidden pt-20 sm:pt-24">
-    <PremiumConfetti show={showConfetti} />
-    
-    <div className="h-full flex items-center justify-center px-6">
+      {screen === 'celebration' && pathway && (
+        <div className="screen-height bg-black relative overflow-hidden pt-20 sm:pt-24">
+          <PremiumConfetti show={showConfetti} />
+          
+          <div className="h-full flex items-center justify-center px-6">
             <div className="max-w-4xl w-full">
               {/* Path Result */}
               <div className="text-center mb-12 animate-scaleIn">
@@ -1453,16 +1474,13 @@ const handleEmailSubmit = async () => {
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
-                      
             </div>
-
           </div>
-                                            {/* Footer */}
-              <div className="text-center mt-8 animate-fadeIn delay-500">
-                <p className="text-xs text-gray-600">homeformusic.org</p><br />
-              </div>
+          {/* Footer */}
+          <div className="text-center mt-8 animate-fadeIn delay-500">
+            <p className="text-xs text-gray-600">homeformusic.org</p><br />
+          </div>
         </div>
-
       )}
 
       {screen === 'plan' && pathway && (
@@ -1568,16 +1586,16 @@ const handleEmailSubmit = async () => {
                 </button>
               </div>
             </div>
-{/* Footer */}
-              <div className="text-center mt-8 animate-fadeIn delay-500">
-                <p className="text-xs text-gray-600">homeformusic.org</p>
-              </div>
+            {/* Footer */}
+            <div className="text-center mt-8 animate-fadeIn delay-500">
+              <p className="text-xs text-gray-600">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
 
-{screen === 'execute' && pathway && (
-  <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6">
+      {screen === 'execute' && pathway && (
+        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6">
           <div className="max-w-4xl w-full">
             {/* Navigation */}
             <button
@@ -1667,16 +1685,13 @@ const handleEmailSubmit = async () => {
             {/* Footer */}
             <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.<br />
-                                                                {/* Website URL */}
-            <div className="text-center mt-8">
-              <p className="text-xs text-gray-600">homeformusic.org</p><br />
-            </div> 
+              {/* Website URL */}
+              <div className="text-center mt-8">
+                <p className="text-xs text-gray-600">homeformusic.org</p><br />
+              </div> 
             </p>
-                      
           </div>
- 
         </div>
-
       )}
     </div>
   );
