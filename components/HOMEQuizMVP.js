@@ -1258,7 +1258,7 @@ const HOMEQuizMVP = () => {
           </div>
                                             {/* Footer */}
               <div className="text-center mt-8 animate-fadeIn delay-500">
-                <p className="text-xs text-gray-600">homeformusic.org</p>
+                <p className="text-xs text-gray-600">homeformusic.org</p><br />
               </div>
         </div>
 
@@ -1465,15 +1465,15 @@ const HOMEQuizMVP = () => {
             
             {/* Footer */}
             <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
-              Not sure? Start with the free community and upgrade anytime.
-
-            </p>
-                      
-          </div>
+              Not sure? Start with the free community and upgrade anytime.<br />
                                                                 {/* Website URL */}
             <div className="text-center mt-8">
               <p className="text-xs text-gray-600">homeformusic.org</p>
-            </div>  
+            </div> 
+            </p>
+                      
+          </div>
+ 
         </div>
 
       )}
