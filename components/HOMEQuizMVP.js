@@ -806,6 +806,75 @@ const HOMEQuizMVP = () => {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
       }
+      /* 3D Liquid animations */
+@keyframes liquid-rotate {
+  0% { transform: translateZ(-5px) rotate(0deg); }
+  100% { transform: translateZ(-5px) rotate(360deg); }
+}
+
+@keyframes liquid-blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.2) rotateX(45deg) rotateY(45deg);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.8) rotateX(-45deg) rotateY(-45deg);
+  }
+  75% {
+    transform: translate(30px, 10px) scale(1.1) rotateX(30deg) rotateY(-30deg);
+  }
+}
+
+@keyframes liquid-blob-reverse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translate(-30px, 20px) scale(0.9) rotateX(-30deg) rotateY(30deg);
+  }
+  50% {
+    transform: translate(20px, -20px) scale(1.3) rotateX(45deg) rotateY(-45deg);
+  }
+  75% {
+    transform: translate(-10px, -30px) scale(1.1) rotateX(-45deg) rotateY(45deg);
+  }
+}
+
+@keyframes liquid-blob-slow {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  33% {
+    transform: translate(-50%, -50%) scale(1.3) rotateZ(180deg);
+  }
+  66% {
+    transform: translate(-50%, -50%) scale(0.7) rotateZ(360deg);
+  }
+}
+
+.animate-liquid-rotate {
+  animation: liquid-rotate 20s linear infinite;
+}
+
+.animate-liquid-blob {
+  animation: liquid-blob 8s ease-in-out infinite;
+}
+
+.animate-liquid-blob-reverse {
+  animation: liquid-blob-reverse 10s ease-in-out infinite;
+}
+
+.animate-liquid-blob-slow {
+  animation: liquid-blob-slow 15s ease-in-out infinite;
+}
+
+/* Enable GPU acceleration */
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
       /* Add this after the other @keyframes animations */
 @keyframes gradient-x {
   0% { transform: translateX(-100%); }
@@ -878,18 +947,6 @@ const HOMEQuizMVP = () => {
           </div>
           
 {/* CTA Button - Prominent */}
-<div className="mb-8 sm:mb-12">
-  <button
-    onClick={() => setScreen('quiz')}
-    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden"
-  >
-    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] via-[#B91372] to-[#1DD1A1] rounded-full animate-gradient-x" />
-    </div>
-    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
-    <span className="relative">Find My Path</span>
-    <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
-  </button>
             
             <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
               2-minute flow • instant results
