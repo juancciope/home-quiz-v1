@@ -1,6 +1,46 @@
 // Import the Circle integration (you'll need to create this as a separate file)
 // const { createCirclePost } = require('../utils/circle-integration');
+// Helper function to extract step text from various formats
+const getStepText = (step) => {
+  if (!step) return '';
+  if (typeof step === 'string') return step;
+  if (step.step) return step.step;
+  return '';
+};
 
+// Helper function to extract step detail
+const getStepDetail = (step) => {
+  if (!step) return '';
+  if (typeof step === 'object' && step.detail) return step.detail;
+  return '';
+};
+
+// Format next steps with details for email/CRM
+const formatNextStepsWithDetails = (steps) => {
+  if (!steps || !Array.isArray(steps)) return '';
+  
+  return steps.map((step, index) => {
+    const stepText = getStepText(step);
+    const detail = getStepDetail(step);
+    const priority = (typeof step === 'object' && step.priority) ? step.priority : index + 1;
+    
+    if (detail) {
+      return `${priority}. ${stepText}\n   → ${detail}`;
+    }
+    return `${priority}. ${stepText}`;
+  }).join('\n\n');
+};
+
+// Format next steps without details (just the action items)
+const formatNextStepsSimple = (steps) => {
+  if (!steps || !Array.isArray(steps)) return '';
+  
+  return steps.map((step, index) => {
+    const stepText = getStepText(step);
+    const priority = (typeof step === 'object' && step.priority) ? step.priority : index + 1;
+    return `${priority}. ${stepText}`;
+  }).join('\n');
+};
 // Circle integration functions (embedded for now - you can move to separate file)
 const CIRCLE_API_URL = 'https://app.circle.so/api/admin/v2/posts';
 const CIRCLE_SPACE_ID = 2102224;
@@ -327,17 +367,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Email is required' });
     }
 
-    // Format next steps for email template
-    const formatNextSteps = (steps) => {
-      if (!steps || !Array.isArray(steps)) return '';
-      
-      if (steps.length > 0 && typeof steps[0] === 'object' && steps[0].step) {
-        return steps.map((stepObj, index) => `${stepObj.priority || index + 1}. ${stepObj.step}`).join('\n');
-      }
-      
-      return steps.map((step, index) => `${index + 1}. ${step}`).join('\n');
-    };
-
     const formatResources = (resources) => {
       if (!resources || !Array.isArray(resources)) return '';
       return resources.map(resource => `• ${resource}`).join('\n');
@@ -364,49 +393,61 @@ export default async function handler(req, res) {
         `stage-${responses?.['current-stage'] || 'unknown'}`,
         `challenge-${responses?.['biggest-challenge'] || 'unknown'}`.substring(0, 30)
       ],
-      custom_fields: {
-        motivation: responses?.motivation || '',
-        ideal_day: responses?.['ideal-day'] || '',
-        success_vision: responses?.['success-vision'] || '',
-        current_stage: responses?.['current-stage'] || '',
-        biggest_challenge: responses?.['biggest-challenge'] || '',
-        quiz_completed_date: new Date().toISOString(),
-        
-        pathway_title: results?.pathway_title || pathway || '',
-        pathway_description: results?.pathway_description || '',
-        pathway_icon: results?.pathway_icon || '',
-        home_connection: results?.home_connection || '',
-        is_personalized: results?.is_personalized || false,
-        
-        next_steps: formattedNextSteps,
-        recommended_resources: formattedResources,
-        next_steps_formatted: formattedNextSteps,
-        recommended_resources_formatted: formattedResources,
-        
-        next_steps_array: JSON.stringify(results?.customNextSteps || results?.next_steps || []),
-        recommended_resources_array: JSON.stringify(results?.recommended_resources || results?.resources || []),
-        
-        next_step_1: (results?.customNextSteps || results?.next_steps)?.[0]?.step || (results?.customNextSteps || results?.next_steps)?.[0] || '',
-        next_step_2: (results?.customNextSteps || results?.next_steps)?.[1]?.step || (results?.customNextSteps || results?.next_steps)?.[1] || '',
-        next_step_3: (results?.customNextSteps || results?.next_steps)?.[2]?.step || (results?.customNextSteps || results?.next_steps)?.[2] || '',
-        next_step_4: (results?.customNextSteps || results?.next_steps)?.[3]?.step || (results?.customNextSteps || results?.next_steps)?.[3] || '',
-        
-        resource_1: results?.recommended_resources?.[0] || '',
-        resource_2: results?.recommended_resources?.[1] || '',
-        resource_3: results?.recommended_resources?.[2] || '',
-        resource_4: results?.recommended_resources?.[3] || '',
-        resource_5: results?.recommended_resources?.[4] || '',
-        resource_6: results?.recommended_resources?.[5] || '',
-        
-        webinar_offer: 'Music Creator Roadmap Course ($299 value) + Artist Branding Playbook (FREE bonus)',
-        webinar_schedule: 'Third Thursday of every month',
-        community_size: '1,000+ music creators',
-        quiz_completion_time: new Date().toLocaleString('en-US', { 
-          timeZone: 'America/Chicago',
-          dateStyle: 'medium',
-          timeStyle: 'short'
-        })
-      }
+custom_fields: {
+  // Quiz responses
+  motivation: responses?.motivation || '',
+  ideal_day: responses?.['ideal-day'] || '',
+  success_vision: responses?.['success-vision'] || '',
+  current_stage: responses?.['stage-level'] || '',
+  resources_priority: responses?.['resources-priority'] || '',
+  
+  // Pathway information
+  pathway: results?.pathway || pathway || '',
+  pathway_title: results?.title || pathway || '',
+  pathway_description: results?.description || '',
+  pathway_icon: results?.icon || '',
+  
+  // Formatted next steps (with and without details)
+  next_steps_full: formatNextStepsWithDetails(results?.nextSteps),
+  next_steps_simple: formatNextStepsSimple(results?.nextSteps),
+  
+  // Individual steps for email templates
+  next_step_1: getStepText(results?.nextSteps?.[0]),
+  next_step_1_detail: getStepDetail(results?.nextSteps?.[0]),
+  next_step_2: getStepText(results?.nextSteps?.[1]),
+  next_step_2_detail: getStepDetail(results?.nextSteps?.[1]),
+  next_step_3: getStepText(results?.nextSteps?.[2]),
+  next_step_3_detail: getStepDetail(results?.nextSteps?.[2]),
+  next_step_4: getStepText(results?.nextSteps?.[3]),
+  next_step_4_detail: getStepDetail(results?.nextSteps?.[3]),
+  
+  // Resources
+  recommended_resources: results?.resources?.join('\n• ') || '',
+  resource_1: results?.resources?.[0] || '',
+  resource_2: results?.resources?.[1] || '',
+  resource_3: results?.resources?.[2] || '',
+  resource_4: results?.resources?.[3] || '',
+  resource_5: results?.resources?.[4] || '',
+  resource_6: results?.resources?.[5] || '',
+  
+  // HOME connection
+  home_connection: results?.homeConnection || '',
+  
+  // Meta information
+  is_personalized: results?.isPersonalized ? 'Yes' : 'No',
+  assistant_used: results?.assistantUsed ? 'Yes' : 'No',
+  quiz_completed_date: new Date().toISOString(),
+  quiz_completion_time: new Date().toLocaleString('en-US', { 
+    timeZone: 'America/Chicago',
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  }),
+  
+  // Additional context
+  source: source || 'music-creator-roadmap-quiz',
+  webinar_offer: 'Music Creator Roadmap Course ($299 value) + Artist Branding Playbook (FREE bonus)',
+  community_size: '1,000+ music creators',
+}
     };
 
     console.log('🔄 Sending to GHL webhook:', {
