@@ -1468,7 +1468,7 @@ const HOMEQuizMVP = () => {
               Not sure? Start with the free community and upgrade anytime.<br />
                                                                 {/* Website URL */}
             <div className="text-center mt-8">
-              <p className="text-xs text-gray-600">homeformusic.org</p>
+              <p className="text-xs text-gray-600">homeformusic.org</p><br />
             </div> 
             </p>
                       
