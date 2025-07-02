@@ -851,9 +851,9 @@ const HOMEQuizMVP = () => {
     
     <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8">
       
-      {/* Main Content - Centered */}
-      <div className="flex-1 flex items-center justify-center -mt-20 sm:mt-0">
-        <div className="max-w-4xl w-full text-center">
+{/* Main Content - Centered */}
+<div className="flex-1 flex items-center justify-center">
+  <div className="max-w-4xl w-full text-center">
           {/* Title - Smaller on mobile */}
           <div className="mb-8 sm:mb-12 animate-fadeIn">
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
