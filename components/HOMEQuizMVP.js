@@ -1255,11 +1255,12 @@ const HOMEQuizMVP = () => {
             </div>
 
           </div>
-                      {/* Footer */}
+
+        </div>
+                                            {/* Footer */}
               <div className="text-center mt-8 animate-fadeIn delay-500">
                 <p className="text-xs text-gray-600">homeformusic.org</p>
               </div>
-        </div>
       )}
 
       {screen === 'plan' && pathway && (
@@ -1468,11 +1469,12 @@ const HOMEQuizMVP = () => {
             </p>
                       
           </div>
-                                   {/* Website URL */}
+       
+        </div>
+                                                         {/* Website URL */}
             <div className="text-center mt-8">
               <p className="text-xs text-gray-600">homeformusic.org</p>
-            </div>         
-        </div>
+            </div>  
       )}
     </div>
   );
