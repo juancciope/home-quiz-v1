@@ -1252,15 +1252,16 @@ const HOMEQuizMVP = () => {
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
+                      
             </div>
 
           </div>
-
-        </div>
                                             {/* Footer */}
               <div className="text-center mt-8 animate-fadeIn delay-500">
                 <p className="text-xs text-gray-600">homeformusic.org</p>
               </div>
+        </div>
+
       )}
 
       {screen === 'plan' && pathway && (
