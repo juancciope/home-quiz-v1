@@ -53,7 +53,7 @@ const questions = [
   },
   {
     id: 'stage-level',
-    question: "Which best describes your current stage in HOME's framework?",
+    question: "Which best describes your current stage?",
     icon: <MapPin className="w-6 h-6" />,
     options: [
       { value: 'planning', label: 'Figuring out my path and building foundations', emoji: '🌱' },
