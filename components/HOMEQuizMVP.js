@@ -13,6 +13,7 @@ import {
   MapPin,
   ListChecks,
   Rocket,
+  User,
   Users,
   ArrowRight,
   Circle,
@@ -886,8 +887,8 @@ const HOMEQuizMVP = () => {
           {/* Feature Pills - Compact for mobile */}
           <div className="flex flex-wrap justify-center gap-3 animate-slideUp delay-200">
             {[
-              { icon: Sparkles, label: 'Artist Profile' },
-              { icon: Users, label: 'Priority Lens' },
+              { icon: User, label: 'Artist Profile' },
+              { icon: Target, label: 'Priority Lens' },
               { icon: ListChecks, label: 'Action Plan' }
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
