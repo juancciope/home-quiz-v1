@@ -1241,15 +1241,6 @@ const HOMEQuizMVP = () => {
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
-              
-              {/* HOME Logo */}
-              <div className="text-center mt-8 animate-fadeIn delay-500">
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                  alt="HOME"
-                  className="h-6 mx-auto opacity-30"
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -1454,15 +1445,6 @@ const HOMEQuizMVP = () => {
             <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.
             </p>
-            
-            {/* HOME Logo */}
-            <div className="text-center mt-8">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                alt="HOME"
-                className="h-6 mx-auto opacity-20"
-              />
-            </div>
           </div>
         </div>
       )}
