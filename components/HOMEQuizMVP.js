@@ -1016,7 +1016,7 @@ const HOMEQuizMVP = () => {
     />
   </div>
   <p className="text-xs text-gray-600">
-    Made by HOME for Music
+    homeformusic.org
   </p>
 </div>
     </div>
