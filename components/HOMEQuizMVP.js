@@ -947,11 +947,46 @@ const HOMEQuizMVP = () => {
           </div>
           
 {/* CTA Button - Prominent */}
-            
-            <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
-              2-minute flow • instant results
-            </p>
-          </div>
+<div className="mb-8 sm:mb-12">
+  <button
+    onClick={() => setScreen('quiz')}
+    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
+    style={{ transformStyle: 'preserve-3d' }}
+  >
+    {/* 3D Liquid layers */}
+    <div className="absolute inset-0 rounded-full" style={{ transform: 'translateZ(-10px)' }}>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full" />
+    </div>
+    
+    {/* Animated liquid blobs */}
+    <div className="absolute inset-0 rounded-full animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+      <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#1DD1A1] rounded-full filter blur-2xl opacity-70 animate-liquid-blob" />
+        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#B91372] rounded-full filter blur-2xl opacity-70 animate-liquid-blob-reverse" />
+        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-[#40E0D0] rounded-full filter blur-xl opacity-60 animate-liquid-blob-slow" />
+      </div>
+    </div>
+    
+    {/* Glass effect overlay */}
+    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-full" style={{ transform: 'translateZ(0px)' }} />
+    
+    {/* Shine effect */}
+    <div className="absolute inset-0 rounded-full overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+    </div>
+    
+    {/* Outer glow */}
+    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+    
+    {/* Content */}
+    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Find My Path</span>
+    <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+  </button>
+  
+  <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
+    2-minute flow • instant results
+  </p>
+</div>
           
           {/* Feature Pills - Compact for mobile */}
           <div className="flex flex-wrap justify-center gap-3 animate-slideUp delay-200">
