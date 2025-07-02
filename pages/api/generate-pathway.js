@@ -98,19 +98,19 @@ export default async function handler(req, res) {
         const thread = await openai.beta.threads.create();
 
         // Add message to thread
-        await openai.beta.threads.messages.create(thread.id, {
-          role: "user",
-          content: `Analyze these music creator quiz responses and provide pathway recommendation:
+await openai.beta.threads.messages.create(thread.id, {
+  role: "user",
+  content: `Analyze these music creator quiz responses and provide a personalized pathway recommendation.
 
 RESPONSES:
 - Motivation: ${responses.motivation}
 - Ideal Day: ${responses['ideal-day']}
 - Success Vision: ${responses['success-vision']}
-- Current Stage: ${responses['current-stage']}
-- Biggest Challenge: ${responses['biggest-challenge']}
+- Current Stage: ${responses['stage-level']}
+- Resources Priority: ${responses['resources-priority']}
 
-Please provide personalized pathway recommendation in the specified JSON format with prioritized next steps and personalized HOME connection content.`
-        });
+Please analyze these responses and provide a personalized pathway recommendation following the exact format specified in your instructions.`
+});
 
         // Run the assistant
         const run = await openai.beta.threads.runs.create(thread.id, {
@@ -144,41 +144,68 @@ Please provide personalized pathway recommendation in the specified JSON format 
           throw new Error('No response from assistant');
         }
 
-        // Parse the assistant's response
-        const responseText = assistantMessage.content[0].text.value;
-        console.log('🎯 Assistant response:', responseText);
+// Parse the assistant's response
+const responseText = assistantMessage.content[0].text.value;
+console.log('🎯 Assistant response received');
 
-        let aiResponse;
-        try {
-          // Try to extract JSON from the response
-          const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            aiResponse = JSON.parse(jsonMatch[0]);
-          } else {
-            throw new Error('No JSON found in assistant response');
-          }
-        } catch (parseError) {
-          console.error('Failed to parse assistant response:', parseError);
-          throw new Error('Invalid assistant response format');
-        }
+let aiResponse;
+try {
+  // Extract JSON from the response
+  const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    aiResponse = JSON.parse(jsonMatch[0]);
+  } else {
+    throw new Error('No JSON found in assistant response');
+  }
+} catch (parseError) {
+  console.error('Failed to parse assistant response:', parseError);
+  throw new Error('Invalid assistant response format');
+}
+
+// Validate the response has all required fields
+if (!aiResponse.pathway || 
+    !aiResponse.customNextSteps || 
+    !aiResponse.homeConnection ||
+    !aiResponse.recommendedResources) {
+  console.error('Incomplete response:', aiResponse);
+  throw new Error('Incomplete assistant response');
+}
         
-        // Get template data and combine with AI personalization
-        const template = pathwayTemplates[aiResponse.pathway];
-        if (!template) {
-          throw new Error('Invalid pathway returned by assistant');
-        }
-        
-        const result = {
-          title: template.title,
-          description: aiResponse.personalizedDescription,
-          icon: template.icon,
-          nextSteps: aiResponse.customNextSteps,
-          resources: template.resources,
-          homeConnection: aiResponse.homeConnection, // 🔥 FIXED: Use AI-generated content instead of template
-          isPersonalized: true,
-          assistantUsed: true,
-          responses // Include for debugging/analytics
-        };
+// Get pathway metadata
+const pathwayIcons = {
+  'touring-performer': '🎤',
+  'creative-artist': '🎨',
+  'writer-producer': '🎹'
+};
+
+const pathwayTitles = {
+  'touring-performer': 'The Touring Performer Path',
+  'creative-artist': 'The Creative Artist Path',
+  'writer-producer': 'The Writer-Producer Path'
+};
+
+// Format the response for the frontend
+const result = {
+  pathway: aiResponse.pathway,
+  title: pathwayTitles[aiResponse.pathway] || 'Your Music Creator Path',
+  description: aiResponse.personalizedDescription,
+  icon: pathwayIcons[aiResponse.pathway] || '🎵',
+  nextSteps: aiResponse.customNextSteps.map(step => ({
+    priority: step.priority,
+    step: step.step,
+    detail: step.detail
+  })),
+  resources: aiResponse.recommendedResources,
+  homeConnection: aiResponse.homeConnection,
+  isPersonalized: true,
+  assistantUsed: true
+};
+
+console.log('✅ Successfully generated personalized pathway:', {
+  pathway: result.pathway,
+  hasSteps: result.nextSteps.length,
+  hasResources: result.resources.length
+});
 
         console.log('✅ Successfully generated personalized pathway using Assistant');
         res.status(200).json(result);
