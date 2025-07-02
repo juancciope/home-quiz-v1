@@ -887,15 +887,15 @@ const HOMEQuizMVP = () => {
             </button>
             
             <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
-              2-minute flow • instant results
+              Free • 2 minutes
             </p>
           </div>
           
           {/* Feature Pills - Compact for mobile */}
           <div className="flex flex-wrap justify-center gap-3 animate-slideUp delay-200">
             {[
-              { icon: IdCard, label: 'Artist Profile' },
-              { icon: Target, label: 'Priority Lens' },
+              { icon: Sparkles, label: 'AI-Powered' },
+              { icon: Users, label: '1,000+ Creators' },
               { icon: ListChecks, label: 'Action Plan' }
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
@@ -911,7 +911,7 @@ const HOMEQuizMVP = () => {
       {/* Footer - Smaller on mobile */}
       <div className="text-center mt-8 animate-fadeIn delay-500">
         <p className="text-xs text-gray-600">
-          Made by homeformusic.org
+          Made by HOME for Music
         </p>
       </div>
     </div>
