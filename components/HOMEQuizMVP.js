@@ -919,9 +919,13 @@ const HOMEQuizMVP = () => {
   return (
     <div className="app-container">
       {showProgress && <ProgressBar currentCheckpoint={currentCheckpoint} />}
-      {/* Website URL - shows on all pages except landing */}
+{/* Website URL - shows on all pages except landing */}
 {screen !== 'landing' && (
-  <div className="fixed bottom-6 left-0 right-0 text-center z-30 pointer-events-none">
+  <div className={`${
+    screen === 'plan' || screen === 'celebration' || screen === 'execute' 
+      ? 'text-center mt-8 pb-6' 
+      : 'fixed bottom-6 left-0 right-0 text-center z-30 pointer-events-none'
+  }`}>
     <p className="text-xs text-gray-600">homeformusic.org</p>
   </div>
 )}
