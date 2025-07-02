@@ -403,7 +403,7 @@ const PremiumConfetti = ({ show }) => {
   
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      <style jsx>{`
+<style dangerouslySetInnerHTML={{ __html: `
         @keyframes confetti-fall {
           0% {
             transform: translateY(-100vh) translateX(0) rotate(0deg) scale(0);
@@ -445,7 +445,7 @@ const PremiumConfetti = ({ show }) => {
           animation-delay: var(--sparkle-delay);
           box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
-      `}</style>
+      `}} />
       
       {[...Array(80)].map((_, i) => {
         const shapes = ['circle', 'square', 'triangle', 'star'];
@@ -806,6 +806,16 @@ const HOMEQuizMVP = () => {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
       }
+      /* Add this after the other @keyframes animations */
+@keyframes gradient-x {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s ease-in-out infinite;
+  background-size: 200% 100%;
+}
       
       .animate-fadeIn {
         animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
