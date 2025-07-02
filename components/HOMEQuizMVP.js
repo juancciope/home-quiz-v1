@@ -1190,7 +1190,7 @@ const HOMEQuizMVP = () => {
               </div>
             )}
                       {/* Footer */}
-          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+          <div className="fixed bottom-12 left-0 right-0 text-center pointer-events-none">
             <p className="text-xs text-gray-600">homeformusic.org</p>
           </div>
           </div>
