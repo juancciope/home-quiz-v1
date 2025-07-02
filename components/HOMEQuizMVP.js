@@ -105,10 +105,10 @@ const pathwayTemplates = {
         description: "Create a powerful performance that captivates audiences and leaves them wanting more",
         actions: [
           "Map out a 45-minute setlist with emotional peaks and valleys",
-          "Record live rehearsal videos to analyze your stage presence",
-          "Design smooth transitions between songs with stories or audience interaction",
-          "Practice your set 3× this week in HOME's rehearsal space",
-          "Get feedback from 5 fellow musicians on your performance energy"
+          "Study successful live albums in your genre for pacing insights",
+          "Record your rehearsals weekly to track improvement",
+          "Design smooth transitions using key relationships between songs",
+          "Create three different setlist variations for different venue types"
         ],
         whyItMatters: "A killer live set is your #1 tool for winning over new fans and booking better gigs. This is where you transform from someone who plays songs to an artist who creates experiences.",
         homeResources: [
@@ -121,51 +121,51 @@ const pathwayTemplates = {
         title: "Master Your Stage Presence",
         description: "Develop the confidence and charisma that makes audiences remember you",
         actions: [
-          "Film yourself performing and identify 3 movements that feel authentic",
-          "Study 5 favorite performers and note their engagement techniques",
-          "Practice talking between songs—write out 3 compelling stories",
-          "Work with HOME's performance coach for personalized feedback",
-          "Perform at 2 local venues this month to build confidence"
+          "Film yourself performing and identify areas for improvement",
+          "Study 5 favorite performers and document their engagement techniques",
+          "Practice storytelling between songs with a timer",
+          "Develop 3 signature stage moves that feel authentic to you",
+          "Perform at 2 new venues monthly to expand your comfort zone"
         ],
         whyItMatters: "Great songs are only half the equation. Your stage presence determines whether people become fans or forget you. This skill directly impacts your booking fees and fan loyalty.",
         homeResources: [
-          "Stage Presence Workshops",
-          "Video Review Sessions",
-          "Performance Psychology Training"
+          "Stage Presence Workshops at HOME",
+          "Video Review Sessions with coaches",
+          "Performance Psychology Training programs"
         ]
       },
       {
         title: "Create Your Professional EPK",
         description: "Build a booking package that gets venue owners and agents to say YES",
         actions: [
-          "Shoot high-quality live performance videos (3–4 songs)",
-          "Write a compelling artist bio that tells your story in 150 words",
-          "Gather professional photos from recent shows",
-          "Create a one-page PDF with all booking essentials",
-          "Build a simple EPK website using HOME's templates"
+          "Shoot high-quality live performance videos of your 4 best songs",
+          "Write a compelling 150-word artist bio that tells your story",
+          "Gather 10 professional photos from recent performances",
+          "Create a one-page PDF with all essential booking information",
+          "Build a simple website showcasing your live performance assets"
         ],
         whyItMatters: "Your EPK is often your only shot at landing bigger gigs. A professional package can be the difference between $200 bar gigs and $2,000 festival slots.",
         homeResources: [
-          "EPK Templates & Examples",
+          "EPK Templates & Examples library",
           "Professional Photography Sessions",
-          "Copywriting Support"
+          "Copywriting Support from HOME team"
         ]
       },
       {
         title: "Book Your Next 10 Shows",
         description: "Build momentum with a strategic booking plan that grows your fanbase",
         actions: [
-          "Research 20 venues that fit your genre and draw",
-          "Send personalized booking emails using HOME's proven templates",
-          "Follow up with 5 venues every week until booked",
-          "Network at HOME showcases to meet booking agents",
-          "Create a touring route that makes financial sense"
+          "Research 20 venues that match your genre and current draw",
+          "Create a tracking spreadsheet for venue contacts and follow-ups",
+          "Send 5 personalized booking emails every week",
+          "Follow up persistently with venues every 2 weeks",
+          "Plan efficient routing to minimize travel costs between cities"
         ],
         whyItMatters: "Consistent gigging builds your reputation, income, and fanbase faster than anything else. This systematic approach removes the guesswork from booking.",
         homeResources: [
-          "Venue Database Access",
-          "Booking Email Templates",
-          "Agent Networking Events"
+          "HOME's Venue Database (500+ contacts)",
+          "Proven Booking Email Templates",
+          "Agent Networking Events at HOME"
         ]
       }
     ]
@@ -188,68 +188,68 @@ const pathwayTemplates = {
         title: "Define Your Unique Artist Brand",
         description: "Discover and articulate what makes you different from every other artist",
         actions: [
-          "Complete HOME's Brand Discovery Worksheet to find your core values",
-          "Create a mood board with 20 images that represent your vibe",
-          "Write your artist mission statement in one powerful sentence",
+          "List 10 core values that guide your creative decisions",
+          "Create a mood board with 20 images representing your aesthetic",
+          "Write your artist mission statement in one memorable sentence",
           "Choose 3 primary colors and 2 fonts for visual consistency",
-          "Design your logo or wordmark with HOME's design tools"
+          "Define your target audience with specific demographics and interests"
         ],
         whyItMatters: "A clear brand helps you stand out in a sea of content. When fans can recognize your content instantly, they're more likely to engage, share, and buy.",
         homeResources: [
-          "Brand Development Workshop",
-          "Design Software Access",
-          "1-on-1 Brand Coaching"
+          "Brand Development Workshop series",
+          "Professional Design Software access",
+          "1-on-1 Brand Coaching sessions"
         ]
       },
       {
         title: "Build Your Content Strategy",
         description: "Create a sustainable system for producing engaging content that grows your fanbase",
         actions: [
+          "Analyze your past content to identify top-performing themes",
           "Map out 30 days of content ideas aligned with your brand",
-          "Set up a weekly content creation schedule you can maintain",
-          "Create templates for 5 types of posts (behind-the-scenes, performances, etc.)",
-          "Develop a signature video format that fans will recognize",
-          "Track which content types get the most engagement"
+          "Create 5 repeatable content formats your fans will recognize",
+          "Set specific weekly time blocks for creation vs consumption",
+          "Track engagement metrics weekly to refine your approach"
         ],
         whyItMatters: "Consistent, strategic content builds trust and keeps you top-of-mind with fans. A good strategy turns casual viewers into devoted supporters who buy everything you create.",
         homeResources: [
-          "Content Calendar Templates",
-          "Video Production Equipment",
-          "Social Media Analytics Tools"
+          "Content Calendar Templates library",
+          "Video Production Equipment access",
+          "Social Media Analytics training"
         ]
       },
       {
         title: "Diversify Your Revenue Streams",
         description: "Build multiple income sources so you're not dependent on any single platform",
         actions: [
-          "Set up merchandise with HOME's print-on-demand partners",
-          "Launch a fan subscription tier with exclusive content",
-          "Create and sell sample packs or presets in your genre",
-          "Develop an online course teaching your specialty",
-          "Apply for sync licensing opportunities through HOME's network"
+          "Research 10 ways successful artists in your genre monetize",
+          "Choose 3 revenue streams to launch this quarter",
+          "Price your offerings based on competitor research",
+          "Create one digital product you can sell immediately",
+          "Set specific monthly income goals for each revenue stream"
         ],
         whyItMatters: "Multiple revenue streams provide financial stability and creative freedom. This approach lets you focus on making great music without financial stress.",
         homeResources: [
-          "Merch Design & Fulfillment",
-          "Fan Platform Setup Guide",
-          "Sync Licensing Connections"
+          "Merch Design & Fulfillment partners",
+          "Fan Platform Setup Guide & tools",
+          "Sync Licensing Network connections"
         ]
       },
       {
         title: "Cultivate Your Community",
         description: "Transform followers into a loyal community that supports your journey",
         actions: [
-          "Host monthly virtual hangouts with your most engaged fans",
-          "Create a private community space for your supporters",
-          "Share personal stories that deepen fan connections",
-          "Recognize and reward your most supportive fans publicly",
-          "Collaborate with fans on creative projects"
+          "Identify your 50 most engaged fans across all platforms",
+          "Create exclusive content for your core supporter group",
+          "Host monthly gatherings (virtual or in-person) for fans",
+          "Share personal stories that create emotional connections",
+          "Develop a system to recognize and reward fan loyalty"
         ],
         whyItMatters: "A strong community provides sustainable support beyond just streams and sales. These are the people who will champion your music and fund your dreams.",
         homeResources: [
-          "Community Building Workshop",
-          "Fan Engagement Tools",
-          "Virtual Event Platform"
+          "Community Building Workshop at HOME",
+          "Fan Engagement Platform tools",
+          "Virtual Event hosting support"
         ]
       }
     ]
@@ -272,17 +272,17 @@ const pathwayTemplates = {
         title: "Master Your Production Craft",
         description: "Develop the technical skills that make artists want to work with you",
         actions: [
-          "Complete one new production technique tutorial daily",
-          "Recreate 5 hit songs in your genre to understand their structure",
-          "Build a template library for fast, professional workflows",
-          "Master HOME's studio equipment through hands-on practice",
-          "Get feedback on mixes from established producers in community"
+          "Complete one production technique tutorial daily for 30 days",
+          "Recreate 5 hit songs to understand professional arrangement",
+          "Build custom presets and templates for efficient workflow",
+          "Study mixing techniques from Grammy-winning engineers",
+          "Practice with different genres to expand your versatility"
         ],
         whyItMatters: "Technical excellence opens doors. When artists trust your skills, they recommend you to others, creating a snowball effect of opportunities.",
         homeResources: [
-          "Pro Studio Access 24/7",
-          "Production Masterclasses",
-          "Mixing/Mastering Workshops"
+          "Pro Studio Access 24/7 at HOME",
+          "Production Masterclasses monthly",
+          "Mixing/Mastering Workshop series"
         ]
       },
       {
@@ -291,49 +291,49 @@ const pathwayTemplates = {
         actions: [
           "Produce 10 tracks across 3 different genres",
           "Create before/after demos showing your production impact",
-          "Build a professional website with your best work",
-          "Get testimonials from 5 artists you've worked with",
-          "Submit tracks to HOME's sync licensing catalog"
+          "Build a professional website featuring your best work",
+          "Collect written testimonials from every artist collaboration",
+          "Document your production process for case studies"
         ],
         whyItMatters: "A strong portfolio is your calling card. It shows potential clients exactly what you can do and gives them confidence to invest in your services.",
         homeResources: [
           "Portfolio Website Templates",
           "Artist Collaboration Network",
-          "Sync Submission Portal"
+          "Sync Submission Portal access"
         ]
       },
       {
         title: "Network & Find Clients",
         description: "Build relationships that lead to consistent production work",
         actions: [
-          "Attend HOME's weekly producer meetups",
-          "Offer 3 free demos to artists in your target genre",
-          "Connect with A&Rs and label contacts at HOME events",
-          "Join online communities where your ideal clients hang out",
-          "Create content showing your production process"
+          "Reach out to 5 new artists weekly with personalized messages",
+          "Offer 3 free demo productions to build initial relationships",
+          "Attend 2 industry events monthly and connect with 10 people",
+          "Share your production process on social media weekly",
+          "Follow up with past clients quarterly to maintain connections"
         ],
         whyItMatters: "Great producers are booked through relationships, not just skills. Building a strong network ensures steady work and better opportunities.",
         homeResources: [
-          "Producer Networking Events",
-          "A&R Introduction Program",
-          "Client Management Tools"
+          "Weekly Producer Meetups at HOME",
+          "A&R Introduction Program access",
+          "Client Management CRM tools"
         ]
       },
       {
         title: "Master the Business Side",
         description: "Understand contracts, royalties, and how to protect your interests",
         actions: [
-          "Learn the basics of music publishing and royalty splits",
-          "Create standard contracts for different types of projects",
-          "Register with a PRO and understand how to collect royalties",
-          "Set up systems for tracking sessions and invoicing",
-          "Build relationships with music supervisors for sync opportunities"
+          "Learn the difference between work-for-hire and royalty deals",
+          "Create template contracts for different project types",
+          "Register with a PRO and set up royalty collection",
+          "Implement professional invoicing and accounting systems",
+          "Research sync licensing opportunities in your genres"
         ],
         whyItMatters: "Understanding the business ensures you get paid fairly for your work. This knowledge protects your interests and maximizes your income potential.",
         homeResources: [
-          "Music Business Course",
-          "Contract Templates",
-          "Publishing Workshop"
+          "Music Business Course at HOME",
+          "Contract Templates library",
+          "Publishing Workshop with experts"
         ]
       }
     ]
