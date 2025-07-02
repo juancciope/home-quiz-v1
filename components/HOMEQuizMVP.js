@@ -1253,11 +1253,12 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
-{/* Footer */}
+
+          </div>
+                      {/* Footer */}
               <div className="text-center mt-8 animate-fadeIn delay-500">
                 <p className="text-xs text-gray-600">homeformusic.org</p>
               </div>
-          </div>
         </div>
       )}
 
@@ -1463,14 +1464,14 @@ const HOMEQuizMVP = () => {
             {/* Footer */}
             <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.
-                      {/* Website URL */}
-            <div className="text-center mt-8">
-              <p className="text-xs text-gray-600">homeformusic.org</p>
-            </div>
+
             </p>
                       
           </div>
-                      
+                                   {/* Website URL */}
+            <div className="text-center mt-8">
+              <p className="text-xs text-gray-600">homeformusic.org</p>
+            </div>         
         </div>
       )}
     </div>
