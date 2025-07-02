@@ -29,15 +29,9 @@ const formatNextStepsWithDetails = (steps) => {
   }).join('\n\n');
 };
 
-// Format next steps without details (just the action items)
-const formatNextStepsSimple = (steps) => {
-  if (!steps || !Array.isArray(steps)) return '';
-  
-  return steps.map((step, index) => {
-    const stepText = getStepText(step);
-    const priority = (typeof step === 'object' && step.priority) ? step.priority : index + 1;
-    return `${priority}. ${stepText}`;
-  }).join('\n');
+const formatResourcesList = (resources) => {
+  if (!resources || !Array.isArray(resources)) return '';
+  return resources.map((resource, index) => `${index + 1}. ${resource}`).join('\n');
 };
 
 // Circle integration functions
@@ -402,15 +396,42 @@ export default async function handler(req, res) {
       } : null
     });
 
+    // Log the complete results object for debugging
+    console.log('📊 Complete results object:', JSON.stringify(results, null, 2));
+
     // Format response data for GHL webhook
     const formattedResponses = Object.entries(responses || {})
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n');
 
+    // Format the timestamp for quiz completion date
+    const quizCompletedDate = new Date().toISOString();
+
+    // Create webhook data with all required fields
     const webhookData = {
+      // Basic fields
       email,
-      pathway: results?.title || pathway || 'Unknown Pathway',
       source: source || 'music-creator-roadmap-quiz',
+      
+      // Quiz response fields (matching your GHL custom fields)
+      custom_fields: {
+        ideal_day: responses?.['ideal-day'] || '',
+        motivation: responses?.motivation || '',
+        stage_level: responses?.['stage-level'] || '',
+        success_vision: responses?.['success-vision'] || '',
+        resource_priority: responses?.['resources-priority'] || '',
+        quiz_completed_date: quizCompletedDate,
+        pathway_icon: results?.icon || '🎵',
+        pathway_description: results?.description || '',
+        home_connection: results?.homeConnection || 'HOME provides the perfect environment to accelerate your music career journey.',
+        next_steps_formatted: formatNextStepsWithDetails(results?.nextSteps || []),
+        recommended_resources_formatted: formatResourcesList(results?.resources || [])
+      },
+      
+      // Main pathway field
+      pathway: results?.title || pathway || 'Unknown Pathway',
+      
+      // Additional formatted fields for backward compatibility
       quiz_responses: formattedResponses,
       next_steps: formatNextStepsWithDetails(results?.nextSteps || []),
       next_steps_simple: formatNextStepsSimple(results?.nextSteps || []),
@@ -419,10 +440,16 @@ export default async function handler(req, res) {
       stage: responses?.['stage-level'] || 'Unknown',
       motivation: responses?.motivation || 'Unknown',
       success_vision: responses?.['success-vision'] || 'Unknown',
+      ideal_day: responses?.['ideal-day'] || 'Unknown',
+      resource_priority: responses?.['resources-priority'] || 'Unknown',
+      pathway_icon: results?.icon || '🎵',
+      pathway_description: results?.description || '',
       is_personalized: results?.isPersonalized ? 'Yes' : 'No',
       assistant_used: results?.assistantUsed ? 'Yes' : 'No',
-      timestamp: new Date().toISOString()
+      timestamp: quizCompletedDate
     };
+    
+    console.log('📤 Webhook data being sent:', JSON.stringify(webhookData, null, 2));
     
     console.log('📤 Sending to GHL webhook:', {
       url: process.env.GHL_WEBHOOK_URL ? 'SET' : 'NOT SET',
