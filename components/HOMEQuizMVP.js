@@ -1076,6 +1076,10 @@ const HOMEQuizMVP = () => {
                     </div>
                   </button>
                 ))}
+                {/* Footer */}
+          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+            <p className="text-xs text-gray-600">homeformusic.org</p>
+          </div>
               </div>
             </div>
           </div>
@@ -1098,6 +1102,10 @@ const HOMEQuizMVP = () => {
             <p className="text-gray-500">
               Creating your personalized music creator pathway
             </p>
+            {/* Footer */}
+          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+            <p className="text-xs text-gray-600">homeformusic.org</p>
+          </div>
           </div>
         </div>
       )}
@@ -1181,6 +1189,10 @@ const HOMEQuizMVP = () => {
                 </div>
               </div>
             )}
+                      {/* Footer */}
+          <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
+            <p className="text-xs text-gray-600">homeformusic.org</p>
+          </div>
           </div>
         </div>
       )}
@@ -1241,6 +1253,10 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
+{/* Footer */}
+              <div className="text-center mt-8 animate-fadeIn delay-500">
+                <p className="text-xs text-gray-600">homeformusic.org</p>
+              </div>
           </div>
         </div>
       )}
@@ -1348,6 +1364,10 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
+{/* Footer */}
+              <div className="text-center mt-8 animate-fadeIn delay-500">
+                <p className="text-xs text-gray-600">homeformusic.org</p>
+              </div>
           </div>
         </div>
       )}
@@ -1443,8 +1463,14 @@ const HOMEQuizMVP = () => {
             {/* Footer */}
             <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.
+                      {/* Website URL */}
+            <div className="text-center mt-8">
+              <p className="text-xs text-gray-600">homeformusic.org</p>
+            </div>
             </p>
+                      
           </div>
+                      
         </div>
       )}
     </div>
