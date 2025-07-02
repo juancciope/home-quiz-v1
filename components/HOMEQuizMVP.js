@@ -1470,12 +1470,12 @@ const HOMEQuizMVP = () => {
             </p>
                       
           </div>
-       
-        </div>
-                                                         {/* Website URL */}
+                                                                {/* Website URL */}
             <div className="text-center mt-8">
               <p className="text-xs text-gray-600">homeformusic.org</p>
             </div>  
+        </div>
+
       )}
     </div>
   );
