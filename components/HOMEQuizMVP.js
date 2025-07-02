@@ -867,17 +867,19 @@ const HOMEQuizMVP = () => {
             </p>
           </div>
           
-          {/* CTA Button - Prominent */}
-          <div className="mb-8 sm:mb-12">
-            <button
-              onClick={() => setScreen('quiz')}
-              className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
-              <span className="relative">Find My Path</span>
-              <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+{/* CTA Button - Prominent */}
+<div className="mb-8 sm:mb-12">
+  <button
+    onClick={() => setScreen('quiz')}
+    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden"
+  >
+    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] via-[#B91372] to-[#1DD1A1] rounded-full animate-gradient-x" />
+    </div>
+    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
+    <span className="relative">Find My Path</span>
+    <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
+  </button>
             
             <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
               2-minute flow • instant results
