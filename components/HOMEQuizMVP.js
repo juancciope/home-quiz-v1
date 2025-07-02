@@ -870,7 +870,7 @@ const HOMEQuizMVP = () => {
               </span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-xl mx-auto">
-              Smart AI insights that define your style, rank your top priorities, and map out your next moves.
+             AI-driven insights that rank your top priorities and map your next moves.
             </p>
           </div>
           
@@ -911,7 +911,7 @@ const HOMEQuizMVP = () => {
       {/* Footer - Smaller on mobile */}
       <div className="text-center mt-8 animate-fadeIn delay-500">
         <p className="text-xs text-gray-600">
-          Made with ❤️ by HOME for Music
+          Made by HOME for Music
         </p>
       </div>
     </div>
