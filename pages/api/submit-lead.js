@@ -1,5 +1,3 @@
-// Import the Circle integration (you'll need to create this as a separate file)
-// const { createCirclePost } = require('../utils/circle-integration');
 // Helper function to extract step text from various formats
 const getStepText = (step) => {
   if (!step) return '';
@@ -41,7 +39,8 @@ const formatNextStepsSimple = (steps) => {
     return `${priority}. ${stepText}`;
   }).join('\n');
 };
-// Circle integration functions (embedded for now - you can move to separate file)
+
+// Circle integration functions
 const CIRCLE_API_URL = 'https://app.circle.so/api/admin/v2/posts';
 const CIRCLE_SPACE_ID = 2102224;
 
@@ -68,8 +67,8 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
     "content": [
       {
         "type": "text",
-        "text": `${results?.pathway_icon || '🎵'} ${pathway}`,
-        "circle_ios_fallback_text": `${results?.pathway_icon || '🎵'} ${pathway}`
+        "text": `${results?.icon || '🎵'} ${results?.title || pathway}`,
+        "circle_ios_fallback_text": `${results?.icon || '🎵'} ${results?.title || pathway}`
       }
     ]
   });
@@ -91,14 +90,14 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
   });
 
   // Add pathway description
-  if (results?.pathway_description) {
+  if (results?.description) {
     content.push({
       "type": "paragraph",
       "content": [
         {
           "type": "text",
-          "text": results.pathway_description,
-          "circle_ios_fallback_text": results.pathway_description
+          "text": results.description,
+          "circle_ios_fallback_text": results.description
         }
       ]
     });
@@ -121,27 +120,28 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
   const responseLabels = {
     motivation: "What drives your music career ambitions?",
     'ideal-day': "Ideal workday as a music professional:",
-    'success-vision': "Success vision in 5 years:",
-    'current-stage': "Current stage:",
-    'biggest-challenge': "Biggest challenge:"
+    'success-vision': "Success vision in 3 years:",
+    'stage-level': "Current stage:",
+    'resources-priority': "Resources priority:"
   };
 
   const valueMap = {
-    'live-performance': 'The energy of a live audience and performing music from the stage',
-    'artistic-expression': 'Artistic expression through recording music and building a loyal following online',
-    'collaboration': 'Making great songs and collaborating with other talented creators',
-    'performing-travel': 'Traveling to a new city to perform for a live audience',
-    'releasing-music': 'Releasing a new song that you are really proud of',
-    'writing-creating': 'Writing the best song that you have ever written',
-    'touring-headliner': 'Headlining major tours and playing sold out shows around the world',
-    'passive-income-artist': 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions',
-    'hit-songwriter': 'Having multiple major hit songs that you collaborated on and earning \'mailbox money\' through sync placements and other royalty streams',
+    'stage-energy': 'The energy of a live audience and performing music from the stage',
+    'creative-expression': 'Artistic expression through recording music and building a loyal following online',
+    'behind-scenes': 'Making great songs and collaborating with other talented creators',
+    'performing': 'Traveling to a new city to perform for a live audience',
+    'creating-content': 'Releasing a new song that you are really proud of',
+    'studio-work': 'Writing the best song that you have ever written',
+    'touring-artist': 'Headlining major tours and playing sold out shows around the world',
+    'creative-brand': 'Earning passive income from a large streaming audience, branded merch sales, and fan subscriptions',
+    'in-demand-producer': 'Having multiple major hit songs that you collaborated on and earning mailbox money through sync placements and other royalty streams',
     'planning': 'Planning Stage - Figuring out my path and building foundations',
     'production': 'Production Stage - Actively creating and releasing work',
-    'scale': 'Scale Stage - Already making the majority of my income from music and looking to grow my business',
-    'performance-opportunities': 'I need more opportunities to perform and grow my live audience',
-    'brand-audience': 'I\'m creating great content, but struggle to build a consistent brand and online audience',
-    'collaboration-income': 'I work behind the scenes, but need better access to collaborators, placements, and consistent income'
+    'scale': 'Scale Stage - Ready to grow and expand my existing success',
+    'performance-facilities': 'Rehearsal spaces, live sound equipment, and performance opportunities',
+    'content-creation': 'Recording studios, video production, and content creation tools',
+    'collaboration-network': 'Access to other creators, producers, and industry professionals',
+    'business-mentorship': 'Business guidance, marketing strategy, and industry connections'
   };
 
   Object.entries(responses || {}).forEach(([key, value]) => {
@@ -178,20 +178,22 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
     ]
   });
 
-  const nextSteps = results?.customNextSteps || results?.next_steps || [];
+  const nextSteps = results?.nextSteps || [];
   if (Array.isArray(nextSteps)) {
-    nextSteps.forEach((step, index) => {
-      const stepText = typeof step === 'object' ? step.step : step;
-      const priority = typeof step === 'object' ? step.priority : index + 1;
+    nextSteps.forEach((step) => {
+      const priority = step.priority || 1;
+      const stepText = step.step || step;
+      const detail = step.detail || '';
       
+      // Add the main step
       content.push({
         "type": "paragraph",
         "content": [
           {
             "type": "text",
             "marks": [{ "type": "bold" }],
-            "text": `${priority}. `,
-            "circle_ios_fallback_text": `${priority}. `
+            "text": `Step ${priority}: `,
+            "circle_ios_fallback_text": `Step ${priority}: `
           },
           {
             "type": "text",
@@ -200,24 +202,39 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
           }
         ]
       });
+      
+      // Add the detail if present
+      if (detail) {
+        content.push({
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "marks": [{ "type": "italic" }],
+              "text": `→ ${detail}`,
+              "circle_ios_fallback_text": `→ ${detail}`
+            }
+          ]
+        });
+      }
     });
   }
 
   // Add recommended resources section
-  content.push({
-    "type": "heading",
-    "attrs": { "level": 3 },
-    "content": [
-      {
-        "type": "text",
-        "text": "📚 Recommended Resources",
-        "circle_ios_fallback_text": "Recommended Resources"
-      }
-    ]
-  });
+  const resources = results?.resources || [];
+  if (resources.length > 0) {
+    content.push({
+      "type": "heading",
+      "attrs": { "level": 3 },
+      "content": [
+        {
+          "type": "text",
+          "text": "📚 Recommended HOME Resources",
+          "circle_ios_fallback_text": "Recommended HOME Resources"
+        }
+      ]
+    });
 
-  const resources = results?.recommended_resources || results?.resources || [];
-  if (Array.isArray(resources)) {
     resources.forEach(resource => {
       content.push({
         "type": "paragraph",
@@ -233,7 +250,7 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
   }
 
   // Add HOME connection section
-  if (results?.home_connection) {
+  if (results?.homeConnection) {
     content.push({
       "type": "heading",
       "attrs": { "level": 3 },
@@ -251,8 +268,8 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
       "content": [
         {
           "type": "text",
-          "text": results.home_connection,
-          "circle_ios_fallback_text": results.home_connection
+          "text": results.homeConnection,
+          "circle_ios_fallback_text": results.homeConnection
         }
       ]
     });
@@ -265,10 +282,10 @@ const formatQuizResultsForCircle = (email, pathway, responses, results) => {
       {
         "type": "text",
         "marks": [{ "type": "italic" }],
-        "text": results?.is_personalized ? 
+        "text": results?.isPersonalized ? 
           "✨ This roadmap was AI-personalized based on the user's specific responses." :
           "📋 This roadmap was generated using template-based recommendations.",
-        "circle_ios_fallback_text": results?.is_personalized ? 
+        "circle_ios_fallback_text": results?.isPersonalized ? 
           "This roadmap was AI-personalized based on the user's specific responses." :
           "This roadmap was generated using template-based recommendations."
       }
@@ -344,6 +361,22 @@ const createCirclePost = async (email, pathway, responses, results) => {
 
 // Main handler function
 export default async function handler(req, res) {
+  // CRITICAL DEBUG LOGGING
+  console.log('🔔 =================================');
+  console.log('🔔 SUBMIT-LEAD API CALLED');
+  console.log('🔔 Method:', req.method);
+  console.log('🔔 Has results?:', !!req.body?.results);
+  console.log('🔔 Results keys:', req.body?.results ? Object.keys(req.body.results) : 'NO RESULTS');
+  console.log('🔔 =================================');
+  
+  // Check environment variables
+  console.log('🔧 Environment check:');
+  console.log('- GHL_WEBHOOK_URL exists:', !!process.env.GHL_WEBHOOK_URL);
+  console.log('- GHL_WEBHOOK_URL length:', process.env.GHL_WEBHOOK_URL?.length);
+  console.log('- GHL_WEBHOOK_URL preview:', process.env.GHL_WEBHOOK_URL ? 
+    process.env.GHL_WEBHOOK_URL.substring(0, 30) + '...' : 'NOT SET');
+  console.log('- CIRCLE_API_TOKEN exists:', !!process.env.CIRCLE_API_TOKEN);
+
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -351,197 +384,19 @@ export default async function handler(req, res) {
   try {
     const { email, pathway, responses, source, results } = req.body;
     
-    console.log('📧 Submit Lead API called with:', {
+    console.log('📧 Submit Lead API detailed data:', {
       email,
       pathway,
       hasResponses: !!responses,
       hasResults: !!results,
-      resultsKeys: results ? Object.keys(results) : [],
-      nextStepsType: results?.customNextSteps ? 'customNextSteps (new format)' : results?.next_steps ? 'next_steps (old format)' : 'none',
-      nextStepsLength: (results?.customNextSteps || results?.next_steps)?.length || 0,
-      firstStepStructure: (results?.customNextSteps || results?.next_steps)?.[0]
-    });
-    
-    // Validate required fields
-    if (!email) {
-      return res.status(400).json({ message: 'Email is required' });
-    }
-
-    const formatResources = (resources) => {
-      if (!resources || !Array.isArray(resources)) return '';
-      return resources.map(resource => `• ${resource}`).join('\n');
-    };
-
-    const formattedNextSteps = formatNextSteps(results?.customNextSteps || results?.next_steps);
-    const formattedResources = formatResources(results?.recommended_resources || results?.resources);
-    
-    console.log('🔧 Formatted content preview:', {
-      nextStepsPreview: formattedNextSteps.substring(0, 100) + '...',
-      resourcesPreview: formattedResources.substring(0, 100) + '...',
-      nextStepsLength: formattedNextSteps.length,
-      resourcesLength: formattedResources.length
-    });
-
-    // Prepare comprehensive data for GHL
-    const ghlData = {
-      email,
-      source: source || 'music-creator-roadmap-quiz',
-      pathway: pathway || 'Unknown',
-      tags: [
-        'quiz-completed',
-        `pathway-${(pathway || 'unknown').toLowerCase().replace(/\s+/g, '-').replace('the-', '')}`,
-        `stage-${responses?.['current-stage'] || 'unknown'}`,
-        `challenge-${responses?.['biggest-challenge'] || 'unknown'}`.substring(0, 30)
-      ],
-custom_fields: {
-  // Quiz responses
-  motivation: responses?.motivation || '',
-  ideal_day: responses?.['ideal-day'] || '',
-  success_vision: responses?.['success-vision'] || '',
-  current_stage: responses?.['stage-level'] || '',
-  resources_priority: responses?.['resources-priority'] || '',
-  
-  // Pathway information
-  pathway: results?.pathway || pathway || '',
-  pathway_title: results?.title || pathway || '',
-  pathway_description: results?.description || '',
-  pathway_icon: results?.icon || '',
-  
-  // Formatted next steps (with and without details)
-  next_steps_full: formatNextStepsWithDetails(results?.nextSteps),
-  next_steps_simple: formatNextStepsSimple(results?.nextSteps),
-  
-  // Individual steps for email templates
-  next_step_1: getStepText(results?.nextSteps?.[0]),
-  next_step_1_detail: getStepDetail(results?.nextSteps?.[0]),
-  next_step_2: getStepText(results?.nextSteps?.[1]),
-  next_step_2_detail: getStepDetail(results?.nextSteps?.[1]),
-  next_step_3: getStepText(results?.nextSteps?.[2]),
-  next_step_3_detail: getStepDetail(results?.nextSteps?.[2]),
-  next_step_4: getStepText(results?.nextSteps?.[3]),
-  next_step_4_detail: getStepDetail(results?.nextSteps?.[3]),
-  
-  // Resources
-  recommended_resources: results?.resources?.join('\n• ') || '',
-  resource_1: results?.resources?.[0] || '',
-  resource_2: results?.resources?.[1] || '',
-  resource_3: results?.resources?.[2] || '',
-  resource_4: results?.resources?.[3] || '',
-  resource_5: results?.resources?.[4] || '',
-  resource_6: results?.resources?.[5] || '',
-  
-  // HOME connection
-  home_connection: results?.homeConnection || '',
-  
-  // Meta information
-  is_personalized: results?.isPersonalized ? 'Yes' : 'No',
-  assistant_used: results?.assistantUsed ? 'Yes' : 'No',
-  quiz_completed_date: new Date().toISOString(),
-  quiz_completion_time: new Date().toLocaleString('en-US', { 
-    timeZone: 'America/Chicago',
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  }),
-  
-  // Additional context
-  source: source || 'music-creator-roadmap-quiz',
-  webinar_offer: 'Music Creator Roadmap Course ($299 value) + Artist Branding Playbook (FREE bonus)',
-  community_size: '1,000+ music creators',
-}
-    };
-
-    console.log('🔄 Sending to GHL webhook:', {
-      url: process.env.GHL_WEBHOOK_URL ? 'URL configured' : 'NO URL',
-      email: ghlData.email,
-      pathway: ghlData.pathway,
-      tags: ghlData.tags,
-      customFieldsCount: Object.keys(ghlData.custom_fields).length,
-      hasNextSteps: !!(results?.customNextSteps?.length || results?.next_steps?.length),
-      hasResources: !!(results?.recommended_resources?.length)
-    });
-
-    let ghlSuccess = false;
-    let ghlResult = null;
-
-    // Send to Go High Level
-    if (!process.env.GHL_WEBHOOK_URL) {
-      console.warn('⚠️ GHL_WEBHOOK_URL not configured, skipping webhook call');
-    } else {
-      try {
-        const ghlResponse = await fetch(process.env.GHL_WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(ghlData)
-        });
-
-        console.log('📡 GHL Response:', {
-          status: ghlResponse.status,
-          statusText: ghlResponse.statusText,
-          ok: ghlResponse.ok
-        });
-
-        if (ghlResponse.ok) {
-          ghlResult = await ghlResponse.json();
-          ghlSuccess = true;
-          console.log('✅ Lead submitted to GHL successfully');
-        } else {
-          const errorText = await ghlResponse.text();
-          console.error('❌ GHL webhook failed:', errorText);
-        }
-      } catch (ghlError) {
-        console.error('❌ GHL webhook error:', ghlError);
-      }
-    }
-
-    // Post to Circle (independent of GHL success)
-    let circleResult = null;
-    if (process.env.CIRCLE_API_TOKEN) {
-      console.log('🔄 Posting results to Circle...');
-      circleResult = await createCirclePost(email, pathway, responses, results);
-    } else {
-      console.warn('⚠️ CIRCLE_API_TOKEN not configured, skipping Circle post');
-    }
-
-    console.log('✅ Quiz submission complete:', { 
-      email, 
-      pathway: ghlData.pathway,
-      ghlSuccess,
-      circleSuccess: circleResult?.success || false,
-      circlePostId: circleResult?.postId,
-      circleUrl: circleResult?.url
-    });
-    
-    res.status(200).json({ 
-      success: true, 
-      message: 'Lead and results submitted successfully',
-      data: {
-        email,
-        pathway: ghlData.pathway,
-        hasPersonalizedResults: results?.is_personalized || false,
-        submittedAt: new Date().toISOString(),
-        ghl: {
-          success: ghlSuccess,
-          result: ghlResult
-        },
-        circle: {
-          success: circleResult?.success || false,
-          postId: circleResult?.postId,
-          url: circleResult?.url,
-          error: circleResult?.error
-        }
-      }
-    });
-    
-  } catch (error) {
-    console.error('❌ Lead submission error:', error);
-    
-    res.status(200).json({ 
-      success: true, 
-      message: 'Thank you for completing the quiz!',
-      note: 'If you don\'t receive your results via email, please contact support.',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
-  }
-}
+      resultsStructure: results ? {
+        pathway: results.pathway,
+        title: results.title,
+        hasDescription: !!results.description,
+        nextStepsCount: results.nextSteps?.length || 0,
+        nextStepsFormat: results.nextSteps?.[0] ? typeof results.nextSteps[0] : 'none',
+        resourcesCount: results.resources?.length || 0,
+        hasHomeConnection: !!results.homeConnection,
+        isPersonalized: results.isPersonalized,
+        assistantUsed: results.assistantUsed
+      } : null
