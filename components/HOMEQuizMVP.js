@@ -814,48 +814,96 @@ const selectResourcesForStep = (allResources, stepIndex) => {
   return selectedResources;
 };
 
-  // Handle email submission
-  const handleEmailSubmit = async () => {
-    if (!email || isProcessing) return;
-    
-    setIsProcessing(true);
-    
-    // Simulate processing with progress
-    const duration = 3000;
-    const steps = 30;
-    const stepDuration = duration / steps;
-    
-    for (let i = 0; i <= steps; i++) {
-      setTimeout(() => {
-        setProgress((i / steps) * 100);
-        if (i === steps) {
-          setIsProcessing(false);
-          setShowResults(true);
-          setScreen('celebration');
-          setShowConfetti(true);
-          setTimeout(() => {
-            setShowConfetti(false);
-          }, 8000);
-        }
-      }, i * stepDuration);
-    }
+// Handle email submission
+const handleEmailSubmit = async () => {
+  console.log('🟢 handleEmailSubmit called');
+  console.log('📧 Email:', email);
+  console.log('🎯 Pathway data:', pathway);
+  
+  if (!email || isProcessing) return;
+  
+  setIsProcessing(true);
+  
+  // Simulate processing with progress
+  const duration = 3000;
+  const steps = 30;
+  const stepDuration = duration / steps;
+  
+  for (let i = 0; i <= steps; i++) {
+    setTimeout(() => {
+      setProgress((i / steps) * 100);
+      if (i === steps) {
+        setIsProcessing(false);
+        setShowResults(true);
+        setScreen('celebration');
+        setShowConfetti(true);
+        setTimeout(() => {
+          setShowConfetti(false);
+        }, 8000);
+      }
+    }, i * stepDuration);
+  }
 
-    // Actually submit
-    try {
-      await fetch('/api/submit-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          pathway: pathway?.title,
-          responses,
-          source: 'music-creator-roadmap-quiz'
-        })
-      });
-    } catch (error) {
-      console.error('Error submitting:', error);
+  // Actually submit
+  try {
+    console.log('🚀 Calling submit-lead API...');
+    
+    // Prepare the results object with AI-generated content
+    const results = {
+      pathway: pathway?.pathway || determinePathway(responses),
+      title: pathway?.title || 'Your Music Creator Path',
+      description: pathway?.description || pathway?.baseDescription || '',
+      icon: pathway?.icon || '🎵',
+      nextSteps: pathway?.steps?.slice(0, 4).map((step, index) => ({
+        priority: index + 1,
+        step: step.title,
+        detail: step.description
+      })) || [],
+      resources: pathway?.steps?.[0]?.homeResources || [
+        "24/7 Studio Access",
+        "Professional Equipment", 
+        "Community Network",
+        "Educational Workshops",
+        "Industry Connections",
+        "Business Resources"
+      ],
+      homeConnection: pathway?.homeConnection || '',
+      isPersonalized: pathway?.isPersonalized || false,
+      assistantUsed: pathway?.assistantUsed || false
+    };
+    
+    console.log('📤 Sending to API:', {
+      email,
+      pathway: pathway?.title,
+      hasResults: true,
+      nextStepsCount: results.nextSteps.length,
+      resourcesCount: results.resources.length
+    });
+    
+    const response = await fetch('/api/submit-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        pathway: pathway?.title,
+        responses,
+        source: 'music-creator-roadmap-quiz',
+        results: results // ← THIS IS THE KEY ADDITION!
+      })
+    });
+    
+    const responseData = await response.json();
+    console.log('📨 API Response:', responseData);
+    
+    if (!response.ok) {
+      console.error('❌ Submit failed:', responseData);
+    } else {
+      console.log('✅ Lead submitted successfully');
     }
-  };
+  } catch (error) {
+    console.error('❌ Error submitting:', error);
+  }
+};
 
   // Navigation
   const goBack = () => {
