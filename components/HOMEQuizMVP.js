@@ -1296,45 +1296,72 @@ const HOMECreatorFlow = () => {
             <div className="flex-1 flex items-center justify-center">
               <div className="max-w-3xl w-full text-center">
                 <div className="animate-fadeIn">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full mb-8 shadow-2xl shadow-[#B91372]/20">
-                    <Target className="w-10 h-10 text-white" />
-                  </div>
-                  
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
-                    Before We Begin...
-                  </h1>
-                  
-                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 sm:p-10 mb-8">
-                    <div className="text-center mb-6">
-                      <div className="text-6xl mb-4">📮</div>
-                      <blockquote className="text-xl sm:text-2xl font-medium text-white mb-4 italic">
-                        "Be like a postage stamp - stick to one thing until you get there"
-                      </blockquote>
-                      <p className="text-gray-400 text-sm">— Josh Billings</p>
+                  {/* Main Hero Section */}
+                  <div className="relative mb-8">
+                    {/* Floating icon with glow */}
+                    <div className="relative mx-auto w-24 h-24 mb-8">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 animate-pulse" />
+                      <div className="relative w-full h-full bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center shadow-2xl shadow-[#B91372]/20">
+                        <Target className="w-12 h-12 text-white" />
+                      </div>
                     </div>
                     
-                    <div className="space-y-4 text-left">
-                      <p className="text-lg text-gray-300 leading-relaxed">
-                        While you may identify with multiple paths in this flow, remember that <strong className="text-white">success comes from focus</strong>.
-                      </p>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
+                      Your Path Starts Here
+                    </h1>
+                    
+                    <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                      The secret to breakthrough success? <strong className="text-white">Laser focus</strong> on what matters most.
+                    </p>
+                  </div>
+                  
+                  {/* Quote Card */}
+                  <div className="relative bg-gradient-to-br from-[#1DD1A1]/5 to-[#B91372]/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 sm:p-10 mb-8 overflow-hidden">
+                    {/* Subtle background pattern */}
+                    <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                      <div className="w-full h-full bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full filter blur-3xl" />
+                    </div>
+                    
+                    <div className="relative z-10">
+                      {/* Icon matching brand colors */}
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl mb-6 shadow-lg">
+                        <Sparkles className="w-8 h-8 text-white" />
+                      </div>
                       
-                      <p className="text-lg text-gray-300 leading-relaxed">
-                        This tool is designed to help you discover your <strong className="text-[#1DD1A1]">top priority</strong> - the one path that deserves your full attention right now.
-                      </p>
+                      <blockquote className="text-xl sm:text-2xl font-medium text-white mb-4 leading-relaxed">
+                        "Be like a postage stamp - stick to one thing until you get there"
+                      </blockquote>
+                      <p className="text-gray-400 text-sm mb-6">— Josh Billings</p>
                       
-                      <p className="text-lg text-gray-300 leading-relaxed">
-                        Answer honestly about what energizes you most, and let us guide you to the path that will accelerate your music career.
-                      </p>
+                      <div className="space-y-4 text-left">
+                        <p className="text-lg text-gray-300 leading-relaxed">
+                          While you may identify with multiple paths, <strong className="text-[#1DD1A1]">focus creates breakthroughs</strong>. This assessment reveals your highest-impact priority.
+                        </p>
+                        
+                        <p className="text-lg text-gray-300 leading-relaxed">
+                          Answer honestly about what energizes you most, and discover the path that will <strong className="text-white">accelerate your music career</strong>.
+                        </p>
+                      </div>
                     </div>
                   </div>
                   
-                  <button
-                    onClick={() => setScreen('assessment')}
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105 text-white text-lg"
-                  >
-                    <span>Start Flow</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
+                  {/* Enhanced CTA Button */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setScreen('assessment')}
+                      className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                    >
+                      {/* Button glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      
+                      <span className="relative z-10">Discover My Path</span>
+                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    
+                    {/* Floating particles for excitement */}
+                    <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-70 animate-bounce" style={{ animationDelay: '0s' }} />
+                    <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-gradient-to-r from-[#B91372] to-[#1DD1A1] rounded-full opacity-50 animate-bounce" style={{ animationDelay: '0.5s' }} />
+                  </div>
                 </div>
               </div>
             </div>
