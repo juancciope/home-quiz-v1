@@ -20,7 +20,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
-// --- Quiz Questions (Original Text) ---
+// --- Assessment Questions ---
 const questions = [
   {
     id: 'motivation',
@@ -77,7 +77,7 @@ const questions = [
 
 // Journey Checkpoints
 const checkpoints = [
-  { id: 'quiz', label: 'Discover Path', icon: Target },
+  { id: 'assessment', label: 'Discover Path', icon: Target },
   { id: 'ai', label: 'AI Analysis', icon: Sparkles },
   { id: 'profile', label: 'Your Profile', icon: Star },
   { id: 'plan', label: 'Action Plan', icon: ListChecks },
@@ -389,7 +389,7 @@ const determinePathway = (responses) => {
 const getCurrentCheckpoint = (screen, questionIndex, currentStep) => {
   if (screen === 'landing') return -1;
   if (screen === 'intro') return -1;
-  if (screen === 'quiz') return 0;
+  if (screen === 'assessment') return 0;
   if (screen === 'transition') return 1;
   if (screen === 'email' || screen === 'celebration') return 2;
   if (screen === 'plan') return 3;
@@ -516,7 +516,7 @@ const selectResourcesForStep = (allResources, stepIndex) => {
 // --- Smart Brand Footer Component ---
 const BrandFooter = ({ currentScreen }) => {
   // Short pages: content fits in viewport - use fixed footer for always-visible branding
-  const shortPages = ['landing', 'quiz', 'transition', 'email', 'execute'];
+  const shortPages = ['landing', 'assessment', 'transition', 'email', 'execute'];
   
   // Long pages: handle footer inline within each page (don't render global footer)
   const longPages = ['intro', 'celebration', 'plan'];
@@ -720,7 +720,7 @@ const ProgressBar = ({ currentCheckpoint }) => {
 };
 
 // --- Main Component ---
-const HOMEQuizMVP = () => {
+const HOMECreatorFlow = () => {
   const [screen, setScreen] = useState('landing');
   const [questionIndex, setQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
@@ -923,7 +923,7 @@ const HOMEQuizMVP = () => {
         email,
         pathway: pathway?.title,
         responses,
-        source: 'music-creator-roadmap-quiz',
+        source: 'music-creator-roadmap-flow',
         results: results
       };
       
@@ -961,12 +961,12 @@ const HOMEQuizMVP = () => {
   const goBack = () => {
     if (screen === 'intro') {
       setScreen('landing');
-    } else if (screen === 'quiz' && questionIndex > 0) {
+    } else if (screen === 'assessment' && questionIndex > 0) {
       setQuestionIndex(prev => prev - 1);
     } else if (screen === 'email') {
-      setScreen('quiz');
+      setScreen('assessment');
       setQuestionIndex(questions.length - 1);
-    } else if (screen === 'quiz' && questionIndex === 0) {
+    } else if (screen === 'assessment' && questionIndex === 0) {
       setScreen('intro');
     } else if (screen === 'plan' && currentStep > 0) {
       setCurrentStep(prev => prev - 1);
@@ -1197,7 +1197,7 @@ const HOMEQuizMVP = () => {
                     </span>
                   </h1>
                   <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-xl mx-auto">
-                   AI-driven insights that rank your top priorities and map your next moves.
+                   AI-powered insights that reveal your priorities and map your strategic next moves.
                   </p>
                 </div>
                 
@@ -1239,7 +1239,7 @@ const HOMEQuizMVP = () => {
                   </button>
                   
                   <p className="text-sm text-gray-400 mt-4 animate-fadeIn">
-                    2-minute flow • instant results
+                    2-minute assessment • instant roadmap
                   </p>
                 </div>
                 
@@ -1315,7 +1315,7 @@ const HOMEQuizMVP = () => {
                     
                     <div className="space-y-4 text-left">
                       <p className="text-lg text-gray-300 leading-relaxed">
-                        While you may identify with multiple paths in this quiz, remember that <strong className="text-white">success comes from focus</strong>.
+                        While you may identify with multiple paths in this flow, remember that <strong className="text-white">success comes from focus</strong>.
                       </p>
                       
                       <p className="text-lg text-gray-300 leading-relaxed">
@@ -1329,10 +1329,10 @@ const HOMEQuizMVP = () => {
                   </div>
                   
                   <button
-                    onClick={() => setScreen('quiz')}
+                    onClick={() => setScreen('assessment')}
                     className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105 text-white text-lg"
                   >
-                    <span>Start Quiz</span>
+                    <span>Start Flow</span>
                     <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>
@@ -1347,7 +1347,7 @@ const HOMEQuizMVP = () => {
         </div>
       )}
 
-      {screen === 'quiz' && (
+      {screen === 'assessment' && (
         <div className="screen-height bg-black pt-20 sm:pt-24">
           <div className="max-w-4xl mx-auto px-6 pb-20">
             {/* Navigation */}
@@ -1421,7 +1421,7 @@ const HOMEQuizMVP = () => {
               AI is analyzing your responses...
             </h2>
             <p className="text-gray-400">
-              Creating your personalized music creator pathway
+              Creating your personalized music creator roadmap
             </p>
           </div>
         </div>
@@ -1452,7 +1452,7 @@ const HOMEQuizMVP = () => {
                 {/* Email Form */}
                 <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
                   <h3 className="text-xl font-semibold mb-6 text-center text-white">
-                    Get Your Personalized Roadmap
+                    Get Your Strategic Roadmap
                   </h3>
                   
                   <input
@@ -1492,7 +1492,7 @@ const HOMEQuizMVP = () => {
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-semibold mb-3 text-white">Creating Your Roadmap</h2>
+                <h2 className="text-2xl font-semibold mb-3 text-white">Creating Your Strategic Roadmap</h2>
                 <p className="text-gray-400 mb-8">Personalizing your action plan...</p>
                 
                 <div className="max-w-xs mx-auto">
@@ -1538,7 +1538,7 @@ const HOMEQuizMVP = () => {
               
               {/* Action Plan Preview */}
               <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-300">
-                <h2 className="text-2xl font-bold mb-8 text-center text-white">Your Personalized 4-Step Action Plan</h2>
+                <h2 className="text-2xl font-bold mb-8 text-center text-white">Your Personalized 4-Step Strategic Roadmap</h2>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                   {pathway.planPreview.map((step, index) => (
@@ -1551,7 +1551,7 @@ const HOMEQuizMVP = () => {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold mb-1 text-white">{step}</h3>
-                        <p className="text-sm text-gray-400">Tailored specifically to your journey</p>
+                        <p className="text-sm text-gray-400">Strategically designed for your career journey</p>
                       </div>
                     </div>
                   ))}
@@ -1561,7 +1561,7 @@ const HOMEQuizMVP = () => {
                   onClick={goNext}
                   className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-[1.02] flex items-center justify-center gap-3 text-white"
                 >
-                  <span>View Full Plan</span>
+                  <span>View Strategic Roadmap</span>
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
@@ -1673,7 +1673,7 @@ const HOMEQuizMVP = () => {
                   onClick={goNext}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105 text-white"
                 >
-                  <span>{currentStep < 3 ? 'Next Step' : 'Execute Plan'}</span>
+                  <span>{currentStep < 3 ? 'Next Step' : 'Execute Roadmap'}</span>
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
@@ -1701,7 +1701,7 @@ const HOMEQuizMVP = () => {
             
             {/* Header */}
             <div className="text-center mb-12 animate-fadeIn">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">Ready to Execute Your Plan?</h1>
+              <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">Ready to Execute Your Roadmap?</h1>
               <p className="text-xl text-gray-300">Choose how you want to start your journey with HOME</p>
             </div>
             
@@ -1722,7 +1722,7 @@ const HOMEQuizMVP = () => {
                   <ul className="space-y-3 mb-8">
                     {[
                       'Personal strategy session with experts',
-                      'Custom roadmap tailored to your goals',
+                      'Strategic roadmap tailored to your goals',
                       'Priority access to HOME resources',
                       'Fast-track your music career'
                     ].map((item, i) => (
@@ -1789,4 +1789,4 @@ const HOMEQuizMVP = () => {
   );
 };
 
-export default HOMEQuizMVP;
+export default HOMECreatorFlow;
