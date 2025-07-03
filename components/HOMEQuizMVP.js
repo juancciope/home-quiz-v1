@@ -513,6 +513,15 @@ const selectResourcesForStep = (allResources, stepIndex) => {
   return selectedResources;
 };
 
+// --- Brand Footer Component ---
+const BrandFooter = () => {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30">
+      <p className="text-xs text-gray-400">homeformusic.org</p>
+    </div>
+  );
+};
+
 // --- Premium Confetti Animation ---
 const PremiumConfetti = ({ show }) => {
   if (!show) return null;
@@ -1230,7 +1239,7 @@ const HOMEQuizMVP = () => {
             </div>
             
             {/* Footer - Logo with glow effect above text */}
-            <div className="text-center mt-8 animate-fadeIn delay-500">
+            <div className="text-center mt-8 animate-fadeIn delay-500 pb-16">
               <div className="relative inline-block mb-3 group">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
                 <img 
@@ -1239,9 +1248,6 @@ const HOMEQuizMVP = () => {
                   className="h-8 relative z-10"
                 />
               </div>
-              <p className="text-xs text-gray-400">
-                homeformusic.org
-              </p>
             </div>
           </div>
         </div>
@@ -1311,11 +1317,6 @@ const HOMEQuizMVP = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Footer */}
-            <div className="text-center mt-8 animate-fadeIn delay-500">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1376,10 +1377,6 @@ const HOMEQuizMVP = () => {
                 ))}
               </div>
             </div>
-            {/* Footer */}
-            <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1400,10 +1397,6 @@ const HOMEQuizMVP = () => {
             <p className="text-gray-400">
               Creating your personalized music creator pathway
             </p>
-            {/* Footer */}
-            <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1487,10 +1480,6 @@ const HOMEQuizMVP = () => {
                 </div>
               </div>
             )}
-            {/* Footer */}
-            <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1551,10 +1540,6 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
-          </div>
-          {/* Footer */}
-          <div className="text-center mt-8 animate-fadeIn delay-500">
-            <p className="text-xs text-gray-600">homeformusic.org</p><br />
           </div>
         </div>
       )}
@@ -1662,10 +1647,6 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
-            {/* Footer */}
-            <div className="text-center mt-8 animate-fadeIn delay-500">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1759,16 +1740,15 @@ const HOMEQuizMVP = () => {
             </div>
             
             {/* Footer */}
-            <p className="text-center text-gray-400 mt-12 animate-fadeIn delay-400">
-              Not sure? Start with the free community and upgrade anytime.<br />
-              {/* Website URL */}
-              <div className="text-center mt-8">
-                <p className="text-xs text-gray-400">homeformusic.org</p><br />
-              </div> 
+            <p className="text-center text-gray-400 mt-12 animate-fadeIn delay-400 pb-16">
+              Not sure? Start with the free community and upgrade anytime.
             </p>
           </div>
         </div>
       )}
+      
+      {/* Consistent Brand Footer - Always visible */}
+      <BrandFooter />
     </div>
   );
 };
