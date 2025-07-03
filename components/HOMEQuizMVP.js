@@ -514,19 +514,10 @@ const selectResourcesForStep = (allResources, stepIndex) => {
 };
 
 // --- Brand Footer Component ---
-const BrandFooter = ({ currentScreen }) => {
-  // Pages with scrollable content get inline footer within their content, others use fixed
-  const scrollableScreens = ['intro', 'celebration', 'plan'];
-  const isScrollable = scrollableScreens.includes(currentScreen);
-  
-  // Don't render global footer for scrollable pages (they have their own inline footer)
-  if (isScrollable) {
-    return null;
-  }
-  
-  // Fixed footer for short pages (landing, quiz, transition, email, execute)
+const BrandFooter = () => {
+  // Unified footer with consistent spacing for all pages
   return (
-    <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30">
+    <div className="text-center py-6 mt-12">
       <p className="text-xs text-gray-400">homeformusic.org</p>
     </div>
   );
@@ -1249,7 +1240,7 @@ const HOMEQuizMVP = () => {
             </div>
             
             {/* Footer - Logo with glow effect above text */}
-            <div className="text-center mt-8 animate-fadeIn delay-500 pb-16">
+            <div className="text-center mt-8 animate-fadeIn delay-500">
               <div className="relative inline-block mb-3 group">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
                 <img 
@@ -1326,11 +1317,6 @@ const HOMEQuizMVP = () => {
                   </button>
                 </div>
               </div>
-            </div>
-            
-            {/* Inline Footer for scrollable page */}
-            <div className="text-center py-4 mt-8">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
@@ -1556,11 +1542,6 @@ const HOMEQuizMVP = () => {
               </div>
             </div>
           </div>
-          
-          {/* Inline Footer for scrollable page */}
-          <div className="text-center py-4 mt-8">
-            <p className="text-xs text-gray-400">homeformusic.org</p>
-          </div>
         </div>
       )}
 
@@ -1667,11 +1648,6 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
-            
-            {/* Inline Footer for scrollable page */}
-            <div className="text-center py-4 mt-8">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1765,7 +1741,7 @@ const HOMEQuizMVP = () => {
             </div>
             
             {/* Footer */}
-            <p className="text-center text-gray-400 mt-12 animate-fadeIn delay-400 pb-16">
+            <p className="text-center text-gray-400 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.
             </p>
           </div>
@@ -1773,7 +1749,7 @@ const HOMEQuizMVP = () => {
       )}
       
       {/* Consistent Brand Footer - Always visible */}
-      <BrandFooter currentScreen={screen} />
+      <BrandFooter />
     </div>
   );
 };
