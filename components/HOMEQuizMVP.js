@@ -513,11 +513,31 @@ const selectResourcesForStep = (allResources, stepIndex) => {
   return selectedResources;
 };
 
-// --- Brand Footer Component ---
-const BrandFooter = () => {
-  // Unified footer with consistent spacing for all pages
+// --- Smart Brand Footer Component ---
+const BrandFooter = ({ currentScreen }) => {
+  // Short pages: content fits in viewport - use fixed footer for always-visible branding
+  const shortPages = ['landing', 'quiz', 'transition', 'email', 'execute'];
+  
+  // Long pages: handle footer inline within each page (don't render global footer)
+  const longPages = ['intro', 'celebration', 'plan'];
+  
+  if (shortPages.includes(currentScreen)) {
+    // Fixed footer for short pages - always visible
+    return (
+      <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30 bg-black/80 backdrop-blur-sm">
+        <p className="text-xs text-gray-400">homeformusic.org</p>
+      </div>
+    );
+  }
+  
+  // Don't render global footer for long pages - they handle their own inline footers
+  if (longPages.includes(currentScreen)) {
+    return null;
+  }
+  
+  // Fallback - fixed footer
   return (
-    <div className="text-center py-6 mt-12">
+    <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30 bg-black/80 backdrop-blur-sm">
       <p className="text-xs text-gray-400">homeformusic.org</p>
     </div>
   );
@@ -1164,7 +1184,7 @@ const HOMEQuizMVP = () => {
             <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
           </div>
           
-          <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8">
+          <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8 pb-20">
             {/* Main Content - Centered */}
             <div className="flex-1 flex items-center justify-center">
               <div className="max-w-4xl w-full text-center">
@@ -1318,13 +1338,18 @@ const HOMEQuizMVP = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Inline Footer for long page */}
+            <div className="text-center py-6 mt-8">
+              <p className="text-xs text-gray-400">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
 
       {screen === 'quiz' && (
         <div className="screen-height bg-black pt-20 sm:pt-24">
-          <div className="max-w-4xl mx-auto px-6 pb-12">
+          <div className="max-w-4xl mx-auto px-6 pb-20">
             {/* Navigation */}
             <button
               onClick={goBack}
@@ -1383,7 +1408,7 @@ const HOMEQuizMVP = () => {
       )}
 
       {screen === 'transition' && (
-        <div className="screen-height bg-black flex items-center justify-center px-6">
+        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
           <div className="text-center animate-scaleIn">
             <div className="relative w-32 h-32 mx-auto mb-8">
               <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
@@ -1403,7 +1428,7 @@ const HOMEQuizMVP = () => {
       )}
 
       {screen === 'email' && (
-        <div className="screen-height bg-black flex items-center justify-center px-6">
+        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
           <div className="max-w-md w-full">
             {!isProcessing ? (
               <div className="animate-fadeIn">
@@ -1542,6 +1567,11 @@ const HOMEQuizMVP = () => {
               </div>
             </div>
           </div>
+          
+          {/* Inline Footer for long page */}
+          <div className="text-center py-6 mt-8">
+            <p className="text-xs text-gray-400">homeformusic.org</p>
+          </div>
         </div>
       )}
 
@@ -1648,12 +1678,17 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
+            
+            {/* Inline Footer for long page */}
+            <div className="text-center py-6 mt-8">
+              <p className="text-xs text-gray-400">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
 
       {screen === 'execute' && pathway && (
-        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6">
+        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
           <div className="max-w-4xl w-full">
             {/* Navigation */}
             <button
@@ -1748,8 +1783,8 @@ const HOMEQuizMVP = () => {
         </div>
       )}
       
-      {/* Consistent Brand Footer - Always visible */}
-      <BrandFooter />
+      {/* Smart Brand Footer - Adapts to page content length */}
+      <BrandFooter currentScreen={screen} />
     </div>
   );
 };
