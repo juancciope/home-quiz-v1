@@ -1585,18 +1585,20 @@ const HOMECreatorFlow = () => {
                              transition-all duration-300 text-white placeholder-gray-400"
                   />
                   
-                  <button
-                    onClick={handleEmailSubmit}
-                    disabled={!email || isProcessing}
-                    className="w-full mt-4 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] 
-                             rounded-2xl font-medium transition-all duration-300
-                             hover:shadow-lg hover:shadow-[#B91372]/20 hover:scale-[1.02]
-                             disabled:opacity-50 disabled:cursor-not-allowed
-                             flex items-center justify-center gap-3 text-white"
-                  >
-                    <span>Continue</span>
-                    <Mail className="w-5 h-5" />
-                  </button>
+                  {/* Enhanced CTA Button - matching homepage */}
+                  <div className="relative mt-6">
+                    <button
+                      onClick={handleEmailSubmit}
+                      disabled={!email || isProcessing}
+                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden"
+                    >
+                      {/* Button glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      
+                      <span className="relative z-10">Get My Roadmap</span>
+                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                   
                   <p className="text-center text-gray-400 text-sm mt-6">
                     We'll never spam. Unsubscribe anytime.
@@ -1604,25 +1606,39 @@ const HOMECreatorFlow = () => {
                 </div>
               </div>
             ) : (
-              <div className="text-center animate-fadeIn">
-                <div className="relative w-32 h-32 mx-auto mb-8">
+              <div className="animate-fadeIn">
+                {/* AI Icon - matching transition screen */}
+                <div className="relative w-24 h-24 mx-auto mb-8">
                   <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
-                  <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center">
-                    <Sparkles className="w-16 h-16 text-white animate-float" />
+                  <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center border border-white/10">
+                    <Sparkles className="w-12 h-12 text-white animate-pulse" />
                   </div>
                 </div>
                 
-                <h2 className="text-2xl font-semibold mb-3 text-white">Creating Your Strategic Roadmap</h2>
-                <p className="text-gray-400 mb-8">Personalizing your action plan...</p>
+                <h2 className="text-2xl font-semibold mb-8 text-white text-center">
+                  Creating Your Strategic Roadmap
+                </h2>
                 
-                <div className="max-w-xs mx-auto">
-                  <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-300"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <p className="text-sm text-gray-400 mt-3">{Math.round(progress)}% Complete</p>
+                {/* Process Steps - matching AI analysis */}
+                <div className="space-y-4">
+                  <AIProcessStep 
+                    step={1}
+                    label="Saving your assessment results"
+                    duration={500}
+                    icon={<Check className="w-4 h-4" />}
+                  />
+                  <AIProcessStep 
+                    step={2}
+                    label="Generating personalized action items"
+                    duration={1500}
+                    icon={<ListChecks className="w-4 h-4" />}
+                  />
+                  <AIProcessStep 
+                    step={3}
+                    label="Preparing your roadmap document"
+                    duration={2500}
+                    icon={<Mail className="w-4 h-4" />}
+                  />
                 </div>
               </div>
             )}
@@ -1677,13 +1693,19 @@ const HOMECreatorFlow = () => {
                   ))}
                 </div>
                 
-                <button
-                  onClick={goNext}
-                  className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-[1.02] flex items-center justify-center gap-3 text-white"
-                >
-                  <span>View Strategic Roadmap</span>
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                {/* Enhanced CTA Button - matching homepage */}
+                <div className="relative">
+                  <button
+                    onClick={goNext}
+                    className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                  >
+                    {/* Button glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                    
+                    <span className="relative z-10">View Strategic Roadmap</span>
+                    <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1789,13 +1811,18 @@ const HOMECreatorFlow = () => {
               
               {/* Navigation */}
               <div className="flex justify-center mt-12">
-                <button
-                  onClick={goNext}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105 text-white"
-                >
-                  <span>{currentStep < 3 ? 'Next Step' : 'Execute Roadmap'}</span>
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={goNext}
+                    className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                  >
+                    {/* Button glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                    
+                    <span className="relative z-10">{currentStep < 3 ? 'Next Step' : 'Execute Roadmap'}</span>
+                    <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
             </div>
             
@@ -1853,12 +1880,19 @@ const HOMECreatorFlow = () => {
                     ))}
                   </ul>
                   
-                  <button 
-                    onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
-                    className="w-full py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#B91372]/20 text-white"
-                  >
-                    Book Free Consultation
-                  </button>
+                  {/* Enhanced CTA Button */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
+                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                    >
+                      {/* Button glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      
+                      <span className="relative z-10">Book Free Consultation</span>
+                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 </div>
               </div>
               
