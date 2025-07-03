@@ -524,7 +524,7 @@ const AIProcessStep = ({ step, label, duration, icon }) => {
     
     const timer2 = setTimeout(() => {
       setStatus('complete');
-    }, duration + 800);
+    }, duration + 2000); // Longer processing time for each step
     
     return () => {
       clearTimeout(timer1);
@@ -1515,32 +1515,34 @@ const HOMECreatorFlow = () => {
               <AIProcessStep 
                 step={1}
                 label="Analyzing your creative priorities"
-                duration={500}
+                duration={1000}
                 icon={<Target className="w-4 h-4" />}
               />
               <AIProcessStep 
                 step={2}
                 label="Mapping your optimal career path"
-                duration={1500}
+                duration={3000}
                 icon={<MapPin className="w-4 h-4" />}
               />
               <AIProcessStep 
                 step={3}
                 label="Identifying strategic next steps"
-                duration={2500}
+                duration={5000}
                 icon={<ListChecks className="w-4 h-4" />}
               />
               <AIProcessStep 
                 step={4}
                 label="Personalizing HOME resources for you"
-                duration={3500}
+                duration={7000}
                 icon={<Rocket className="w-4 h-4" />}
               />
+              <AIProcessStep 
+                step={5}
+                label="Finalizing your strategic roadmap"
+                duration={9000}
+                icon={<Sparkles className="w-4 h-4" />}
+              />
             </div>
-            
-            <p className="text-gray-400 text-center text-sm">
-              This usually takes 5-10 seconds...
-            </p>
           </div>
         </div>
       )}
