@@ -513,6 +513,67 @@ const selectResourcesForStep = (allResources, stepIndex) => {
   return selectedResources;
 };
 
+// --- AI Process Step Component ---
+const AIProcessStep = ({ step, label, duration, icon }) => {
+  const [status, setStatus] = useState('pending'); // pending, processing, complete
+  
+  useEffect(() => {
+    const timer1 = setTimeout(() => {
+      setStatus('processing');
+    }, duration);
+    
+    const timer2 = setTimeout(() => {
+      setStatus('complete');
+    }, duration + 800);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [duration]);
+  
+  return (
+    <div className={`flex items-center gap-3 transition-all duration-500 ${
+      status === 'pending' ? 'opacity-40' : 'opacity-100'
+    }`}>
+      {/* Status Icon */}
+      <div className="relative">
+        {status === 'complete' ? (
+          <div className="w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center">
+            <Check className="w-4 h-4 text-white" />
+          </div>
+        ) : status === 'processing' ? (
+          <div className="w-8 h-8 rounded-full border-2 border-white/20 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full border-2 border-t-[#1DD1A1] border-r-[#B91372] border-b-transparent border-l-transparent animate-spin" />
+          </div>
+        ) : (
+          <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
+            {React.cloneElement(icon, { className: 'w-4 h-4 text-white/40' })}
+          </div>
+        )}
+      </div>
+      
+      {/* Label */}
+      <div className="flex-1">
+        <p className={`text-sm transition-colors duration-500 ${
+          status === 'complete' ? 'text-white' : 
+          status === 'processing' ? 'text-white/80' : 
+          'text-white/40'
+        }`}>
+          {label}
+        </p>
+        
+        {/* Progress line */}
+        {status === 'processing' && (
+          <div className="mt-1 h-0.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] animate-gradient-x" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // --- Smart Brand Footer Component ---
 const BrandFooter = ({ currentScreen }) => {
   // Short pages: content fits in viewport - use fixed footer for always-visible branding
@@ -1436,19 +1497,49 @@ const HOMECreatorFlow = () => {
 
       {screen === 'transition' && (
         <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
-          <div className="text-center animate-scaleIn">
-            <div className="relative w-32 h-32 mx-auto mb-8">
+          <div className="max-w-md w-full animate-fadeIn">
+            {/* AI Icon */}
+            <div className="relative w-24 h-24 mx-auto mb-8">
               <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
-              <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center">
-                <Sparkles className="w-16 h-16 text-white animate-float" />
+              <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center border border-white/10">
+                <Sparkles className="w-12 h-12 text-white animate-pulse" />
               </div>
             </div>
             
-            <h2 className="text-2xl font-semibold mb-3 text-white">
-              AI is analyzing your responses...
+            <h2 className="text-2xl font-semibold mb-8 text-white text-center">
+              AI is crafting your strategic roadmap
             </h2>
-            <p className="text-gray-400">
-              Creating your personalized music creator roadmap
+            
+            {/* Process Steps */}
+            <div className="space-y-4 mb-8">
+              <AIProcessStep 
+                step={1}
+                label="Analyzing your creative priorities"
+                duration={500}
+                icon={<Target className="w-4 h-4" />}
+              />
+              <AIProcessStep 
+                step={2}
+                label="Mapping your optimal career path"
+                duration={1500}
+                icon={<MapPin className="w-4 h-4" />}
+              />
+              <AIProcessStep 
+                step={3}
+                label="Identifying strategic next steps"
+                duration={2500}
+                icon={<ListChecks className="w-4 h-4" />}
+              />
+              <AIProcessStep 
+                step={4}
+                label="Personalizing HOME resources for you"
+                duration={3500}
+                icon={<Rocket className="w-4 h-4" />}
+              />
+            </div>
+            
+            <p className="text-gray-400 text-center text-sm">
+              This usually takes 5-10 seconds...
             </p>
           </div>
         </div>
