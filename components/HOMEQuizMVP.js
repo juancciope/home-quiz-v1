@@ -388,6 +388,7 @@ const determinePathway = (responses) => {
 // Get current checkpoint
 const getCurrentCheckpoint = (screen, questionIndex, currentStep) => {
   if (screen === 'landing') return -1;
+  if (screen === 'intro') return -1;
   if (screen === 'quiz') return 0;
   if (screen === 'transition') return 1;
   if (screen === 'email' || screen === 'celebration') return 2;
@@ -928,13 +929,15 @@ const HOMEQuizMVP = () => {
 
   // Navigation
   const goBack = () => {
-    if (screen === 'quiz' && questionIndex > 0) {
+    if (screen === 'intro') {
+      setScreen('landing');
+    } else if (screen === 'quiz' && questionIndex > 0) {
       setQuestionIndex(prev => prev - 1);
     } else if (screen === 'email') {
       setScreen('quiz');
       setQuestionIndex(questions.length - 1);
     } else if (screen === 'quiz' && questionIndex === 0) {
-      setScreen('landing');
+      setScreen('intro');
     } else if (screen === 'plan' && currentStep > 0) {
       setCurrentStep(prev => prev - 1);
     } else if (screen === 'plan' && currentStep === 0) {
@@ -1171,7 +1174,7 @@ const HOMEQuizMVP = () => {
                 {/* CTA Button - Prominent */}
                 <div className="mb-8 sm:mb-12">
                   <button
-                    onClick={() => setScreen('quiz')}
+                    onClick={() => setScreen('intro')}
                     className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
@@ -1239,6 +1242,79 @@ const HOMEQuizMVP = () => {
               <p className="text-xs text-gray-400">
                 homeformusic.org
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {screen === 'intro' && (
+        <div className="screen-height bg-black relative overflow-hidden flex flex-col pt-20 sm:pt-24">
+          {/* Background gradient */}
+          <div className="absolute inset-0">
+            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-5" />
+            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-5" />
+          </div>
+          
+          <div className="relative z-10 flex-1 flex flex-col px-6 sm:px-8">
+            {/* Navigation */}
+            <button
+              onClick={goBack}
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group self-start"
+            >
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              <span>Back</span>
+            </button>
+
+            {/* Main Content */}
+            <div className="flex-1 flex items-center justify-center">
+              <div className="max-w-3xl w-full text-center">
+                <div className="animate-fadeIn">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full mb-8 shadow-2xl shadow-[#B91372]/20">
+                    <Target className="w-10 h-10 text-white" />
+                  </div>
+                  
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
+                    Before We Begin...
+                  </h1>
+                  
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 sm:p-10 mb-8">
+                    <div className="text-center mb-6">
+                      <div className="text-6xl mb-4">📮</div>
+                      <blockquote className="text-xl sm:text-2xl font-medium text-white mb-4 italic">
+                        "Be like a postage stamp - stick to one thing until you get there"
+                      </blockquote>
+                      <p className="text-gray-400 text-sm">— Josh Billings</p>
+                    </div>
+                    
+                    <div className="space-y-4 text-left">
+                      <p className="text-lg text-gray-300 leading-relaxed">
+                        While you may identify with multiple paths in this quiz, remember that <strong className="text-white">success comes from focus</strong>.
+                      </p>
+                      
+                      <p className="text-lg text-gray-300 leading-relaxed">
+                        This tool is designed to help you discover your <strong className="text-[#1DD1A1]">top priority</strong> - the one path that deserves your full attention right now.
+                      </p>
+                      
+                      <p className="text-lg text-gray-300 leading-relaxed">
+                        Answer honestly about what energizes you most, and let us guide you to the path that will accelerate your music career.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => setScreen('quiz')}
+                    className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-medium transition-all duration-500 hover:shadow-xl hover:shadow-[#B91372]/20 hover:scale-105 text-white text-lg"
+                  >
+                    <span>Start Quiz</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Footer */}
+            <div className="text-center mt-8 animate-fadeIn delay-500">
+              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
