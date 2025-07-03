@@ -514,7 +514,17 @@ const selectResourcesForStep = (allResources, stepIndex) => {
 };
 
 // --- Brand Footer Component ---
-const BrandFooter = () => {
+const BrandFooter = ({ currentScreen }) => {
+  // Pages with scrollable content get inline footer within their content, others use fixed
+  const scrollableScreens = ['intro', 'celebration', 'plan'];
+  const isScrollable = scrollableScreens.includes(currentScreen);
+  
+  // Don't render global footer for scrollable pages (they have their own inline footer)
+  if (isScrollable) {
+    return null;
+  }
+  
+  // Fixed footer for short pages (landing, quiz, transition, email, execute)
   return (
     <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30">
       <p className="text-xs text-gray-400">homeformusic.org</p>
@@ -1317,6 +1327,11 @@ const HOMEQuizMVP = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Inline Footer for scrollable page */}
+            <div className="text-center py-4 mt-8">
+              <p className="text-xs text-gray-400">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
@@ -1541,6 +1556,11 @@ const HOMEQuizMVP = () => {
               </div>
             </div>
           </div>
+          
+          {/* Inline Footer for scrollable page */}
+          <div className="text-center py-4 mt-8">
+            <p className="text-xs text-gray-400">homeformusic.org</p>
+          </div>
         </div>
       )}
 
@@ -1647,6 +1667,11 @@ const HOMEQuizMVP = () => {
                 </button>
               </div>
             </div>
+            
+            {/* Inline Footer for scrollable page */}
+            <div className="text-center py-4 mt-8">
+              <p className="text-xs text-gray-400">homeformusic.org</p>
+            </div>
           </div>
         </div>
       )}
@@ -1748,7 +1773,7 @@ const HOMEQuizMVP = () => {
       )}
       
       {/* Consistent Brand Footer - Always visible */}
-      <BrandFooter />
+      <BrandFooter currentScreen={screen} />
     </div>
   );
 };
