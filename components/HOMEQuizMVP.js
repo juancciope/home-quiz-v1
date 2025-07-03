@@ -1163,7 +1163,7 @@ const HOMEQuizMVP = () => {
                       Music Creator Roadmap
                     </span>
                   </h1>
-                  <p className="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-xl mx-auto">
+                  <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-xl mx-auto">
                    AI-driven insights that rank your top priorities and map your next moves.
                   </p>
                 </div>
@@ -1205,7 +1205,7 @@ const HOMEQuizMVP = () => {
                     <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
                   </button>
                   
-                  <p className="text-sm text-gray-600 mt-4 animate-fadeIn">
+                  <p className="text-sm text-gray-400 mt-4 animate-fadeIn">
                     2-minute flow • instant results
                   </p>
                 </div>
@@ -1236,7 +1236,7 @@ const HOMEQuizMVP = () => {
                   className="h-8 relative z-10"
                 />
               </div>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-gray-400">
                 homeformusic.org
               </p>
             </div>
@@ -1250,7 +1250,7 @@ const HOMEQuizMVP = () => {
             {/* Navigation */}
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
             >
               <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
@@ -1258,7 +1258,7 @@ const HOMEQuizMVP = () => {
             
             {/* Progress */}
             <div className="mb-12">
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+              <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
                 <span>Question {questionIndex + 1} of {questions.length}</span>
                 <span>{Math.round(((questionIndex + 1) / questions.length) * 100)}%</span>
               </div>
@@ -1294,7 +1294,7 @@ const HOMEQuizMVP = () => {
                     <div className="flex items-center gap-4">
                       <span className="text-3xl">{option.emoji}</span>
                       <span className="flex-1 text-lg text-white">{option.label}</span>
-                      <ChevronRight className="w-5 h-5 text-gray-500" />
+                      <ChevronRight className="w-5 h-5 text-gray-400" />
                     </div>
                   </button>
                 ))}
@@ -1302,7 +1302,7 @@ const HOMEQuizMVP = () => {
             </div>
             {/* Footer */}
             <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-              <p className="text-xs text-gray-600">homeformusic.org</p>
+              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
@@ -1321,12 +1321,12 @@ const HOMEQuizMVP = () => {
             <h2 className="text-2xl font-semibold mb-3 text-white">
               AI is analyzing your responses...
             </h2>
-            <p className="text-gray-500">
+            <p className="text-gray-400">
               Creating your personalized music creator pathway
             </p>
             {/* Footer */}
             <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-              <p className="text-xs text-gray-600">homeformusic.org</p>
+              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
@@ -1339,7 +1339,7 @@ const HOMEQuizMVP = () => {
               <div className="animate-fadeIn">
                 <button
                   onClick={goBack}
-                  className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
                 >
                   <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                   <span>Back</span>
@@ -1351,7 +1351,7 @@ const HOMEQuizMVP = () => {
                     <span className="text-5xl">{pathway?.icon}</span>
                   </div>
                   <h2 className="text-3xl font-bold mb-3 text-white">Your Path is Ready</h2>
-                  <p className="text-gray-400">{pathway?.title}</p>
+                  <p className="text-gray-300">{pathway?.title}</p>
                 </div>
                 
                 {/* Email Form */}
@@ -1367,7 +1367,7 @@ const HOMEQuizMVP = () => {
                     placeholder="your@email.com"
                     className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl 
                              focus:bg-white/10 focus:border-white/20 focus:outline-none
-                             transition-all duration-300 text-white placeholder-gray-600"
+                             transition-all duration-300 text-white placeholder-gray-400"
                   />
                   
                   <button
@@ -1383,7 +1383,7 @@ const HOMEQuizMVP = () => {
                     <Mail className="w-5 h-5" />
                   </button>
                   
-                  <p className="text-center text-gray-600 text-sm mt-6">
+                  <p className="text-center text-gray-400 text-sm mt-6">
                     We'll never spam. Unsubscribe anytime.
                   </p>
                 </div>
@@ -1398,7 +1398,7 @@ const HOMEQuizMVP = () => {
                 </div>
                 
                 <h2 className="text-2xl font-semibold mb-3 text-white">Creating Your Roadmap</h2>
-                <p className="text-gray-500 mb-8">Personalizing your action plan...</p>
+                <p className="text-gray-400 mb-8">Personalizing your action plan...</p>
                 
                 <div className="max-w-xs mx-auto">
                   <div className="h-1 bg-white/10 rounded-full overflow-hidden">
@@ -1407,13 +1407,13 @@ const HOMEQuizMVP = () => {
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-                  <p className="text-sm text-gray-600 mt-3">{Math.round(progress)}% Complete</p>
+                  <p className="text-sm text-gray-400 mt-3">{Math.round(progress)}% Complete</p>
                 </div>
               </div>
             )}
             {/* Footer */}
             <div className="fixed bottom-6 left-0 right-0 text-center pointer-events-none">
-              <p className="text-xs text-gray-600">homeformusic.org</p>
+              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
@@ -1432,7 +1432,7 @@ const HOMEQuizMVP = () => {
                 </div>
                 
                 <h1 className="text-5xl sm:text-6xl font-bold mb-6 text-white">{pathway.title}</h1>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">{pathway.description}</p>
+                <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">{pathway.description}</p>
                 
                 <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                   <MapPin className="w-5 h-5 text-[#B91372]" />
@@ -1460,7 +1460,7 @@ const HOMEQuizMVP = () => {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold mb-1 text-white">{step}</h3>
-                        <p className="text-sm text-gray-500">Tailored specifically to your journey</p>
+                        <p className="text-sm text-gray-400">Tailored specifically to your journey</p>
                       </div>
                     </div>
                   ))}
@@ -1489,7 +1489,7 @@ const HOMEQuizMVP = () => {
             {/* Navigation */}
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
             >
               <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
@@ -1497,7 +1497,7 @@ const HOMEQuizMVP = () => {
             
             {/* Step Progress */}
             <div className="mb-8">
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+              <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
                 <span>Step {currentStep + 1} of 4</span>
                 <span>{Math.round(((currentStep + 1) / 4) * 100)}%</span>
               </div>
@@ -1517,7 +1517,7 @@ const HOMEQuizMVP = () => {
                   <span className="text-2xl font-bold text-white">{currentStep + 1}</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">{pathway.steps[currentStep].title}</h2>
-                <p className="text-xl text-gray-400 max-w-3xl mx-auto">{pathway.steps[currentStep].description}</p>
+                <p className="text-xl text-gray-300 max-w-3xl mx-auto">{pathway.steps[currentStep].description}</p>
               </div>
               
               {/* Content Cards */}
@@ -1588,7 +1588,7 @@ const HOMEQuizMVP = () => {
             </div>
             {/* Footer */}
             <div className="text-center mt-8 animate-fadeIn delay-500">
-              <p className="text-xs text-gray-600">homeformusic.org</p>
+              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
@@ -1600,7 +1600,7 @@ const HOMEQuizMVP = () => {
             {/* Navigation */}
             <button
               onClick={goBack}
-              className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors mb-8 group"
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
             >
               <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               <span>Back</span>
@@ -1609,7 +1609,7 @@ const HOMEQuizMVP = () => {
             {/* Header */}
             <div className="text-center mb-12 animate-fadeIn">
               <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">Ready to Execute Your Plan?</h1>
-              <p className="text-xl text-gray-400">Choose how you want to start your journey with HOME</p>
+              <p className="text-xl text-gray-300">Choose how you want to start your journey with HOME</p>
             </div>
             
             {/* Options */}
@@ -1623,7 +1623,7 @@ const HOMEQuizMVP = () => {
                   <div className="text-center mb-6">
                     <Rocket className="w-16 h-16 text-[#B91372] mx-auto mb-4" />
                     <h3 className="text-2xl font-bold mb-2 text-white">Accelerated Growth</h3>
-                    <p className="text-gray-500">Start with 1-on-1 consultation</p>
+                    <p className="text-gray-400">Start with 1-on-1 consultation</p>
                   </div>
                   
                   <ul className="space-y-3 mb-8">
@@ -1655,7 +1655,7 @@ const HOMEQuizMVP = () => {
                   <div className="text-center mb-6">
                     <Users className="w-16 h-16 text-[#1DD1A1] mx-auto mb-4" />
                     <h3 className="text-2xl font-bold mb-2 text-white">Community Growth</h3>
-                    <p className="text-gray-500">Start with free account</p>
+                    <p className="text-gray-400">Start with free account</p>
                   </div>
                   
                   <ul className="space-y-3 mb-8">
@@ -1683,11 +1683,11 @@ const HOMEQuizMVP = () => {
             </div>
             
             {/* Footer */}
-            <p className="text-center text-gray-600 mt-12 animate-fadeIn delay-400">
+            <p className="text-center text-gray-400 mt-12 animate-fadeIn delay-400">
               Not sure? Start with the free community and upgrade anytime.<br />
               {/* Website URL */}
               <div className="text-center mt-8">
-                <p className="text-xs text-gray-600">homeformusic.org</p><br />
+                <p className="text-xs text-gray-400">homeformusic.org</p><br />
               </div> 
             </p>
           </div>
