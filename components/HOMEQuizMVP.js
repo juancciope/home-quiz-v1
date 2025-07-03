@@ -574,31 +574,16 @@ const AIProcessStep = ({ step, label, duration, icon }) => {
   );
 };
 
-// --- Smart Brand Footer Component ---
+// --- Brand Footer Component ---
 const BrandFooter = ({ currentScreen }) => {
-  // Short pages: content fits in viewport - use fixed footer for always-visible branding
-  const shortPages = ['landing', 'assessment', 'transition', 'email', 'execute'];
-  
-  // Long pages: handle footer inline within each page (don't render global footer)
-  const longPages = ['intro', 'celebration', 'plan'];
-  
-  if (shortPages.includes(currentScreen)) {
-    // Fixed footer for short pages - always visible
-    return (
-      <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30 bg-black/80 backdrop-blur-sm">
-        <p className="text-xs text-gray-400">homeformusic.org</p>
-      </div>
-    );
-  }
-  
-  // Don't render global footer for long pages - they handle their own inline footers
-  if (longPages.includes(currentScreen)) {
+  // Landing page has its own special footer treatment
+  if (currentScreen === 'landing') {
     return null;
   }
   
-  // Fallback - fixed footer
+  // All other pages get consistent dark footer
   return (
-    <div className="fixed bottom-0 left-0 right-0 text-center py-4 pointer-events-none z-30 bg-black/80 backdrop-blur-sm">
+    <div className="fixed bottom-0 left-0 right-0 text-center py-4 z-30 bg-black/95 backdrop-blur-sm border-t border-white/5">
       <p className="text-xs text-gray-400">homeformusic.org</p>
     </div>
   );
@@ -1245,10 +1230,10 @@ const HOMECreatorFlow = () => {
             <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
           </div>
           
-          <div className="relative z-10 flex-1 flex flex-col p-6 sm:p-8 pb-20">
+          <div className="relative z-10 flex-1 flex flex-col justify-center p-6 sm:p-8 pb-20">
             {/* Main Content - Centered */}
-            <div className="flex-1 flex items-center justify-center">
-              <div className="max-w-4xl w-full text-center">
+            <div className="w-full">
+              <div className="max-w-4xl mx-auto text-center">
                 {/* Title - Smaller on mobile */}
                 <div className="mb-8 sm:mb-12 animate-fadeIn">
                   <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
@@ -1318,17 +1303,17 @@ const HOMECreatorFlow = () => {
                   ))}
                 </div>
               </div>
-            </div>
-            
-            {/* Footer - Logo with glow effect above text */}
-            <div className="text-center mt-8 animate-fadeIn delay-500">
-              <div className="relative inline-block mb-3 group">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                  alt="HOME"
-                  className="h-8 relative z-10"
-                />
+              
+              {/* Footer - Logo with glow effect above text */}
+              <div className="text-center mt-12 sm:mt-16 animate-fadeIn delay-500">
+                <div className="relative inline-block mb-3 group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
+                  <img 
+                    src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+                    alt="HOME"
+                    className="h-8 relative z-10"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1426,11 +1411,6 @@ const HOMECreatorFlow = () => {
                 </div>
               </div>
             </div>
-            
-            {/* Inline Footer for long page */}
-            <div className="text-center py-6 mt-8">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
-            </div>
           </div>
         </div>
       )}
@@ -1498,14 +1478,6 @@ const HOMECreatorFlow = () => {
       {screen === 'transition' && (
         <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
           <div className="max-w-md w-full animate-fadeIn">
-            {/* AI Icon */}
-            <div className="relative w-24 h-24 mx-auto mb-8">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
-              <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center border border-white/10">
-                <Sparkles className="w-12 h-12 text-white animate-pulse" />
-              </div>
-            </div>
-            
             <h2 className="text-2xl font-semibold mb-8 text-white text-center">
               AI is crafting your strategic roadmap
             </h2>
@@ -1607,14 +1579,6 @@ const HOMECreatorFlow = () => {
               </div>
             ) : (
               <div className="animate-fadeIn">
-                {/* AI Icon - matching transition screen */}
-                <div className="relative w-24 h-24 mx-auto mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl animate-pulse" />
-                  <div className="relative bg-black rounded-full w-full h-full flex items-center justify-center border border-white/10">
-                    <Sparkles className="w-12 h-12 text-white animate-pulse" />
-                  </div>
-                </div>
-                
                 <h2 className="text-2xl font-semibold mb-8 text-white text-center">
                   Creating Your Strategic Roadmap
                 </h2>
@@ -1654,10 +1618,6 @@ const HOMECreatorFlow = () => {
             <div className="max-w-4xl w-full">
               {/* Path Result */}
               <div className="text-center mb-12 animate-scaleIn">
-                <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full mb-8 shadow-2xl shadow-[#B91372]/30 animate-float">
-                  <span className="text-6xl">{pathway.icon}</span>
-                </div>
-                
                 <h1 className="text-5xl sm:text-6xl font-bold mb-6 text-white">{pathway.title}</h1>
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">{pathway.description}</p>
                 
@@ -1824,11 +1784,6 @@ const HOMECreatorFlow = () => {
                   </button>
                 </div>
               </div>
-            </div>
-            
-            {/* Inline Footer for long page */}
-            <div className="text-center py-6 mt-8">
-              <p className="text-xs text-gray-400">homeformusic.org</p>
             </div>
           </div>
         </div>
