@@ -651,7 +651,7 @@ const BrandFooter = ({ currentScreen }) => {
   );
 };
 
-// --- Fuzzy Score Preview Component (FOMO Version) ---
+// --- Advanced Fuzzy Score Preview Component ---
 const FuzzyScorePreview = ({ scores, blend }) => {
   const pathwayInfo = {
     'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-[#1DD1A1] to-[#40E0D0]' },
@@ -660,97 +660,138 @@ const FuzzyScorePreview = ({ scores, blend }) => {
   };
   
   const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const topTwo = sortedScores.slice(0, 2);
+  const primary = sortedScores[0];
+  const hidden = sortedScores.slice(1);
   
   return (
-    <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-8 relative overflow-hidden">
-      {/* Preview badge */}
-      <div className="absolute top-4 right-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white text-xs font-semibold px-3 py-1 rounded-full">
-        Preview
+    <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8 relative overflow-hidden">
+      {/* Animated background particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 2}s`
+            }}
+          />
+        ))}
       </div>
       
-      <h3 className="text-lg font-semibold mb-4 text-white text-center">Your Creative Profile</h3>
-      
-      <div className="space-y-4">
-        {topTwo.map(([pathway, percentage], index) => {
-          const info = pathwayInfo[pathway];
-          const isPrimary = blend?.primary === pathway;
-          const isSecondary = blend?.secondary === pathway;
+      {/* Primary pathway reveal */}
+      <div className="relative z-10">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full border border-white/20 mb-4">
+            <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+            <span className="text-sm font-medium text-white">Your Primary Creative Type</span>
+            <Sparkles className="w-4 h-4 text-[#B91372]" />
+          </div>
           
-          return (
-            <div key={pathway} className="relative">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{info.icon}</span>
-                  <span className="text-sm font-medium text-white">
-                    {info.name}
-                    {isPrimary && <span className="ml-2 text-xs text-[#1DD1A1]">(Primary)</span>}
-                    {isSecondary && <span className="ml-2 text-xs text-[#B91372]">(Secondary)</span>}
-                  </span>
-                </div>
-                <span className="text-lg font-bold text-white">{percentage}%</span>
-              </div>
-              
-              <div className="h-3 bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full bg-gradient-to-r ${info.color} transition-all duration-1000 ease-out`}
-                  style={{ width: `${percentage}%` }}
-                />
-              </div>
-              
-              {percentage > 60 && (
-                <p className="text-xs text-gray-400 mt-1">Strong alignment</p>
-              )}
-              {percentage > 30 && percentage <= 60 && (
-                <p className="text-xs text-gray-400 mt-1">Moderate alignment</p>
-              )}
-            </div>
-          );
-        })}
-        
-        {/* Blurred third pathway for FOMO */}
-        {sortedScores.length > 2 && (
-          <div className="relative">
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-xl z-10 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-8 h-8 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full mx-auto mb-2 flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">+</span>
-                </div>
-                <p className="text-xs text-white font-medium">Get full analysis</p>
-              </div>
-            </div>
-            <div className="blur-sm opacity-50">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{pathwayInfo[sortedScores[2][0]].icon}</span>
-                  <span className="text-sm font-medium text-white">
-                    {pathwayInfo[sortedScores[2][0]].name}
-                  </span>
-                </div>
-                <span className="text-lg font-bold text-white">••%</span>
-              </div>
-              <div className="h-3 bg-white/5 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-gray-400 to-gray-500 w-1/3" />
-              </div>
+          <div className="relative inline-block">
+            <div className="absolute -inset-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-30 animate-pulse" />
+            <div className="relative w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-4xl shadow-2xl">
+              {pathwayInfo[primary[0]].icon}
             </div>
           </div>
-        )}
-      </div>
-      
-      {blend && blend.type !== 'focused' && (
-        <div className="mt-4 p-3 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
-          <p className="text-sm text-gray-300 text-center">
-            {blend.description}
+          
+          <h3 className="text-2xl font-bold text-white mt-4 mb-2">
+            {pathwayInfo[primary[0]].name}
+          </h3>
+          <div className="inline-flex items-center gap-2 text-3xl font-bold text-white">
+            <span>{primary[1]}%</span>
+            <span className="text-[#1DD1A1]">Match</span>
+          </div>
+        </div>
+        
+        {/* Primary pathway bar */}
+        <div className="mb-6">
+          <div className="h-4 bg-white/5 rounded-full overflow-hidden relative">
+            <div 
+              className={`h-full bg-gradient-to-r ${pathwayInfo[primary[0]].color} transition-all duration-2000 ease-out relative`}
+              style={{ width: `${primary[1]}%` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+            </div>
+          </div>
+          <p className="text-center text-gray-300 mt-2 text-sm">
+            {primary[1] > 70 ? 'Exceptional alignment' : 
+             primary[1] > 50 ? 'Strong alignment' : 'Good alignment'}
           </p>
         </div>
-      )}
-      
-      {/* FOMO message */}
-      <div className="mt-4 text-center">
-        <p className="text-xs text-gray-400">
-          Get your email to see complete analysis + strategic roadmap
-        </p>
+        
+        {/* Hidden pathways with advanced effects */}
+        <div className="space-y-3">
+          {hidden.map(([pathway, percentage], index) => {
+            const info = pathwayInfo[pathway];
+            return (
+              <div key={pathway} className="relative group">
+                {/* Glassmorphism overlay with matrix effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60 rounded-2xl z-20 flex items-center justify-center backdrop-blur-md border border-white/10">
+                  <div className="text-center">
+                    <div className="relative">
+                      {/* Matrix rain effect */}
+                      <div className="absolute inset-0 overflow-hidden rounded-lg">
+                        {[...Array(5)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="absolute text-[#1DD1A1] text-xs opacity-20 animate-pulse"
+                            style={{
+                              left: `${i * 20}%`,
+                              animation: `matrix-rain ${2 + i}s infinite linear`,
+                              animationDelay: `${i * 0.5}s`
+                            }}
+                          >
+                            {Math.random().toString(36).substr(2, 3)}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="relative bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl p-3 border border-white/20">
+                        <Mail className="w-5 h-5 text-white mx-auto mb-1" />
+                        <p className="text-xs text-white font-semibold">Email Required</p>
+                        <p className="text-xs text-gray-300">Unlock {info.name}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Hidden pathway content */}
+                <div className="relative p-4 rounded-2xl border border-white/5 bg-white/[0.01]">
+                  <div className="flex items-center justify-between mb-2 opacity-30">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl filter grayscale">{info.icon}</span>
+                      <span className="text-sm font-medium text-white">
+                        {info.name}
+                      </span>
+                    </div>
+                    <span className="text-lg font-bold text-white">••%</span>
+                  </div>
+                  <div className="h-3 bg-white/5 rounded-full overflow-hidden opacity-30">
+                    <div className="h-full bg-gradient-to-r from-gray-600 to-gray-700 w-1/2" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
+      
+      {/* Enhanced CSS for matrix effect */}
+      <style jsx>{`
+        @keyframes matrix-rain {
+          0% { transform: translateY(-100px); opacity: 0; }
+          50% { opacity: 0.3; }
+          100% { transform: translateY(100px); opacity: 0; }
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(180deg); }
+        }
+      `}</style>
     </div>
   );
 };
@@ -1925,21 +1966,47 @@ const HOMECreatorFlow = () => {
                   <FuzzyScorePreview scores={fuzzyScores} blend={pathwayBlend} />
                 )}
                 
-                {/* Email Form */}
-                <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
-                  <h3 className="text-xl font-semibold mb-6 text-center text-white">
-                    Get Your Strategic Roadmap
-                  </h3>
+                {/* Hero Email Capture */}
+                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                  {/* Animated background elements */}
+                  <div className="absolute inset-0">
+                    <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                    <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
+                  </div>
                   
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl 
-                             focus:bg-white/10 focus:border-white/20 focus:outline-none
-                             transition-all duration-300 text-white placeholder-gray-400"
-                  />
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-4">
+                        <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                        <span className="text-sm font-semibold text-white">Unlock Complete Analysis</span>
+                        <Sparkles className="w-4 h-4 text-[#B91372]" />
+                      </div>
+                      <h3 className="text-2xl font-bold mb-3 text-white">
+                        Get Your Complete Strategic Roadmap
+                      </h3>
+                      <p className="text-gray-300 text-sm">
+                        See all pathways + personalized next steps + exclusive resources
+                      </p>
+                    </div>
+                    
+                    {/* Enhanced email input */}
+                    <div className="relative mb-6">
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl blur-sm" />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="your@email.com"
+                        className="relative w-full px-6 py-5 bg-black/40 border border-white/30 rounded-2xl 
+                                 focus:bg-black/60 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
+                                 transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
+                      />
+                      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                        <Mail className="w-5 h-5 text-gray-400" />
+                      </div>
+                    </div>
                   
                   {/* Enhanced CTA Button - matching homepage */}
                   <div className="relative mt-6">
@@ -1980,10 +2047,23 @@ const HOMECreatorFlow = () => {
                       <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
                     </button>
                   </div>
-                  
-                  <p className="text-center text-gray-400 text-sm mt-6">
-                    We'll never spam. Unsubscribe anytime.
-                  </p>
+                    
+                    {/* Value proposition */}
+                    <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-white/10">
+                      <div className="flex items-center gap-2 text-xs text-gray-300">
+                        <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                        <span>Complete Analysis</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-300">
+                        <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                        <span>Strategic Roadmap</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-300">
+                        <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                        <span>No Spam Ever</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
