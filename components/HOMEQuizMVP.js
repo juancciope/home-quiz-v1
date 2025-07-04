@@ -63,14 +63,13 @@ const questions = [
     ]
   },
   {
-    id: 'resources-priority',
-    question: "What type of resources would most accelerate your career right now?",
+    id: 'success-definition',
+    question: "If you had to choose one of these versions of success, which would it be?",
     icon: <Sparkles className="w-6 h-6" />,
     options: [
-      { value: 'performance-facilities', label: 'Rehearsal spaces, live sound equipment, and performance opportunities', emoji: '🎪' },
-      { value: 'content-creation', label: 'Recording studios, video production, and content creation tools', emoji: '🎬' },
-      { value: 'collaboration-network', label: 'Access to other creators, producers, and industry professionals', emoji: '🤝' },
-      { value: 'business-mentorship', label: 'Business guidance, marketing strategy, and industry connections', emoji: '🧭' }
+      { value: 'live-performer', label: 'You make a good living playing live to large audiences, but you are not playing your original music', emoji: '🎤' },
+      { value: 'online-audience', label: 'You have a large online audience and released a hit song, but you did not write it', emoji: '📱' },
+      { value: 'songwriter', label: 'You have a hit song that you wrote, but someone else recorded and released it', emoji: '✍️' }
     ]
   }
 ];
