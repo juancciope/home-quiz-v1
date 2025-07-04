@@ -2564,7 +2564,14 @@ const HOMECreatorFlow = () => {
                   
                   {/* HOME Resources */}
                   <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
-                    <h3 className="text-lg font-bold mb-4 text-white">HOME Resources</h3>
+                    <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-white">
+                      <img 
+                        src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+                        alt="HOME"
+                        className="h-5 w-auto"
+                      />
+                      HOME Resources
+                    </h3>
                     <div className="space-y-2">
                       {pathway.steps[currentStep].homeResources.map((resource, index) => (
                         <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
