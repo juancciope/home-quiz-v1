@@ -1295,9 +1295,9 @@ const HOMECreatorFlow = () => {
                       <div className="absolute top-0 left-0 w-full h-full">
                         <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
                         <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
-                        <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#40E0D0] rounded-full filter blur-lg opacity-70 animate-liquid-blob-slow" />
-                        <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#FF6B6B] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
-                        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#4ECDC4] rounded-full filter blur-lg opacity-60 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                        <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+                        <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+                        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
                       </div>
                     </div>
                     
