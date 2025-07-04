@@ -799,9 +799,9 @@ const FuzzyScorePreview = ({ scores, blend }) => {
 // --- Full Fuzzy Score Display Component ---
 const FuzzyScoreDisplay = ({ scores, blend }) => {
   const pathwayInfo = {
-    'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-[#1DD1A1] to-[#B91372]', baseColor: '#1DD1A1' },
-    'creative-artist': { name: 'Creative Artist', icon: '🎨', color: 'from-[#B91372] to-[#1DD1A1]', baseColor: '#B91372' },
-    'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-[#1DD1A1] to-[#B91372]', baseColor: '#1DD1A1' }
+    'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-blue-500 to-purple-600', baseColor: '#3B82F6' },
+    'creative-artist': { name: 'Creative Artist', icon: '🎨', color: 'from-pink-500 to-orange-500', baseColor: '#EC4899' },
+    'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-green-500 to-teal-500', baseColor: '#10B981' }
   };
   
   const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
@@ -821,17 +821,8 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
             <div key={pathway} className="relative group">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="relative">
-                    {/* Liquid animation for emoji background */}
-                    <div className="absolute inset-0 rounded-full overflow-hidden">
-                      <div className="absolute top-0 left-0 w-full h-full">
-                        <div className="absolute top-1/4 left-1/4 w-8 h-8 bg-[#1DD1A1] rounded-full filter blur-md opacity-40 animate-liquid-blob" />
-                        <div className="absolute bottom-1/4 right-1/4 w-6 h-6 bg-[#B91372] rounded-full filter blur-md opacity-30 animate-liquid-blob-reverse" />
-                      </div>
-                    </div>
-                    <div className="relative w-10 h-10 bg-gradient-to-br from-white/10 to-white/5 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10">
-                      <span className="text-lg">{info.icon}</span>
-                    </div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-white/10 to-white/5 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10">
+                    <span className="text-lg">{info.icon}</span>
                   </div>
                   <div>
                     <span className="text-sm font-medium text-white block">
@@ -850,15 +841,8 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
               </div>
               
               <div className="relative h-3 bg-white/5 rounded-full overflow-hidden">
-                {/* Liquid animation background for progress bar */}
-                <div className="absolute inset-0 rounded-full overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-full">
-                    <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-[#1DD1A1] rounded-full filter blur-lg opacity-20 animate-liquid-blob" />
-                    <div className="absolute bottom-1/4 right-1/4 w-12 h-12 bg-[#B91372] rounded-full filter blur-lg opacity-15 animate-liquid-blob-reverse" />
-                  </div>
-                </div>
                 <div 
-                  className={`relative h-full bg-gradient-to-r ${info.color} transition-all duration-2000 ease-out z-10`}
+                  className={`h-full bg-gradient-to-r ${info.color} transition-all duration-2000 ease-out`}
                   style={{ width: `${percentage}%` }}
                 >
                   {/* Shimmer effect */}
@@ -871,22 +855,51 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
       </div>
       
       {blend && blend.type !== 'focused' && (
-        <div className="relative mt-6 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10 overflow-hidden">
-          {/* Liquid animation background */}
-          <div className="absolute inset-0 rounded-xl overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full">
-              <div className="absolute top-1/4 left-1/4 w-20 h-20 bg-[#1DD1A1] rounded-full filter blur-xl opacity-10 animate-liquid-blob" />
-              <div className="absolute bottom-1/4 right-1/4 w-16 h-16 bg-[#B91372] rounded-full filter blur-xl opacity-8 animate-liquid-blob-reverse" />
-            </div>
-          </div>
-          <div className="relative z-10">
-            <h4 className="text-sm font-bold text-white mb-2 text-center">🌟 Multi-Pathway Creator</h4>
-            <p className="text-sm text-gray-300 text-center">
-              {blend.description}
-            </p>
-          </div>
+        <div className="mt-6 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
+          <h4 className="text-sm font-bold text-white mb-2 text-center">🌟 Multi-Pathway Creator</h4>
+          <p className="text-sm text-gray-300 text-center">
+            {blend.description}
+          </p>
         </div>
       )}
+      
+      {/* Share Button */}
+      <div className="mt-6 text-center">
+        <button
+          onClick={() => {
+            const primaryPath = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+            const pathName = primaryPath[0].replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const percentage = primaryPath[1];
+            
+            const options = [
+              {
+                name: 'Instagram',
+                action: () => {
+                  const text = `Just discovered my creative profile! I'm ${percentage}% aligned with ${pathName} 🎵✨ What's your music creator type? 🚀`;
+                  navigator.clipboard.writeText(`${text} https://homeformusic.app`);
+                  window.open('https://www.instagram.com/', '_blank');
+                }
+              },
+              {
+                name: 'TikTok', 
+                action: () => {
+                  const text = `Just discovered my creative profile! I'm ${percentage}% aligned with ${pathName} 🎵✨ What's your music creator type? 🚀`;
+                  navigator.clipboard.writeText(`${text} https://homeformusic.app`);
+                  window.open('https://www.tiktok.com/', '_blank');
+                }
+              }
+            ];
+            
+            const choice = prompt('Share to:\\n1. Instagram\\n2. TikTok\\n\\nEnter 1 or 2:');
+            if (choice === '1' || choice === '2') {
+              options[parseInt(choice) - 1].action();
+            }
+          }}
+          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 text-sm"
+        >
+          📱 Share My Profile
+        </button>
+      </div>
     </div>
   );
 };
@@ -2341,7 +2354,7 @@ const HOMECreatorFlow = () => {
                     <h2 className="text-lg font-bold mb-4 text-center text-white">Your Strategic Roadmap</h2>
                     
                     <div className="space-y-3 mb-6">
-                      {pathway.planPreview.slice(0, 3).map((step, index) => (
+                      {pathway.planPreview.map((step, index) => (
                         <div key={index} className="flex items-center gap-3 group">
                           <div className="relative group overflow-hidden">
                             {/* Liquid animation background for circular brand-colored elements */}
