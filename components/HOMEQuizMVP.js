@@ -1328,7 +1328,7 @@ const HOMECreatorFlow = () => {
             <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-5" />
           </div>
           
-          <div className="relative z-10 flex-1 flex flex-col px-6 sm:px-8">
+          <div className="relative z-10 flex-1 flex flex-col px-6 sm:px-8 pb-20">
             {/* Navigation */}
             <button
               onClick={goBack}
@@ -1670,16 +1670,12 @@ const HOMECreatorFlow = () => {
             </div>
           </div>
           
-          {/* Inline Footer for long page */}
-          <div className="text-center py-6 mt-8">
-            <p className="text-xs text-gray-400">homeformusic.org</p>
-          </div>
         </div>
       )}
 
       {screen === 'plan' && pathway && (
         <div className="screen-height bg-black pt-20 sm:pt-24 overflow-y-auto">
-          <div className="max-w-4xl mx-auto px-6 pb-12">
+          <div className="max-w-4xl mx-auto px-6 pb-20">
             {/* Navigation */}
             <button
               onClick={goBack}
