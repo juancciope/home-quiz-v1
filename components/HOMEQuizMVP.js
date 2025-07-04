@@ -1242,12 +1242,10 @@ const HOMECreatorFlow = () => {
                 <div className="mb-8 sm:mb-12 animate-fadeIn">
                   <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
                     Find Your Path on the
-                    <span className="block relative overflow-hidden">
-                      <span className="relative inline-block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent animate-pulse">
-                        {/* Animated background layers */}
-                        <span className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] via-[#40E0D0] to-[#B91372] bg-clip-text text-transparent opacity-0 animate-[shimmer_3s_ease-in-out_infinite]" style={{backgroundSize: '200% 100%'}}>Music Creator Roadmap</span>
-                        <span className="relative z-10">Music Creator Roadmap</span>
-                      </span>
+                    <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent relative">
+                      {/* Animated glow effect behind text */}
+                      <span className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] blur-sm opacity-50 animate-pulse">Music Creator Roadmap</span>
+                      <span className="relative z-10">Music Creator Roadmap</span>
                     </span>
                   </h1>
                   <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-xl mx-auto">
