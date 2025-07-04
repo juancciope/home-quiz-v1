@@ -599,6 +599,51 @@ const BrandFooter = ({ currentScreen }) => {
   );
 };
 
+// --- Liquid Animation Component ---
+const LiquidButton = ({ onClick, disabled, className, children, ...props }) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`group relative inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className || ''}`}
+      style={{ transformStyle: 'preserve-3d' }}
+      {...props}
+    >
+      {/* 3D Liquid layers */}
+      <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+      </div>
+      
+      {/* Animated liquid blobs */}
+      <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+          <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+          <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+          <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+          <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+        </div>
+      </div>
+      
+      {/* Glass effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+      
+      {/* Shine effect */}
+      <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+      </div>
+      
+      {/* Outer glow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+      
+      {/* Content */}
+      <div className="relative z-10" style={{ transform: 'translateZ(10px)' }}>
+        {children}
+      </div>
+    </button>
+  );
+};
+
 // --- Premium Confetti Animation ---
 const PremiumConfetti = ({ show }) => {
   if (!show) return null;
@@ -1441,13 +1486,38 @@ const HOMECreatorFlow = () => {
                   <div className="relative">
                     <button
                       onClick={() => setScreen('assessment')}
-                      className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                      className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
+                      style={{ transformStyle: 'preserve-3d' }}
                     >
-                      {/* Button glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      {/* 3D Liquid layers */}
+                      <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+                      </div>
                       
-                      <span className="relative z-10">Discover My Path</span>
-                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      {/* Animated liquid blobs */}
+                      <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+                        <div className="absolute top-0 left-0 w-full h-full">
+                          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+                          <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+                          <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+                          <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+                          <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                        </div>
+                      </div>
+                      
+                      {/* Glass effect overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+                      
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                      </div>
+                      
+                      {/* Outer glow */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+                      
+                      <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Discover My Path</span>
+                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
                     </button>
                     
                     {/* Floating particles for excitement */}
