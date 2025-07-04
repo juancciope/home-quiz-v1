@@ -1952,15 +1952,6 @@ const HOMECreatorFlow = () => {
                   <span>Back</span>
                 </button>
                 
-                {/* Pathway Preview */}
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-6 shadow-2xl shadow-[#B91372]/20">
-                    <span className="text-5xl">{pathway?.icon}</span>
-                  </div>
-                  <h2 className="text-3xl font-bold mb-3 text-white">Your Path is Ready</h2>
-                  <p className="text-gray-300">{pathway?.title}</p>
-                </div>
-                
                 {/* Unified Email Capture Experience */}
                 {fuzzyScores && (
                   <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
@@ -2055,15 +2046,8 @@ const HOMECreatorFlow = () => {
                           
                           return (
                             <div key={pathway} className="relative">
-                              {/* Glassmorphism overlay with matrix effect */}
-                              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 rounded-2xl z-10 flex items-center justify-center backdrop-blur-md border border-white/10">
-                                <div className="text-center">
-                                  <div className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl p-3 border border-white/20">
-                                    <Mail className="w-4 h-4 text-white mx-auto mb-1" />
-                                    <p className="text-xs text-white font-semibold">Email Required</p>
-                                  </div>
-                                </div>
-                              </div>
+                              {/* Glassmorphism overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 rounded-2xl z-10 backdrop-blur-md border border-white/10"></div>
                               
                               {/* Hidden pathway content */}
                               <div className="relative p-4 rounded-2xl border border-white/10 bg-white/[0.02]">
@@ -2151,19 +2135,50 @@ const HOMECreatorFlow = () => {
                           </button>
                         </div>
                         
-                        {/* Value proposition */}
-                        <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-white/10">
-                          <div className="flex items-center gap-2 text-xs text-gray-300">
-                            <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                            <span>All 3 Pathways</span>
+                        {/* Email consent and privacy */}
+                        <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
+                          {/* Value proposition */}
+                          <div className="flex items-center justify-center gap-6">
+                            <div className="flex items-center gap-2 text-xs text-gray-300">
+                              <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                              <span>Complete Analysis</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-300">
+                              <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                              <span>Personalized Roadmap</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-300">
+                              <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                              <span>Unsubscribe Anytime</span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-300">
-                            <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                            <span>Strategic Roadmap</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-300">
-                            <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                            <span>No Spam Ever</span>
+                          
+                          {/* Privacy compliance */}
+                          <div className="text-center text-xs text-gray-400 leading-relaxed">
+                            <p className="mb-2">
+                              By providing your email, you consent to receive your personalized music career roadmap and occasional valuable resources from HOME. 
+                            </p>
+                            <p>
+                              We respect your privacy. Read our{' '}
+                              <a 
+                                href="https://homeformusic.app/privacy" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-[#1DD1A1] hover:text-[#B91372] transition-colors underline"
+                              >
+                                Privacy Policy
+                              </a>
+                              {' '}and{' '}
+                              <a 
+                                href="https://homeformusic.app/terms" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-[#1DD1A1] hover:text-[#B91372] transition-colors underline"
+                              >
+                                Terms of Service
+                              </a>
+                              .
+                            </p>
                           </div>
                         </div>
                       </div>
