@@ -2703,7 +2703,7 @@ const HOMECreatorFlow = () => {
                     {[
                       'Monday templates with your personalized path',
                       'Tasks organized by your priorities',
-                      'CRM system access for contacts & leads',
+                      'CRM Google Sheet template for contacts & leads',
                       'Step-by-step implementation guides'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
