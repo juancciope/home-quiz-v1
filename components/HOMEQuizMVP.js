@@ -2641,31 +2641,17 @@ const HOMECreatorFlow = () => {
                 <p className="text-sm text-gray-300 mb-8">Choose how you want to start your journey with HOME</p>
               </div>
               
-              {/* Recommended Option */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-6 pb-8 mb-6 overflow-hidden">
-                {/* Animated background elements */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
-                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
-                </div>
-                
-                {/* Recommended badge - inside container */}
-                <div className="flex justify-center mb-4">
-                  <div className="px-4 py-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-xs font-bold text-white">
-                    RECOMMENDED
-                  </div>
-                </div>
-                
-                <div className="relative z-10 text-center">
+              {/* Fully Managed Option */}
+              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6">
+                <div className="text-center">
                   <div className="relative inline-block mb-4">
-                    <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
-                    <div className="relative w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center shadow-xl">
-                      <Users className="w-6 h-6 text-white" />
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
+                      <Users className="w-6 h-6 text-[#1DD1A1]" />
                     </div>
                   </div>
                   
                   <h3 className="text-lg font-bold mb-2 text-white">Fully Managed</h3>
-                  <p className="text-sm text-gray-400 mb-3">We handle everything for you</p>
+                  <p className="text-sm text-gray-400 mb-4">We handle everything for you</p>
                   
                   <ul className="space-y-2 mb-6 text-left">
                     {[
@@ -2681,40 +2667,12 @@ const HOMECreatorFlow = () => {
                     ))}
                   </ul>
                   
-                  <button 
+                  <LiquidButton
                     onClick={() => window.open('https://calendly.com/homeformusic', '_blank')}
-                    className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
-                    style={{ transformStyle: 'preserve-3d' }}
+                    className="w-full"
                   >
-                    {/* 3D Liquid layers */}
-                    <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
-                    </div>
-                    
-                    {/* Animated liquid blobs */}
-                    <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
-                      <div className="absolute top-0 left-0 w-full h-full">
-                        <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
-                        <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
-                        <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
-                        <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
-                        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
-                      </div>
-                    </div>
-                    
-                    {/* Glass effect overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
-                    
-                    {/* Shine effect */}
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
-                      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
-                    </div>
-                    
-                    {/* Outer glow */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
-                    
-                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Talk to Us</span>
-                  </button>
+                    Talk to Us
+                  </LiquidButton>
                 </div>
               </div>
               
@@ -2745,12 +2703,12 @@ const HOMECreatorFlow = () => {
                     ))}
                   </ul>
                   
-                  <button 
+                  <LiquidButton
                     onClick={() => window.open('https://homeformusic.app/templates', '_blank')}
-                    className="w-full py-3 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20 text-white text-sm"
+                    className="w-full"
                   >
                     Get Tech Templates
-                  </button>
+                  </LiquidButton>
                 </div>
               </div>
               
@@ -2780,12 +2738,12 @@ const HOMECreatorFlow = () => {
                     ))}
                   </ul>
                   
-                  <button 
+                  <LiquidButton
                     onClick={() => window.open('https://homeformusic.app/community', '_blank')}
-                    className="w-full py-3 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20 text-white text-sm"
+                    className="w-full"
                   >
                     Join Free Community
-                  </button>
+                  </LiquidButton>
                 </div>
               </div>
               
