@@ -584,7 +584,7 @@ const BrandFooter = ({ currentScreen }) => {
   // All other pages get consistent dark footer
   return (
     <div className="fixed bottom-0 left-0 right-0 text-center py-4 z-30 bg-black/95 backdrop-blur-sm border-t border-white/5">
-      <p className="text-xs text-gray-400">homeformusic.org</p>
+      <p className="text-xs text-gray-400">homeformusic.app</p>
     </div>
   );
 };
@@ -1157,19 +1157,19 @@ const HOMECreatorFlow = () => {
       }
 
       .animate-liquid-rotate {
-        animation: liquid-rotate 20s linear infinite;
+        animation: liquid-rotate 12s linear infinite;
       }
 
       .animate-liquid-blob {
-        animation: liquid-blob 8s ease-in-out infinite;
+        animation: liquid-blob 4s ease-in-out infinite;
       }
 
       .animate-liquid-blob-reverse {
-        animation: liquid-blob-reverse 10s ease-in-out infinite;
+        animation: liquid-blob-reverse 5s ease-in-out infinite;
       }
 
       .animate-liquid-blob-slow {
-        animation: liquid-blob-slow 15s ease-in-out infinite;
+        animation: liquid-blob-slow 7s ease-in-out infinite;
       }
 
       /* Enable GPU acceleration */
@@ -1182,6 +1182,11 @@ const HOMECreatorFlow = () => {
       @keyframes gradient-x {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(100%); }
+      }
+      
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
       }
 
       .animate-gradient-x {
@@ -1237,8 +1242,12 @@ const HOMECreatorFlow = () => {
                 <div className="mb-8 sm:mb-12 animate-fadeIn">
                   <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
                     Find Your Path on the
-                    <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
-                      Music Creator Roadmap
+                    <span className="block relative overflow-hidden">
+                      <span className="relative inline-block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent animate-pulse">
+                        {/* Animated background layers */}
+                        <span className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] via-[#40E0D0] to-[#B91372] bg-clip-text text-transparent opacity-0 animate-[shimmer_3s_ease-in-out_infinite]" style={{backgroundSize: '200% 100%'}}>Music Creator Roadmap</span>
+                        <span className="relative z-10">Music Creator Roadmap</span>
+                      </span>
                     </span>
                   </h1>
                   <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-xl mx-auto">
@@ -1315,7 +1324,7 @@ const HOMECreatorFlow = () => {
               </div>
               <div className="text-sm text-gray-400 mt-2">
                 By HOME For Music<br />
-                homeformusic.org
+                homeformusic.app
               </div>
             </div>
           </div>
@@ -1818,7 +1827,7 @@ const HOMECreatorFlow = () => {
                   {/* Enhanced CTA Button */}
                   <div className="relative">
                     <button 
-                      onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
+                      onClick={() => window.open('https://homeformusic.app/consultation', '_blank')}
                       className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
                     >
                       {/* Button glow effect */}
@@ -1855,7 +1864,7 @@ const HOMECreatorFlow = () => {
                   </ul>
                   
                   <button 
-                    onClick={() => window.open('https://homeformusic.org/community', '_blank')}
+                    onClick={() => window.open('https://homeformusic.app/community', '_blank')}
                     className="w-full py-4 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20 text-white"
                   >
                     Join Free Community
