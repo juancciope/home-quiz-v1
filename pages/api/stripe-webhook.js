@@ -1,5 +1,4 @@
 import Stripe from 'stripe';
-import { buffer } from 'micro';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -9,6 +8,15 @@ export const config = {
     bodyParser: false,
   },
 };
+
+// Helper function to read raw body
+async function getRawBody(req) {
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
 
 // Sample industry map data - replace with your actual curated list
 const INDUSTRY_MAP_DATA = {
@@ -127,7 +135,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const buf = await buffer(req);
+  const buf = await getRawBody(req);
   const sig = req.headers['stripe-signature'];
 
   let event;
