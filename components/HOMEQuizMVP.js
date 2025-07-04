@@ -1223,17 +1223,16 @@ const HOMECreatorFlow = () => {
       {showProgress && <ProgressBar currentCheckpoint={currentCheckpoint} />}
       
       {screen === 'landing' && (
-        <div className="screen-height bg-black relative overflow-hidden flex flex-col">
+        <div className="screen-height bg-black relative overflow-hidden flex items-center justify-center">
           {/* Subtle gradient background */}
           <div className="absolute inset-0">
             <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-10" />
             <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-10" />
           </div>
           
-          <div className="relative z-10 flex-1 flex flex-col justify-center p-6 sm:p-8 pb-20">
+          <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-8">
             {/* Main Content - Centered */}
-            <div className="w-full">
-              <div className="max-w-4xl mx-auto text-center">
+            <div className="text-center">
                 {/* Title - Smaller on mobile */}
                 <div className="mb-8 sm:mb-12 animate-fadeIn">
                   <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
@@ -1304,16 +1303,19 @@ const HOMECreatorFlow = () => {
                 </div>
               </div>
               
-              {/* Footer - Logo with glow effect above text */}
-              <div className="text-center mt-12 sm:mt-16 animate-fadeIn delay-500">
-                <div className="relative inline-block mb-3 group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-                  <img 
-                    src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                    alt="HOME"
-                    className="h-8 relative z-10"
-                  />
-                </div>
+            {/* Footer - Logo with glow effect and text */}
+            <div className="text-center mt-12 sm:mt-16 animate-fadeIn delay-500">
+              <div className="relative inline-block mb-3 group">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+                  alt="HOME"
+                  className="h-8 relative z-10"
+                />
+              </div>
+              <div className="text-sm text-gray-400 mt-2">
+                By HOME For Music<br />
+                homeformusic.org
               </div>
             </div>
           </div>
