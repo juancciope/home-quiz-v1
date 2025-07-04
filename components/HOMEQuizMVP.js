@@ -1986,16 +1986,19 @@ const HOMECreatorFlow = () => {
                 <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 pt-12 group-hover:border-white/20 transition-all duration-500">
                   <div className="text-center mb-6">
                     <Rocket className="w-16 h-16 text-[#B91372] mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2 text-white">Accelerated Growth</h3>
-                    <p className="text-gray-400">Start with 1-on-1 consultation</p>
+                    <h3 className="text-2xl font-bold mb-2 text-white">Your Local Music Industry Map</h3>
+                    <p className="text-gray-400">Get strategic networking advantage</p>
+                    <div className="mt-3">
+                      <span className="text-2xl font-bold text-[#1DD1A1]">$20</span>
+                    </div>
                   </div>
                   
                   <ul className="space-y-3 mb-8">
                     {[
-                      'Personal strategy session with experts',
-                      'Strategic roadmap tailored to your goals',
-                      'Priority access to HOME resources',
-                      'Fast-track your music career'
+                      'Curated list of 10 key companies in your area',
+                      'Direct contact information and decision-makers',
+                      'Strategic partnership and collaboration opportunities',
+                      'Skip months of research - start connecting immediately'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <Check className="w-5 h-5 text-[#1DD1A1] mt-0.5" />
@@ -2038,8 +2041,7 @@ const HOMECreatorFlow = () => {
                       {/* Outer glow */}
                       <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
                       
-                      <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Book Free Consultation</span>
-                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+                      <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Get Your Industry Map</span>
                     </button>
                   </div>
                 </div>
