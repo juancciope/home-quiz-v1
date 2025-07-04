@@ -1961,110 +1961,215 @@ const HOMECreatorFlow = () => {
                   <p className="text-gray-300">{pathway?.title}</p>
                 </div>
                 
-                {/* Fuzzy Score Preview */}
+                {/* Unified Email Capture Experience */}
                 {fuzzyScores && (
-                  <FuzzyScorePreview scores={fuzzyScores} blend={pathwayBlend} />
-                )}
-                
-                {/* Hero Email Capture */}
-                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
-                  {/* Animated background elements */}
-                  <div className="absolute inset-0">
-                    <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
-                    <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10">
-                    <div className="text-center mb-8">
-                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-4">
-                        <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
-                        <span className="text-sm font-semibold text-white">Unlock Complete Analysis</span>
-                        <Sparkles className="w-4 h-4 text-[#B91372]" />
-                      </div>
-                      <h3 className="text-2xl font-bold mb-3 text-white">
-                        Get Your Complete Strategic Roadmap
-                      </h3>
-                      <p className="text-gray-300 text-sm">
-                        See all pathways + personalized next steps + exclusive resources
-                      </p>
+                  <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                    {/* Animated background elements */}
+                    <div className="absolute inset-0 overflow-hidden">
+                      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                      <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-gradient-to-br from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}} />
+                      
+                      {/* Floating particles */}
+                      {[...Array(15)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                          style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                            animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                            animationDelay: `${Math.random() * 2}s`
+                          }}
+                        />
+                      ))}
                     </div>
                     
-                    {/* Enhanced email input */}
-                    <div className="relative mb-6">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl blur-sm" />
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="your@email.com"
-                        className="relative w-full px-6 py-5 bg-black/40 border border-white/30 rounded-2xl 
-                                 focus:bg-black/60 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
-                                 transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
-                      />
-                      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                        <Mail className="w-5 h-5 text-gray-400" />
-                      </div>
-                    </div>
-                  
-                  {/* Enhanced CTA Button - matching homepage */}
-                  <div className="relative mt-6">
-                    <button
-                      onClick={handleEmailSubmit}
-                      disabled={!email || isProcessing}
-                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden transform-gpu"
-                      style={{ transformStyle: 'preserve-3d' }}
-                    >
-                      {/* 3D Liquid layers */}
-                      <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
-                      </div>
-                      
-                      {/* Animated liquid blobs */}
-                      <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
-                        <div className="absolute top-0 left-0 w-full h-full">
-                          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
-                          <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
-                          <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
-                          <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
-                          <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                    {/* Content */}
+                    <div className="relative z-10">
+                      {/* Header */}
+                      <div className="text-center mb-8">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                          <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                          <span className="text-sm font-semibold text-white">Your Creative Profile Analysis</span>
+                          <Sparkles className="w-4 h-4 text-[#B91372]" />
                         </div>
                       </div>
                       
-                      {/* Glass effect overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
-                      
-                      {/* Shine effect */}
-                      <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
-                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                      {/* Primary Pathway Showcase */}
+                      <div className="text-center mb-8">
+                        <div className="relative inline-block mb-6">
+                          <div className="absolute -inset-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-30 animate-pulse" />
+                          <div className="relative w-24 h-24 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-5xl shadow-2xl">
+                            {(() => {
+                              const pathwayInfo = {
+                                'touring-performer': '🎤',
+                                'creative-artist': '🎨', 
+                                'writer-producer': '🎹'
+                              };
+                              const sortedScores = Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1]);
+                              return pathwayInfo[sortedScores[0][0]];
+                            })()}
+                          </div>
+                        </div>
+                        
+                        <h3 className="text-3xl font-bold text-white mb-3">
+                          {(() => {
+                            const pathwayInfo = {
+                              'touring-performer': 'Touring Performer',
+                              'creative-artist': 'Creative Artist', 
+                              'writer-producer': 'Writer/Producer'
+                            };
+                            const sortedScores = Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1]);
+                            return pathwayInfo[sortedScores[0][0]];
+                          })()}
+                        </h3>
+                        
+                        <div className="inline-flex items-center gap-3 text-4xl font-bold text-white mb-6">
+                          <span>{Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][1]}%</span>
+                          <span className="text-[#1DD1A1] text-2xl">Match</span>
+                        </div>
+                        
+                        {/* Primary pathway bar */}
+                        <div className="max-w-md mx-auto mb-8">
+                          <div className="h-4 bg-white/5 rounded-full overflow-hidden relative">
+                            <div 
+                              className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-2000 ease-out relative"
+                              style={{ width: `${Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][1]}%` }}
+                            >
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       
-                      {/* Outer glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+                      {/* Hidden pathways preview */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        {Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1]).slice(1).map(([pathway, percentage]) => {
+                          const pathwayInfo = {
+                            'touring-performer': { name: 'Touring Performer', icon: '🎤' },
+                            'creative-artist': { name: 'Creative Artist', icon: '🎨' },
+                            'writer-producer': { name: 'Writer/Producer', icon: '🎹' }
+                          };
+                          const info = pathwayInfo[pathway];
+                          
+                          return (
+                            <div key={pathway} className="relative">
+                              {/* Glassmorphism overlay with matrix effect */}
+                              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70 rounded-2xl z-10 flex items-center justify-center backdrop-blur-md border border-white/10">
+                                <div className="text-center">
+                                  <div className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl p-3 border border-white/20">
+                                    <Mail className="w-4 h-4 text-white mx-auto mb-1" />
+                                    <p className="text-xs text-white font-semibold">Email Required</p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Hidden pathway content */}
+                              <div className="relative p-4 rounded-2xl border border-white/10 bg-white/[0.02]">
+                                <div className="flex items-center gap-3 mb-2 opacity-40">
+                                  <span className="text-2xl filter grayscale">{info.icon}</span>
+                                  <div className="flex-1">
+                                    <span className="text-sm font-medium text-white block">{info.name}</span>
+                                    <span className="text-xs text-gray-400">••% alignment</span>
+                                  </div>
+                                </div>
+                                <div className="h-2 bg-white/5 rounded-full overflow-hidden opacity-40">
+                                  <div className="h-full bg-gradient-to-r from-gray-600 to-gray-700 w-1/2" />
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                       
-                      <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Get My Roadmap</span>
-                      <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
-                    </button>
-                  </div>
-                    
-                    {/* Value proposition */}
-                    <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-white/10">
-                      <div className="flex items-center gap-2 text-xs text-gray-300">
-                        <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                        <span>Complete Analysis</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-300">
-                        <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                        <span>Strategic Roadmap</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-300">
-                        <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                        <span>No Spam Ever</span>
+                      {/* Email capture section */}
+                      <div className="border-t border-white/10 pt-8">
+                        <div className="text-center mb-6">
+                          <h4 className="text-xl font-bold text-white mb-2">
+                            Unlock Your Complete Strategic Roadmap
+                          </h4>
+                          <p className="text-gray-300 text-sm">
+                            See all pathway scores + personalized next steps + exclusive resources
+                          </p>
+                        </div>
+                        
+                        {/* Enhanced email input */}
+                        <div className="relative mb-6">
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl blur-sm" />
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="your@email.com"
+                            className="relative w-full px-6 py-5 bg-black/40 border border-white/30 rounded-2xl 
+                                     focus:bg-black/60 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
+                                     transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
+                          />
+                          <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            <Mail className="w-5 h-5 text-gray-400" />
+                          </div>
+                        </div>
+                        
+                        {/* Enhanced CTA Button */}
+                        <div className="relative">
+                          <button
+                            onClick={handleEmailSubmit}
+                            disabled={!email || isProcessing}
+                            className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden transform-gpu"
+                            style={{ transformStyle: 'preserve-3d' }}
+                          >
+                            {/* 3D Liquid layers */}
+                            <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+                              <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+                            </div>
+                            
+                            {/* Animated liquid blobs */}
+                            <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+                              <div className="absolute top-0 left-0 w-full h-full">
+                                <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+                                <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+                                <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+                                <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+                                <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                              </div>
+                            </div>
+                            
+                            {/* Glass effect overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+                            
+                            {/* Shine effect */}
+                            <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+                              <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                            </div>
+                            
+                            {/* Outer glow */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+                            
+                            <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Get My Complete Roadmap</span>
+                            <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+                          </button>
+                        </div>
+                        
+                        {/* Value proposition */}
+                        <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-white/10">
+                          <div className="flex items-center gap-2 text-xs text-gray-300">
+                            <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                            <span>All 3 Pathways</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-gray-300">
+                            <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                            <span>Strategic Roadmap</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-gray-300">
+                            <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
+                            <span>No Spam Ever</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ) : (
               <div className="animate-fadeIn">
