@@ -2642,36 +2642,37 @@ const HOMECreatorFlow = () => {
               </div>
               
               {/* Recommended Option */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-6 mb-6 overflow-hidden">
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-6 pb-8 mb-6 overflow-hidden">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
                   <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
                 </div>
                 
-                {/* Recommended badge */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-xs font-bold z-10 text-white">
-                  RECOMMENDED
+                {/* Recommended badge - inside container */}
+                <div className="flex justify-center mb-4">
+                  <div className="px-4 py-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full text-xs font-bold text-white">
+                    RECOMMENDED
+                  </div>
                 </div>
                 
-                <div className="relative z-10 text-center pt-4">
+                <div className="relative z-10 text-center">
                   <div className="relative inline-block mb-4">
                     <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
                     <div className="relative w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center shadow-xl">
-                      <Rocket className="w-6 h-6 text-white" />
+                      <Users className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-2 text-white">Your Local Music Industry Map</h3>
-                  <p className="text-sm text-gray-400 mb-3">Get strategic networking advantage</p>
-                  <div className="text-xl font-bold text-[#1DD1A1] mb-4">$20</div>
+                  <h3 className="text-lg font-bold mb-2 text-white">Fully Managed</h3>
+                  <p className="text-sm text-gray-400 mb-3">We handle everything for you</p>
                   
                   <ul className="space-y-2 mb-6 text-left">
                     {[
-                      'Curated list of 10 key companies in your area',
-                      'Direct contact information and decision-makers',
-                      'Strategic partnership opportunities',
-                      'Skip months of research'
+                      'Personal strategy session with our team',
+                      'Custom roadmap execution & accountability',
+                      'Direct access to industry connections',
+                      'Monthly progress reviews & optimization'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
@@ -2681,7 +2682,7 @@ const HOMECreatorFlow = () => {
                   </ul>
                   
                   <button 
-                    onClick={handleIndustryMapPurchase}
+                    onClick={() => window.open('https://calendly.com/homeformusic', '_blank')}
                     className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
@@ -2712,7 +2713,43 @@ const HOMECreatorFlow = () => {
                     {/* Outer glow */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
                     
-                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Get Your Industry Map</span>
+                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Talk to Us</span>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Tech Templates Option */}
+              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6">
+                <div className="text-center">
+                  <div className="relative inline-block mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
+                      <ListChecks className="w-6 h-6 text-[#1DD1A1]" />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold mb-2 text-white">Tech Templates</h3>
+                  <p className="text-sm text-gray-400 mb-3">DIY with professional tools</p>
+                  <div className="text-xl font-bold text-[#1DD1A1] mb-4">$20</div>
+                  
+                  <ul className="space-y-2 mb-6 text-left">
+                    {[
+                      'Monday.com template for task management',
+                      'CRM system access for contacts & leads',
+                      'Pre-built workflows for music creators',
+                      'Step-by-step implementation guides'
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-gray-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <button 
+                    onClick={() => window.open('https://homeformusic.app/templates', '_blank')}
+                    className="w-full py-3 bg-white/10 backdrop-blur rounded-2xl font-medium transition-all duration-300 hover:bg-white/20 text-white text-sm"
+                  >
+                    Get Tech Templates
                   </button>
                 </div>
               </div>
