@@ -856,10 +856,33 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
       
       {blend && blend.type !== 'focused' && (
         <div className="mt-6 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
-          <h4 className="text-sm font-bold text-white mb-2 text-center">🌟 Multi-Pathway Creator</h4>
-          <p className="text-sm text-gray-300 text-center">
-            {blend.description}
-          </p>
+          <h4 className="text-sm font-bold text-white mb-3 text-center">🌟 Multi-Pathway Creator</h4>
+          <div className="space-y-2 text-xs text-gray-300">
+            {blend.type === 'blend' && (
+              <>
+                <p className="text-center">
+                  <span className="text-white font-medium">Your creative DNA shows strong overlap</span> between pathways. 
+                  This means you naturally think across multiple revenue streams and artistic expressions.
+                </p>
+                <p className="text-center">
+                  <span className="text-[#1DD1A1] font-medium">Strategy:</span> Focus 70% on your primary path while developing your secondary strengths. 
+                  This creates unique opportunities that single-pathway creators miss.
+                </p>
+              </>
+            )}
+            {blend.type === 'hybrid' && (
+              <>
+                <p className="text-center">
+                  <span className="text-white font-medium">You're a rare hybrid creator</span> with nearly equal alignment across all pathways. 
+                  This gives you extraordinary versatility in the music industry.
+                </p>
+                <p className="text-center">
+                  <span className="text-[#1DD1A1] font-medium">Strategy:</span> Develop parallel revenue streams across all areas. 
+                  Your balanced profile means you can pivot and adapt faster than specialized creators.
+                </p>
+              </>
+            )}
+          </div>
         </div>
       )}
       
@@ -895,9 +918,37 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
               options[parseInt(choice) - 1].action();
             }
           }}
-          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 text-sm"
+          className="group relative inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 overflow-hidden transform-gpu"
+          style={{ transformStyle: 'preserve-3d' }}
         >
-          📱 Share My Profile
+          {/* 3D Liquid layers */}
+          <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+          </div>
+          
+          {/* Animated liquid blobs */}
+          <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+            <div className="absolute top-0 left-0 w-full h-full">
+              <div className="absolute top-1/4 left-1/4 w-10 h-10 bg-[#1DD1A1] rounded-full filter blur-lg opacity-80 animate-liquid-blob" />
+              <div className="absolute bottom-1/4 right-1/4 w-8 h-8 bg-[#B91372] rounded-full filter blur-lg opacity-80 animate-liquid-blob-reverse" />
+              <div className="absolute top-1/2 left-1/2 w-6 h-6 bg-[#1DD1A1] rounded-full filter blur-md opacity-60 animate-liquid-blob-slow" />
+            </div>
+          </div>
+          
+          {/* Glass effect overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+          
+          {/* Shine effect */}
+          <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+            <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+          </div>
+          
+          {/* Outer glow */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+          
+          <svg className="relative z-10 w-5 h-5 text-white" style={{ transform: 'translateZ(10px)' }} fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92S19.61 16.08 18 16.08z"/>
+          </svg>
         </button>
       </div>
     </div>
