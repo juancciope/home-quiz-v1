@@ -1488,14 +1488,26 @@ const HOMECreatorFlow = () => {
             <div className="space-y-4 mb-8">
               <AIProcessStep 
                 step={1}
-                label="Analyzing your creative priorities and career goals"
-                duration={1000}
+                label="Analyzing your creative priorities"
+                duration={1500}
                 icon={<Target className="w-4 h-4" />}
               />
               <AIProcessStep 
                 step={2}
-                label="Crafting your personalized strategic roadmap"
-                duration={6000}
+                label="Mapping your optimal career path"
+                duration={4000}
+                icon={<MapPin className="w-4 h-4" />}
+              />
+              <AIProcessStep 
+                step={3}
+                label="Identifying strategic next steps"
+                duration={6500}
+                icon={<ListChecks className="w-4 h-4" />}
+              />
+              <AIProcessStep 
+                step={4}
+                label="Crafting your personalized roadmap"
+                duration={9000}
                 icon={<Sparkles className="w-4 h-4" />}
               />
             </div>
@@ -1567,25 +1579,13 @@ const HOMECreatorFlow = () => {
                   Creating Your Strategic Roadmap
                 </h2>
                 
-                {/* Process Steps - matching AI analysis */}
+                {/* Process Steps - fast completion */}
                 <div className="space-y-4">
                   <AIProcessStep 
                     step={1}
-                    label="Saving your assessment results"
-                    duration={500}
+                    label="Finalizing your strategic roadmap"
+                    duration={1000}
                     icon={<Check className="w-4 h-4" />}
-                  />
-                  <AIProcessStep 
-                    step={2}
-                    label="Generating personalized action items"
-                    duration={1500}
-                    icon={<ListChecks className="w-4 h-4" />}
-                  />
-                  <AIProcessStep 
-                    step={3}
-                    label="Preparing your roadmap document"
-                    duration={2500}
-                    icon={<Mail className="w-4 h-4" />}
                   />
                 </div>
               </div>
