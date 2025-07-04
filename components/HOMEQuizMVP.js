@@ -381,6 +381,17 @@ const determinePathway = (responses) => {
     scores[visionMap[responses['success-vision']]] += 4;
   }
   
+  // New success definition scoring
+  const successDefinitionMap = {
+    'live-performer': 'touring-performer',
+    'online-audience': 'creative-artist',
+    'songwriter': 'writer-producer'
+  };
+  
+  if (successDefinitionMap[responses['success-definition']]) {
+    scores[successDefinitionMap[responses['success-definition']]] += 3;
+  }
+  
   return Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
 };
 
