@@ -1987,11 +1987,11 @@ const HOMECreatorFlow = () => {
                         </div>
                       </div>
                       
-                      {/* Primary Pathway Showcase */}
-                      <div className="text-center mb-8">
+                      {/* Consolidated Pathway & Email Section */}
+                      <div className="text-center">
                         <div className="relative inline-block mb-6">
-                          <div className="absolute -inset-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-30 animate-pulse" />
-                          <div className="relative w-24 h-24 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-5xl shadow-2xl">
+                          <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
+                          <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-3xl shadow-xl">
                             {(() => {
                               const pathwayInfo = {
                                 'touring-performer': '🎤',
@@ -2004,7 +2004,7 @@ const HOMECreatorFlow = () => {
                           </div>
                         </div>
                         
-                        <h3 className="text-3xl font-bold text-white mb-3">
+                        <h3 className="text-2xl font-bold text-white mb-2">
                           {(() => {
                             const pathwayInfo = {
                               'touring-performer': 'Touring Performer',
@@ -2016,14 +2016,14 @@ const HOMECreatorFlow = () => {
                           })()}
                         </h3>
                         
-                        <div className="inline-flex items-center gap-3 text-4xl font-bold text-white mb-6">
+                        <div className="inline-flex items-center gap-2 text-3xl font-bold text-white mb-4">
                           <span>{Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][1]}%</span>
-                          <span className="text-[#1DD1A1] text-2xl">Match</span>
+                          <span className="text-[#1DD1A1] text-xl">Match</span>
                         </div>
                         
                         {/* Primary pathway bar */}
-                        <div className="max-w-md mx-auto mb-8">
-                          <div className="h-4 bg-white/5 rounded-full overflow-hidden relative">
+                        <div className="max-w-sm mx-auto mb-6">
+                          <div className="h-3 bg-white/5 rounded-full overflow-hidden relative">
                             <div 
                               className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-2000 ease-out relative"
                               style={{ width: `${Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][1]}%` }}
@@ -2032,29 +2032,20 @@ const HOMECreatorFlow = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      
-                      {/* Email capture section */}
-                      <div className="border-t border-white/10 pt-8">
-                        <div className="text-center mb-6">
-                          <h4 className="text-xl font-bold text-white mb-2">
-                            Unlock Your Complete Strategic Roadmap
-                          </h4>
-                          <p className="text-gray-300 text-sm">
-                            See all pathway scores + personalized next steps + exclusive resources
-                          </p>
-                        </div>
+                        
+                        <p className="text-xs text-gray-400 mb-6">
+                          Get your complete analysis with all pathway scores and personalized roadmap
+                        </p>
                         
                         {/* Enhanced email input */}
                         <div className="relative mb-6">
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl blur-sm" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5 rounded-2xl blur-sm" />
                           <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="your@email.com"
-                            className="relative w-full px-6 py-5 bg-black/40 border border-white/30 rounded-2xl 
+                            className="relative w-full px-6 py-5 bg-black/20 border border-white/20 rounded-2xl 
                                      focus:bg-black/60 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
                                      transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
                           />
