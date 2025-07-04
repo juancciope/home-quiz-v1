@@ -339,60 +339,112 @@ const pathwayTemplates = {
   }
 };
 // --- Helpers ---
-const determinePathway = (responses) => {
+// Fuzzy logic scoring with percentage alignments
+const calculateFuzzyScores = (responses) => {
   const scores = {
     'touring-performer': 0,
     'creative-artist': 0,
     'writer-producer': 0
   };
   
-  // Motivation scoring
-  const motivationMap = {
-    'stage-energy': 'touring-performer',
-    'creative-expression': 'creative-artist', 
-    'behind-scenes': 'writer-producer',
-    'business-building': 'creative-artist'
+  // Fuzzy scoring matrix - each answer contributes to multiple pathways
+  const fuzzyMatrix = {
+    motivation: {
+      'stage-energy': { 'touring-performer': 1.0, 'creative-artist': 0.3, 'writer-producer': 0.1 },
+      'creative-expression': { 'touring-performer': 0.2, 'creative-artist': 1.0, 'writer-producer': 0.4 },
+      'behind-scenes': { 'touring-performer': 0.1, 'creative-artist': 0.3, 'writer-producer': 1.0 }
+    },
+    'ideal-day': {
+      'performing': { 'touring-performer': 1.0, 'creative-artist': 0.4, 'writer-producer': 0.1 },
+      'creating-content': { 'touring-performer': 0.3, 'creative-artist': 1.0, 'writer-producer': 0.3 },
+      'studio-work': { 'touring-performer': 0.1, 'creative-artist': 0.4, 'writer-producer': 1.0 }
+    },
+    'success-vision': {
+      'touring-artist': { 'touring-performer': 1.0, 'creative-artist': 0.5, 'writer-producer': 0.2 },
+      'creative-brand': { 'touring-performer': 0.3, 'creative-artist': 1.0, 'writer-producer': 0.3 },
+      'in-demand-producer': { 'touring-performer': 0.2, 'creative-artist': 0.4, 'writer-producer': 1.0 }
+    },
+    'success-definition': {
+      'live-performer': { 'touring-performer': 1.0, 'creative-artist': 0.2, 'writer-producer': 0.1 },
+      'online-audience': { 'touring-performer': 0.2, 'creative-artist': 1.0, 'writer-producer': 0.2 },
+      'songwriter': { 'touring-performer': 0.1, 'creative-artist': 0.3, 'writer-producer': 1.0 }
+    },
+    'stage-level': {
+      'planning': { 'touring-performer': 0.33, 'creative-artist': 0.33, 'writer-producer': 0.34 },
+      'production': { 'touring-performer': 0.33, 'creative-artist': 0.34, 'writer-producer': 0.33 },
+      'scale': { 'touring-performer': 0.34, 'creative-artist': 0.33, 'writer-producer': 0.33 }
+    }
   };
   
-  if (motivationMap[responses.motivation]) {
-    scores[motivationMap[responses.motivation]] += 3;
-  }
-  
-  // Ideal day scoring
-  const idealDayMap = {
-    'performing': 'touring-performer',
-    'creating-content': 'creative-artist',
-    'studio-work': 'writer-producer',
-    'strategy-networking': 'creative-artist'
+  // Question weights based on importance
+  const questionWeights = {
+    motivation: 0.25,
+    'ideal-day': 0.25,
+    'success-vision': 0.30,
+    'success-definition': 0.15,
+    'stage-level': 0.05
   };
   
-  if (idealDayMap[responses['ideal-day']]) {
-    scores[idealDayMap[responses['ideal-day']]] += 3;
+  // Calculate weighted scores
+  Object.entries(responses).forEach(([question, answer]) => {
+    if (fuzzyMatrix[question] && fuzzyMatrix[question][answer]) {
+      const weight = questionWeights[question] || 0.2;
+      Object.entries(fuzzyMatrix[question][answer]).forEach(([pathway, value]) => {
+        scores[pathway] += value * weight;
+      });
+    }
+  });
+  
+  // Convert to percentages
+  const maxPossibleScore = Object.values(questionWeights).reduce((a, b) => a + b, 0);
+  const percentages = {};
+  Object.entries(scores).forEach(([pathway, score]) => {
+    percentages[pathway] = Math.round((score / maxPossibleScore) * 100);
+  });
+  
+  return percentages;
+};
+
+// Get primary pathway (for backwards compatibility)
+const determinePathway = (responses) => {
+  const percentages = calculateFuzzyScores(responses);
+  return Object.keys(percentages).reduce((a, b) => percentages[a] > percentages[b] ? a : b);
+};
+
+// Get pathway blend description
+const getPathwayBlend = (percentages) => {
+  const sorted = Object.entries(percentages).sort((a, b) => b[1] - a[1]);
+  const primary = sorted[0];
+  const secondary = sorted[1];
+  
+  if (primary[1] - secondary[1] < 10) {
+    // Very close scores - true hybrid
+    return {
+      type: 'hybrid',
+      description: `You're a true hybrid creator with nearly equal alignment to multiple paths`,
+      primary: primary[0],
+      secondary: secondary[0],
+      balance: true
+    };
+  } else if (secondary[1] > 30) {
+    // Strong secondary influence
+    return {
+      type: 'blend',
+      description: `You're ${primary[1]}% aligned with your primary path, but show strong ${secondary[1]}% signals toward another`,
+      primary: primary[0],
+      secondary: secondary[0],
+      balance: false
+    };
+  } else {
+    // Clear primary path
+    return {
+      type: 'focused',
+      description: `You show clear ${primary[1]}% alignment with your primary path`,
+      primary: primary[0],
+      secondary: null,
+      balance: false
+    };
   }
-  
-  // Success vision scoring
-  const visionMap = {
-    'touring-artist': 'touring-performer',
-    'creative-brand': 'creative-artist',
-    'in-demand-producer': 'writer-producer'
-  };
-  
-  if (visionMap[responses['success-vision']]) {
-    scores[visionMap[responses['success-vision']]] += 4;
-  }
-  
-  // New success definition scoring
-  const successDefinitionMap = {
-    'live-performer': 'touring-performer',
-    'online-audience': 'creative-artist',
-    'songwriter': 'writer-producer'
-  };
-  
-  if (successDefinitionMap[responses['success-definition']]) {
-    scores[successDefinitionMap[responses['success-definition']]] += 3;
-  }
-  
-  return Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
 };
 
 // Get current checkpoint
@@ -595,6 +647,72 @@ const BrandFooter = ({ currentScreen }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 text-center py-4 z-30 bg-black/95 backdrop-blur-sm border-t border-white/5">
       <p className="text-xs text-gray-400">homeformusic.app</p>
+    </div>
+  );
+};
+
+// --- Fuzzy Score Display Component ---
+const FuzzyScoreDisplay = ({ scores, blend }) => {
+  const pathwayInfo = {
+    'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-[#1DD1A1] to-[#40E0D0]' },
+    'creative-artist': { name: 'Creative Artist', icon: '🎨', color: 'from-[#B91372] to-[#FF1493]' },
+    'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-[#FFD93D] to-[#FFA500]' }
+  };
+  
+  const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  
+  return (
+    <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-8">
+      <h3 className="text-lg font-semibold mb-4 text-white text-center">Your Creative Profile</h3>
+      
+      <div className="space-y-4">
+        {sortedScores.map(([pathway, percentage]) => {
+          const info = pathwayInfo[pathway];
+          const isPrimary = blend?.primary === pathway;
+          const isSecondary = blend?.secondary === pathway;
+          
+          return (
+            <div key={pathway} className="relative">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{info.icon}</span>
+                  <span className="text-sm font-medium text-white">
+                    {info.name}
+                    {isPrimary && <span className="ml-2 text-xs text-[#1DD1A1]">(Primary)</span>}
+                    {isSecondary && <span className="ml-2 text-xs text-[#B91372]">(Secondary)</span>}
+                  </span>
+                </div>
+                <span className="text-lg font-bold text-white">{percentage}%</span>
+              </div>
+              
+              <div className="h-3 bg-white/5 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full bg-gradient-to-r ${info.color} transition-all duration-1000 ease-out`}
+                  style={{ width: `${percentage}%` }}
+                />
+              </div>
+              
+              {percentage > 60 && (
+                <p className="text-xs text-gray-400 mt-1">Strong alignment</p>
+              )}
+              {percentage > 30 && percentage <= 60 && (
+                <p className="text-xs text-gray-400 mt-1">Moderate alignment</p>
+              )}
+              {percentage <= 30 && (
+                <p className="text-xs text-gray-400 mt-1">Some alignment</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      
+      {blend && blend.type !== 'focused' && (
+        <div className="mt-4 p-3 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
+          <p className="text-sm text-gray-300 text-center">
+            {blend.description}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
@@ -835,6 +953,8 @@ const HOMECreatorFlow = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [aiGeneratedPathway, setAiGeneratedPathway] = useState(null);
+  const [fuzzyScores, setFuzzyScores] = useState(null);
+  const [pathwayBlend, setPathwayBlend] = useState(null);
 
   const currentCheckpoint = getCurrentCheckpoint(screen, questionIndex, currentStep);
   const showProgress = screen !== 'landing';
@@ -903,11 +1023,21 @@ const HOMECreatorFlow = () => {
         try {
           console.log('🤖 Calling AI endpoint with responses:', finalResponses);
           
+          // Calculate fuzzy scores
+          const calculatedScores = calculateFuzzyScores(finalResponses);
+          const calculatedBlend = getPathwayBlend(calculatedScores);
+          setFuzzyScores(calculatedScores);
+          setPathwayBlend(calculatedBlend);
+          
           // Call AI endpoint for personalized pathway
           const aiResponse = await fetch('/api/generate-pathway', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ responses: finalResponses })
+            body: JSON.stringify({ 
+              responses: finalResponses,
+              fuzzyScores: calculatedScores,
+              pathwayBlend: calculatedBlend
+            })
           });
           
           if (aiResponse.ok) {
@@ -1685,6 +1815,11 @@ const HOMECreatorFlow = () => {
                   <h2 className="text-3xl font-bold mb-3 text-white">Your Path is Ready</h2>
                   <p className="text-gray-300">{pathway?.title}</p>
                 </div>
+                
+                {/* Fuzzy Score Display */}
+                {fuzzyScores && (
+                  <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} />
+                )}
                 
                 {/* Email Form */}
                 <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">

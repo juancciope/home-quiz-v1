@@ -74,9 +74,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { responses } = req.body;
+    const { responses, fuzzyScores, pathwayBlend } = req.body;
     
-    console.log('🤖 Generate pathway API called with responses:', responses);
+    console.log('🤖 Generate pathway API called with:');
+    console.log('📊 Fuzzy scores:', fuzzyScores);
+    console.log('🎯 Pathway blend:', pathwayBlend);
     
     // Validate required fields
     if (!responses || !responses.motivation) {
@@ -107,9 +109,26 @@ RESPONSES:
 - Ideal Day: ${responses['ideal-day']}
 - Success Vision: ${responses['success-vision']}
 - Current Stage: ${responses['stage-level']}
-- Resources Priority: ${responses['resources-priority']}
+- Success Definition: ${responses['success-definition']}
 
-Please analyze these responses and provide a personalized pathway recommendation following the exact format specified in your instructions.`
+FUZZY ALIGNMENT SCORES:
+- Touring Performer: ${fuzzyScores?.['touring-performer'] || 0}%
+- Creative Artist: ${fuzzyScores?.['creative-artist'] || 0}%
+- Writer-Producer: ${fuzzyScores?.['writer-producer'] || 0}%
+
+PATHWAY BLEND ANALYSIS:
+- Type: ${pathwayBlend?.type || 'focused'}
+- Description: ${pathwayBlend?.description || 'Single pathway alignment'}
+- Primary Path: ${pathwayBlend?.primary || 'touring-performer'}
+- Secondary Path: ${pathwayBlend?.secondary || 'none'}
+
+Based on these fuzzy scores and blend analysis, please provide a nuanced recommendation that:
+1. Acknowledges their percentage alignments across all pathways
+2. Provides strategies that blend their primary and secondary pathways if scores are close
+3. Offers specific advice for balancing multiple interests
+4. Creates action steps that serve multiple pathway alignments where possible
+
+Do not box them into a single category - acknowledge their unique blend and provide guidance that honors their multi-faceted interests.`
 });
 
         // Run the assistant
