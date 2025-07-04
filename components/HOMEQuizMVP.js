@@ -1724,9 +1724,19 @@ const HOMECreatorFlow = () => {
       {screen === 'intro' && (
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
           <div className="max-w-md w-full">
-            <div className="animate-fadeIn text-center">
-              {/* Header badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
+            <div className="animate-fadeIn">
+              {/* Back button */}
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Back</span>
+              </button>
+              
+              <div className="text-center">
+                {/* Header badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
                 <Target className="w-4 h-4 text-[#1DD1A1]" />
                 <span className="text-sm font-semibold text-white">Your Path Starts Here</span>
               </div>
@@ -1789,6 +1799,7 @@ const HOMECreatorFlow = () => {
                 <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Discover My Path</span>
                 <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
               </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1798,6 +1809,15 @@ const HOMECreatorFlow = () => {
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
           <div className="max-w-md w-full">
             <div className="animate-fadeIn">
+              {/* Back button */}
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Back</span>
+              </button>
+              
               {/* Main Content Container - matching email capture style */}
               <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
                 {/* Animated background elements */}
@@ -1879,38 +1899,72 @@ const HOMECreatorFlow = () => {
       )}
 
       {screen === 'transition' && (
-        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
-          <div className="max-w-md w-full animate-fadeIn">
-            <h2 className="text-2xl font-semibold mb-8 text-white text-center">
-              AI is crafting your strategic roadmap
-            </h2>
-            
-            {/* Process Steps */}
-            <div className="space-y-4 mb-8">
-              <AIProcessStep 
-                step={1}
-                label="Analyzing your creative priorities"
-                duration={1500}
-                icon={<Target className="w-4 h-4" />}
-              />
-              <AIProcessStep 
-                step={2}
-                label="Mapping your optimal career path"
-                duration={4000}
-                icon={<MapPin className="w-4 h-4" />}
-              />
-              <AIProcessStep 
-                step={3}
-                label="Identifying strategic next steps"
-                duration={6500}
-                icon={<ListChecks className="w-4 h-4" />}
-              />
-              <AIProcessStep 
-                step={4}
-                label="Crafting your personalized roadmap"
-                duration={9000}
-                icon={<Sparkles className="w-4 h-4" />}
-              />
+        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
+          <div className="max-w-md w-full">
+            <div className="animate-fadeIn">
+              {/* Main Content Container - matching unified style */}
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                  
+                  {/* Floating particles */}
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 2}s`
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 text-center">
+                  {/* Header badge */}
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
+                    <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                    <span className="text-sm font-semibold text-white">AI Analysis</span>
+                  </div>
+                  
+                  <h2 className="text-2xl font-bold mb-8 text-white">
+                    Crafting Your Strategic Roadmap
+                  </h2>
+                  
+                  {/* Process Steps */}
+                  <div className="space-y-4">
+                    <AIProcessStep 
+                      step={1}
+                      label="Analyzing your creative priorities"
+                      duration={1500}
+                      icon={<Target className="w-4 h-4" />}
+                    />
+                    <AIProcessStep 
+                      step={2}
+                      label="Mapping your optimal career path"
+                      duration={4000}
+                      icon={<MapPin className="w-4 h-4" />}
+                    />
+                    <AIProcessStep 
+                      step={3}
+                      label="Identifying strategic next steps"
+                      duration={6500}
+                      icon={<ListChecks className="w-4 h-4" />}
+                    />
+                    <AIProcessStep 
+                      step={4}
+                      label="Crafting your personalized roadmap"
+                      duration={9000}
+                      icon={<Sparkles className="w-4 h-4" />}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2101,18 +2155,50 @@ const HOMECreatorFlow = () => {
               </div>
             ) : (
               <div className="animate-fadeIn">
-                <h2 className="text-2xl font-semibold mb-8 text-white text-center">
-                  Creating Your Strategic Roadmap
-                </h2>
-                
-                {/* Process Steps - fast completion */}
-                <div className="space-y-4">
-                  <AIProcessStep 
-                    step={1}
-                    label="Finalizing your strategic roadmap"
-                    duration={1000}
-                    icon={<Check className="w-4 h-4" />}
-                  />
+                {/* Main Content Container - matching unified style */}
+                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                  {/* Animated background elements */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                    <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                    
+                    {/* Floating particles */}
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                        style={{
+                          left: `${Math.random() * 100}%`,
+                          top: `${Math.random() * 100}%`,
+                          animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                          animationDelay: `${Math.random() * 2}s`
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10 text-center">
+                    {/* Header badge */}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
+                      <Check className="w-4 h-4 text-[#1DD1A1]" />
+                      <span className="text-sm font-semibold text-white">Final Processing</span>
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold mb-8 text-white">
+                      Creating Your Strategic Roadmap
+                    </h2>
+                    
+                    {/* Process Steps - fast completion */}
+                    <div className="space-y-4">
+                      <AIProcessStep 
+                        step={1}
+                        label="Finalizing your strategic roadmap"
+                        duration={1000}
+                        icon={<Check className="w-4 h-4" />}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -2258,6 +2344,15 @@ const HOMECreatorFlow = () => {
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20 overflow-y-auto">
           <div className="max-w-md w-full">
             <div className="animate-fadeIn">
+              {/* Back button */}
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Back</span>
+              </button>
+              
               {/* Main Content Container - matching email capture style */}
               <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
                 {/* Animated background elements */}
@@ -2395,6 +2490,15 @@ const HOMECreatorFlow = () => {
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
           <div className="max-w-md w-full">
             <div className="animate-fadeIn">
+              {/* Back button */}
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Back</span>
+              </button>
+              
               {/* Header badge */}
               <div className="text-center mb-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
