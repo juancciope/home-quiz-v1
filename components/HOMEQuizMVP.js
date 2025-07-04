@@ -799,16 +799,17 @@ const FuzzyScorePreview = ({ scores, blend }) => {
 // --- Full Fuzzy Score Display Component ---
 const FuzzyScoreDisplay = ({ scores, blend }) => {
   const pathwayInfo = {
-    'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-[#1DD1A1] to-[#40E0D0]' },
-    'creative-artist': { name: 'Creative Artist', icon: '🎨', color: 'from-[#B91372] to-[#FF1493]' },
-    'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-[#FFD93D] to-[#FFA500]' }
+    'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-[#1DD1A1] to-[#B91372]', baseColor: '#1DD1A1' },
+    'creative-artist': { name: 'Creative Artist', icon: '🎨', color: 'from-[#B91372] to-[#1DD1A1]', baseColor: '#B91372' },
+    'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-[#1DD1A1] to-[#B91372]', baseColor: '#1DD1A1' }
   };
   
   const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   
   return (
     <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-8">
-      <h3 className="text-lg font-semibold mb-4 text-white text-center">Your Complete Creative Profile</h3>
+      <h3 className="text-lg font-semibold mb-2 text-white text-center">✨ Your Creative DNA</h3>
+      <p className="text-xs text-gray-400 text-center mb-6">Multi-dimensional creator profile</p>
       
       <div className="space-y-4">
         {sortedScores.map(([pathway, percentage]) => {
@@ -817,45 +818,73 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
           const isSecondary = blend?.secondary === pathway;
           
           return (
-            <div key={pathway} className="relative">
+            <div key={pathway} className="relative group">
               <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{info.icon}</span>
-                  <span className="text-sm font-medium text-white">
-                    {info.name}
-                    {isPrimary && <span className="ml-2 text-xs text-[#1DD1A1]">(Primary)</span>}
-                    {isSecondary && <span className="ml-2 text-xs text-[#B91372]">(Secondary)</span>}
-                  </span>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    {/* Liquid animation for emoji background */}
+                    <div className="absolute inset-0 rounded-full overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-full">
+                        <div className="absolute top-1/4 left-1/4 w-8 h-8 bg-[#1DD1A1] rounded-full filter blur-md opacity-40 animate-liquid-blob" />
+                        <div className="absolute bottom-1/4 right-1/4 w-6 h-6 bg-[#B91372] rounded-full filter blur-md opacity-30 animate-liquid-blob-reverse" />
+                      </div>
+                    </div>
+                    <div className="relative w-10 h-10 bg-gradient-to-br from-white/10 to-white/5 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10">
+                      <span className="text-lg">{info.icon}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-white block">
+                      {info.name}
+                    </span>
+                    {isPrimary && <span className="text-xs text-[#1DD1A1] font-medium">🎯 Your Primary Path</span>}
+                    {isSecondary && <span className="text-xs text-[#B91372] font-medium">⭐ Strong Secondary</span>}
+                  </div>
                 </div>
-                <span className="text-lg font-bold text-white">{percentage}%</span>
+                <div className="text-right">
+                  <span className="text-lg font-bold text-white">{percentage}%</span>
+                  <div className="text-xs text-gray-400">
+                    {percentage > 70 ? 'Excellent' : percentage > 50 ? 'Strong' : 'Good'} fit
+                  </div>
+                </div>
               </div>
               
-              <div className="h-3 bg-white/5 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-white/5 rounded-full overflow-hidden">
+                {/* Liquid animation background for progress bar */}
+                <div className="absolute inset-0 rounded-full overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full">
+                    <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-[#1DD1A1] rounded-full filter blur-lg opacity-20 animate-liquid-blob" />
+                    <div className="absolute bottom-1/4 right-1/4 w-12 h-12 bg-[#B91372] rounded-full filter blur-lg opacity-15 animate-liquid-blob-reverse" />
+                  </div>
+                </div>
                 <div 
-                  className={`h-full bg-gradient-to-r ${info.color} transition-all duration-1000 ease-out`}
+                  className={`relative h-full bg-gradient-to-r ${info.color} transition-all duration-2000 ease-out z-10`}
                   style={{ width: `${percentage}%` }}
-                />
+                >
+                  {/* Shimmer effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+                </div>
               </div>
-              
-              {percentage > 60 && (
-                <p className="text-xs text-gray-400 mt-1">Strong alignment</p>
-              )}
-              {percentage > 30 && percentage <= 60 && (
-                <p className="text-xs text-gray-400 mt-1">Moderate alignment</p>
-              )}
-              {percentage <= 30 && (
-                <p className="text-xs text-gray-400 mt-1">Some alignment</p>
-              )}
             </div>
           );
         })}
       </div>
       
       {blend && blend.type !== 'focused' && (
-        <div className="mt-4 p-3 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
-          <p className="text-sm text-gray-300 text-center">
-            {blend.description}
-          </p>
+        <div className="relative mt-6 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10 overflow-hidden">
+          {/* Liquid animation background */}
+          <div className="absolute inset-0 rounded-xl overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full">
+              <div className="absolute top-1/4 left-1/4 w-20 h-20 bg-[#1DD1A1] rounded-full filter blur-xl opacity-10 animate-liquid-blob" />
+              <div className="absolute bottom-1/4 right-1/4 w-16 h-16 bg-[#B91372] rounded-full filter blur-xl opacity-8 animate-liquid-blob-reverse" />
+            </div>
+          </div>
+          <div className="relative z-10">
+            <h4 className="text-sm font-bold text-white mb-2 text-center">🌟 Multi-Pathway Creator</h4>
+            <p className="text-sm text-gray-300 text-center">
+              {blend.description}
+            </p>
+          </div>
         </div>
       )}
     </div>
@@ -2239,33 +2268,94 @@ const HOMECreatorFlow = () => {
                   {/* Header */}
                   <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
-                      <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
-                      <span className="text-sm font-semibold text-white">Your Path Revealed</span>
-                      <Sparkles className="w-4 h-4 text-[#B91372]" />
+                      <Star className="w-4 h-4 text-[#1DD1A1]" />
+                      <span className="text-sm font-semibold text-white">Your Creator Profile</span>
                     </div>
                     
                     {/* Path result */}
                     <div className="mb-6">
-                      <div className="relative inline-block mb-4">
-                        <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
-                        <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-3xl shadow-xl">
+                      <div className="relative inline-block mb-4 group">
+                        {/* Liquid animation for main icon */}
+                        <div className="absolute inset-0 rounded-full overflow-hidden" style={{ transform: 'translateZ(-5px)' }}>
+                          <div className="absolute top-0 left-0 w-full h-full">
+                            <div className="absolute top-1/4 left-1/4 w-20 h-20 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+                            <div className="absolute bottom-1/4 right-1/4 w-18 h-18 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+                            <div className="absolute top-1/2 left-1/2 w-14 h-14 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+                          </div>
+                        </div>
+                        <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-3xl shadow-xl z-10">
                           {pathway.icon}
                         </div>
                       </div>
                       
-                      <h1 className="text-2xl font-bold mb-4 text-white">{pathway.title}</h1>
+                      <h1 className="text-2xl font-bold mb-2 text-white">{pathway.title.replace('The ', '').replace(' Path', '')}</h1>
+                      <p className="text-lg font-medium text-[#1DD1A1] mb-4">🎯 Your Music Creator Archetype</p>
                       <p className="text-sm text-gray-300 leading-relaxed">{pathway.description}</p>
                     </div>
                     
-                    {/* Stage indicator */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-8">
-                      <MapPin className="w-4 h-4 text-[#B91372]" />
-                      <span className="text-sm font-medium text-white">
-                        You're at the <span className="text-[#B91372]">
+                    {/* Stage indicator with liquid animation */}
+                    <div className="relative inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6 group overflow-hidden">
+                      {/* Liquid animation background */}
+                      <div className="absolute inset-0 rounded-full overflow-hidden opacity-30">
+                        <div className="absolute top-0 left-0 w-full h-full">
+                          <div className="absolute top-1/4 left-1/4 w-16 h-16 bg-[#B91372] rounded-full filter blur-lg opacity-60 animate-liquid-blob" />
+                          <div className="absolute bottom-1/4 right-1/4 w-12 h-12 bg-[#1DD1A1] rounded-full filter blur-lg opacity-40 animate-liquid-blob-reverse" />
+                        </div>
+                      </div>
+                      <MapPin className="w-4 h-4 text-[#B91372] relative z-10" />
+                      <span className="text-sm font-medium text-white relative z-10">
+                        Currently at the <span className="text-[#B91372] font-bold">
                           {responses['stage-level'] === 'planning' ? 'Planning' : 
                            responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
                         </span>
                       </span>
+                    </div>
+                    
+                    {/* Share buttons */}
+                    <div className="flex justify-center gap-3 mb-8">
+                      <button
+                        onClick={() => {
+                          const text = `Just discovered I'm a ${pathway.title.replace('The ', '').replace(' Path', '')} 🎵 Ready to accelerate my music career! 🚀 #MusicCreator #MusicCareer #HOME`;
+                          const url = 'https://homeformusic.app';
+                          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                        }}
+                        className="group relative p-3 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl border border-white/10 hover:border-[#1DD1A1] transition-all duration-300 overflow-hidden"
+                      >
+                        {/* Liquid animation */}
+                        <div className="absolute inset-0 rounded-2xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <div className="absolute top-0 left-0 w-full h-full">
+                            <div className="absolute top-1/4 left-1/4 w-8 h-8 bg-[#1DD1A1] rounded-full filter blur-md opacity-60 animate-liquid-blob" />
+                            <div className="absolute bottom-1/4 right-1/4 w-6 h-6 bg-[#B91372] rounded-full filter blur-md opacity-40 animate-liquid-blob-reverse" />
+                          </div>
+                        </div>
+                        <span className="relative z-10 text-white text-sm">Share on X</span>
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          const text = `Just discovered I'm a ${pathway.title.replace('The ', '').replace(' Path', '')} 🎵 Ready to accelerate my music career! 🚀`;
+                          if (navigator.share) {
+                            navigator.share({
+                              title: 'My Music Creator Profile',
+                              text: text,
+                              url: 'https://homeformusic.app'
+                            });
+                          } else {
+                            navigator.clipboard.writeText(`${text} https://homeformusic.app`);
+                            // Could add a toast notification here
+                          }
+                        }}
+                        className="group relative p-3 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl border border-white/10 hover:border-[#B91372] transition-all duration-300 overflow-hidden"
+                      >
+                        {/* Liquid animation */}
+                        <div className="absolute inset-0 rounded-2xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <div className="absolute top-0 left-0 w-full h-full">
+                            <div className="absolute top-1/4 left-1/4 w-8 h-8 bg-[#B91372] rounded-full filter blur-md opacity-60 animate-liquid-blob" />
+                            <div className="absolute bottom-1/4 right-1/4 w-6 h-6 bg-[#1DD1A1] rounded-full filter blur-md opacity-40 animate-liquid-blob-reverse" />
+                          </div>
+                        </div>
+                        <span className="relative z-10 text-white text-sm">Share</span>
+                      </button>
                     </div>
                   </div>
                   
@@ -2276,15 +2366,23 @@ const HOMECreatorFlow = () => {
                     </div>
                   )}
                   
-                  {/* Action Plan Preview - compact for mobile */}
+                  {/* Action Plan Preview - show all 4 steps */}
                   <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
-                    <h2 className="text-lg font-bold mb-4 text-center text-white">Your Strategic Roadmap</h2>
+                    <h2 className="text-lg font-bold mb-4 text-center text-white">🗺️ Your Strategic Roadmap</h2>
+                    <p className="text-xs text-gray-400 text-center mb-6">Your personalized path to music career success</p>
                     
                     <div className="space-y-3 mb-6">
-                      {pathway.planPreview.slice(0, 3).map((step, index) => (
+                      {pathway.planPreview.map((step, index) => (
                         <div key={index} className="flex items-center gap-3 group">
-                          <div className="relative">
-                            <div className="w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-xl flex items-center justify-center font-bold text-white text-sm">
+                          <div className="relative group overflow-hidden">
+                            {/* Liquid animation background */}
+                            <div className="absolute inset-0 rounded-xl overflow-hidden">
+                              <div className="absolute top-0 left-0 w-full h-full">
+                                <div className="absolute top-1/4 left-1/4 w-6 h-6 bg-[#1DD1A1] rounded-full filter blur-sm opacity-60 animate-liquid-blob" />
+                                <div className="absolute bottom-1/4 right-1/4 w-4 h-4 bg-[#B91372] rounded-full filter blur-sm opacity-40 animate-liquid-blob-reverse" />
+                              </div>
+                            </div>
+                            <div className="relative w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-xl flex items-center justify-center font-bold text-white text-sm z-10">
                               {index + 1}
                             </div>
                           </div>
