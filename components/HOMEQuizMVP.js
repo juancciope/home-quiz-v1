@@ -2758,9 +2758,22 @@ const HOMECreatorFlow = () => {
               </div>
               
               {/* Footer */}
-              <p className="text-center text-gray-400 text-sm">
-                Not sure? Start with the free community and upgrade anytime.
-              </p>
+              <div className="text-center space-y-2">
+                <p className="text-gray-400 text-sm">
+                  Not sure? Start with the free community and upgrade anytime.
+                </p>
+                <p className="text-gray-400 text-xs">
+                  Have feedback or found an issue? 
+                  <a 
+                    href="https://github.com/anthropics/claude-code/issues" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[#1DD1A1] hover:text-[#B91372] transition-colors ml-1"
+                  >
+                    Let us know
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
