@@ -1614,7 +1614,7 @@ const HOMECreatorFlow = () => {
         <div className="screen-height bg-black relative overflow-hidden pt-20 sm:pt-24">
           <PremiumConfetti show={showConfetti} />
           
-          <div className="h-full flex items-center justify-center px-6">
+          <div className="h-full flex items-center justify-center px-6 pb-20">
             <div className="max-w-4xl w-full">
               {/* Path Result */}
               <div className="text-center mb-12 animate-scaleIn">
@@ -1662,7 +1662,7 @@ const HOMECreatorFlow = () => {
                     {/* Button glow effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
                     
-                    <span className="relative z-10">View Strategic Roadmap</span>
+                    <span className="relative z-10">View My Roadmap</span>
                     <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
