@@ -1488,32 +1488,14 @@ const HOMECreatorFlow = () => {
             <div className="space-y-4 mb-8">
               <AIProcessStep 
                 step={1}
-                label="Analyzing your creative priorities"
-                duration={1500}
+                label="Analyzing your creative priorities and career goals"
+                duration={1000}
                 icon={<Target className="w-4 h-4" />}
               />
               <AIProcessStep 
                 step={2}
-                label="Mapping your optimal career path"
-                duration={4000}
-                icon={<MapPin className="w-4 h-4" />}
-              />
-              <AIProcessStep 
-                step={3}
-                label="Identifying strategic next steps"
-                duration={6500}
-                icon={<ListChecks className="w-4 h-4" />}
-              />
-              <AIProcessStep 
-                step={4}
-                label="Personalizing HOME resources for you"
-                duration={9000}
-                icon={<Rocket className="w-4 h-4" />}
-              />
-              <AIProcessStep 
-                step={5}
-                label="Finalizing your strategic roadmap"
-                duration={11500}
+                label="Crafting your personalized strategic roadmap"
+                duration={6000}
                 icon={<Sparkles className="w-4 h-4" />}
               />
             </div>
