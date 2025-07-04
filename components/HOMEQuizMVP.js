@@ -1943,7 +1943,7 @@ const HOMECreatorFlow = () => {
         <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
           <div className="max-w-md w-full">
             {!isProcessing ? (
-              <div className="animate-fadeIn">
+              <div className="animate-fadeIn mt-8">
                 <button
                   onClick={goBack}
                   className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
@@ -2034,38 +2034,6 @@ const HOMECreatorFlow = () => {
                         </div>
                       </div>
                       
-                      {/* Hidden pathways preview */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                        {Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1]).slice(1).map(([pathway, percentage]) => {
-                          const pathwayInfo = {
-                            'touring-performer': { name: 'Touring Performer', icon: '🎤' },
-                            'creative-artist': { name: 'Creative Artist', icon: '🎨' },
-                            'writer-producer': { name: 'Writer/Producer', icon: '🎹' }
-                          };
-                          const info = pathwayInfo[pathway];
-                          
-                          return (
-                            <div key={pathway} className="relative">
-                              {/* Glassmorphism overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 rounded-2xl z-10 backdrop-blur-md border border-white/10"></div>
-                              
-                              {/* Hidden pathway content */}
-                              <div className="relative p-4 rounded-2xl border border-white/10 bg-white/[0.02]">
-                                <div className="flex items-center gap-3 mb-2 opacity-40">
-                                  <span className="text-2xl filter grayscale">{info.icon}</span>
-                                  <div className="flex-1">
-                                    <span className="text-sm font-medium text-white block">{info.name}</span>
-                                    <span className="text-xs text-gray-400">••% alignment</span>
-                                  </div>
-                                </div>
-                                <div className="h-2 bg-white/5 rounded-full overflow-hidden opacity-40">
-                                  <div className="h-full bg-gradient-to-r from-gray-600 to-gray-700 w-1/2" />
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
                       
                       {/* Email capture section */}
                       <div className="border-t border-white/10 pt-8">
@@ -2135,31 +2103,16 @@ const HOMECreatorFlow = () => {
                           </button>
                         </div>
                         
-                        {/* Email consent and privacy */}
-                        <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
-                          {/* Value proposition */}
-                          <div className="flex items-center justify-center gap-6">
-                            <div className="flex items-center gap-2 text-xs text-gray-300">
-                              <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                              <span>Complete Analysis</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-gray-300">
-                              <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                              <span>Personalized Roadmap</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-gray-300">
-                              <CheckCircle2 className="w-4 h-4 text-[#1DD1A1]" />
-                              <span>Unsubscribe Anytime</span>
-                            </div>
-                          </div>
-                          
-                          {/* Privacy compliance */}
+                        {/* Privacy compliance */}
+                        <div className="mt-6 pt-6 border-t border-white/10">
                           <div className="text-center text-xs text-gray-400 leading-relaxed">
-                            <p className="mb-2">
+                            <p className="mb-3">
                               By providing your email, you consent to receive your personalized music career roadmap and occasional valuable resources from HOME. 
                             </p>
+                            <p className="mb-1">
+                              We respect your privacy. Read our
+                            </p>
                             <p>
-                              We respect your privacy. Read our{' '}
                               <a 
                                 href="https://homeformusic.app/privacy" 
                                 target="_blank" 
