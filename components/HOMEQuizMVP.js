@@ -1722,48 +1722,63 @@ const HOMECreatorFlow = () => {
       )}
 
       {screen === 'intro' && (
-        <div className="screen-height bg-black relative overflow-hidden flex flex-col pt-20 sm:pt-24">
-          {/* Background gradient */}
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#1DD1A1] rounded-full filter blur-[200px] opacity-5" />
-            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[#B91372] rounded-full filter blur-[200px] opacity-5" />
-          </div>
-          
-          <div className="relative z-10 flex-1 flex flex-col px-6 sm:px-8 pb-20">
-            {/* Navigation */}
-            <button
-              onClick={goBack}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group self-start"
-            >
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Back</span>
-            </button>
+        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
+          <div className="max-w-md w-full mt-8">
+            <div className="animate-fadeIn">
+              {/* Main Content Container - matching email capture style */}
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                  
+                  {/* Floating particles */}
+                  {[...Array(10)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 2}s`
+                      }}
+                    />
+                  ))}
+                </div>
 
-            {/* Main Content */}
-            <div className="flex-1 flex items-center justify-center">
-              <div className="max-w-3xl w-full text-center">
-                <div className="animate-fadeIn">
-                  {/* Main Hero Section */}
-                  <div className="relative mb-8">
-                    {/* Floating icon with glow */}
-                    <div className="relative mx-auto w-24 h-24 mb-8">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 animate-pulse" />
-                      <div className="relative w-full h-full bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center shadow-2xl shadow-[#B91372]/20">
-                        <Target className="w-12 h-12 text-white" />
+                {/* Content */}
+                <div className="relative z-10 text-center">
+                  {/* Header */}
+                  <div className="mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                      <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                      <span className="text-sm font-semibold text-white">Your Path Starts Here</span>
+                      <Sparkles className="w-4 h-4 text-[#B91372]" />
+                    </div>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="mb-8">
+                    {/* Icon */}
+                    <div className="relative inline-block mb-6">
+                      <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
+                      <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center shadow-xl">
+                        <Target className="w-8 h-8 text-white" />
                       </div>
                     </div>
                     
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
-                      Your Path Starts Here
+                    <h1 className="text-2xl font-bold mb-4 text-white">
+                      Focus Changes Everything
                     </h1>
                     
-                    <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    <p className="text-sm text-gray-300 mb-6">
                       The secret to breakthrough success? <strong className="text-white">Laser focus</strong> on what matters most.
                     </p>
                   </div>
                   
-                  {/* Quote Card */}
-                  <div className="relative bg-gradient-to-br from-[#1DD1A1]/5 to-[#B91372]/5 backdrop-blur-sm rounded-3xl border border-white/10 p-8 sm:p-10 mb-8 overflow-hidden">
+                  {/* Quote Section */}
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
                     {/* Subtle background pattern */}
                     <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
                       <div className="w-full h-full bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full filter blur-3xl" />
@@ -1842,59 +1857,83 @@ const HOMECreatorFlow = () => {
       )}
 
       {screen === 'assessment' && (
-        <div className="screen-height bg-black pt-20 sm:pt-24">
-          <div className="max-w-4xl mx-auto px-6 pb-20">
-            {/* Navigation */}
-            <button
-              onClick={goBack}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
-            >
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Back</span>
-            </button>
-            
-            {/* Progress */}
-            <div className="mb-12">
-              <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
-                <span>Question {questionIndex + 1} of {questions.length}</span>
-                <span>{Math.round(((questionIndex + 1) / questions.length) * 100)}%</span>
-              </div>
-              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
-                  style={{ width: `${((questionIndex + 1) / questions.length) * 100}%` }}
-                />
-              </div>
-            </div>
-            
-            {/* Question */}
+        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
+          <div className="max-w-md w-full mt-8">
             <div className="animate-fadeIn">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center text-white">
-                {questions[questionIndex].question}
-              </h2>
-              
-              {/* Options */}
-              <div className="space-y-4">
-                {questions[questionIndex].options.map((option, index) => (
-                  <button
-                    key={option.value}
-                    onClick={() => handleAnswer(questions[questionIndex].id, option.value)}
-                    className={`
-                      w-full p-6 rounded-2xl border transition-all duration-300 text-left animate-slideUp
-                      ${selectedOption === option.value 
-                        ? 'border-[#1DD1A1] bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10' 
-                        : 'border-white/10 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.05] hover:border-white/20'
-                      }
-                    `}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="text-3xl">{option.emoji}</span>
-                      <span className="flex-1 text-lg text-white">{option.label}</span>
-                      <ChevronRight className="w-5 h-5 text-gray-400" />
+              {/* Main Content Container - matching email capture style */}
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                  
+                  {/* Floating particles */}
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 2}s`
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Progress indicator */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
+                      <span>Question {questionIndex + 1} of {questions.length}</span>
+                      <span>{Math.round(((questionIndex + 1) / questions.length) * 100)}%</span>
                     </div>
-                  </button>
-                ))}
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
+                        style={{ width: `${((questionIndex + 1) / questions.length) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Question */}
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                      {questions[questionIndex].icon}
+                      <span className="text-sm font-semibold text-white">Path Discovery</span>
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold text-white mb-4">
+                      {questions[questionIndex].question}
+                    </h2>
+                  </div>
+                  
+                  {/* Options */}
+                  <div className="space-y-3">
+                    {questions[questionIndex].options.map((option, index) => (
+                      <button
+                        key={option.value}
+                        onClick={() => handleAnswer(questions[questionIndex].id, option.value)}
+                        className={`
+                          w-full p-4 rounded-2xl border transition-all duration-300 text-left animate-slideUp
+                          ${selectedOption === option.value 
+                            ? 'border-[#1DD1A1] bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10' 
+                            : 'border-white/10 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.05] hover:border-white/20'
+                          }
+                        `}
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{option.emoji}</span>
+                          <span className="flex-1 text-sm text-white leading-relaxed">{option.label}</span>
+                          <ChevronRight className="w-4 h-4 text-gray-400" />
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1944,14 +1983,6 @@ const HOMECreatorFlow = () => {
           <div className="max-w-md w-full">
             {!isProcessing ? (
               <div className="animate-fadeIn mt-8">
-                <button
-                  onClick={goBack}
-                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
-                >
-                  <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                  <span>Back</span>
-                </button>
-                
                 {/* Unified Email Capture Experience */}
                 {fuzzyScores && (
                   <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
@@ -2152,92 +2183,131 @@ const HOMECreatorFlow = () => {
       )}
 
       {screen === 'celebration' && pathway && (
-        <div className="screen-height bg-black relative overflow-hidden pt-20 sm:pt-24">
+        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20">
           <PremiumConfetti show={showConfetti} />
           
-          <div className="h-full flex items-center justify-center px-6 pb-20">
-            <div className="max-w-4xl w-full">
-              {/* Path Result */}
-              <div className="text-center mb-12 animate-scaleIn">
-                <h1 className="text-5xl sm:text-6xl font-bold mb-6 text-white">{pathway.title}</h1>
-                <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">{pathway.description}</p>
-                
-                <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                  <MapPin className="w-5 h-5 text-[#B91372]" />
-                  <span className="font-medium text-white">
-                    You're at the <span className="text-[#B91372]">
-                      {responses['stage-level'] === 'planning' ? 'Planning' : 
-                       responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
-                    </span>
-                  </span>
-                </div>
-              </div>
-              
-              {/* Full Fuzzy Score Display */}
-              {fuzzyScores && (
-                <div className="animate-slideUp delay-200">
-                  <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} />
-                </div>
-              )}
-              
-              {/* Action Plan Preview */}
-              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-300">
-                <h2 className="text-2xl font-bold mb-8 text-center text-white">Your Personalized 4-Step Strategic Roadmap</h2>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                  {pathway.planPreview.map((step, index) => (
-                    <div key={index} className="flex items-start gap-4 group">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity" />
-                        <div className="relative w-12 h-12 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl flex items-center justify-center font-bold text-white">
-                          {index + 1}
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold mb-1 text-white">{step}</h3>
-                        <p className="text-sm text-gray-400">Strategically designed for your career journey</p>
-                      </div>
-                    </div>
+          <div className="max-w-md w-full mt-8">
+            <div className="animate-fadeIn">
+              {/* Main Content Container - matching email capture style */}
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                  
+                  {/* Floating particles */}
+                  {[...Array(12)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 2}s`
+                      }}
+                    />
                   ))}
                 </div>
-                
-                {/* Enhanced CTA Button - matching homepage */}
-                <div className="relative">
-                  <button
-                    onClick={goNext}
-                    className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
-                    style={{ transformStyle: 'preserve-3d' }}
-                  >
-                    {/* 3D Liquid layers */}
-                    <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Header */}
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                      <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                      <span className="text-sm font-semibold text-white">Your Path Revealed</span>
+                      <Sparkles className="w-4 h-4 text-[#B91372]" />
                     </div>
                     
-                    {/* Animated liquid blobs */}
-                    <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
-                      <div className="absolute top-0 left-0 w-full h-full">
-                        <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
-                        <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
-                        <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
-                        <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
-                        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                    {/* Path result */}
+                    <div className="mb-6">
+                      <div className="relative inline-block mb-4">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
+                        <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-3xl shadow-xl">
+                          {pathway.icon}
+                        </div>
                       </div>
+                      
+                      <h1 className="text-2xl font-bold mb-4 text-white">{pathway.title}</h1>
+                      <p className="text-sm text-gray-300 leading-relaxed">{pathway.description}</p>
                     </div>
                     
-                    {/* Glass effect overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+                    {/* Stage indicator */}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-8">
+                      <MapPin className="w-4 h-4 text-[#B91372]" />
+                      <span className="text-sm font-medium text-white">
+                        You're at the <span className="text-[#B91372]">
+                          {responses['stage-level'] === 'planning' ? 'Planning' : 
+                           responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Full Fuzzy Score Display */}
+                  {fuzzyScores && (
+                    <div className="mb-8">
+                      <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} />
+                    </div>
+                  )}
+                  
+                  {/* Action Plan Preview - compact for mobile */}
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
+                    <h2 className="text-lg font-bold mb-4 text-center text-white">Your Strategic Roadmap</h2>
                     
-                    {/* Shine effect */}
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
-                      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                    <div className="space-y-3 mb-6">
+                      {pathway.planPreview.slice(0, 3).map((step, index) => (
+                        <div key={index} className="flex items-center gap-3 group">
+                          <div className="relative">
+                            <div className="w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-xl flex items-center justify-center font-bold text-white text-sm">
+                              {index + 1}
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-sm font-medium text-white">{step}</h3>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                     
-                    {/* Outer glow */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
-                    
-                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>View My Roadmap</span>
-                    <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
-                  </button>
+                    {/* Enhanced CTA Button */}
+                    <button
+                      onClick={goNext}
+                      className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
+                      style={{ transformStyle: 'preserve-3d' }}
+                    >
+                      {/* 3D Liquid layers */}
+                      <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+                      </div>
+                      
+                      {/* Animated liquid blobs */}
+                      <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+                        <div className="absolute top-0 left-0 w-full h-full">
+                          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+                          <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+                          <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+                          <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+                          <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                        </div>
+                      </div>
+                      
+                      {/* Glass effect overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+                      
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                      </div>
+                      
+                      {/* Outer glow */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+                      
+                      <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>View My Roadmap</span>
+                      <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2247,103 +2317,103 @@ const HOMECreatorFlow = () => {
       )}
 
       {screen === 'plan' && pathway && (
-        <div className="screen-height bg-black pt-20 sm:pt-24 overflow-y-auto">
-          <div className="max-w-4xl mx-auto px-6 pb-20">
-            {/* Navigation */}
-            <button
-              onClick={goBack}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
-            >
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Back</span>
-            </button>
-            
-            {/* Step Progress */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
-                <span>Step {currentStep + 1} of 4</span>
-                <span>{Math.round(((currentStep + 1) / 4) * 100)}%</span>
-              </div>
-              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
-                  style={{ width: `${((currentStep + 1) / 4) * 100}%` }}
-                />
-              </div>
-            </div>
-            
-            {/* Step Content */}
+        <div className="screen-height bg-black flex items-center justify-center px-6 pb-20 overflow-y-auto">
+          <div className="max-w-md w-full mt-8">
             <div className="animate-fadeIn">
-              {/* Step Header */}
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-3xl mb-6 shadow-2xl shadow-[#B91372]/20 animate-float">
-                  <span className="text-2xl font-bold text-white">{currentStep + 1}</span>
+              {/* Main Content Container - matching email capture style */}
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                  
+                  {/* Floating particles */}
+                  {[...Array(6)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 2}s`
+                      }}
+                    />
+                  ))}
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">{pathway.steps[currentStep].title}</h2>
-                <p className="text-xl text-gray-300 max-w-3xl mx-auto">{pathway.steps[currentStep].description}</p>
-              </div>
-              
-              {/* Content Cards */}
-              <div className="space-y-6">
-                {/* Why This Matters */}
-                <div className="relative group animate-slideUp delay-100">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#B91372]/10 to-transparent rounded-3xl blur-xl" />
-                  <div className="relative bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8">
-                    <h3 className="flex items-center gap-3 text-2xl font-bold mb-4 text-white">
-                      <Sparkles className="w-6 h-6 text-[#B91372]" />
+
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Step Progress */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
+                      <span>Step {currentStep + 1} of 4</span>
+                      <span>{Math.round(((currentStep + 1) / 4) * 100)}%</span>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] transition-all duration-700 ease-out"
+                        style={{ width: `${((currentStep + 1) / 4) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Step Header */}
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                      <div className="w-6 h-6 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-sm font-bold text-white">
+                        {currentStep + 1}
+                      </div>
+                      <span className="text-sm font-semibold text-white">Strategic Roadmap</span>
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold mb-4 text-white">{pathway.steps[currentStep].title}</h2>
+                    <p className="text-sm text-gray-300 leading-relaxed">{pathway.steps[currentStep].description}</p>
+                  </div>
+                  
+                  {/* Why This Matters */}
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6">
+                    <h3 className="flex items-center gap-2 text-lg font-bold mb-3 text-white">
+                      <Sparkles className="w-5 h-5 text-[#B91372]" />
                       Why This Matters
                     </h3>
-                    <p className="text-lg text-gray-300 leading-relaxed">{pathway.steps[currentStep].whyItMatters}</p>
+                    <p className="text-sm text-gray-300 leading-relaxed">{pathway.steps[currentStep].whyItMatters}</p>
                   </div>
-                </div>
-                
-                {/* Action Items */}
-                <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 animate-slideUp delay-200">
-                  <h3 className="flex items-center gap-3 text-2xl font-bold mb-6 text-white">
-                    <Target className="w-6 h-6 text-[#1DD1A1]" />
-                    Your Action Items
-                  </h3>
-                  <div className="space-y-4">
-                    {pathway.steps[currentStep].actions.map((action, index) => (
-                      <div key={index} className="flex items-start gap-4 group">
-                        <div className="relative mt-1">
-                          <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full blur opacity-0 group-hover:opacity-50 transition-opacity" />
-                          <div className="relative w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-sm font-medium text-white">
+                  
+                  {/* Action Items */}
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6">
+                    <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-white">
+                      <Target className="w-5 h-5 text-[#1DD1A1]" />
+                      Your Action Items
+                    </h3>
+                    <div className="space-y-3">
+                      {pathway.steps[currentStep].actions.map((action, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <div className="w-6 h-6 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-xs font-medium text-white mt-0.5">
                             {index + 1}
                           </div>
+                          <p className="flex-1 text-gray-300 text-sm leading-relaxed">{action}</p>
                         </div>
-                        <p className="flex-1 text-gray-300 text-lg">{action}</p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-                
-                {/* HOME Resources */}
-                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#B91372]/5 to-[#1DD1A1]/5 p-8 animate-slideUp delay-300">
-                  <div className="absolute top-4 right-4">
-                    <img 
-                      src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                      alt="HOME"
-                      className="h-6 w-auto opacity-20"
-                    />
+                  
+                  {/* HOME Resources */}
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
+                    <h3 className="text-lg font-bold mb-4 text-white">HOME Resources</h3>
+                    <div className="space-y-2">
+                      {pathway.steps[currentStep].homeResources.map((resource, index) => (
+                        <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
+                          <p className="text-sm font-medium text-white">{resource}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold mb-6 text-white">HOME Resources for This Step</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {pathway.steps[currentStep].homeResources.map((resource, index) => (
-                      <div key={index} className="bg-white/5 rounded-2xl p-4 backdrop-blur border border-white/10">
-                        <p className="font-medium text-white">{resource}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              {/* Navigation */}
-              <div className="flex justify-center mt-12">
-                <div className="relative">
+                  
+                  {/* Navigation Button */}
                   <button
                     onClick={goNext}
-                    className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
+                    className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
                     {/* 3D Liquid layers */}
