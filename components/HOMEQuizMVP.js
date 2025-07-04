@@ -807,7 +807,7 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
   const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   
   return (
-    <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-8">
+    <div className="mb-8">
       <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Creative Profile</h3>
       <p className="text-xs text-gray-400 text-center mb-6">Multi-dimensional creator profile</p>
       
@@ -2357,7 +2357,7 @@ const HOMECreatorFlow = () => {
                   <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
                       <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
-                      <span className="text-sm font-semibold text-white">Your Path Revealed</span>
+                      <span className="text-sm font-semibold text-white">Your Path</span>
                       <Sparkles className="w-4 h-4 text-[#B91372]" />
                     </div>
                     
@@ -2401,7 +2401,7 @@ const HOMECreatorFlow = () => {
                   )}
                   
                   {/* Action Plan Preview - compact for mobile */}
-                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
+                  <div className="mb-8">
                     <h2 className="text-lg font-bold mb-4 text-center text-white">Your Strategic Roadmap</h2>
                     
                     <div className="space-y-3 mb-6">
