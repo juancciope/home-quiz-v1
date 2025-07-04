@@ -1115,61 +1115,88 @@ const HOMECreatorFlow = () => {
       }
 
       @keyframes liquid-blob {
-        0%, 100% {
-          transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
+        0% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+          opacity: 0.7;
         }
-        25% {
-          transform: translate(20px, -30px) scale(1.2) rotateX(45deg) rotateY(45deg);
+        20% {
+          transform: translate(60px, -40px) scale(1.8) rotate(72deg);
+          opacity: 0.9;
         }
-        50% {
-          transform: translate(-20px, 20px) scale(0.8) rotateX(-45deg) rotateY(-45deg);
+        40% {
+          transform: translate(-50px, 60px) scale(0.6) rotate(144deg);
+          opacity: 0.4;
         }
-        75% {
-          transform: translate(30px, 10px) scale(1.1) rotateX(30deg) rotateY(-30deg);
+        60% {
+          transform: translate(40px, -20px) scale(1.4) rotate(216deg);
+          opacity: 0.8;
+        }
+        80% {
+          transform: translate(-30px, -50px) scale(1.1) rotate(288deg);
+          opacity: 0.6;
+        }
+        100% {
+          transform: translate(0, 0) scale(1) rotate(360deg);
+          opacity: 0.7;
         }
       }
 
       @keyframes liquid-blob-reverse {
-        0%, 100% {
-          transform: translate(0, 0) scale(1) rotateX(0deg) rotateY(0deg);
+        0% {
+          transform: translate(0, 0) scale(1) rotate(360deg);
+          opacity: 0.6;
         }
         25% {
-          transform: translate(-30px, 20px) scale(0.9) rotateX(-30deg) rotateY(30deg);
+          transform: translate(-40px, 50px) scale(0.7) rotate(270deg);
+          opacity: 0.9;
         }
         50% {
-          transform: translate(20px, -20px) scale(1.3) rotateX(45deg) rotateY(-45deg);
+          transform: translate(70px, -30px) scale(1.6) rotate(180deg);
+          opacity: 0.3;
         }
         75% {
-          transform: translate(-10px, -30px) scale(1.1) rotateX(-45deg) rotateY(45deg);
+          transform: translate(-20px, -40px) scale(1.2) rotate(90deg);
+          opacity: 0.7;
+        }
+        100% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+          opacity: 0.6;
         }
       }
 
       @keyframes liquid-blob-slow {
-        0%, 100% {
-          transform: translate(-50%, -50%) scale(1);
+        0% {
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+          opacity: 0.5;
         }
         33% {
-          transform: translate(-50%, -50%) scale(1.3) rotateZ(180deg);
+          transform: translate(-30%, -70%) scale(1.5) rotate(120deg);
+          opacity: 0.8;
         }
         66% {
-          transform: translate(-50%, -50%) scale(0.7) rotateZ(360deg);
+          transform: translate(-70%, -30%) scale(0.8) rotate(240deg);
+          opacity: 0.3;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(360deg);
+          opacity: 0.5;
         }
       }
 
       .animate-liquid-rotate {
-        animation: liquid-rotate 12s linear infinite;
+        animation: liquid-rotate 8s linear infinite;
       }
 
       .animate-liquid-blob {
-        animation: liquid-blob 4s ease-in-out infinite;
+        animation: liquid-blob 3s ease-in-out infinite;
       }
 
       .animate-liquid-blob-reverse {
-        animation: liquid-blob-reverse 5s ease-in-out infinite;
+        animation: liquid-blob-reverse 3.5s ease-in-out infinite reverse;
       }
 
       .animate-liquid-blob-slow {
-        animation: liquid-blob-slow 7s ease-in-out infinite;
+        animation: liquid-blob-slow 4s ease-in-out infinite;
       }
 
       /* Enable GPU acceleration */
@@ -1266,9 +1293,11 @@ const HOMECreatorFlow = () => {
                     {/* Animated liquid blobs */}
                     <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
                       <div className="absolute top-0 left-0 w-full h-full">
-                        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#1DD1A1] rounded-full filter blur-2xl opacity-70 animate-liquid-blob" />
-                        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#B91372] rounded-full filter blur-2xl opacity-70 animate-liquid-blob-reverse" />
-                        <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-[#40E0D0] rounded-full filter blur-xl opacity-60 animate-liquid-blob-slow" />
+                        <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+                        <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+                        <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#40E0D0] rounded-full filter blur-lg opacity-70 animate-liquid-blob-slow" />
+                        <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#FF6B6B] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+                        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#4ECDC4] rounded-full filter blur-lg opacity-60 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
                       </div>
                     </div>
                     
