@@ -1250,16 +1250,16 @@ const HOMECreatorFlow = () => {
                 <div className="mb-8 sm:mb-12">
                   <button
                     onClick={() => setScreen('intro')}
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-full transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-2xl transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
                     {/* 3D Liquid layers */}
-                    <div className="absolute inset-0 rounded-full" style={{ transform: 'translateZ(-10px)' }}>
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full" />
+                    <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
                     </div>
                     
                     {/* Animated liquid blobs */}
-                    <div className="absolute inset-0 rounded-full animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+                    <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
                       <div className="absolute top-0 left-0 w-full h-full">
                         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#1DD1A1] rounded-full filter blur-2xl opacity-70 animate-liquid-blob" />
                         <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-[#B91372] rounded-full filter blur-2xl opacity-70 animate-liquid-blob-reverse" />
@@ -1268,15 +1268,15 @@ const HOMECreatorFlow = () => {
                     </div>
                     
                     {/* Glass effect overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-full" style={{ transform: 'translateZ(0px)' }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
                     
                     {/* Shine effect */}
-                    <div className="absolute inset-0 rounded-full overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
                       <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                     </div>
                     
                     {/* Outer glow */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
                     
                     {/* Content */}
                     <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Find My Path</span>
@@ -1397,10 +1397,10 @@ const HOMECreatorFlow = () => {
                   <div className="relative">
                     <button
                       onClick={() => setScreen('assessment')}
-                      className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                      className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
                     >
                       {/* Button glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
                       
                       <span className="relative z-10">Discover My Path</span>
                       <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -1558,10 +1558,10 @@ const HOMECreatorFlow = () => {
                     <button
                       onClick={handleEmailSubmit}
                       disabled={!email || isProcessing}
-                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden"
+                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden"
                     >
                       {/* Button glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
                       
                       <span className="relative z-10">Get My Roadmap</span>
                       <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -1641,7 +1641,7 @@ const HOMECreatorFlow = () => {
                 <div className="relative">
                   <button
                     onClick={goNext}
-                    className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                    className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
                   >
                     {/* Button glow effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
@@ -1754,7 +1754,7 @@ const HOMECreatorFlow = () => {
                 <div className="relative">
                   <button
                     onClick={goNext}
-                    className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                    className="group relative inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
                   >
                     {/* Button glow effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
@@ -1819,10 +1819,10 @@ const HOMECreatorFlow = () => {
                   <div className="relative">
                     <button 
                       onClick={() => window.open('https://homeformusic.org/consultation', '_blank')}
-                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
+                      className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden"
                     >
                       {/* Button glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
                       
                       <span className="relative z-10">Book Free Consultation</span>
                       <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
