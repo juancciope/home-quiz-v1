@@ -958,6 +958,41 @@ const HOMECreatorFlow = () => {
     }, 300);
   };
 
+  // Handle industry map purchase
+  const handleIndustryMapPurchase = async () => {
+    console.log('🛒 Starting industry map purchase');
+    
+    if (!email) {
+      alert('Please enter your email address first');
+      return;
+    }
+    
+    try {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          pathwayTitle: pathway?.title || 'Your Music Creator Path',
+          userResponses: responses
+        })
+      });
+      
+      const { url } = await response.json();
+      
+      if (url) {
+        // Redirect to Stripe checkout
+        window.location.href = url;
+      } else {
+        console.error('No checkout URL received');
+        alert('Unable to start checkout. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      alert('Unable to start checkout. Please try again.');
+    }
+  };
+
   // Handle email submission
   const handleEmailSubmit = async () => {
     console.log('🟢 handleEmailSubmit called');
@@ -2010,7 +2045,7 @@ const HOMECreatorFlow = () => {
                   {/* Enhanced CTA Button */}
                   <div className="relative">
                     <button 
-                      onClick={() => window.open('https://homeformusic.app/consultation', '_blank')}
+                      onClick={handleIndustryMapPurchase}
                       className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
                       style={{ transformStyle: 'preserve-3d' }}
                     >
