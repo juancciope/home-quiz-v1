@@ -2653,7 +2653,11 @@ const HOMECreatorFlow = () => {
                 <div className="text-center">
                   <div className="relative inline-block mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
-                      <Users className="w-6 h-6 text-[#1DD1A1]" />
+                      <img 
+                        src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
+                        alt="HOME"
+                        className="h-6 w-auto"
+                      />
                     </div>
                   </div>
                   
@@ -2693,14 +2697,13 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   <h3 className="text-lg font-bold mb-2 text-white">Tech Templates</h3>
-                  <p className="text-sm text-gray-400 mb-3">DIY with professional tools</p>
-                  <div className="text-xl font-bold text-[#1DD1A1] mb-4">$20</div>
+                  <p className="text-sm text-gray-400 mb-4">DIY with professional tools</p>
                   
                   <ul className="space-y-2 mb-6 text-left">
                     {[
-                      'Monday.com template for task management',
+                      'Monday templates with your personalized path',
+                      'Tasks organized by your priorities',
                       'CRM system access for contacts & leads',
-                      'Pre-built workflows for music creators',
                       'Step-by-step implementation guides'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
@@ -2714,7 +2717,7 @@ const HOMECreatorFlow = () => {
                     onClick={() => window.open('https://homeformusic.app/templates', '_blank')}
                     className="w-full"
                   >
-                    Get Tech Templates
+                    Get Tech Templates - $20
                   </LiquidButton>
                 </div>
               </div>
