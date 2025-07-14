@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Navigate to the PDF view page
+    // Navigate to the PDF view page and inject data
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
@@ -37,8 +37,16 @@ export default async function handler(req, res) {
       timeout: 30000
     });
     
-    // Wait a bit for any animations to settle
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Inject the pathway data into the page
+    await page.evaluate((data) => {
+      sessionStorage.setItem(`pdf-data-${data.sessionId}`, JSON.stringify(data.pathwayData));
+    }, { sessionId, pathwayData });
+    
+    // Reload the page to pick up the sessionStorage data
+    await page.reload({ waitUntil: 'networkidle0' });
+    
+    // Wait for the page to fully render
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Generate PDF
     const pdf = await page.pdf({

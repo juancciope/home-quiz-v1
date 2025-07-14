@@ -9,25 +9,49 @@ import {
   Music
 } from 'lucide-react';
 
-export default function PDFView() {
+export async function getServerSideProps(context) {
+  const { sessionId } = context.query;
+  
+  // Try to get data from sessionStorage during build time
+  // This won't work in serverless, so we'll use query params instead
+  return {
+    props: {
+      sessionId: sessionId || null,
+    },
+  };
+}
+
+export default function PDFView({ sessionId, pathwayData }) {
   const router = useRouter();
-  const { sessionId } = router.query;
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (sessionId) {
-      // Retrieve data from sessionStorage or fetch from API
+      // Try sessionStorage first (for client-side navigation)
       const storedData = sessionStorage.getItem(`pdf-data-${sessionId}`);
       if (storedData) {
         setData(JSON.parse(storedData));
         setLoading(false);
+      } else if (pathwayData) {
+        // Use passed data (for server-side rendering)
+        setData(pathwayData);
+        setLoading(false);
+      } else {
+        // Show fallback message
+        setLoading(false);
       }
     }
-  }, [sessionId]);
+  }, [sessionId, pathwayData]);
 
-  if (loading) return <div className="min-h-screen bg-black" />;
-  if (!data) return <div className="min-h-screen bg-black text-white p-8">No data found</div>;
+  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
+  if (!data) return <div className="min-h-screen bg-black text-white p-8 flex items-center justify-center">
+    <div className="text-center">
+      <h1 className="text-2xl font-bold mb-4">PDF Data Not Found</h1>
+      <p className="text-gray-400">Session ID: {sessionId}</p>
+      <p className="text-gray-400 mt-2">Please regenerate your PDF from the quiz results.</p>
+    </div>
+  </div>;
 
   const { pathway, fuzzyScores, pathwayBlend, responses } = data;
 
