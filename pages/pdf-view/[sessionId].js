@@ -9,18 +9,28 @@ export async function getServerSideProps(context) {
   let pathwayData = null;
   if (data) {
     try {
-      // Try direct base64 decode first
-      pathwayData = JSON.parse(Buffer.from(data, 'base64').toString('utf-8'));
+      // Decode base64 and clean the string
+      const decodedString = Buffer.from(data, 'base64').toString('utf-8');
+      console.log('PDF View - Decoded string length:', decodedString.length);
+      
+      // Clean control characters that could break JSON parsing
+      const cleanedString = decodedString.replace(/[\x00-\x1F\x7F]/g, '');
+      
+      pathwayData = JSON.parse(cleanedString);
       console.log('PDF View - Data parsed successfully:', !!pathwayData);
     } catch (error) {
-      console.error('Error parsing pathway data:', error);
-      // Try with URL decoding
+      console.error('Error parsing pathway data:', error.message);
+      console.error('Error at position:', error.message.match(/position (\d+)/)?.[1]);
+      
+      // Try with URL decoding as fallback
       try {
         const decodedData = decodeURIComponent(data);
-        pathwayData = JSON.parse(Buffer.from(decodedData, 'base64').toString('utf-8'));
+        const decodedString = Buffer.from(decodedData, 'base64').toString('utf-8');
+        const cleanedString = decodedString.replace(/[\x00-\x1F\x7F]/g, '');
+        pathwayData = JSON.parse(cleanedString);
         console.log('PDF View - Data parsed successfully with URL decode:', !!pathwayData);
       } catch (error2) {
-        console.error('Error parsing pathway data with URL decode:', error2);
+        console.error('Error parsing pathway data with URL decode:', error2.message);
       }
     }
   }
