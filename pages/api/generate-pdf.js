@@ -25,15 +25,19 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Navigate to PDF view with data in URL
+    // Navigate to complete PDF view with full data
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
     
-    // Clean and encode data for URL
-    const cleanedData = JSON.stringify(pathwayData, null, 0); // Remove formatting
+    // Clean and encode ALL data for URL
+    const cleanedData = JSON.stringify(pathwayData)
+      .replace(/[\x00-\x1F\x7F-\x9F]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .replace(/"/g, '\\"');
+    
     const encodedData = Buffer.from(cleanedData).toString('base64');
-    const pdfUrl = `${baseUrl}/pdf-view/${sessionId}?data=${encodedData}`;
+    const pdfUrl = `${baseUrl}/pdf-complete/${sessionId}?data=${encodedData}`;
     console.log('📄 Navigating to:', pdfUrl);
     
     await page.goto(pdfUrl, {
@@ -41,15 +45,16 @@ export default async function handler(req, res) {
       timeout: 30000
     });
     
-    // Wait for content to load
+    // Wait for complete content to load
     await page.waitForFunction(() => {
-      return document.body.innerText.includes('Your Music Creator Path');
-    }, { timeout: 10000 }).catch(() => {
+      return document.body.innerText.includes('Complete Action Plan') && 
+             document.body.innerText.includes('Your Creative Profile');
+    }, { timeout: 15000 }).catch(() => {
       console.log('Content timeout, proceeding anyway...');
     });
     
-    // Short wait for rendering
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Wait for rendering
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Generate PDF
     const pdf = await page.pdf({
