@@ -13,14 +13,28 @@
       box-sizing: border-box;
     }
     
+    html {
+      background: #000000;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #000000;
       color: #ffffff;
       line-height: 1.6;
-      padding: 32px;
+      padding: 0;
+      margin: 0;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
+      min-height: 100vh;
+    }
+    
+    .page-container {
+      background: #000000;
+      min-height: 100vh;
+      padding: 32px;
     }
     
     .container {
@@ -78,15 +92,15 @@
     }
     
     .profile-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .profile-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .profile-item:last-child {
-      border-bottom: none;
+      margin-bottom: 8px;
     }
     
     .profile-left {
@@ -95,39 +109,123 @@
       gap: 12px;
     }
     
+    .profile-icon-container {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
     .profile-icon {
-      font-size: 24px;
+      font-size: 18px;
+    }
+    
+    .profile-info {
+      display: flex;
+      flex-direction: column;
     }
     
     .profile-name {
-      font-size: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+    
+    .profile-label {
+      font-size: 12px;
       font-weight: 500;
     }
     
+    .primary-label {
+      color: #1DD1A1;
+    }
+    
+    .secondary-label {
+      color: #B91372;
+    }
+    
     .profile-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      text-align: right;
+    }
+    
+    .percentage {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+    
+    .fit-level {
+      font-size: 12px;
+      color: #9ca3af;
     }
     
     .progress-bar {
-      width: 150px;
       height: 12px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 6px;
       overflow: hidden;
+      position: relative;
     }
     
     .progress-fill {
       height: 100%;
       border-radius: 6px;
+      position: relative;
+      overflow: hidden;
     }
     
-    .percentage {
-      font-size: 16px;
+    .progress-shimmer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .multi-pathway {
+      margin-top: 24px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(185, 19, 114, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+    
+    .multi-pathway-title {
+      font-size: 14px;
       font-weight: 700;
-      min-width: 50px;
-      text-align: right;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    
+    .multi-pathway-content {
+      font-size: 12px;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+    
+    .multi-pathway-content p {
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .strategy-label {
+      color: #1DD1A1;
+      font-weight: 500;
     }
     
     .roadmap-step {
@@ -243,7 +341,8 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="page-container">
+    <div class="container">
     <!-- Header -->
     <div class="header">
       <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="logo">
@@ -256,22 +355,60 @@
     
     <!-- Creative Profile -->
     <div class="section">
-      <h2 class="section-title">Your Creative Profile</h2>
+      <h3 class="section-title" style="font-size: 18px; font-weight: 600;">Your Creative Profile</h3>
+      <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-bottom: 24px;">Multi-dimensional creator profile</p>
+      
       <div>
         {{#each fuzzyScoresArray}}
         <div class="profile-item">
-          <div class="profile-left">
-            <span class="profile-icon">{{icon}}</span>
-            <span class="profile-name">{{name}}</span>
-          </div>
-          <div class="profile-right">
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: {{percentage}}%; background: {{color}};"></div>
+          <div class="profile-header">
+            <div class="profile-left">
+              <div class="profile-icon-container">
+                <span class="profile-icon">{{icon}}</span>
+              </div>
+              <div class="profile-info">
+                <span class="profile-name">{{name}}</span>
+                {{#if isPrimary}}
+                <span class="profile-label primary-label">🎯 Your Primary Path</span>
+                {{/if}}
+                {{#if isSecondary}}
+                <span class="profile-label secondary-label">⭐ Strong Secondary</span>
+                {{/if}}
+              </div>
             </div>
-            <span class="percentage">{{percentage}}%</span>
+            <div class="profile-right">
+              <span class="percentage">{{percentage}}%</span>
+              <div class="fit-level">
+                {{#if (gt percentage 70)}}Excellent{{else if (gt percentage 50)}}Strong{{else}}Good{{/if}} fit
+              </div>
+            </div>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: {{percentage}}%; background: {{color}};">
+              <div class="progress-shimmer"></div>
+            </div>
           </div>
         </div>
         {{/each}}
+        
+        <!-- Multi-Pathway Creator Section -->
+        {{#if pathwayBlend}}
+        {{#unless (eq pathwayBlend.type 'focused')}}
+        <div class="multi-pathway">
+          <h4 class="multi-pathway-title">🌟 Multi-Pathway Creator</h4>
+          <div class="multi-pathway-content">
+            {{#if (eq pathwayBlend.type 'blend')}}
+            <p><strong style="color: #ffffff;">Your creative DNA shows strong overlap</strong> between pathways. This means you naturally think across multiple revenue streams and artistic expressions.</p>
+            <p><span class="strategy-label">Strategy:</span> Focus 70% on your primary path while developing your secondary strengths. This creates unique opportunities that single-pathway creators miss.</p>
+            {{/if}}
+            {{#if (eq pathwayBlend.type 'hybrid')}}
+            <p><strong style="color: #ffffff;">You're a rare hybrid creator</strong> with nearly equal alignment across all pathways. This gives you extraordinary versatility in the music industry.</p>
+            <p><span class="strategy-label">Strategy:</span> Leverage your versatility to create multiple income streams and pivot quickly to market opportunities.</p>
+            {{/if}}
+          </div>
+        </div>
+        {{/unless}}
+        {{/if}}
       </div>
     </div>
     
@@ -362,6 +499,7 @@
     <div class="footer">
       <p>Generated on {{currentDate}}</p>
       <p style="margin-top: 8px;">homeformusic.app</p>
+    </div>
     </div>
   </div>
 </body>

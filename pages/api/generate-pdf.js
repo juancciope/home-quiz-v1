@@ -47,12 +47,17 @@ export default async function handler(req, res) {
       .sort((a, b) => b[1] - a[1])
       .map(([key, percentage]) => {
         const info = pathwayInfo[key] || { name: key, icon: '🎵', color: '#1DD1A1' };
+        const isPrimary = pathwayData.pathwayBlend?.primary === key;
+        const isSecondary = pathwayData.pathwayBlend?.secondary === key;
+        
         return {
           key,
           percentage,
           name: info.name,
           icon: info.icon,
-          color: info.color
+          color: info.color,
+          isPrimary,
+          isSecondary
         };
       });
 
@@ -63,6 +68,14 @@ export default async function handler(req, res) {
 
     Handlebars.registerHelper('@index1', function() {
       return this['@index'] + 1;
+    });
+
+    Handlebars.registerHelper('gt', function(a, b) {
+      return a > b;
+    });
+
+    Handlebars.registerHelper('eq', function(a, b) {
+      return a === b;
     });
 
     // Prepare template data
