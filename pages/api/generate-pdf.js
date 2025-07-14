@@ -126,27 +126,29 @@ export default async function handler(req, res) {
     await browser.close();
 
     console.log('✅ PDF generated successfully, buffer size:', pdfBuffer.length);
-    console.log('📊 PDF buffer first 100 bytes:', pdfBuffer.slice(0, 100).toString('hex'));
     
     // Verify PDF starts with PDF header
-    const pdfHeader = pdfBuffer.slice(0, 4).toString();
+    const pdfHeader = pdfBuffer.slice(0, 4).toString('ascii');
     console.log('📋 PDF header:', pdfHeader);
     
     if (pdfHeader !== '%PDF') {
-      console.error('❌ Invalid PDF header:', pdfHeader);
+      console.error('❌ Invalid PDF header. Expected: %PDF, Got:', pdfHeader);
       return res.status(500).json({
         success: false,
-        message: "Generated PDF is invalid"
+        message: "Generated PDF is invalid - header: " + pdfHeader
       });
     }
 
-    // Send PDF directly
+    // Send PDF with proper headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="music-creator-roadmap-${sessionId}.pdf"`);
     res.setHeader('Content-Length', pdfBuffer.length);
+    res.setHeader('Cache-Control', 'no-cache');
     
-    console.log('📤 Sending PDF response...');
-    res.send(pdfBuffer);
+    console.log('📤 Sending PDF response with', pdfBuffer.length, 'bytes');
+    
+    // End the response with the buffer
+    res.end(pdfBuffer);
 
   } catch (error) {
     console.error("❌ Error generating PDF:", error.message || error);
