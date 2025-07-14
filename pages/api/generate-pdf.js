@@ -11,17 +11,6 @@ export default async function handler(req, res) {
   try {
     console.log('🎨 Starting PDF generation for session:', sessionId);
     
-    // Store the PDF data server-side
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
-    
-    await fetch(`${baseUrl}/api/pdf-data?sessionId=${sessionId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pathwayData }),
-    });
-    
     // Launch Puppeteer with serverless Chromium
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -36,8 +25,14 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Navigate to the PDF view page
-    const pdfUrl = `${baseUrl}/pdf/${sessionId}`;
+    // Navigate to the PDF view page with data as query parameter
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
+    
+    // Encode the pathway data as base64 to pass in URL
+    const encodedData = Buffer.from(JSON.stringify(pathwayData)).toString('base64');
+    const pdfUrl = `${baseUrl}/pdf/${sessionId}?data=${encodeURIComponent(encodedData)}`;
     console.log('📄 Navigating to:', pdfUrl);
     
     await page.goto(pdfUrl, {

@@ -10,33 +10,23 @@ import {
 } from 'lucide-react';
 
 export async function getServerSideProps(context) {
-  const { sessionId } = context.query;
+  const { sessionId, data } = context.query;
   
-  try {
-    // Fetch data from our API endpoint
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
-    
-    const response = await fetch(`${baseUrl}/api/pdf-data?sessionId=${sessionId}`);
-    
-    if (response.ok) {
-      const pathwayData = await response.json();
-      return {
-        props: {
-          sessionId: sessionId || null,
-          pathwayData,
-        },
-      };
+  let pathwayData = null;
+  
+  // Try to get data from query parameter (base64 encoded)
+  if (data) {
+    try {
+      pathwayData = JSON.parse(Buffer.from(data, 'base64').toString('utf-8'));
+    } catch (error) {
+      console.error('Error parsing pathway data:', error);
     }
-  } catch (error) {
-    console.error('Error fetching PDF data:', error);
   }
   
   return {
     props: {
       sessionId: sessionId || null,
-      pathwayData: null,
+      pathwayData,
     },
   };
 }
