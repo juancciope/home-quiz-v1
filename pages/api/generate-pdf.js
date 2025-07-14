@@ -40,16 +40,18 @@ export default async function handler(req, res) {
       timeout: 30000
     });
     
-    // Wait for fonts and styling to load
+    // Wait for content and styling to load
     await page.waitForFunction(() => {
+      const container = document.querySelector('.pdf-container');
+      const mainTitle = document.querySelector('.main-title');
       const computedStyle = window.getComputedStyle(document.body);
-      return computedStyle.fontFamily.includes('Inter') || computedStyle.color === 'rgb(255, 255, 255)';
-    }, { timeout: 10000 }).catch(() => {
-      console.log('Styling timeout, proceeding anyway...');
+      return container && mainTitle && (computedStyle.backgroundColor === 'rgb(0, 0, 0)' || computedStyle.color === 'rgb(255, 255, 255)');
+    }, { timeout: 15000 }).catch(() => {
+      console.log('Content/styling timeout, proceeding anyway...');
     });
     
-    // Wait for the page to fully render
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // Additional wait for complete rendering
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Generate PDF
     const pdf = await page.pdf({
