@@ -25,33 +25,33 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Navigate to the PDF view page with data as query parameter
+    // Store data in sessionStorage and navigate to simplified PDF view
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
     
-    // Encode the pathway data as base64 to pass in URL
-    const encodedData = Buffer.from(JSON.stringify(pathwayData)).toString('base64');
-    const pdfUrl = `${baseUrl}/pdf/${sessionId}?data=${encodeURIComponent(encodedData)}`;
+    const pdfUrl = `${baseUrl}/pdf-view/${sessionId}`;
     console.log('📄 Navigating to:', pdfUrl);
+    
+    // Inject the data first
+    await page.evaluate((data) => {
+      sessionStorage.setItem(`pdf-data-${data.sessionId}`, JSON.stringify(data.pathwayData));
+    }, { sessionId, pathwayData });
     
     await page.goto(pdfUrl, {
       waitUntil: 'networkidle0',
       timeout: 30000
     });
     
-    // Wait for content and styling to load
+    // Wait for content to load
     await page.waitForFunction(() => {
-      const container = document.querySelector('.pdf-container');
-      const mainTitle = document.querySelector('.main-title');
-      const computedStyle = window.getComputedStyle(document.body);
-      return container && mainTitle && (computedStyle.backgroundColor === 'rgb(0, 0, 0)' || computedStyle.color === 'rgb(255, 255, 255)');
-    }, { timeout: 15000 }).catch(() => {
-      console.log('Content/styling timeout, proceeding anyway...');
+      return document.body.innerText.includes('Your Music Creator Path');
+    }, { timeout: 10000 }).catch(() => {
+      console.log('Content timeout, proceeding anyway...');
     });
     
-    // Additional wait for complete rendering
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // Short wait for rendering
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Generate PDF
     const pdf = await page.pdf({
