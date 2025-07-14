@@ -3,12 +3,25 @@ import { useRouter } from 'next/router';
 export async function getServerSideProps(context) {
   const { sessionId, data } = context.query;
   
+  console.log('PDF View - SessionId:', sessionId);
+  console.log('PDF View - Data param exists:', !!data);
+  
   let pathwayData = null;
   if (data) {
     try {
+      // Try direct base64 decode first
       pathwayData = JSON.parse(Buffer.from(data, 'base64').toString('utf-8'));
+      console.log('PDF View - Data parsed successfully:', !!pathwayData);
     } catch (error) {
       console.error('Error parsing pathway data:', error);
+      // Try with URL decoding
+      try {
+        const decodedData = decodeURIComponent(data);
+        pathwayData = JSON.parse(Buffer.from(decodedData, 'base64').toString('utf-8'));
+        console.log('PDF View - Data parsed successfully with URL decode:', !!pathwayData);
+      } catch (error2) {
+        console.error('Error parsing pathway data with URL decode:', error2);
+      }
     }
   }
   
@@ -22,7 +35,14 @@ export async function getServerSideProps(context) {
 
 export default function PDFView({ sessionId, pathwayData }) {
   if (!pathwayData) {
-    return <div style={{background: '#000', color: '#fff', minHeight: '100vh', padding: '20px', textAlign: 'center'}}>No PDF data found</div>;
+    return (
+      <div style={{background: '#000', color: '#fff', minHeight: '100vh', padding: '20px', textAlign: 'center'}}>
+        <h1>No PDF data found</h1>
+        <p>Session ID: {sessionId}</p>
+        <p>Data received: {pathwayData ? 'Yes' : 'No'}</p>
+        <p>Check console for details</p>
+      </div>
+    );
   }
 
   const data = pathwayData;

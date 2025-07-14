@@ -30,9 +30,9 @@ export default async function handler(req, res) {
       ? `https://${process.env.VERCEL_URL}` 
       : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
     
-    // Encode data as base64 for URL
+    // Encode data as base64 for URL (no double encoding)
     const encodedData = Buffer.from(JSON.stringify(pathwayData)).toString('base64');
-    const pdfUrl = `${baseUrl}/pdf-view/${sessionId}?data=${encodeURIComponent(encodedData)}`;
+    const pdfUrl = `${baseUrl}/pdf-view/${sessionId}?data=${encodedData}`;
     console.log('📄 Navigating to:', pdfUrl);
     
     await page.goto(pdfUrl, {
