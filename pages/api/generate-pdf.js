@@ -41,8 +41,8 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Navigate to simple PDF view - data is already stored server-side
-    const pdfUrl = `${baseUrl}/pdf-complete/${sessionId}`;
+    // Navigate to final PDF view - data is already stored server-side
+    const pdfUrl = `${baseUrl}/pdf-final/${sessionId}`;
     console.log('📄 Navigating to:', pdfUrl);
     
     await page.goto(pdfUrl, {
@@ -50,11 +50,11 @@ export default async function handler(req, res) {
       timeout: 30000
     });
     
-    // Wait for complete content to load
+    // Wait for content to load
     await page.waitForFunction(() => {
-      return document.body.innerText.includes('Complete Action Plan') && 
-             document.body.innerText.includes('Your Creative Profile');
-    }, { timeout: 15000 }).catch(() => {
+      return document.body.innerText.includes('Your Creative Profile') ||
+             document.body.innerText.includes('Music Creator Roadmap');
+    }, { timeout: 10000 }).catch(() => {
       console.log('Content timeout, proceeding anyway...');
     });
     
