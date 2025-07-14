@@ -11,6 +11,22 @@ export default async function handler(req, res) {
   try {
     console.log('🎨 Starting PDF generation for session:', sessionId);
     
+    // Store data server-side using our existing API
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
+    
+    try {
+      await fetch(`${baseUrl}/api/pdf-data?sessionId=${sessionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pathwayData }),
+      });
+      console.log('📦 Data stored successfully');
+    } catch (storeError) {
+      console.error('Failed to store data:', storeError);
+    }
+    
     // Launch Puppeteer with serverless Chromium
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -25,19 +41,8 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Navigate to complete PDF view with full data
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
-    
-    // Clean and encode ALL data for URL
-    const cleanedData = JSON.stringify(pathwayData)
-      .replace(/[\x00-\x1F\x7F-\x9F]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .replace(/"/g, '\\"');
-    
-    const encodedData = Buffer.from(cleanedData).toString('base64');
-    const pdfUrl = `${baseUrl}/pdf-complete/${sessionId}?data=${encodedData}`;
+    // Navigate to simple PDF view - data is already stored server-side
+    const pdfUrl = `${baseUrl}/pdf-complete/${sessionId}`;
     console.log('📄 Navigating to:', pdfUrl);
     
     await page.goto(pdfUrl, {

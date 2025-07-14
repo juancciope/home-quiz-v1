@@ -1,15 +1,24 @@
 export async function getServerSideProps(context) {
-  const { sessionId, data } = context.query;
+  const { sessionId } = context.query;
   
   let pathwayData = null;
-  if (data) {
-    try {
-      const decodedString = Buffer.from(data, 'base64').toString('utf-8');
-      const cleanedString = decodedString.replace(/[\x00-\x1F\x7F-\x9F]/g, ' ').replace(/\s+/g, ' ');
-      pathwayData = JSON.parse(cleanedString);
-    } catch (error) {
-      console.error('PDF parsing error:', error);
+  
+  try {
+    // Fetch data from our API endpoint
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
+    
+    const response = await fetch(`${baseUrl}/api/pdf-data?sessionId=${sessionId}`);
+    
+    if (response.ok) {
+      pathwayData = await response.json();
+      console.log('📦 Data retrieved successfully for session:', sessionId);
+    } else {
+      console.error('Failed to retrieve data, status:', response.status);
     }
+  } catch (error) {
+    console.error('Error fetching PDF data:', error);
   }
   
   return {
