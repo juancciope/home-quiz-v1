@@ -1,23 +1,31 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
-export default function PDFView() {
-  const router = useRouter();
-  const { sessionId } = router.query;
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    if (sessionId) {
-      const storedData = sessionStorage.getItem(`pdf-data-${sessionId}`);
-      if (storedData) {
-        setData(JSON.parse(storedData));
-      }
+export async function getServerSideProps(context) {
+  const { sessionId, data } = context.query;
+  
+  let pathwayData = null;
+  if (data) {
+    try {
+      pathwayData = JSON.parse(Buffer.from(data, 'base64').toString('utf-8'));
+    } catch (error) {
+      console.error('Error parsing pathway data:', error);
     }
-  }, [sessionId]);
-
-  if (!data) {
-    return <div style={{background: '#000', color: '#fff', minHeight: '100vh', padding: '20px', textAlign: 'center'}}>Loading PDF content...</div>;
   }
+  
+  return {
+    props: {
+      sessionId: sessionId || null,
+      pathwayData,
+    },
+  };
+}
+
+export default function PDFView({ sessionId, pathwayData }) {
+  if (!pathwayData) {
+    return <div style={{background: '#000', color: '#fff', minHeight: '100vh', padding: '20px', textAlign: 'center'}}>No PDF data found</div>;
+  }
+
+  const data = pathwayData;
 
   const { pathway, fuzzyScores, pathwayBlend, responses } = data;
 

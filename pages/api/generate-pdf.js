@@ -25,18 +25,15 @@ export default async function handler(req, res) {
     // Set viewport for consistent rendering
     await page.setViewport({ width: 1200, height: 1600 });
     
-    // Store data in sessionStorage and navigate to simplified PDF view
+    // Navigate to PDF view with data in URL
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
     
-    const pdfUrl = `${baseUrl}/pdf-view/${sessionId}`;
+    // Encode data as base64 for URL
+    const encodedData = Buffer.from(JSON.stringify(pathwayData)).toString('base64');
+    const pdfUrl = `${baseUrl}/pdf-view/${sessionId}?data=${encodeURIComponent(encodedData)}`;
     console.log('📄 Navigating to:', pdfUrl);
-    
-    // Inject the data first
-    await page.evaluate((data) => {
-      sessionStorage.setItem(`pdf-data-${data.sessionId}`, JSON.stringify(data.pathwayData));
-    }, { sessionId, pathwayData });
     
     await page.goto(pdfUrl, {
       waitUntil: 'networkidle0',
