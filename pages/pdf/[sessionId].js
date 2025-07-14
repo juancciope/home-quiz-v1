@@ -39,16 +39,20 @@ export default function PDFView({ sessionId, pathwayData }) {
   React.useEffect(() => {
     if (pathwayData) {
       // Use server-side data
+      console.log('PDF Data received:', pathwayData);
       setData(pathwayData);
       setLoading(false);
     } else if (sessionId) {
       // Fallback: try sessionStorage for client-side navigation
       const storedData = sessionStorage.getItem(`pdf-data-${sessionId}`);
       if (storedData) {
-        setData(JSON.parse(storedData));
+        const parsedData = JSON.parse(storedData);
+        console.log('PDF Data from storage:', parsedData);
+        setData(parsedData);
         setLoading(false);
       } else {
         // No data found
+        console.log('No PDF data found for session:', sessionId);
         setLoading(false);
       }
     }
@@ -64,6 +68,17 @@ export default function PDFView({ sessionId, pathwayData }) {
   </div>;
 
   const { pathway, fuzzyScores, pathwayBlend, responses } = data;
+
+  // Validate required data
+  if (!pathway || !fuzzyScores) {
+    return <div className="min-h-screen bg-black text-white p-8 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold mb-4">Invalid PDF Data</h1>
+        <p className="text-gray-400">Missing pathway or scores data</p>
+        <p className="text-gray-400 mt-2">Please regenerate your PDF from the quiz results.</p>
+      </div>
+    </div>;
+  }
 
   const pathwayInfo = {
     'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-blue-500 to-purple-600' },
@@ -122,13 +137,24 @@ export default function PDFView({ sessionId, pathwayData }) {
       <div className="mb-12">
         <h2 className="text-xl font-bold mb-6 text-center">Your Strategic Roadmap</h2>
         <div className="space-y-6 max-w-2xl mx-auto">
-          {pathway.planPreview.map((step, index) => (
+          {pathway.planPreview && pathway.planPreview.map((step, index) => (
             <div key={index} className="flex items-start gap-4">
               <div className="w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
                 {index + 1}
               </div>
               <div className="flex-1">
                 <h3 className="font-medium mb-1">{step}</h3>
+              </div>
+            </div>
+          ))}
+          {pathway.nextSteps && pathway.nextSteps.map((step, index) => (
+            <div key={index} className="flex items-start gap-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
+                {index + 1}
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium mb-1">{step.step}</h3>
+                <p className="text-sm text-gray-400">{step.detail}</p>
               </div>
             </div>
           ))}
@@ -155,7 +181,7 @@ export default function PDFView({ sessionId, pathwayData }) {
               Your Action Items
             </h3>
             <div className="space-y-3">
-              {step.actions.map((action, i) => (
+              {step.actions && step.actions.map((action, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-gray-300">{action}</p>
@@ -174,7 +200,7 @@ export default function PDFView({ sessionId, pathwayData }) {
               HOME Resources
             </h3>
             <div className="space-y-2">
-              {step.homeResources.map((resource, i) => (
+              {step.homeResources && step.homeResources.map((resource, i) => (
                 <div key={i} className="bg-white/5 rounded-lg p-3">
                   <p className="text-sm">{resource}</p>
                 </div>
