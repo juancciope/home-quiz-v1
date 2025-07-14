@@ -32,7 +32,10 @@ export default async function handler(req, res) {
     await page.setViewport({ width: 1200, height: 1600 });
     
     // Navigate to the PDF view page
-    const pdfUrl = `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/pdf/${pdf_session}`;
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
+    const pdfUrl = `${baseUrl}/pdf/${pdf_session}`;
     console.log('📄 Navigating to:', pdfUrl);
     
     await page.goto(pdfUrl, {
@@ -41,7 +44,7 @@ export default async function handler(req, res) {
     });
     
     // Wait a bit for any animations to settle
-    await page.waitForTimeout(2000);
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Generate PDF
     const pdf = await page.pdf({
