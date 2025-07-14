@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { 
   Sparkles, 
   Target, 
@@ -86,9 +87,67 @@ export default function PDFView({ sessionId, pathwayData }) {
     'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-green-500 to-teal-500' }
   };
 
+  // Generate detailed steps if they don't exist
+  const generateDetailedSteps = (pathway) => {
+    if (pathway.steps) return pathway.steps;
+    
+    // Generate detailed steps from nextSteps
+    return (pathway.nextSteps || []).map((step, index) => ({
+      title: step.step || `Step ${index + 1}`,
+      description: step.detail || 'Take action to advance your music career.',
+      whyItMatters: `This step is crucial for building your ${pathway.title.toLowerCase()} career. Focus on this to create sustainable growth and lasting impact in your music journey.`,
+      actions: [
+        step.step || 'Complete this action step',
+        'Track your progress and results',
+        'Connect with others doing similar work',
+        'Document your learnings and wins',
+        'Plan your next action based on results'
+      ],
+      homeResources: pathway.resources?.slice(0, 3) || [
+        'Access to HOME community',
+        'Mentorship and guidance',
+        'Professional development resources'
+      ]
+    }));
+  };
+
+  const detailedSteps = generateDetailedSteps(pathway);
+
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      {/* Header */}
+    <>
+      <Head>
+        <title>Music Creator Roadmap - {pathway.title}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+          
+          * {
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+          
+          .gradient-border {
+            background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
+            padding: 1px;
+            border-radius: 24px;
+          }
+          
+          .gradient-bg {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%);
+          }
+        `}</style>
+      </Head>
+      <div className="min-h-screen bg-black text-white p-8">
+        {/* Header */}
       <div className="text-center mb-12">
         <img 
           src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
@@ -162,7 +221,7 @@ export default function PDFView({ sessionId, pathwayData }) {
       </div>
 
       {/* Detailed Action Steps */}
-      {pathway.steps && pathway.steps.map((step, index) => (
+      {detailedSteps && detailedSteps.map((step, index) => (
         <div key={index} className="mb-12 break-inside-avoid">
           <h2 className="text-xl font-bold mb-4">Step {index + 1}: {step.title}</h2>
           <p className="text-gray-300 mb-6">{step.description}</p>
@@ -215,6 +274,7 @@ export default function PDFView({ sessionId, pathwayData }) {
         <p className="text-sm text-gray-400">Generated on {new Date().toLocaleDateString()}</p>
         <p className="text-xs text-gray-500 mt-2">homeformusic.app</p>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
