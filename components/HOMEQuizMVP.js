@@ -1385,6 +1385,52 @@ const HOMECreatorFlow = () => {
     }
   };
 
+  // Handle PDF generation (direct download for testing)
+  const handlePDFGeneration = async () => {
+    try {
+      // Store PDF data in sessionStorage for the PDF page
+      const sessionId = Date.now().toString();
+      const pdfData = {
+        pathway: aiGeneratedPathway || pathway,
+        fuzzyScores,
+        pathwayBlend,
+        responses
+      };
+      
+      sessionStorage.setItem(`pdf-data-${sessionId}`, JSON.stringify(pdfData));
+      
+      // Generate PDF directly
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          pathwayData: pdfData
+        }),
+      });
+
+      if (response.ok) {
+        // Create download link
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `music-creator-roadmap-${sessionId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      } else {
+        alert('Failed to generate PDF. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
+  };
+
   // Handle email submission
   const handleEmailSubmit = async () => {
     console.log('🟢 handleEmailSubmit called');
@@ -2687,7 +2733,7 @@ const HOMECreatorFlow = () => {
                 </div>
               </div>
               
-              {/* Tech Templates Option */}
+              {/* PDF Roadmap Option */}
               <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6">
                 <div className="text-center">
                   <div className="relative inline-block mb-4">
@@ -2696,15 +2742,15 @@ const HOMECreatorFlow = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-2 text-white">Tech Templates</h3>
-                  <p className="text-sm text-gray-400 mb-4">DIY with professional tools</p>
+                  <h3 className="text-lg font-bold mb-2 text-white">Complete PDF Roadmap</h3>
+                  <p className="text-sm text-gray-400 mb-4">Your full personalized plan to download</p>
                   
                   <ul className="space-y-2 mb-6 text-left">
                     {[
-                      'Monday templates with your personalized path',
-                      'Tasks organized by your priorities',
-                      'CRM Google Sheet template for contacts & leads',
-                      'Step-by-step implementation guides'
+                      'All 4 strategic roadmap steps with details',
+                      'Complete action items for each phase',
+                      'Your creative profile & pathway analysis',
+                      'HOME resources & next steps guide'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
@@ -2714,10 +2760,10 @@ const HOMECreatorFlow = () => {
                   </ul>
                   
                   <LiquidButton
-                    onClick={() => window.open('https://homeformusic.app/templates', '_blank')}
+                    onClick={handlePDFGeneration}
                     className="w-full"
                   >
-                    Get Tech Templates - $20
+                    Download PDF Roadmap
                   </LiquidButton>
                 </div>
               </div>
