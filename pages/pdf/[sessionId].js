@@ -12,11 +12,31 @@ import {
 export async function getServerSideProps(context) {
   const { sessionId } = context.query;
   
-  // Try to get data from sessionStorage during build time
-  // This won't work in serverless, so we'll use query params instead
+  try {
+    // Fetch data from our API endpoint
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000');
+    
+    const response = await fetch(`${baseUrl}/api/pdf-data?sessionId=${sessionId}`);
+    
+    if (response.ok) {
+      const pathwayData = await response.json();
+      return {
+        props: {
+          sessionId: sessionId || null,
+          pathwayData,
+        },
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching PDF data:', error);
+  }
+  
   return {
     props: {
       sessionId: sessionId || null,
+      pathwayData: null,
     },
   };
 }
@@ -27,18 +47,18 @@ export default function PDFView({ sessionId, pathwayData }) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    if (sessionId) {
-      // Try sessionStorage first (for client-side navigation)
+    if (pathwayData) {
+      // Use server-side data
+      setData(pathwayData);
+      setLoading(false);
+    } else if (sessionId) {
+      // Fallback: try sessionStorage for client-side navigation
       const storedData = sessionStorage.getItem(`pdf-data-${sessionId}`);
       if (storedData) {
         setData(JSON.parse(storedData));
         setLoading(false);
-      } else if (pathwayData) {
-        // Use passed data (for server-side rendering)
-        setData(pathwayData);
-        setLoading(false);
       } else {
-        // Show fallback message
+        // No data found
         setLoading(false);
       }
     }
