@@ -379,9 +379,9 @@ const calculateFuzzyScores = (responses) => {
   // Question weights based on importance
   const questionWeights = {
     motivation: 0.25,
-    'ideal-day': 0.25,
-    'success-vision': 0.30,
-    'success-definition': 0.15,
+    'ideal-day': 0.20,
+    'success-vision': 0.10,
+    'success-definition': 0.40,
     'stage-level': 0.05
   };
   
