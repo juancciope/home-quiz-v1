@@ -78,11 +78,20 @@
     }
     
     .page-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
       background: linear-gradient(135deg, rgba(29, 209, 161, 0.3) 0%, rgba(185, 19, 114, 0.3) 100%);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 16px;
-      padding: 6px 16px;
-      font-size: 12px;
+      border-radius: 24px;
+      margin-bottom: 32px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
     }
     
     .page-footer {
@@ -145,11 +154,15 @@
     .sparkle {
       color: #1DD1A1;
       font-size: 16px;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+      line-height: 1;
     }
     
     .sparkle-pink {
       color: #B91372;
       font-size: 16px;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+      line-height: 1;
     }
     
     .title {
@@ -220,7 +233,11 @@
     }
     
     .profile-icon {
-      font-size: 18px;
+      font-size: 20px;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+      line-height: 1;
+      text-align: center;
+      display: block;
     }
     
     .profile-info {
@@ -371,10 +388,12 @@
       margin-bottom: 40px;
       page-break-before: always;
       page-break-inside: avoid;
+      padding-top: 60px;
     }
     
     .detail-section:first-of-type {
       page-break-before: always;
+      padding-top: 60px;
     }
     
     .detail-section-title {
@@ -464,25 +483,24 @@
     /* HOME Connection */
     .home-connection-page {
       page-break-before: always;
-      min-height: 80vh;
+      padding-top: 60px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
     
     .home-connection {
       background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%);
       border: 1px solid rgba(29, 209, 161, 0.3);
       border-radius: 16px;
-      padding: 48px;
-      margin-bottom: 32px;
+      padding: 32px;
+      margin-bottom: 16px;
     }
     
     .home-connection-title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       color: #ffffff;
       display: flex;
       align-items: center;
@@ -492,70 +510,70 @@
 
     .home-connection p {
       color: #d1d5db;
-      line-height: 1.8;
-      font-size: 16px;
-      margin-bottom: 24px;
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 16px;
       text-align: center;
     }
     
     .cta-benefits {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin: 32px 0;
+      gap: 16px;
+      margin: 20px 0;
     }
     
     .cta-benefit {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px;
       text-align: center;
     }
     
     .cta-benefit-icon {
-      font-size: 32px;
-      margin-bottom: 12px;
+      font-size: 24px;
+      margin-bottom: 8px;
       display: block;
     }
     
     .cta-benefit-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     
     .cta-benefit-desc {
-      font-size: 14px;
+      font-size: 12px;
       color: #d1d5db;
-      line-height: 1.5;
+      line-height: 1.4;
     }
     
     .cta-action {
       background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
       border-radius: 16px;
-      padding: 32px;
+      padding: 24px;
       text-align: center;
-      margin-top: 32px;
+      margin-top: 20px;
     }
     
     .cta-action-title {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     
     .cta-action-text {
-      font-size: 16px;
+      font-size: 14px;
       color: #ffffff;
-      line-height: 1.6;
-      margin-bottom: 24px;
+      line-height: 1.5;
+      margin-bottom: 16px;
     }
     
     .cta-contact {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: #ffffff;
     }
