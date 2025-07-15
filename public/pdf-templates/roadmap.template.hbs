@@ -258,7 +258,7 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible;
       page-break-inside: avoid;
     }
     
@@ -972,13 +972,9 @@
     .cover-title-enhanced {
       font-size: 32px;
       font-weight: 800;
-      background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #ffffff;
       text-align: center;
       margin-bottom: 16px;
-      text-shadow: 0 0 30px rgba(29, 209, 161, 0.3);
     }
     
     .cover-description-enhanced {
@@ -1146,7 +1142,6 @@
               <span>Your Creative Profile</span>
               <span class="sparkle-pink">✨</span>
             </div>
-            <p class="section-subtitle" style="text-align: center; margin-bottom: 32px; margin-top: 16px;">Ranked by alignment with your answers</p>
           </div>
           
           <div>
@@ -1308,15 +1303,15 @@
           </div>
           <div class="action-item">
             <span class="action-check">✅</span>
+            <span class="action-text">{{detail}}</span>
+          </div>
+          <div class="action-item">
+            <span class="action-check">✅</span>
             <span class="action-text">Set specific, measurable goals for this step</span>
           </div>
           <div class="action-item">
             <span class="action-check">✅</span>
             <span class="action-text">Connect with others who have succeeded in this area</span>
-          </div>
-          <div class="action-item">
-            <span class="action-check">✅</span>
-            <span class="action-text">Document your progress and learnings</span>
           </div>
           <div class="action-item">
             <span class="action-check">✅</span>
