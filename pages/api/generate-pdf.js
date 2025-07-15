@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     // Prepare data for template
     const pathwayInfo = {
       'touring-performer': { 
-        name: 'The Performer', 
+        name: 'Touring Performer', 
         icon: '🎤', 
         color: '#3b82f6',
         description: 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.',
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
         shadow: 'Burnout from constant travel, missing stability, addiction to applause'
       },
       'creative-artist': { 
-        name: 'The Creator', 
+        name: 'Creative Artist', 
         icon: '🎨', 
         color: '#ec4899',
         description: 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.',
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
         shadow: 'Over-identifying with your work, creative blocks, comparison trap'
       },
       'writer-producer': { 
-        name: 'The Architect', 
+        name: 'Writer/Producer', 
         icon: '🎹', 
         color: '#10b981',
         description: 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.',

@@ -800,7 +800,7 @@ const FuzzyScorePreview = ({ scores, blend }) => {
 const FuzzyScoreDisplay = ({ scores, blend }) => {
   const pathwayInfo = {
     'touring-performer': { 
-      name: 'The Performer', 
+      name: 'Touring Performer', 
       icon: '🎤', 
       color: 'from-blue-500 to-purple-600', 
       baseColor: '#3B82F6',
@@ -809,7 +809,7 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
       shadow: 'Burnout from constant travel, missing stability, addiction to applause'
     },
     'creative-artist': { 
-      name: 'The Creator', 
+      name: 'Creative Artist', 
       icon: '🎨', 
       color: 'from-pink-500 to-orange-500', 
       baseColor: '#EC4899',
@@ -818,7 +818,7 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
       shadow: 'Over-identifying with your work, creative blocks, comparison trap'
     },
     'writer-producer': { 
-      name: 'The Architect', 
+      name: 'Writer/Producer', 
       icon: '🎹', 
       color: 'from-green-500 to-teal-500', 
       baseColor: '#10B981',
