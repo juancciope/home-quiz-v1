@@ -64,8 +64,9 @@ const questions = [
   },
   {
     id: 'success-definition',
-    question: "If you had to choose one of these versions of success, which would it be?",
-    icon: <Sparkles className="w-6 h-6" />,
+    question: "⭐ Most Important: If you had to choose one of these versions of success, which would it be?",
+    subtitle: "Take your time with this one. This question reveals your core values and has the biggest impact on your personalized roadmap.",
+    icon: <Target className="w-6 h-6" />,
     options: [
       { value: 'live-performer', label: 'You make a good living playing live to large audiences, but you are not playing your original music', emoji: '🎤' },
       { value: 'online-audience', label: 'You have a large online audience and released a hit song, but you did not write it', emoji: '📱' },
@@ -2157,6 +2158,11 @@ const HOMECreatorFlow = () => {
                     <h2 className="text-2xl font-bold text-white mb-4">
                       {questions[questionIndex].question}
                     </h2>
+                    {questions[questionIndex].subtitle && (
+                      <p className="text-sm text-[#1DD1A1] mb-4 max-w-md mx-auto leading-relaxed">
+                        {questions[questionIndex].subtitle}
+                      </p>
+                    )}
                   </div>
                   
                   {/* Options */}
