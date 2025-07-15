@@ -187,6 +187,14 @@
     .section {
       margin-bottom: 48px;
       page-break-inside: avoid;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    /* Ensure the Creative Profile section fits on one page */
+    .section:has(.archetype-card) {
+      max-height: calc(100vh - 200px);
+      overflow: visible;
     }
     
     .section-title {
@@ -212,6 +220,8 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
+      overflow: hidden;
+      page-break-inside: avoid;
     }
     
     .archetype-primary {
@@ -364,6 +374,12 @@
       color: #d1d5db;
       line-height: 1.6;
       margin-bottom: 16px;
+      max-height: 48px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
     
     .archetype-details {
@@ -386,6 +402,11 @@
     
     .detail-text {
       color: #9ca3af;
+      max-width: 380px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
     }
     
     /* Legacy Profile styles - removing old ones */
@@ -497,33 +518,6 @@
       background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
     }
     
-    /* Multi-Pathway */
-    .multi-pathway {
-      margin-top: 24px;
-      padding: 16px;
-      background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(185, 19, 114, 0.1));
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-    }
-    
-    .multi-pathway-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffffff;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-    
-    .multi-pathway-content {
-      font-size: 12px;
-      color: #d1d5db;
-      line-height: 1.5;
-    }
-    
-    .multi-pathway-content p {
-      margin-bottom: 8px;
-      text-align: center;
-    }
     
     .strategy-label {
       color: #1DD1A1;
@@ -537,6 +531,9 @@
       background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(185, 19, 114, 0.1));
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
+      page-break-inside: avoid;
+      max-width: 100%;
+      overflow: hidden;
     }
     
     .summary-title {
@@ -617,6 +614,12 @@
       color: #d1d5db;
       font-size: 13px;
       line-height: 1.5;
+      max-height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
     
     /* Detailed Steps */
@@ -738,6 +741,8 @@
       border-radius: 16px;
       padding: 32px;
       margin-bottom: 16px;
+      page-break-inside: avoid;
+      overflow: hidden;
     }
     
     .home-connection-title {
@@ -758,6 +763,12 @@
       font-size: 14px;
       margin-bottom: 16px;
       text-align: center;
+      max-height: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical;
     }
     
     .cta-benefits {
@@ -935,25 +946,6 @@
             {{/if}}
           </div>
           {{/each}}
-          
-          <!-- Multi-Pathway Creator Section -->
-          {{#if pathwayBlend}}
-          {{#unless (eq pathwayBlend.type 'focused')}}
-          <div class="multi-pathway">
-            <h4 class="multi-pathway-title">🌟 Multi-Pathway Creator</h4>
-            <div class="multi-pathway-content">
-              {{#if (eq pathwayBlend.type 'blend')}}
-              <p><strong style="color: #ffffff;">Your creative DNA shows strong overlap</strong> between pathways. This means you naturally think across multiple revenue streams and artistic expressions.</p>
-              <p><span class="strategy-label">Strategy:</span> Focus 70% on your primary path while developing your secondary strengths. This creates unique opportunities that single-pathway creators miss.</p>
-              {{/if}}
-              {{#if (eq pathwayBlend.type 'hybrid')}}
-              <p><strong style="color: #ffffff;">You're a rare hybrid creator</strong> with nearly equal alignment across all pathways. This gives you extraordinary versatility in the music industry.</p>
-              <p><span class="strategy-label">Strategy:</span> Leverage your versatility to create multiple income streams and pivot quickly to market opportunities.</p>
-              {{/if}}
-            </div>
-          </div>
-          {{/unless}}
-          {{/if}}
           
           <!-- Summary Section -->
           <div class="summary-section">

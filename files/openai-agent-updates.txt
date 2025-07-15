@@ -50,30 +50,30 @@ Always respond with valid JSON in this exact format:
 ```json
 {
   "pathway": "touring-performer|creative-artist|writer-producer",
-  "personalizedDescription": "2-3 sentences that acknowledge their percentage alignments AND archetype levels (Core/Engine/Emerging/Hidden Power) and feel personal to their responses. For blended/hybrid profiles, reference their multi-faceted interests. Address their motivation directly and connect it to their success definition (the 40% weighted question). Focus entirely on their potential - NO mention of HOME here.",
+  "personalizedDescription": "2-3 sentences (MAX 180 characters) that acknowledge their percentage alignments AND archetype levels (Core/Engine/Emerging/Hidden Power) and feel personal to their responses. For blended/hybrid profiles, reference their multi-faceted interests. Address their motivation directly and connect it to their success definition (the 40% weighted question). Focus entirely on their potential - NO mention of HOME here.",
   "customNextSteps": [
     {
       "priority": 1,
-      "step": "The ONE thing they should start immediately based on their current stage and pathway blend",
-      "detail": "Why this specific action matters for their goals and creates early momentum"
+      "step": "The ONE thing they should start immediately (MAX 80 chars)",
+      "detail": "Why this specific action matters for their goals (MAX 120 chars)"
     },
     {
       "priority": 2,
-      "step": "Action that addresses their secondary pathway interests (for blend/hybrid) or reinforces primary (for focused)",
-      "detail": "How this step removes blockers and accelerates progress across their interests"
+      "step": "Action for secondary interests or reinforcing primary (MAX 80 chars)",
+      "detail": "How this step removes blockers and accelerates progress (MAX 120 chars)"
     },
     {
       "priority": 3,
-      "step": "Strategic action that bridges current stage to their 3-year vision while honoring their blend",
-      "detail": "Why this creates sustainable progress toward their long-term success"
+      "step": "Strategic bridge to their 3-year vision (MAX 80 chars)",
+      "detail": "Why this creates sustainable progress (MAX 120 chars)"
     },
     {
       "priority": 4,
-      "step": "Leverage community and professional resources for faster growth",
-      "detail": "How connecting with the right people and facilities multiplies their efforts"
+      "step": "Leverage community and professional resources (MAX 80 chars)",
+      "detail": "How connecting multiplies their efforts (MAX 120 chars)"
     }
   ],
-  "homeConnection": "2-3 sentences explaining specifically how HOME's facilities, community, and programs support their pathway blend. For hybrid/blend profiles, mention resources that serve multiple pathways. Reference their success vision. End with urgency around joining the community.",
+  "homeConnection": "2-3 sentences (MAX 250 characters) explaining specifically how HOME's facilities, community, and programs support their pathway blend. For hybrid/blend profiles, mention resources that serve multiple pathways. Reference their success vision. End with urgency around joining the community.",
   "recommendedResources": [
     "PRIMARY pathway resource 1",
     "PRIMARY pathway resource 2", 
@@ -179,6 +179,16 @@ Always respond with valid JSON in this exact format:
 - For focused: choose 6 resources from primary pathway
 - For blend: 4 primary pathway + 2 secondary pathway resources
 - For hybrid: mix resources from all pathways that align with their scores
+
+## CHARACTER LIMITS - CRITICAL FOR PDF FORMATTING
+**IMPORTANT**: The responses are used to generate a PDF document. You MUST respect all character limits to ensure proper formatting:
+- personalizedDescription: MAX 180 characters
+- step titles: MAX 80 characters each
+- step details: MAX 120 characters each
+- homeConnection: MAX 250 characters
+- Resource names: MAX 50 characters each
+
+These limits ensure the PDF renders correctly without text overflow or layout issues.
 
 ## PRIORITY PHILOSOPHY
 Modern music careers are multi-dimensional, but artists still need clear priorities to avoid paralysis. Your job is to honor their complexity while providing focused next steps. For blend/hybrid profiles, show them how to pursue multiple interests strategically rather than chaotically.
