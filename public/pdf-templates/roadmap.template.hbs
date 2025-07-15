@@ -204,7 +204,136 @@
       margin-bottom: 24px;
     }
     
-    /* Creative Profile */
+    /* Creative Archetypes */
+    .archetype-card {
+      position: relative;
+      margin-bottom: 24px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+    
+    .archetype-primary {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .archetype-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    
+    .archetype-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .archetype-icon-container {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .archetype-icon-container:nth-child(1) {
+      background: linear-gradient(135deg, #3b82f6, #9333ea);
+    }
+    
+    .archetype-card:nth-child(2) .archetype-icon-container {
+      background: linear-gradient(135deg, #ec4899, #f97316);
+    }
+    
+    .archetype-card:nth-child(3) .archetype-icon-container {
+      background: linear-gradient(135deg, #10b981, #14b8a6);
+    }
+    
+    .archetype-icon {
+      font-size: 24px;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', sans-serif;
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    .archetype-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .archetype-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .archetype-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    
+    .archetype-level-icon {
+      font-size: 16px;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', sans-serif;
+    }
+    
+    .archetype-level {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .level-core {
+      color: #fb923c;
+    }
+    
+    .level-engine {
+      color: #facc15;
+    }
+    
+    .level-emerging {
+      color: #4ade80;
+    }
+    
+    .level-hidden {
+      color: #c084fc;
+    }
+    
+    .archetype-description {
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    
+    .archetype-details {
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .detail-row {
+      font-size: 12px;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      color: #ffffff;
+      margin-right: 8px;
+    }
+    
+    .detail-text {
+      color: #9ca3af;
+    }
+    
+    /* Legacy Profile styles - removing old ones */
     .profile-item {
       position: relative;
       margin-bottom: 20px;
@@ -655,37 +784,43 @@
       
       <!-- Creative Profile -->
       <div class="section">
-        <h3 class="section-title">Your Creative Profile</h3>
-        <p class="section-subtitle">Multi-dimensional creator profile</p>
+        <h3 class="section-title">Your Creative Archetypes</h3>
+        <p class="section-subtitle">Your unique creator blueprint</p>
         
         <div>
           {{#each fuzzyScoresArray}}
-          <div class="profile-item">
-            <div class="profile-header">
-              <div class="profile-left">
-                <div class="profile-icon-container">
-                  <span class="profile-icon">{{icon}}</span>
+          <div class="archetype-card {{#if isFirst}}archetype-primary{{/if}}">
+            <div class="archetype-header">
+              <div class="archetype-left">
+                <div class="archetype-icon-container">
+                  <span class="archetype-icon">{{icon}}</span>
                 </div>
-                <div class="profile-info">
-                  <span class="profile-name">{{name}}</span>
-                  {{#if isPrimary}}
-                  <span class="profile-label primary-label">🎯 Your Primary Path</span>
-                  {{/if}}
-                  {{#if isSecondary}}
-                  <span class="profile-label secondary-label">⭐ Strong Secondary</span>
-                  {{/if}}
-                </div>
-              </div>
-              <div class="profile-right">
-                <span class="percentage">{{percentage}}%</span>
-                <div class="fit-level">
-                  {{#if (gt percentage 70)}}Excellent{{else if (gt percentage 50)}}Strong{{else}}Good{{/if}} fit
+                <div class="archetype-info">
+                  <div class="archetype-name-row">
+                    <span class="archetype-name">{{name}}</span>
+                    <span class="archetype-level-icon">{{archetypeIcon}}</span>
+                  </div>
+                  <span class="archetype-level {{#if (eq archetypeLevel 'Core')}}level-core{{else if (eq archetypeLevel 'Engine')}}level-engine{{else if (eq archetypeLevel 'Emerging')}}level-emerging{{else}}level-hidden{{/if}}">
+                    {{archetypeLevel}} • {{archetypeDescription}}
+                  </span>
                 </div>
               </div>
             </div>
-            <div class="progress-bar">
-              <div class="progress-fill {{#if (eq key 'touring-performer')}}blue-gradient{{else if (eq key 'creative-artist')}}pink-gradient{{else}}green-gradient{{/if}}" style="width: {{percentage}}%;"></div>
+            
+            <p class="archetype-description">{{description}}</p>
+            
+            {{#if isFirst}}
+            <div class="archetype-details">
+              <div class="detail-row">
+                <span class="detail-label">Key Traits:</span>
+                <span class="detail-text">{{traits}}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Shadow Side:</span>
+                <span class="detail-text">{{shadow}}</span>
+              </div>
             </div>
+            {{/if}}
           </div>
           {{/each}}
           

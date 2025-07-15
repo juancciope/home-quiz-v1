@@ -799,106 +799,160 @@ const FuzzyScorePreview = ({ scores, blend }) => {
 // --- Full Fuzzy Score Display Component ---
 const FuzzyScoreDisplay = ({ scores, blend }) => {
   const pathwayInfo = {
-    'touring-performer': { name: 'Touring Performer', icon: '🎤', color: 'from-blue-500 to-purple-600', baseColor: '#3B82F6' },
-    'creative-artist': { name: 'Creative Artist', icon: '🎨', color: 'from-pink-500 to-orange-500', baseColor: '#EC4899' },
-    'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: 'from-green-500 to-teal-500', baseColor: '#10B981' }
+    'touring-performer': { 
+      name: 'The Performer', 
+      icon: '🎤', 
+      color: 'from-blue-500 to-purple-600', 
+      baseColor: '#3B82F6',
+      description: 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.',
+      traits: 'Stage presence, audience connection, tour resilience, live energy',
+      shadow: 'Burnout from constant travel, missing stability, addiction to applause'
+    },
+    'creative-artist': { 
+      name: 'The Creator', 
+      icon: '🎨', 
+      color: 'from-pink-500 to-orange-500', 
+      baseColor: '#EC4899',
+      description: 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.',
+      traits: 'Creative flow, artistic vision, digital presence, authenticity',
+      shadow: 'Over-identifying with your work, creative blocks, comparison trap'
+    },
+    'writer-producer': { 
+      name: 'The Architect', 
+      icon: '🎹', 
+      color: 'from-green-500 to-teal-500', 
+      baseColor: '#10B981',
+      description: 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.',
+      traits: 'Technical mastery, sonic vision, collaboration, patience',
+      shadow: 'Perfectionism, staying too hidden, undervaluing your contribution'
+    }
+  };
+  
+  // Map scores to archetype levels
+  const getArchetypeLevel = (percentage) => {
+    if (percentage >= 85) return { level: 'Core', icon: '🔥', description: 'This is your essence' };
+    if (percentage >= 70) return { level: 'Engine', icon: '⚡', description: 'Powers your creativity' };
+    if (percentage >= 55) return { level: 'Emerging', icon: '🌱', description: 'Growing stronger' };
+    return { level: 'Hidden Power', icon: '💫', description: 'Untapped potential' };
   };
   
   const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Creative Profile</h3>
-      <p className="text-xs text-gray-400 text-center mb-6">Multi-dimensional creator profile</p>
+      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Creative Archetypes</h3>
+      <p className="text-xs text-gray-400 text-center mb-6">Your unique creator blueprint</p>
       
-      <div className="space-y-4">
-        {sortedScores.map(([pathway, percentage]) => {
+      <div className="space-y-6">
+        {sortedScores.map(([pathway, percentage], index) => {
           const info = pathwayInfo[pathway];
-          const isPrimary = blend?.primary === pathway;
-          const isSecondary = blend?.secondary === pathway;
+          const archetypeLevel = getArchetypeLevel(percentage);
           
           return (
-            <div key={pathway} className="relative group">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-white/10 to-white/5 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10">
-                    <span className="text-lg">{info.icon}</span>
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium text-white block">
-                      {info.name}
-                    </span>
-                    {isPrimary && <span className="text-xs text-[#1DD1A1] font-medium">🎯 Your Primary Path</span>}
-                    {isSecondary && <span className="text-xs text-[#B91372] font-medium">⭐ Strong Secondary</span>}
+            <div key={pathway} className="relative">
+              {/* Archetype Card */}
+              <div className={`p-4 rounded-xl bg-gradient-to-r ${
+                index === 0 ? 'from-white/10 to-white/5 border-2' : 'from-white/5 to-white/[0.02] border'
+              } border-white/10 backdrop-blur-sm`}>
+                
+                {/* Header */}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-12 h-12 bg-gradient-to-br ${info.color} rounded-full flex items-center justify-center shadow-lg`}>
+                      <span className="text-xl">{info.icon}</span>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-base font-bold text-white">{info.name}</span>
+                        <span className="text-sm">{archetypeLevel.icon}</span>
+                      </div>
+                      <span className={`text-xs font-medium ${
+                        archetypeLevel.level === 'Core' ? 'text-orange-400' :
+                        archetypeLevel.level === 'Engine' ? 'text-yellow-400' :
+                        archetypeLevel.level === 'Emerging' ? 'text-green-400' :
+                        'text-purple-400'
+                      }`}>
+                        {archetypeLevel.level} • {archetypeLevel.description}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <span className="text-lg font-bold text-white">{percentage}%</span>
-                  <div className="text-xs text-gray-400">
-                    {percentage > 70 ? 'Excellent' : percentage > 50 ? 'Strong' : 'Good'} fit
+                
+                {/* Description */}
+                <p className="text-xs text-gray-300 mb-3 leading-relaxed">
+                  {info.description}
+                </p>
+                
+                {/* Traits & Shadow */}
+                {index === 0 && (
+                  <div className="space-y-2 pt-2 border-t border-white/10">
+                    <div>
+                      <span className="text-xs font-semibold text-white">Key Traits: </span>
+                      <span className="text-xs text-gray-400">{info.traits}</span>
+                    </div>
+                    <div>
+                      <span className="text-xs font-semibold text-white">Shadow Side: </span>
+                      <span className="text-xs text-gray-400">{info.shadow}</span>
+                    </div>
                   </div>
-                </div>
-              </div>
-              
-              <div className="relative h-3 bg-white/5 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full bg-gradient-to-r ${info.color} transition-all duration-2000 ease-out`}
-                  style={{ width: `${percentage}%` }}
-                >
-                  {/* Shimmer effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
-                </div>
+                )}
               </div>
             </div>
           );
         })}
       </div>
       
-      {blend && blend.type !== 'focused' && (
-        <div className="mt-6 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
-          <h4 className="text-sm font-bold text-white mb-3 text-center">🌟 Multi-Pathway Creator</h4>
-          <div className="space-y-2 text-xs text-gray-300">
-            {blend.type === 'blend' && (
-              <>
-                <p className="text-center">
-                  <span className="text-white font-medium">Your creative DNA shows strong overlap</span> between pathways. 
-                  This means you naturally think across multiple revenue streams and artistic expressions.
-                </p>
-                <p className="text-center">
-                  <span className="text-[#1DD1A1] font-medium">Strategy:</span> Focus 70% on your primary path while developing your secondary strengths. 
-                  This creates unique opportunities that single-pathway creators miss.
-                </p>
-              </>
-            )}
-            {blend.type === 'hybrid' && (
-              <>
-                <p className="text-center">
-                  <span className="text-white font-medium">You're a rare hybrid creator</span> with nearly equal alignment across all pathways. 
-                  This gives you extraordinary versatility in the music industry.
-                </p>
-                <p className="text-center">
-                  <span className="text-[#1DD1A1] font-medium">Strategy:</span> Develop parallel revenue streams across all areas. 
-                  Your balanced profile means you can pivot and adapt faster than specialized creators.
-                </p>
-              </>
-            )}
-          </div>
+      {/* Summary Section */}
+      <div className="mt-8 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
+        <h4 className="text-sm font-bold text-white mb-3">🧭 Summary</h4>
+        <div className="text-xs text-gray-300 space-y-2">
+          {(() => {
+            const coreArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 85);
+            const engineArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 70 && percentage < 85);
+            const emergingArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 55 && percentage < 70);
+            
+            const coreName = coreArchetypes.length > 0 ? pathwayInfo[coreArchetypes[0][0]].name : '';
+            const engineName = engineArchetypes.length > 0 ? pathwayInfo[engineArchetypes[0][0]].name : '';
+            
+            return (
+              <p className="leading-relaxed">
+                {coreArchetypes.length > 0 && (
+                  <>You are <span className="text-white font-medium">{coreName}</span> at your core</>
+                )}
+                {engineArchetypes.length > 0 && (
+                  <>, with <span className="text-white font-medium">{engineName}</span> energy driving your creative process</>
+                )}
+                {emergingArchetypes.length > 0 && (
+                  <> and emerging strengths that are growing stronger</>
+                )}.
+                {' '}This unique blend makes you a <span className="text-[#1DD1A1] font-medium">
+                  {blend?.type === 'hybrid' ? 'versatile creator who can pivot between multiple paths' : 
+                   blend?.type === 'blend' ? 'multi-dimensional artist with complementary strengths' :
+                   'focused creator with clear direction'}
+                </span>.
+              </p>
+            );
+          })()}
+          
+          <p className="text-[#B91372] font-medium text-center mt-3">
+            You're not trying to fit into systems — you're creating better ones.
+          </p>
         </div>
-      )}
+      </div>
       
       {/* Share Button */}
       <div className="mt-6 text-center">
         <button
           onClick={() => {
             const primaryPath = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
-            const pathName = primaryPath[0].replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
-            const percentage = primaryPath[1];
+            const pathName = pathwayInfo[primaryPath[0]].name;
+            const archetypeLevel = getArchetypeLevel(primaryPath[1]);
             
             const options = [
               {
                 name: 'Instagram',
                 action: () => {
-                  const text = `Just discovered my creative profile! I'm ${percentage}% aligned with ${pathName} 🎵✨ What's your music creator type? 🚀`;
+                  const text = `Just discovered my creative archetype! I'm ${pathName} (${archetypeLevel.level}) ${archetypeLevel.icon} 🎵✨ What's your music creator archetype? 🚀`;
                   navigator.clipboard.writeText(`${text} https://homeformusic.app`);
                   window.open('https://www.instagram.com/', '_blank');
                 }
@@ -906,7 +960,7 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
               {
                 name: 'TikTok', 
                 action: () => {
-                  const text = `Just discovered my creative profile! I'm ${percentage}% aligned with ${pathName} 🎵✨ What's your music creator type? 🚀`;
+                  const text = `Just discovered my creative archetype! I'm ${pathName} (${archetypeLevel.level}) ${archetypeLevel.icon} 🎵✨ What's your music creator archetype? 🚀`;
                   navigator.clipboard.writeText(`${text} https://homeformusic.app`);
                   window.open('https://www.tiktok.com/', '_blank');
                 }

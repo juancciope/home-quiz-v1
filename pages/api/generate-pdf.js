@@ -37,16 +37,53 @@ export default async function handler(req, res) {
 
     // Prepare data for template
     const pathwayInfo = {
-      'touring-performer': { name: 'Touring Performer', icon: '🎤', color: '#3b82f6' },
-      'creative-artist': { name: 'Creative Artist', icon: '🎨', color: '#ec4899' },
-      'writer-producer': { name: 'Writer/Producer', icon: '🎹', color: '#10b981' }
+      'touring-performer': { 
+        name: 'The Performer', 
+        icon: '🎤', 
+        color: '#3b82f6',
+        description: 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.',
+        traits: 'Stage presence, audience connection, tour resilience, live energy',
+        shadow: 'Burnout from constant travel, missing stability, addiction to applause'
+      },
+      'creative-artist': { 
+        name: 'The Creator', 
+        icon: '🎨', 
+        color: '#ec4899',
+        description: 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.',
+        traits: 'Creative flow, artistic vision, digital presence, authenticity',
+        shadow: 'Over-identifying with your work, creative blocks, comparison trap'
+      },
+      'writer-producer': { 
+        name: 'The Architect', 
+        icon: '🎹', 
+        color: '#10b981',
+        description: 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.',
+        traits: 'Technical mastery, sonic vision, collaboration, patience',
+        shadow: 'Perfectionism, staying too hidden, undervaluing your contribution'
+      }
+    };
+    
+    // Map scores to archetype levels
+    const getArchetypeLevel = (percentage) => {
+      if (percentage >= 85) return { level: 'Core', icon: '🔥', description: 'This is your essence' };
+      if (percentage >= 70) return { level: 'Engine', icon: '⚡', description: 'Powers your creativity' };
+      if (percentage >= 55) return { level: 'Emerging', icon: '🌱', description: 'Growing stronger' };
+      return { level: 'Hidden Power', icon: '💫', description: 'Untapped potential' };
     };
 
     // Transform fuzzyScores into array for handlebars
     const fuzzyScoresArray = Object.entries(pathwayData.fuzzyScores || {})
       .sort((a, b) => b[1] - a[1])
-      .map(([key, percentage]) => {
-        const info = pathwayInfo[key] || { name: key, icon: '🎵', color: '#1DD1A1' };
+      .map(([key, percentage], index) => {
+        const info = pathwayInfo[key] || { 
+          name: key, 
+          icon: '🎵', 
+          color: '#1DD1A1',
+          description: '',
+          traits: '',
+          shadow: ''
+        };
+        const archetypeLevel = getArchetypeLevel(percentage);
         const isPrimary = pathwayData.pathwayBlend?.primary === key;
         const isSecondary = pathwayData.pathwayBlend?.secondary === key;
         
@@ -56,8 +93,15 @@ export default async function handler(req, res) {
           name: info.name,
           icon: info.icon,
           color: info.color,
+          description: info.description,
+          traits: info.traits,
+          shadow: info.shadow,
+          archetypeLevel: archetypeLevel.level,
+          archetypeIcon: archetypeLevel.icon,
+          archetypeDescription: archetypeLevel.description,
           isPrimary,
-          isSecondary
+          isSecondary,
+          isFirst: index === 0
         };
       });
 
