@@ -40,7 +40,7 @@
       background: #000000 !important;
       background-color: #000000 !important;
       min-height: 100vh;
-      padding: 20px;
+      padding: 0;
       width: 100%;
       box-sizing: border-box;
     }
@@ -50,6 +50,71 @@
       margin: 0 auto;
       background: #000000 !important;
       background-color: #000000 !important;
+      padding: 60px 40px 80px 40px;
+      box-sizing: border-box;
+    }
+    
+    .page-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1000;
+    }
+    
+    .page-header-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    
+    .page-header-badge {
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.3) 0%, rgba(185, 19, 114, 0.3) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      padding: 6px 16px;
+      font-size: 12px;
+    }
+    
+    .page-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1000;
+    }
+    
+    .page-footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .footer-logo {
+      height: 24px;
+      filter: brightness(1);
+    }
+    
+    .footer-text {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
     }
     
     /* Header */
@@ -304,7 +369,12 @@
     /* Detailed Steps */
     .detail-section {
       margin-bottom: 40px;
+      page-break-before: always;
       page-break-inside: avoid;
+    }
+    
+    .detail-section:first-of-type {
+      page-break-before: always;
     }
     
     .detail-section-title {
@@ -392,18 +462,102 @@
     }
     
     /* HOME Connection */
+    .home-connection-page {
+      page-break-before: always;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
     .home-connection {
       background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%);
       border: 1px solid rgba(29, 209, 161, 0.3);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 48px;
+      border-radius: 16px;
+      padding: 48px;
+      margin-bottom: 32px;
     }
     
+    .home-connection-title {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
     .home-connection p {
       color: #d1d5db;
-      line-height: 1.6;
+      line-height: 1.8;
+      font-size: 16px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .cta-benefits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 32px 0;
+    }
+    
+    .cta-benefit {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .cta-benefit-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .cta-benefit-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    
+    .cta-benefit-desc {
       font-size: 14px;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+    
+    .cta-action {
+      background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 32px;
+    }
+    
+    .cta-action-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    
+    .cta-action-text {
+      font-size: 16px;
+      color: #ffffff;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    
+    .cta-contact {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
     }
     
     /* Footer */
@@ -443,6 +597,14 @@
   </style>
 </head>
 <body style="background: #000000 !important; background-color: #000000 !important; margin: 0; padding: 0;">
+  <!-- Page Footer - Fixed on all pages -->
+  <div class="page-footer">
+    <div class="page-footer-content">
+      <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="footer-logo">
+      <div class="footer-text">homeformusic.app</div>
+    </div>
+  </div>
+
   <div class="page-container">
     <div class="container">
       <!-- Header -->
@@ -533,6 +695,12 @@
       <!-- Detailed Action Steps -->
       {{#each pathway.nextSteps}}
       <div class="detail-section">
+        <!-- Page Header for each step -->
+        <div class="page-header-badge">
+          <span class="sparkle">✨</span>
+          Step {{add @index 1}} Strategic Roadmap
+          <span class="sparkle-pink">✨</span>
+        </div>
         <h2 class="detail-section-title">Step {{add @index 1}}: {{step}}</h2>
         
         <div class="detail-box">
@@ -584,20 +752,64 @@
       </div>
       {{/each}}
       
-      <!-- HOME Connection -->
+      <!-- HOME Connection CTA Page -->
       {{#if pathway.homeConnection}}
-      <div class="section">
-        <h2 class="section-title">Your HOME Connection</h2>
+      <div class="home-connection-page">
+        <div class="page-header-badge">
+          <span class="sparkle">✨</span>
+          Your HOME Connection
+          <span class="sparkle-pink">✨</span>
+        </div>
+        
         <div class="home-connection">
+          <h2 class="home-connection-title">
+            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
+            Transform Your Plan Into Reality
+          </h2>
+          
           <p>{{pathway.homeConnection}}</p>
+          
+          <p><strong>You now have your personalized roadmap.</strong> The question is: will you execute it alone, or accelerate your journey with the right community and resources?</p>
+          
+          <div class="cta-benefits">
+            <div class="cta-benefit">
+              <span class="cta-benefit-icon">🎤</span>
+              <div class="cta-benefit-title">Professional Venues</div>
+              <div class="cta-benefit-desc">250-capacity venue and rehearsal spaces to develop your live performance</div>
+            </div>
+            
+            <div class="cta-benefit">
+              <span class="cta-benefit-icon">🎧</span>
+              <div class="cta-benefit-title">Recording Studios</div>
+              <div class="cta-benefit-desc">Professional-grade studios to create the music that defines your career</div>
+            </div>
+            
+            <div class="cta-benefit">
+              <span class="cta-benefit-icon">🤝</span>
+              <div class="cta-benefit-title">Industry Network</div>
+              <div class="cta-benefit-desc">Connect with established professionals who can accelerate your growth</div>
+            </div>
+            
+            <div class="cta-benefit">
+              <span class="cta-benefit-icon">📈</span>
+              <div class="cta-benefit-title">Expert Guidance</div>
+              <div class="cta-benefit-desc">Mentorship from successful creators who've walked this path before</div>
+            </div>
+          </div>
+          
+          <div class="cta-action">
+            <h3 class="cta-action-title">Ready to Execute Your Plan?</h3>
+            <p class="cta-action-text">
+              Join HOME's community of ambitious music creators. Get access to premium facilities, 
+              expert mentorship, and a network that turns plans into careers.
+            </p>
+            <div class="cta-contact">
+              📧 Connect with us: homeformusic.app
+            </div>
+          </div>
         </div>
       </div>
       {{/if}}
-      
-      <div class="footer">
-        <p>Generated on {{currentDate}}</p>
-        <p>homeformusic.app</p>
-      </div>
     </div>
   </div>
 </body>
