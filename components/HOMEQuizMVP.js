@@ -483,57 +483,125 @@ const transformAIStepsToComponentFormat = (aiPathway) => {
 
 // Generate authentic action items (no HOME mentions)
 const generateActionsForStep = (stepTitle, stepIndex, pathway) => {
-  // Generic action templates based on step type
-  const actionTemplates = {
-    performance: [
-      "Create a setlist that tells a story from start to finish",
-      "Record yourself performing and identify areas for improvement",
-      "Study 5 artists you admire and note their stage techniques",
-      "Practice transitions between songs until they're seamless",
-      "Develop 3 authentic stories to share between songs"
-    ],
-    brand: [
-      "Define your unique value proposition in one sentence",
-      "Create a mood board with 20 images representing your brand",
-      "Choose a consistent color palette and visual style",
-      "Write your artist bio from three different perspectives",
-      "Identify your target audience demographics and psychographics"
-    ],
-    content: [
-      "Map out 30 days of content aligned with your brand",
-      "Create content templates for different post types",
-      "Develop a signature format your fans will recognize",
-      "Set up a sustainable content creation schedule",
-      "Track engagement metrics to understand what resonates"
-    ],
-    production: [
-      "Study the arrangement of 5 hit songs in your genre",
-      "Build templates for faster workflow in your DAW",
-      "Create a sample library of your signature sounds",
-      "Collaborate with artists in complementary genres",
-      "Document your production process for educational content"
-    ],
-    business: [
-      "Set specific, measurable goals for the next 90 days",
-      "Create multiple revenue streams beyond just music sales",
-      "Build an email list of your most engaged fans",
-      "Develop standard contracts and pricing structures",
-      "Network with 5 new industry professionals monthly"
-    ]
-  };
-  
-  // Select appropriate actions based on step title keywords
+  // Create step-specific actions based on the actual step title and index
+  const pathwayType = pathway.title ? pathway.title.toLowerCase() : '';
   const lowerTitle = stepTitle.toLowerCase();
-  if (lowerTitle.includes('perform') || lowerTitle.includes('stage') || lowerTitle.includes('live')) {
-    return actionTemplates.performance;
-  } else if (lowerTitle.includes('brand') || lowerTitle.includes('identity')) {
-    return actionTemplates.brand;
-  } else if (lowerTitle.includes('content') || lowerTitle.includes('social')) {
-    return actionTemplates.content;
-  } else if (lowerTitle.includes('produc') || lowerTitle.includes('studio')) {
-    return actionTemplates.production;
-  } else {
-    return actionTemplates.business;
+  
+  // Touring Performer specific actions
+  if (pathwayType.includes('touring') || pathwayType.includes('performer')) {
+    const touringActions = [
+      // Step 1 - Foundation
+      [
+        "Create a 45-60 minute setlist with strong opening and closing songs",
+        "Record yourself performing each song and analyze your stage presence",
+        "Book 3 local venue performances within the next 30 days",
+        "Study crowd interaction techniques from 5 successful live performers",
+        "Develop 2-3 authentic stories to connect songs to your personal journey"
+      ],
+      // Step 2 - Performance Skills
+      [
+        "Practice stage movements and microphone technique for 20 minutes daily",
+        "Create signature moments in 3 of your strongest songs",
+        "Film yourself performing and identify 3 areas for improvement",
+        "Research and reach out to 10 venues in your target cities",
+        "Develop a pre-show ritual to manage nerves and get in the zone"
+      ],
+      // Step 3 - Business Building
+      [
+        "Create a professional EPK with high-quality photos and performance videos",
+        "Build relationships with 5 local venue owners or booking agents",
+        "Set up a system to collect fan contact info at every show",
+        "Develop tiered pricing for different venue sizes and markets",
+        "Create a 6-month touring plan targeting realistic markets"
+      ],
+      // Step 4 - Scaling & Growth
+      [
+        "Partner with 2-3 artists for joint shows to expand your audience",
+        "Research and apply to 3 music festivals in your genre",
+        "Hire or partner with a booking agent for larger venues",
+        "Create VIP packages and meet-and-greet experiences",
+        "Document your touring journey for social media and press"
+      ]
+    ];
+    return touringActions[stepIndex] || touringActions[0];
+  }
+  
+  // Creative Artist specific actions
+  else if (pathwayType.includes('creative') || pathwayType.includes('artist')) {
+    const creativeActions = [
+      // Step 1 - Brand Foundation
+      [
+        "Define your unique artistic voice in one compelling sentence",
+        "Create a visual mood board with 20 images representing your brand",
+        "Write your origin story and connect it to your music",
+        "Identify 3 artists whose careers you want to model",
+        "Choose consistent colors, fonts, and visual style for all content"
+      ],
+      // Step 2 - Content Strategy
+      [
+        "Plan 30 days of content that shows your creative process",
+        "Create content templates for different types of posts",
+        "Establish a posting schedule you can maintain long-term",
+        "Develop signature content formats your fans will recognize",
+        "Set up analytics tracking to understand what resonates"
+      ],
+      // Step 3 - Audience Building
+      [
+        "Launch an email list with exclusive content for subscribers",
+        "Create a lead magnet (free song, behind-scenes content, etc.)",
+        "Engage meaningfully with 20 potential fans daily on social media",
+        "Collaborate with 3 other artists to cross-pollinate audiences",
+        "Start a weekly live stream or regular fan interaction format"
+      ],
+      // Step 4 - Revenue Diversification
+      [
+        "Launch merchandise that reflects your brand aesthetic",
+        "Create a Patreon or fan subscription with exclusive perks",
+        "Develop digital products (sample packs, courses, etc.)",
+        "Explore sync licensing opportunities for your music",
+        "Build partnerships with brands that align with your values"
+      ]
+    ];
+    return creativeActions[stepIndex] || creativeActions[0];
+  }
+  
+  // Writer-Producer specific actions
+  else {
+    const producerActions = [
+      // Step 1 - Technical Foundation
+      [
+        "Master 3 new production techniques by recreating hit songs",
+        "Build custom templates and workflow shortcuts in your DAW",
+        "Create a signature sound library with 50+ original samples",
+        "Study the arrangement structure of 10 chart-topping songs",
+        "Document your production process for consistent results"
+      ],
+      // Step 2 - Collaboration Network
+      [
+        "Reach out to 5 artists seeking production collaborations",
+        "Join 3 producer/songwriter communities online and locally",
+        "Offer free production to 2 promising artists to build relationships",
+        "Create a portfolio showcasing your range across different genres",
+        "Establish clear pricing and contract templates for your services"
+      ],
+      // Step 3 - Business Development
+      [
+        "Research and submit to music libraries for sync opportunities",
+        "Build relationships with A&Rs and music supervisors",
+        "Create instrumental versions of your best productions",
+        "Develop a system for tracking royalties and publishing splits",
+        "Position yourself as the go-to producer for a specific sound/genre"
+      ],
+      // Step 4 - Industry Recognition
+      [
+        "Submit your best work to relevant music competitions and awards",
+        "Create educational content showcasing your production expertise",
+        "Mentor emerging artists to build your reputation and network",
+        "Explore opportunities to score for film, TV, or games",
+        "Build a waitlist of artists wanting to work with you"
+      ]
+    ];
+    return producerActions[stepIndex] || producerActions[0];
   }
 };
 
@@ -2824,7 +2892,6 @@ const HOMECreatorFlow = () => {
                     </div>
                     
                     <h2 className="text-2xl font-bold mb-4 text-white">{pathway.steps[currentStep].title}</h2>
-                    <p className="text-sm text-gray-300 leading-relaxed">{pathway.steps[currentStep].description}</p>
                   </div>
                   
                   {/* Why This Matters */}
