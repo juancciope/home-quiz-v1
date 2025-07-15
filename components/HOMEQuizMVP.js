@@ -2352,7 +2352,6 @@ const HOMECreatorFlow = () => {
                               <div className="inline-flex items-center gap-3 text-2xl font-bold text-white mb-4">
                                 <span className="text-3xl">{archetype.icon}</span>
                                 <span style={{ color: archetype.color }}>{archetype.level}</span>
-                                <span className="text-[#1DD1A1] text-lg">Level</span>
                               </div>
                               
                               <p className="text-sm text-gray-300 mb-6 max-w-xs mx-auto">
@@ -2361,7 +2360,7 @@ const HOMECreatorFlow = () => {
                               
                               {/* Simple value proposition */}
                               <p className="text-sm text-gray-300 mb-8 leading-relaxed">
-                                Get your complete personalized roadmap with all archetype levels and strategic next steps.
+                                Get your complete personalized roadmap with all creator profiles and strategic next steps.
                               </p>
                             </>
                           );
@@ -2406,7 +2405,7 @@ const HOMECreatorFlow = () => {
                           <div className="mt-4 text-center">
                             <div className="inline-flex items-center gap-2 text-xs text-gray-400">
                               <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                              <span>Free • No credit card required</span>
+                              <span>Instant access • Built for music creators</span>
                             </div>
                           </div>
                         </div>
