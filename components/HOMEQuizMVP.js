@@ -1406,6 +1406,11 @@ const HOMECreatorFlow = () => {
             currentStep = 3;
           }, 4200);
           
+          // Fourth step - finalizing roadmap
+          setTimeout(() => {
+            currentStep = 4;
+          }, 6000);
+          
           clearInterval(progressInterval);
           setLoadingProgress(100); // Complete
           
