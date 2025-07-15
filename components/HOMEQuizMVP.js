@@ -2359,158 +2359,54 @@ const HOMECreatorFlow = () => {
                                 {archetype.description}
                               </p>
                               
-                              {/* FOMO Elements */}
-                              <div className="space-y-3 mb-6">
-                                <div className="flex items-center justify-center gap-2 text-xs text-yellow-400">
-                                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
-                                  <span>Limited access • Only for assessed creators</span>
-                                </div>
-                                
-                                <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 rounded-lg p-3">
-                                  <div className="flex items-center justify-center gap-2 text-xs text-red-300">
-                                    <span className="animate-pulse">⚠️</span>
-                                    <span>This detailed analysis expires in 10 minutes</span>
-                                  </div>
-                                </div>
-                                
-                                <div className="grid grid-cols-2 gap-3 text-xs">
-                                  <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                                    <div className="text-[#1DD1A1] font-semibold">✨ Included</div>
-                                    <div className="text-gray-400">Complete archetype breakdown</div>
-                                  </div>
-                                  <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                                    <div className="text-[#1DD1A1] font-semibold">🎯 Included</div>
-                                    <div className="text-gray-400">Personalized action steps</div>
-                                  </div>
-                                </div>
-                              </div>
+                              {/* Simple value proposition */}
+                              <p className="text-sm text-gray-300 mb-8 leading-relaxed">
+                                Get your complete personalized roadmap with all archetype levels and strategic next steps.
+                              </p>
                             </>
                           );
                         })()}
                         
-                        {/* Enhanced email input with cool effects */}
-                        <div className="relative mb-6">
-                          {/* Glowing border effect */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 rounded-2xl blur-lg animate-pulse" />
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5 rounded-2xl blur-sm" />
-                          
-                          {/* Floating particles around input */}
-                          <div className="absolute -inset-4 overflow-hidden rounded-3xl">
-                            {[...Array(6)].map((_, i) => (
-                              <div
-                                key={i}
-                                className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-30"
-                                style={{
-                                  left: `${20 + Math.random() * 60}%`,
-                                  top: `${20 + Math.random() * 60}%`,
-                                  animation: `float ${2 + Math.random() * 3}s ease-in-out infinite`,
-                                  animationDelay: `${Math.random() * 2}s`
-                                }}
-                              />
-                            ))}
-                          </div>
-                          
+                        {/* Clean email input */}
+                        <div className="relative mb-8">
                           <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email to unlock your roadmap"
-                            className="relative w-full px-6 py-5 bg-black/30 border border-white/30 rounded-2xl 
-                                     focus:bg-black/60 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
-                                     transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm
-                                     hover:border-[#1DD1A1]/50 hover:bg-black/40"
+                            placeholder="Enter your email address"
+                            className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl 
+                                     focus:bg-black/50 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
+                                     transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
                           />
                           <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                            <div className="relative">
-                              <Mail className="w-5 h-5 text-gray-400" />
-                              <div className="absolute -inset-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-0 animate-ping" />
-                            </div>
+                            <Mail className="w-5 h-5 text-gray-400" />
                           </div>
                         </div>
                         
-                        {/* Value stack with animated icons */}
-                        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-4 mb-6">
-                          <div className="text-center">
-                            <div className="text-xs text-blue-300 font-semibold mb-2">🎁 What you'll get instantly:</div>
-                            <div className="grid grid-cols-1 gap-2 text-xs">
-                              <div className="flex items-center justify-center gap-2 text-white">
-                                <span className="animate-bounce">📊</span>
-                                <span>Complete breakdown of all 3 archetype levels</span>
-                              </div>
-                              <div className="flex items-center justify-center gap-2 text-white">
-                                <span className="animate-bounce" style={{animationDelay: '0.2s'}}>🎯</span>
-                                <span>AI-generated strategic roadmap ($47 value)</span>
-                              </div>
-                              <div className="flex items-center justify-center gap-2 text-white">
-                                <span className="animate-bounce" style={{animationDelay: '0.4s'}}>💎</span>
-                                <span>Exclusive HOME community access</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Enhanced CTA Button with FOMO */}
+                        {/* Clean CTA Button */}
                         <div className="relative">
-                          {/* Urgent action indicator */}
-                          <div className="text-center mb-4">
-                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-lg px-4 py-2">
-                              <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
-                              <span className="text-xs text-orange-300 font-semibold">🔥 Limited time access</span>
-                            </div>
-                          </div>
-                          
                           <button
                             onClick={handleEmailSubmit}
                             disabled={!email || isProcessing}
-                            className="group relative w-full inline-flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-bold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden transform-gpu"
-                            style={{ transformStyle: 'preserve-3d' }}
+                            className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-[#B91372]/25 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg"
                           >
-                            {/* 3D Liquid layers */}
-                            <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
-                              <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
-                            </div>
-                            
-                            {/* Animated liquid blobs */}
-                            <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
-                              <div className="absolute top-0 left-0 w-full h-full">
-                                <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
-                                <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
-                                <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
-                                <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
-                                <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
-                              </div>
-                            </div>
-                            
-                            {/* Pulsing border effect */}
-                            <div className="absolute inset-0 rounded-2xl border-2 border-white/20 animate-pulse" />
-                            
-                            {/* Glass effect overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
+                            {/* Simple gradient background */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl" />
                             
                             {/* Shine effect */}
-                            <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
-                              <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                            <div className="absolute inset-0 rounded-xl overflow-hidden">
+                              <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/20 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
                             </div>
                             
-                            {/* Outer glow */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
-                            
-                            <span className="relative z-10 flex items-center gap-2" style={{ transform: 'translateZ(10px)' }}>
-                              <span>🚀 Unlock My Roadmap Now</span>
-                              <span className="text-sm font-normal">(Free)</span>
-                            </span>
-                            <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+                            <span className="relative z-10">Get My Complete Roadmap</span>
+                            <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                           </button>
                           
-                          {/* Social proof */}
+                          {/* Simple trust indicator */}
                           <div className="mt-4 text-center">
-                            <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
-                              <div className="flex -space-x-2">
-                                <div className="w-6 h-6 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full border border-black"></div>
-                                <div className="w-6 h-6 bg-gradient-to-r from-[#B91372] to-[#1DD1A1] rounded-full border border-black"></div>
-                                <div className="w-6 h-6 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full border border-black"></div>
-                              </div>
-                              <span>1,247+ creators have unlocked their roadmap</span>
+                            <div className="inline-flex items-center gap-2 text-xs text-gray-400">
+                              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                              <span>Free • No credit card required</span>
                             </div>
                           </div>
                         </div>
