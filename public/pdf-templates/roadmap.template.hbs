@@ -1122,56 +1122,6 @@
             <p class="cover-description-enhanced">{{pathway.description}}</p>
           </div>
           
-          <!-- Enhanced Summary Section -->
-          <div class="cover-summary-enhanced">
-            <div style="position: relative; z-index: 2;">
-              <h4 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 20px; text-align: center;">
-                🧭 Your Creative Blueprint
-              </h4>
-              <div style="text-align: center;">
-                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
-                  <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
-                  {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core')}}
-                  Your {{fuzzyScoresArray.[0].name}} identity is crystal clear and drives your creative decisions.
-                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Engine')}}
-                  {{fuzzyScoresArray.[0].name}} powers your creativity, while you're still exploring other facets of your artistic identity.
-                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Emerging')}}
-                  You're growing into your {{fuzzyScoresArray.[0].name}} strengths, with room to develop this pathway further.
-                  {{else}}
-                  Your {{fuzzyScoresArray.[0].name}} traits represent untapped potential waiting to be unlocked.
-                  {{/if}}
-                </p>
-                
-                {{#if fuzzyScoresArray.[1]}}
-                {{#if (gte fuzzyScoresArray.[1].percentage 55)}}
-                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
-                  Your secondary <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[1].name}}</span> traits (<span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[1].percentage}}%</span>) complement your primary path, creating unique creative opportunities.
-                </p>
-                {{/if}}
-                {{/if}}
-                
-                <p style="color: #1DD1A1; font-size: 15px; font-weight: 600; margin-bottom: 16px;">
-                  Strategy: 
-                  {{#if pathwayBlend}}
-                  {{#if (eq pathwayBlend.type 'hybrid')}}
-                  Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.
-                  {{else if (eq pathwayBlend.type 'blend')}}
-                  Focus 70% on your {{fuzzyScoresArray.[0].name}} strengths while developing your {{fuzzyScoresArray.[1].name}} skills as a strategic advantage.
-                  {{else}}
-                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
-                  {{/if}}
-                  {{else}}
-                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
-                  {{/if}}
-                </p>
-                
-                <p style="color: #B91372; font-weight: 600; font-style: italic; text-align: center; margin-top: 20px; font-size: 16px;">
-                  You're not trying to fit into systems — you're creating better ones.
-                </p>
-              </div>
-            </div>
-          </div>
-          
           <!-- Enhanced Focus Section -->
           <div class="cover-focus-enhanced">
             <div style="position: relative; z-index: 2; text-align: center;">
@@ -1196,10 +1146,8 @@
               <span>Your Creative Profile</span>
               <span class="sparkle-pink">✨</span>
             </div>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 32px; margin-top: 16px;">Ranked by alignment with your answers</p>
           </div>
-          
-          <h3 class="section-title" style="text-align: center; margin-bottom: 8px;">Your Creative Profile</h3>
-          <p class="section-subtitle" style="text-align: center; margin-bottom: 32px;">Ranked by alignment with your answers</p>
           
           <div>
             {{#each fuzzyScoresArray}}
@@ -1247,6 +1195,56 @@
               {{/if}}
             </div>
             {{/each}}
+          </div>
+          
+          <!-- Creative Blueprint Section -->
+          <div class="cover-summary-enhanced" style="margin-top: 40px;">
+            <div style="position: relative; z-index: 2;">
+              <h4 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 20px; text-align: center;">
+                🧭 Your Creative Blueprint
+              </h4>
+              <div style="text-align: center;">
+                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
+                  <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
+                  {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core')}}
+                  Your {{fuzzyScoresArray.[0].name}} identity is crystal clear and drives your creative decisions.
+                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Engine')}}
+                  {{fuzzyScoresArray.[0].name}} powers your creativity, while you're still exploring other facets of your artistic identity.
+                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Emerging')}}
+                  You're growing into your {{fuzzyScoresArray.[0].name}} strengths, with room to develop this pathway further.
+                  {{else}}
+                  Your {{fuzzyScoresArray.[0].name}} traits represent untapped potential waiting to be unlocked.
+                  {{/if}}
+                </p>
+                
+                {{#if fuzzyScoresArray.[1]}}
+                {{#if (gte fuzzyScoresArray.[1].percentage 55)}}
+                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
+                  Your secondary <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[1].name}}</span> traits (<span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[1].percentage}}%</span>) complement your primary path, creating unique creative opportunities.
+                </p>
+                {{/if}}
+                {{/if}}
+                
+                <p style="color: #1DD1A1; font-size: 15px; font-weight: 600; margin-bottom: 16px;">
+                  Strategy: 
+                  {{#if pathwayBlend}}
+                  {{#if (eq pathwayBlend.type 'hybrid')}}
+                  Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.
+                  {{else if (eq pathwayBlend.type 'blend')}}
+                  Focus 70% on your {{fuzzyScoresArray.[0].name}} strengths while developing your {{fuzzyScoresArray.[1].name}} skills as a strategic advantage.
+                  {{else}}
+                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
+                  {{/if}}
+                  {{else}}
+                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
+                  {{/if}}
+                </p>
+                
+                <p style="color: #B91372; font-weight: 600; font-style: italic; text-align: center; margin-top: 20px; font-size: 16px;">
+                  You're not trying to fit into systems — you're creating better ones.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
