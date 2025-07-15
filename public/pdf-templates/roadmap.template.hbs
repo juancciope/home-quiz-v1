@@ -934,6 +934,129 @@
       color: #ffffff;
     }
     
+    /* Enhanced Cover Page Styling */
+    .cover-page {
+      background: radial-gradient(ellipse at top, rgba(29, 209, 161, 0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at bottom, rgba(185, 19, 114, 0.15) 0%, transparent 50%),
+                  #000000;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cover-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(185, 19, 114, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(29, 209, 161, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .cover-header-enhanced {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.4) 0%, rgba(185, 19, 114, 0.4) 100%);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      padding: 16px 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 32px rgba(29, 209, 161, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    
+    .cover-title-enhanced {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-bottom: 16px;
+      text-shadow: 0 0 30px rgba(29, 209, 161, 0.3);
+    }
+    
+    .cover-description-enhanced {
+      font-size: 16px;
+      color: #e5e7eb;
+      line-height: 1.6;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto 40px auto;
+      font-weight: 400;
+    }
+    
+    .cover-summary-enhanced {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border: 1px solid rgba(29, 209, 161, 0.3);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .cover-summary-enhanced::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.05) 0%, rgba(185, 19, 114, 0.05) 100%);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+    
+    .cover-focus-enhanced {
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.15) 0%, rgba(185, 19, 114, 0.15) 100%);
+      border: 2px solid rgba(29, 209, 161, 0.4);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(29, 209, 161, 0.15);
+      position: relative;
+    }
+    
+    .cover-focus-enhanced::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, #1DD1A1, #B91372);
+      border-radius: 22px;
+      z-index: -1;
+      opacity: 0.3;
+    }
+    
+    .cover-logo-enhanced {
+      height: 40px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 4px 12px rgba(29, 209, 161, 0.3));
+    }
+    
+    .archetype-badge-enhanced {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.2) 0%, rgba(185, 19, 114, 0.2) 100%);
+      border: 1px solid rgba(29, 209, 161, 0.4);
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1DD1A1;
+      margin-bottom: 16px;
+    }
+    
     /* Footer */
     .footer {
       text-align: center;
@@ -982,78 +1105,91 @@
   <div class="page-container">
     <div class="container">
       
-      <!-- PAGE 1: Music Creator Roadmap -->
-      <div class="pdf-page">
-        <div class="page-content">
-          <div style="text-align: center; margin-bottom: 32px;">
-            <div class="bubble-header">
+      <!-- PAGE 1: Enhanced Cover Page -->
+      <div class="pdf-page cover-page">
+        <div class="page-content" style="position: relative; z-index: 2;">
+          <div style="text-align: center; margin-bottom: 40px;">
+            <div class="cover-header-enhanced">
               <span class="sparkle">✨</span>
-              <span>Your Music Creator Roadmap</span>
+              <span style="font-size: 16px; font-weight: 700; color: #ffffff;">Your Music Creator Roadmap</span>
               <span class="sparkle-pink">✨</span>
             </div>
           </div>
           
-          <div class="header">
-            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="logo">
-            <h1 class="title">{{pathway.title}}</h1>
-            <p class="description">{{pathway.description}}</p>
+          <div style="text-align: center; margin-bottom: 40px;">
+            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="cover-logo-enhanced">
+            
+            <!-- Archetype Badge -->
+            <div class="archetype-badge-enhanced">
+              <span style="font-size: 18px;">{{fuzzyScoresArray.[0].icon}}</span>
+              <span>{{fuzzyScoresArray.[0].name}} {{fuzzyScoresArray.[0].archetypeIcon}}</span>
+            </div>
+            
+            <h1 class="cover-title-enhanced">{{pathway.title}}</h1>
+            <p class="cover-description-enhanced">{{pathway.description}}</p>
           </div>
           
-          <!-- Summary Section -->
-          <div class="summary-section">
-            <h4 class="summary-title">🧭 Summary</h4>
-            <div class="summary-content">
-              <p class="summary-text">
-                <span class="highlight">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at {{fuzzyScoresArray.[0].percentage}}% alignment. 
-                {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core')}}
-                Your {{fuzzyScoresArray.[0].name}} identity is crystal clear and drives your creative decisions.
-                {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Engine')}}
-                {{fuzzyScoresArray.[0].name}} powers your creativity, while you're still exploring other facets of your artistic identity.
-                {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Emerging')}}
-                You're growing into your {{fuzzyScoresArray.[0].name}} strengths, with room to develop this pathway further.
-                {{else}}
-                Your {{fuzzyScoresArray.[0].name}} traits represent untapped potential waiting to be unlocked.
+          <!-- Enhanced Summary Section -->
+          <div class="cover-summary-enhanced">
+            <div style="position: relative; z-index: 2;">
+              <h4 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 20px; text-align: center;">
+                🧭 Your Creative Blueprint
+              </h4>
+              <div style="text-align: center;">
+                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
+                  <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
+                  {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core')}}
+                  Your {{fuzzyScoresArray.[0].name}} identity is crystal clear and drives your creative decisions.
+                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Engine')}}
+                  {{fuzzyScoresArray.[0].name}} powers your creativity, while you're still exploring other facets of your artistic identity.
+                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Emerging')}}
+                  You're growing into your {{fuzzyScoresArray.[0].name}} strengths, with room to develop this pathway further.
+                  {{else}}
+                  Your {{fuzzyScoresArray.[0].name}} traits represent untapped potential waiting to be unlocked.
+                  {{/if}}
+                </p>
+                
+                {{#if fuzzyScoresArray.[1]}}
+                {{#if (gte fuzzyScoresArray.[1].percentage 55)}}
+                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
+                  Your secondary <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[1].name}}</span> traits (<span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[1].percentage}}%</span>) complement your primary path, creating unique creative opportunities.
+                </p>
                 {{/if}}
-              </p>
-              
-              {{#if fuzzyScoresArray.[1]}}
-              {{#if (gte fuzzyScoresArray.[1].percentage 55)}}
-              <p class="summary-text">
-                Your secondary <span class="highlight">{{fuzzyScoresArray.[1].name}}</span> traits ({{fuzzyScoresArray.[1].percentage}}%) complement your primary path, creating unique creative opportunities.
-              </p>
-              {{/if}}
-              {{/if}}
-              
-              <p class="summary-strategy">
-                Strategy: 
-                {{#if pathwayBlend}}
-                {{#if (eq pathwayBlend.type 'hybrid')}}
-                Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.
-                {{else if (eq pathwayBlend.type 'blend')}}
-                Focus 70% on your {{fuzzyScoresArray.[0].name}} strengths while developing your {{fuzzyScoresArray.[1].name}} skills as a strategic advantage.
-                {{else}}
-                Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
                 {{/if}}
-                {{else}}
-                Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
-                {{/if}}
-              </p>
-              
-              <p class="summary-quote">
-                You're not trying to fit into systems — you're creating better ones.
-              </p>
+                
+                <p style="color: #1DD1A1; font-size: 15px; font-weight: 600; margin-bottom: 16px;">
+                  Strategy: 
+                  {{#if pathwayBlend}}
+                  {{#if (eq pathwayBlend.type 'hybrid')}}
+                  Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.
+                  {{else if (eq pathwayBlend.type 'blend')}}
+                  Focus 70% on your {{fuzzyScoresArray.[0].name}} strengths while developing your {{fuzzyScoresArray.[1].name}} skills as a strategic advantage.
+                  {{else}}
+                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
+                  {{/if}}
+                  {{else}}
+                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
+                  {{/if}}
+                </p>
+                
+                <p style="color: #B91372; font-weight: 600; font-style: italic; text-align: center; margin-top: 20px; font-size: 16px;">
+                  You're not trying to fit into systems — you're creating better ones.
+                </p>
+              </div>
             </div>
           </div>
           
-          <!-- Focus Section -->
-          <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
-            <h4 style="font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 16px;">Focus Changes Everything</h4>
-            <blockquote style="color: #1DD1A1; font-size: 16px; font-style: italic; margin: 0 0 16px 0; font-weight: 500;">
-              "Be like a postage stamp - stick to one thing until you get there"
-            </blockquote>
-            <p style="color: #d1d5db; font-size: 14px; line-height: 1.6; margin: 0;">
-              While you may identify with multiple paths, <strong style="color: #1DD1A1;">focus creates breakthroughs</strong>. This roadmap reveals your highest-impact priority and the path that will <strong style="color: #ffffff;">accelerate your music career</strong>.
-            </p>
+          <!-- Enhanced Focus Section -->
+          <div class="cover-focus-enhanced">
+            <div style="position: relative; z-index: 2; text-align: center;">
+              <h4 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 16px;">Focus Changes Everything</h4>
+              <blockquote style="color: #1DD1A1; font-size: 18px; font-style: italic; margin: 0 0 16px 0; font-weight: 600;">
+                "Be like a postage stamp - stick to one thing until you get there"
+              </blockquote>
+              <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin: 0;">
+                While you may identify with multiple paths, <strong style="color: #1DD1A1;">focus creates breakthroughs</strong>. This roadmap reveals your highest-impact priority and the path that will <strong style="color: #ffffff;">accelerate your music career</strong>.
+              </p>
+            </div>
           </div>
         </div>
       </div>
