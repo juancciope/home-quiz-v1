@@ -1357,12 +1357,19 @@ const HOMECreatorFlow = () => {
         setProcessingStartTime(Date.now());
         
         // Progress simulation during actual processing
+        let currentStep = 0;
         const progressInterval = setInterval(() => {
           setLoadingProgress(prev => {
             if (prev >= 90) return prev; // Don't go to 100% until actually done
-            return prev + Math.random() * 10; // Gradual progress increase
+            
+            // Gradual progress increase with step-based milestones
+            const targetProgress = Math.min(currentStep * 25 + Math.random() * 20, 90);
+            if (prev < targetProgress) {
+              return Math.min(prev + 3 + Math.random() * 5, targetProgress);
+            }
+            return prev;
           });
-        }, 1000);
+        }, 800);
         
         try {
           console.log('🤖 Calling AI endpoint with responses:', finalResponses);
@@ -1372,7 +1379,16 @@ const HOMECreatorFlow = () => {
           const calculatedBlend = getPathwayBlend(calculatedScores);
           setFuzzyScores(calculatedScores);
           setPathwayBlend(calculatedBlend);
-          setLoadingProgress(25); // First step complete
+          
+          // Allow first step to complete gradually
+          setTimeout(() => {
+            currentStep = 1;
+          }, 1500);
+          
+          // Start second step after slight delay
+          setTimeout(() => {
+            currentStep = 2;
+          }, 2800);
           
           // Call AI endpoint for personalized pathway
           const aiResponse = await fetch('/api/generate-pathway', {
@@ -1384,6 +1400,11 @@ const HOMECreatorFlow = () => {
               pathwayBlend: calculatedBlend
             })
           });
+          
+          // Third step - AI processing
+          setTimeout(() => {
+            currentStep = 3;
+          }, 4200);
           
           clearInterval(progressInterval);
           setLoadingProgress(100); // Complete
@@ -1426,7 +1447,13 @@ const HOMECreatorFlow = () => {
         } catch (error) {
           console.error('❌ Error generating AI pathway:', error);
           clearInterval(progressInterval);
-          setLoadingProgress(100);
+          
+          // Complete remaining steps quickly on error
+          setTimeout(() => {
+            currentStep = 4;
+            setLoadingProgress(100);
+          }, 1000);
+          
           // Fallback to template
           const pathwayKey = determinePathway(finalResponses);
           setPathway(pathwayTemplates[pathwayKey]);
@@ -1989,9 +2016,20 @@ const HOMECreatorFlow = () => {
               
               <div className="text-center">
                 {/* Header badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
                 <Target className="w-4 h-4 text-[#1DD1A1]" />
                 <span className="text-sm font-semibold text-white">Your Path Starts Here</span>
+              </div>
+              
+              {/* Disclaimer */}
+              <div className="bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] backdrop-blur-xl rounded-2xl border border-white/10 p-4 mb-8 text-left">
+                <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                  <span className="text-white font-medium">Important:</span> This tool is developed by{' '}
+                  <span className="text-[#1DD1A1]">homeformusic.org</span> as a creative guidance resource.
+                </p>
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  No tool or person can promise or guarantee results in the music industry. Success depends on talent, dedication, market conditions, and many other factors beyond any assessment.
+                </p>
               </div>
 
               {/* Main Content */}
