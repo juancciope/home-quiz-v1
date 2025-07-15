@@ -857,30 +857,53 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
   
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Creative Archetypes</h3>
-      <p className="text-xs text-gray-400 text-center mb-6">Your unique creator blueprint</p>
+      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Creative Profile</h3>
+      <p className="text-xs text-gray-400 text-center mb-6">Ranked by alignment with your answers</p>
       
       <div className="space-y-6">
         {sortedScores.map(([pathway, percentage], index) => {
           const info = pathwayInfo[pathway];
           const archetypeLevel = getArchetypeLevel(percentage);
+          const isPrimary = index === 0;
+          const isSecondary = index === 1;
           
           return (
             <div key={pathway} className="relative">
+              {/* Rank indicator */}
+              {isPrimary && (
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                  #1 PRIMARY
+                </div>
+              )}
+              {isSecondary && (
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-gray-400 to-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                  #2 SECONDARY
+                </div>
+              )}
+              
               {/* Archetype Card */}
               <div className={`p-4 rounded-xl bg-gradient-to-r ${
-                index === 0 ? 'from-white/10 to-white/5 border-2' : 'from-white/5 to-white/[0.02] border'
-              } border-white/10 backdrop-blur-sm`}>
+                isPrimary ? 'from-white/15 to-white/8 border-2 border-[#1DD1A1]/30' : 
+                isSecondary ? 'from-white/10 to-white/5 border border-white/20' :
+                'from-white/5 to-white/[0.02] border border-white/10'
+              } backdrop-blur-sm relative overflow-hidden`}>
+                
+                {/* Glow effect for primary */}
+                {isPrimary && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl" />
+                )}
+                
+                <div className="relative z-10">
                 
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${info.color} rounded-full flex items-center justify-center shadow-lg`}>
+                    <div className={`w-12 h-12 bg-gradient-to-br ${info.color} rounded-full flex items-center justify-center shadow-lg ${isPrimary ? 'ring-2 ring-[#1DD1A1]/50' : ''}`}>
                       <span className="text-xl">{info.icon}</span>
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-base font-bold text-white">{info.name}</span>
+                        <span className={`text-base font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{info.name}</span>
                         <span className="text-sm">{archetypeLevel.icon}</span>
                       </div>
                       <span className={`text-xs font-medium ${
@@ -893,6 +916,11 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
                       </span>
                     </div>
                   </div>
+                  <div className="text-right">
+                    <div className={`text-xl font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{percentage}%</div>
+                    <div className="text-xs text-gray-400">alignment</div>
+                  </div>
+                </div>
                 </div>
                 
                 {/* Description */}
@@ -924,33 +952,60 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
         <h4 className="text-sm font-bold text-white mb-3">🧭 Summary</h4>
         <div className="text-xs text-gray-300 space-y-2">
           {(() => {
-            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            const coreArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 85);
-            const engineArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 70 && percentage < 85);
-            const emergingArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 55 && percentage < 70);
+            // Use existing sortedScores to avoid scope confusion
+            const primaryArchetype = sortedScores[0];
+            const secondaryArchetype = sortedScores[1];
+            const tertiaryArchetype = sortedScores[2];
             
-            const coreName = coreArchetypes.length > 0 ? pathwayInfo[coreArchetypes[0][0]].name : '';
-            const engineName = engineArchetypes.length > 0 ? pathwayInfo[engineArchetypes[0][0]].name : '';
+            const primaryInfo = pathwayInfo[primaryArchetype[0]];
+            const primaryLevel = getArchetypeLevel(primaryArchetype[1]);
+            
+            // Calculate spread for blend analysis
+            const scoreSpread = primaryArchetype[1] - (sortedScores[2] ? sortedScores[2][1] : 0);
+            const isBalanced = scoreSpread < 20; // Less than 20% difference indicates balance
+            
+            // Generate insights based on fuzzy logic alignment
+            const generateInsights = () => {
+              if (primaryLevel.level === 'Core') {
+                return `Your ${primaryInfo.name} identity is crystal clear and drives your creative decisions.`;
+              } else if (primaryLevel.level === 'Engine') {
+                return `${primaryInfo.name} powers your creativity, while you're still exploring other facets of your artistic identity.`;
+              } else if (primaryLevel.level === 'Emerging') {
+                return `You're growing into your ${primaryInfo.name} strengths, with room to develop this pathway further.`;
+              } else {
+                return `Your ${primaryInfo.name} traits represent untapped potential waiting to be unlocked.`;
+              }
+            };
+            
+            const getBlendStrategy = () => {
+              if (blend?.type === 'hybrid') {
+                return 'Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.';
+              } else if (blend?.type === 'blend') {
+                return `Focus 70% on your ${primaryInfo.name} strengths while developing your ${pathwayInfo[secondaryArchetype[0]].name} skills as a strategic advantage.`;
+              } else if (isBalanced) {
+                return 'Your balanced profile suggests you can adapt to market opportunities while maintaining artistic integrity.';
+              } else {
+                return `Your clear ${primaryInfo.name} direction allows for deep specialization and expertise building.`;
+              }
+            };
             
             return (
-              <p className="leading-relaxed">
-                {coreArchetypes.length > 0 ? (
-                  <>You are <span className="text-white font-medium">{coreName}</span> at your core</>
-                ) : (
-                  <>You are a <span className="text-white font-medium">{sortedScores[0] ? pathwayInfo[sortedScores[0][0]]?.name || 'Music Creator' : 'Music Creator'}</span></>
+              <div className="space-y-3">
+                <p className="leading-relaxed">
+                  <span className="text-white font-medium">{primaryInfo.name}</span> is your primary creative archetype at {primaryArchetype[1]}% alignment. 
+                  {' '}{generateInsights()}
+                </p>
+                
+                {secondaryArchetype && secondaryArchetype[1] >= 55 && (
+                  <p className="leading-relaxed">
+                    Your secondary <span className="text-white font-medium">{pathwayInfo[secondaryArchetype[0]].name}</span> traits ({secondaryArchetype[1]}%) complement your primary path, creating unique creative opportunities.
+                  </p>
                 )}
-                {engineArchetypes.length > 0 && (
-                  <>, with <span className="text-white font-medium">{engineName}</span> energy driving your creative process</>
-                )}
-                {emergingArchetypes.length > 0 && (
-                  <> and emerging strengths that are growing stronger</>
-                )}.
-                {' '}This unique blend makes you a <span className="text-[#1DD1A1] font-medium">
-                  {blend?.type === 'hybrid' ? 'versatile creator who can pivot between multiple paths' : 
-                   blend?.type === 'blend' ? 'multi-dimensional artist with complementary strengths' :
-                   'focused creator with clear direction'}
-                </span>.
-              </p>
+                
+                <p className="leading-relaxed text-[#1DD1A1] font-medium">
+                  Strategy: {getBlendStrategy()}
+                </p>
+              </div>
             );
           })()}
           
