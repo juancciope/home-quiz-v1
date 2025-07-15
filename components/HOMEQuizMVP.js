@@ -923,6 +923,7 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
         <h4 className="text-sm font-bold text-white mb-3">🧭 Summary</h4>
         <div className="text-xs text-gray-300 space-y-2">
           {(() => {
+            const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
             const coreArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 85);
             const engineArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 70 && percentage < 85);
             const emergingArchetypes = sortedScores.filter(([_, percentage]) => percentage >= 55 && percentage < 70);
@@ -932,8 +933,10 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
             
             return (
               <p className="leading-relaxed">
-                {coreArchetypes.length > 0 && (
+                {coreArchetypes.length > 0 ? (
                   <>You are <span className="text-white font-medium">{coreName}</span> at your core</>
+                ) : (
+                  <>You are a <span className="text-white font-medium">{sortedScores[0] ? pathwayInfo[sortedScores[0][0]]?.name || 'Music Creator' : 'Music Creator'}</span></>
                 )}
                 {engineArchetypes.length > 0 && (
                   <>, with <span className="text-white font-medium">{engineName}</span> energy driving your creative process</>
