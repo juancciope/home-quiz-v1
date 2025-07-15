@@ -474,7 +474,7 @@ const transformAIStepsToComponentFormat = (aiPathway) => {
     return {
       title: stepText.trim(),
       description: stepDetail ? stepDetail.trim() : 'Take action on this important step in your music career journey',
-      actions: [stepText.trim(), stepDetail ? stepDetail.trim() : 'Focus on implementing this step effectively'],
+      actions: generateActionsForStep(stepText, index, aiPathway),
       whyItMatters: stepDetail ? stepDetail.trim() : generateWhyItMatters(stepText, aiPathway),
       homeResources: selectResourcesForStep(resources, index)
     };
