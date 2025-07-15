@@ -1287,6 +1287,8 @@ const HOMECreatorFlow = () => {
   const [aiGeneratedPathway, setAiGeneratedPathway] = useState(null);
   const [fuzzyScores, setFuzzyScores] = useState(null);
   const [pathwayBlend, setPathwayBlend] = useState(null);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [processingStartTime, setProcessingStartTime] = useState(null);
 
   const currentCheckpoint = getCurrentCheckpoint(screen, questionIndex, currentStep);
   const showProgress = screen !== 'landing';
@@ -1349,8 +1351,18 @@ const HOMECreatorFlow = () => {
         const finalResponses = { ...responses, [questionId]: value };
         setScreen('transition');
         
-        // Simulate AI generation
+        // Start AI generation with real progress tracking
         setIsGenerating(true);
+        setLoadingProgress(0);
+        setProcessingStartTime(Date.now());
+        
+        // Progress simulation during actual processing
+        const progressInterval = setInterval(() => {
+          setLoadingProgress(prev => {
+            if (prev >= 90) return prev; // Don't go to 100% until actually done
+            return prev + Math.random() * 10; // Gradual progress increase
+          });
+        }, 1000);
         
         try {
           console.log('🤖 Calling AI endpoint with responses:', finalResponses);
@@ -1360,6 +1372,7 @@ const HOMECreatorFlow = () => {
           const calculatedBlend = getPathwayBlend(calculatedScores);
           setFuzzyScores(calculatedScores);
           setPathwayBlend(calculatedBlend);
+          setLoadingProgress(25); // First step complete
           
           // Call AI endpoint for personalized pathway
           const aiResponse = await fetch('/api/generate-pathway', {
@@ -1371,6 +1384,9 @@ const HOMECreatorFlow = () => {
               pathwayBlend: calculatedBlend
             })
           });
+          
+          clearInterval(progressInterval);
+          setLoadingProgress(100); // Complete
           
           if (aiResponse.ok) {
             const aiPathway = await aiResponse.json();
@@ -1409,6 +1425,8 @@ const HOMECreatorFlow = () => {
           }
         } catch (error) {
           console.error('❌ Error generating AI pathway:', error);
+          clearInterval(progressInterval);
+          setLoadingProgress(100);
           // Fallback to template
           const pathwayKey = determinePathway(finalResponses);
           setPathway(pathwayTemplates[pathwayKey]);
@@ -1514,26 +1532,28 @@ const HOMECreatorFlow = () => {
     }
     
     setIsProcessing(true);
+    setProgress(0);
     
-    // Simulate processing with progress
-    const duration = 3000;
-    const steps = 30;
-    const stepDuration = duration / steps;
+    // Realistic processing with variable timing
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 95) return prev;
+        return prev + Math.random() * 15; // More realistic progress
+      });
+    }, 200);
     
-    for (let i = 0; i <= steps; i++) {
+    // Simulate actual email processing time (1-2 seconds)
+    setTimeout(() => {
+      clearInterval(progressInterval);
+      setProgress(100);
+      setIsProcessing(false);
+      setShowResults(true);
+      setScreen('celebration');
+      setShowConfetti(true);
       setTimeout(() => {
-        setProgress((i / steps) * 100);
-        if (i === steps) {
-          setIsProcessing(false);
-          setShowResults(true);
-          setScreen('celebration');
-          setShowConfetti(true);
-          setTimeout(() => {
-            setShowConfetti(false);
-          }, 8000);
-        }
-      }, i * stepDuration);
-    }
+        setShowConfetti(false);
+      }, 8000);
+    }, 1000 + Math.random() * 1000); // 1-2 seconds
 
     // Actually submit
     try {
@@ -2180,24 +2200,28 @@ const HOMECreatorFlow = () => {
                       step={1}
                       label="Analyzing your creative priorities"
                       duration={1500}
+                      progress={loadingProgress}
                       icon={<Target className="w-5 h-5" />}
                     />
                     <AIProcessStep 
                       step={2}
                       label="Mapping your optimal career path"
                       duration={4000}
+                      progress={loadingProgress}
                       icon={<MapPin className="w-5 h-5" />}
                     />
                     <AIProcessStep 
                       step={3}
                       label="Identifying strategic next steps"
                       duration={6500}
+                      progress={loadingProgress}
                       icon={<ListChecks className="w-5 h-5" />}
                     />
                     <AIProcessStep 
                       step={4}
                       label="Crafting your personalized roadmap"
                       duration={9000}
+                      progress={loadingProgress}
                       icon={<Sparkles className="w-5 h-5" />}
                     />
                   </div>
@@ -2438,6 +2462,7 @@ const HOMECreatorFlow = () => {
                         step={1}
                         label="Finalizing your strategic roadmap"
                         duration={1000}
+                        progress={progress}
                         icon={<Check className="w-5 h-5" />}
                       />
                     </div>
@@ -2550,6 +2575,17 @@ const HOMECreatorFlow = () => {
                           </div>
                         </div>
                       ))}
+                    </div>
+                    
+                    {/* Disclaimer */}
+                    <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-4 mb-6">
+                      <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                        <span className="text-white font-medium">Important:</span> This tool is developed by{' '}
+                        <span className="text-[#1DD1A1]">homeformusic.org</span> as a creative guidance resource.
+                      </p>
+                      <p className="text-xs text-gray-400 leading-relaxed">
+                        No tool or person can promise or guarantee results in the music industry. Success depends on talent, dedication, market conditions, and many other factors beyond any assessment.
+                      </p>
                     </div>
                     
                     {/* Enhanced CTA Button */}
