@@ -465,19 +465,17 @@ const transformAIStepsToComponentFormat = (aiPathway) => {
   const steps = aiPathway.nextSteps || [];
   const resources = aiPathway.resources || [];
   
-  // Take first 4 steps and create detailed step objects
+  // Take first 4 steps and create detailed step objects using AI-generated content
   return steps.slice(0, 4).map((step, index) => {
     const stepObj = typeof step === 'object' ? step : { step: step };
     const stepText = stepObj.step;
-    const stepParts = stepText.split(':');
-    const title = stepParts[0] || stepText;
-    const description = stepObj.detail || stepParts[1] || 'Take action on this important step in your music career journey';
+    const stepDetail = stepObj.detail;
     
     return {
-      title: title.trim(),
-      description: description.trim(),
-      actions: generateActionsForStep(title, index, aiPathway),
-      whyItMatters: generateWhyItMatters(title, aiPathway),
+      title: stepText.trim(),
+      description: stepDetail ? stepDetail.trim() : 'Take action on this important step in your music career journey',
+      actions: [stepText.trim(), stepDetail ? stepDetail.trim() : 'Focus on implementing this step effectively'],
+      whyItMatters: stepDetail ? stepDetail.trim() : generateWhyItMatters(stepText, aiPathway),
       homeResources: selectResourcesForStep(resources, index)
     };
   });
