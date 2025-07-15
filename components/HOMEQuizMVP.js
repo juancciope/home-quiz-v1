@@ -2054,17 +2054,6 @@ const HOMECreatorFlow = () => {
                 </div>
               </div>
               
-              {/* Disclaimer */}
-              <div className="bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] backdrop-blur-xl rounded-2xl border border-white/10 p-4 mb-8 text-left">
-                <p className="text-xs text-gray-400 leading-relaxed mb-2">
-                  <span className="text-white font-medium">Important:</span> This tool is developed by{' '}
-                  <span className="text-[#1DD1A1]">homeformusic.app</span> as a creative guidance resource.
-                </p>
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  No tool or person can promise or guarantee results in the music industry. Success depends on talent, dedication, market conditions, and many other factors beyond any assessment.
-                </p>
-              </div>
-              
               {/* CTA Button */}
               <button
                 onClick={() => setScreen('assessment')}
