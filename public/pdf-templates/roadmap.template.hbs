@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background: #000000 !important; margin: 0; padding: 0;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,35 +13,46 @@
       box-sizing: border-box;
     }
     
-    html {
-      background: #000000;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+    html, body {
+      background: #000000 !important;
+      background-color: #000000 !important;
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      margin: 0 !important;
+      padding: 0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      width: 100%;
+      height: 100%;
     }
     
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #000000;
-      color: #ffffff;
-      line-height: 1.6;
-      padding: 0;
-      margin: 0;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-      min-height: 100vh;
+    @page {
+      background: #000000 !important;
+      margin: 0 !important;
+      size: A4;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     
     .page-container {
-      background: #000000;
+      background: #000000 !important;
+      background-color: #000000 !important;
       min-height: 100vh;
-      padding: 32px;
+      padding: 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
     
     .container {
-      max-width: 800px;
+      max-width: 750px;
       margin: 0 auto;
+      background: #000000 !important;
+      background-color: #000000 !important;
     }
     
+    /* Header */
     .header {
       text-align: center;
       margin-bottom: 48px;
@@ -50,6 +61,7 @@
     .logo {
       height: 32px;
       margin-bottom: 32px;
+      filter: brightness(1);
     }
     
     .badge {
@@ -57,40 +69,61 @@
       align-items: center;
       gap: 8px;
       padding: 12px 24px;
-      background: linear-gradient(135deg, rgba(29, 209, 161, 0.2) 0%, rgba(185, 19, 114, 0.2) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.3) 0%, rgba(185, 19, 114, 0.3) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 24px;
       margin-bottom: 24px;
       font-size: 14px;
       font-weight: 600;
     }
     
+    .sparkle {
+      color: #1DD1A1;
+      font-size: 16px;
+    }
+    
+    .sparkle-pink {
+      color: #B91372;
+      font-size: 16px;
+    }
+    
     .title {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
       margin-bottom: 16px;
+      color: #ffffff;
     }
     
     .description {
       color: #d1d5db;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.6;
       max-width: 600px;
       margin: 0 auto;
     }
     
+    /* Section Styling */
     .section {
       margin-bottom: 48px;
       page-break-inside: avoid;
     }
     
     .section-title {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 600;
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 8px;
+      color: #ffffff;
     }
     
+    .section-subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    /* Creative Profile */
     .profile-item {
       position: relative;
       margin-bottom: 20px;
@@ -181,21 +214,19 @@
       overflow: hidden;
     }
     
-    .progress-shimmer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      animation: shimmer 2s infinite;
+    .blue-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
     }
     
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
+    .pink-gradient {
+      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
     }
     
+    .green-gradient {
+      background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    }
+    
+    /* Multi-Pathway */
     .multi-pathway {
       margin-top: 24px;
       padding: 16px;
@@ -228,6 +259,7 @@
       font-weight: 500;
     }
     
+    /* Roadmap Steps */
     .roadmap-step {
       display: flex;
       gap: 16px;
@@ -249,6 +281,7 @@
       font-weight: 700;
       font-size: 16px;
       flex-shrink: 0;
+      color: #ffffff;
     }
     
     .step-content {
@@ -256,37 +289,59 @@
     }
     
     .step-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       margin-bottom: 8px;
+      color: #ffffff;
     }
     
     .step-detail {
       color: #d1d5db;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.5;
     }
     
+    /* Detailed Steps */
     .detail-section {
-      margin-bottom: 32px;
+      margin-bottom: 40px;
       page-break-inside: avoid;
     }
     
-    .detail-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 24px;
+    .detail-section-title {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
       margin-bottom: 24px;
+      color: #ffffff;
+    }
+    
+    .detail-box {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
     }
     
     .detail-box-title {
       font-size: 18px;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: #ffffff;
+    }
+    
+    .why-icon {
+      color: #B91372;
+      font-size: 20px;
+    }
+    
+    .action-icon {
+      color: #1DD1A1;
+      font-size: 20px;
     }
     
     .action-item {
@@ -298,9 +353,10 @@
     
     .action-check {
       color: #1DD1A1;
-      font-size: 18px;
+      font-size: 16px;
       flex-shrink: 0;
       margin-top: 2px;
+      font-weight: 700;
     }
     
     .action-text {
@@ -309,19 +365,20 @@
       line-height: 1.5;
     }
     
-    .home-connection {
-      background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%);
-      border: 1px solid rgba(29, 209, 161, 0.3);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 48px;
+    .home-resources-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #ffffff;
     }
     
-    .footer {
-      text-align: center;
-      color: #9ca3af;
-      font-size: 14px;
-      margin-top: 64px;
+    .home-logo {
+      height: 20px;
+      width: auto;
+      filter: brightness(1);
     }
     
     .resource-item {
@@ -330,176 +387,217 @@
       border-radius: 8px;
       margin-bottom: 8px;
       font-size: 14px;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* HOME Connection */
+    .home-connection {
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.1) 0%, rgba(185, 19, 114, 0.1) 100%);
+      border: 1px solid rgba(29, 209, 161, 0.3);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+    
+    .home-connection p {
+      color: #d1d5db;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+      margin-top: 40px;
+      padding-bottom: 40px;
+    }
+    
+    .footer p {
+      margin-bottom: 4px;
     }
     
     @media print {
-      body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      html, body {
+        background: #000000 !important;
+        background-color: #000000 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      
+      @page {
+        background: #000000 !important;
+        background-color: #000000 !important;
+        margin: 0 !important;
+      }
+      
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
       }
     }
   </style>
 </head>
-<body>
+<body style="background: #000000 !important; background-color: #000000 !important; margin: 0; padding: 0;">
   <div class="page-container">
     <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="logo">
-      <div class="badge">
-        ✨ Your Music Creator Roadmap ✨
+      <!-- Header -->
+      <div class="header">
+        <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="logo">
+        <div class="badge">
+          <span class="sparkle">✨</span>
+          <span>Your Music Creator Roadmap</span>
+          <span class="sparkle-pink">✨</span>
+        </div>
+        <h1 class="title">{{pathway.title}}</h1>
+        <p class="description">{{pathway.description}}</p>
       </div>
-      <h1 class="title">{{pathway.title}}</h1>
-      <p class="description">{{pathway.description}}</p>
-    </div>
-    
-    <!-- Creative Profile -->
-    <div class="section">
-      <h3 class="section-title" style="font-size: 18px; font-weight: 600;">Your Creative Profile</h3>
-      <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-bottom: 24px;">Multi-dimensional creator profile</p>
       
-      <div>
-        {{#each fuzzyScoresArray}}
-        <div class="profile-item">
-          <div class="profile-header">
-            <div class="profile-left">
-              <div class="profile-icon-container">
-                <span class="profile-icon">{{icon}}</span>
-              </div>
-              <div class="profile-info">
-                <span class="profile-name">{{name}}</span>
-                {{#if isPrimary}}
-                <span class="profile-label primary-label">🎯 Your Primary Path</span>
-                {{/if}}
-                {{#if isSecondary}}
-                <span class="profile-label secondary-label">⭐ Strong Secondary</span>
-                {{/if}}
-              </div>
-            </div>
-            <div class="profile-right">
-              <span class="percentage">{{percentage}}%</span>
-              <div class="fit-level">
-                {{#if (gt percentage 70)}}Excellent{{else if (gt percentage 50)}}Strong{{else}}Good{{/if}} fit
-              </div>
-            </div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: {{percentage}}%; background: {{color}};">
-              <div class="progress-shimmer"></div>
-            </div>
-          </div>
-        </div>
-        {{/each}}
+      <!-- Creative Profile -->
+      <div class="section">
+        <h3 class="section-title">Your Creative Profile</h3>
+        <p class="section-subtitle">Multi-dimensional creator profile</p>
         
-        <!-- Multi-Pathway Creator Section -->
-        {{#if pathwayBlend}}
-        {{#unless (eq pathwayBlend.type 'focused')}}
-        <div class="multi-pathway">
-          <h4 class="multi-pathway-title">🌟 Multi-Pathway Creator</h4>
-          <div class="multi-pathway-content">
-            {{#if (eq pathwayBlend.type 'blend')}}
-            <p><strong style="color: #ffffff;">Your creative DNA shows strong overlap</strong> between pathways. This means you naturally think across multiple revenue streams and artistic expressions.</p>
-            <p><span class="strategy-label">Strategy:</span> Focus 70% on your primary path while developing your secondary strengths. This creates unique opportunities that single-pathway creators miss.</p>
-            {{/if}}
-            {{#if (eq pathwayBlend.type 'hybrid')}}
-            <p><strong style="color: #ffffff;">You're a rare hybrid creator</strong> with nearly equal alignment across all pathways. This gives you extraordinary versatility in the music industry.</p>
-            <p><span class="strategy-label">Strategy:</span> Leverage your versatility to create multiple income streams and pivot quickly to market opportunities.</p>
-            {{/if}}
+        <div>
+          {{#each fuzzyScoresArray}}
+          <div class="profile-item">
+            <div class="profile-header">
+              <div class="profile-left">
+                <div class="profile-icon-container">
+                  <span class="profile-icon">{{icon}}</span>
+                </div>
+                <div class="profile-info">
+                  <span class="profile-name">{{name}}</span>
+                  {{#if isPrimary}}
+                  <span class="profile-label primary-label">🎯 Your Primary Path</span>
+                  {{/if}}
+                  {{#if isSecondary}}
+                  <span class="profile-label secondary-label">⭐ Strong Secondary</span>
+                  {{/if}}
+                </div>
+              </div>
+              <div class="profile-right">
+                <span class="percentage">{{percentage}}%</span>
+                <div class="fit-level">
+                  {{#if (gt percentage 70)}}Excellent{{else if (gt percentage 50)}}Strong{{else}}Good{{/if}} fit
+                </div>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill {{#if (eq key 'touring-performer')}}blue-gradient{{else if (eq key 'creative-artist')}}pink-gradient{{else}}green-gradient{{/if}}" style="width: {{percentage}}%;"></div>
+            </div>
+          </div>
+          {{/each}}
+          
+          <!-- Multi-Pathway Creator Section -->
+          {{#if pathwayBlend}}
+          {{#unless (eq pathwayBlend.type 'focused')}}
+          <div class="multi-pathway">
+            <h4 class="multi-pathway-title">🌟 Multi-Pathway Creator</h4>
+            <div class="multi-pathway-content">
+              {{#if (eq pathwayBlend.type 'blend')}}
+              <p><strong style="color: #ffffff;">Your creative DNA shows strong overlap</strong> between pathways. This means you naturally think across multiple revenue streams and artistic expressions.</p>
+              <p><span class="strategy-label">Strategy:</span> Focus 70% on your primary path while developing your secondary strengths. This creates unique opportunities that single-pathway creators miss.</p>
+              {{/if}}
+              {{#if (eq pathwayBlend.type 'hybrid')}}
+              <p><strong style="color: #ffffff;">You're a rare hybrid creator</strong> with nearly equal alignment across all pathways. This gives you extraordinary versatility in the music industry.</p>
+              <p><span class="strategy-label">Strategy:</span> Leverage your versatility to create multiple income streams and pivot quickly to market opportunities.</p>
+              {{/if}}
+            </div>
+          </div>
+          {{/unless}}
+          {{/if}}
+        </div>
+      </div>
+      
+      <!-- Strategic Roadmap -->
+      <div class="section">
+        <h2 class="section-title">Your Strategic Roadmap</h2>
+        {{#each pathway.nextSteps}}
+        {{#if (lt @index 4)}}
+        <div class="roadmap-step">
+          <div class="step-number">{{add @index 1}}</div>
+          <div class="step-content">
+            <h3 class="step-title">{{step}}</h3>
+            <p class="step-detail">{{detail}}</p>
           </div>
         </div>
-        {{/unless}}
         {{/if}}
+        {{/each}}
       </div>
-    </div>
-    
-    <!-- Strategic Roadmap -->
-    <div class="section">
-      <h2 class="section-title">Your Strategic Roadmap</h2>
+      
+      <!-- Detailed Action Steps -->
       {{#each pathway.nextSteps}}
-      <div class="roadmap-step">
-        <div class="step-number">{{@index1}}</div>
-        <div class="step-content">
-          <h3 class="step-title">{{step}}</h3>
-          <p class="step-detail">{{detail}}</p>
+      <div class="detail-section">
+        <h2 class="detail-section-title">Step {{add @index 1}}: {{step}}</h2>
+        
+        <div class="detail-box">
+          <h3 class="detail-box-title">
+            <span class="why-icon">💡</span>
+            Why This Matters
+          </h3>
+          <p style="color: #d1d5db; font-size: 14px; line-height: 1.5;">{{detail}}</p>
+        </div>
+        
+        <div class="detail-box">
+          <h3 class="detail-box-title">
+            <span class="action-icon">📋</span>
+            Your Action Items
+          </h3>
+          <div class="action-item">
+            <span class="action-check">✅</span>
+            <span class="action-text">{{step}}</span>
+          </div>
+          <div class="action-item">
+            <span class="action-check">✅</span>
+            <span class="action-text">Set specific, measurable goals for this step</span>
+          </div>
+          <div class="action-item">
+            <span class="action-check">✅</span>
+            <span class="action-text">Connect with others who have succeeded in this area</span>
+          </div>
+          <div class="action-item">
+            <span class="action-check">✅</span>
+            <span class="action-text">Document your progress and learnings</span>
+          </div>
+          <div class="action-item">
+            <span class="action-check">✅</span>
+            <span class="action-text">Track results and optimize your approach</span>
+          </div>
+        </div>
+        
+        <div class="detail-box">
+          <h3 class="home-resources-title">
+            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
+            HOME Resources
+          </h3>
+          {{#each ../pathway.resources}}
+          {{#if (lt @index 3)}}
+          <div class="resource-item">{{this}}</div>
+          {{/if}}
+          {{/each}}
         </div>
       </div>
       {{/each}}
-    </div>
-    
-    <!-- Detailed Action Steps -->
-    {{#each pathway.nextSteps}}
-    <div class="detail-section">
-      <h2 class="section-title">Step {{@index1}}: {{step}}</h2>
       
-      <div class="detail-box">
-        <h3 class="detail-box-title">
-          <span style="color: #B91372;">✨</span>
-          Why This Matters
-        </h3>
-        <p style="color: #d1d5db;">{{detail}}</p>
+      <!-- HOME Connection -->
+      {{#if pathway.homeConnection}}
+      <div class="section">
+        <h2 class="section-title">Your HOME Connection</h2>
+        <div class="home-connection">
+          <p>{{pathway.homeConnection}}</p>
+        </div>
       </div>
+      {{/if}}
       
-      <div class="detail-box">
-        <h3 class="detail-box-title">
-          <span style="color: #1DD1A1;">🎯</span>
-          Your Action Items
-        </h3>
-        <div class="action-item">
-          <span class="action-check">✓</span>
-          <span class="action-text">{{step}}</span>
-        </div>
-        <div class="action-item">
-          <span class="action-check">✓</span>
-          <span class="action-text">Set specific, measurable goals for this step</span>
-        </div>
-        <div class="action-item">
-          <span class="action-check">✓</span>
-          <span class="action-text">Connect with others who have succeeded in this area</span>
-        </div>
-        <div class="action-item">
-          <span class="action-check">✓</span>
-          <span class="action-text">Document your progress and learnings</span>
-        </div>
-        <div class="action-item">
-          <span class="action-check">✓</span>
-          <span class="action-text">Track results and optimize your approach</span>
-        </div>
+      <div class="footer">
+        <p>Generated on {{currentDate}}</p>
+        <p>homeformusic.app</p>
       </div>
-      
-      <div class="detail-box">
-        <h3 class="detail-box-title">
-          <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" style="height: 20px;">
-          HOME Resources
-        </h3>
-        {{#each ../pathway.resources}}
-        {{#if @first}}
-        <div class="resource-item">{{this}}</div>
-        {{/if}}
-        {{#if @second}}
-        <div class="resource-item">{{this}}</div>
-        {{/if}}
-        {{#if @third}}
-        <div class="resource-item">{{this}}</div>
-        {{/if}}
-        {{/each}}
-      </div>
-    </div>
-    {{/each}}
-    
-    <!-- HOME Connection -->
-    {{#if pathway.homeConnection}}
-    <div class="section">
-      <h2 class="section-title">Your HOME Connection</h2>
-      <div class="home-connection">
-        <p>{{pathway.homeConnection}}</p>
-      </div>
-    </div>
-    {{/if}}
-    
-    <div class="footer">
-      <p>Generated on {{currentDate}}</p>
-      <p style="margin-top: 8px;">homeformusic.app</p>
-    </div>
     </div>
   </div>
 </body>

@@ -78,6 +78,20 @@ export default async function handler(req, res) {
       return a === b;
     });
 
+    Handlebars.registerHelper('add', function(a, b) {
+      return a + b;
+    });
+
+    Handlebars.registerHelper('lt', function(a, b) {
+      return a < b;
+    });
+
+    Handlebars.registerHelper('unless', function(conditional, options) {
+      if (!conditional) {
+        return options.fn(this);
+      }
+    });
+
     // Prepare template data
     const templateData = {
       ...pathwayData,
@@ -119,6 +133,9 @@ export default async function handler(req, res) {
       timeout: 30000
     });
 
+    // Set media type to screen for proper background rendering
+    await page.emulateMediaType('screen');
+
     // Wait for any fonts to load
     await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -127,13 +144,16 @@ export default async function handler(req, res) {
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
-      preferCSSPageSize: true,
+      preferCSSPageSize: false,
+      omitBackground: false,
       margin: {
-        top: '20px',
-        bottom: '20px', 
-        left: '20px',
-        right: '20px'
-      }
+        top: '0px',
+        bottom: '0px', 
+        left: '0px',
+        right: '0px'
+      },
+      width: '210mm',
+      height: '297mm'
     });
 
     await browser.close();
