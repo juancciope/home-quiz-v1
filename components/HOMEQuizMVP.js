@@ -576,59 +576,75 @@ const selectResourcesForStep = (allResources, stepIndex) => {
 };
 
 // --- AI Process Step Component ---
-const AIProcessStep = ({ step, label, duration, icon }) => {
+const AIProcessStep = ({ step, label, duration, icon, progress = 0 }) => {
   const [status, setStatus] = useState('pending'); // pending, processing, complete
   
   useEffect(() => {
-    const timer1 = setTimeout(() => {
-      setStatus('processing');
-    }, duration);
-    
-    const timer2 = setTimeout(() => {
-      setStatus('complete');
-    }, duration + 2500); // Extended processing time for each step
-    
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, [duration]);
+    // If progress is provided, use it instead of fixed timers
+    if (progress > 0) {
+      const stepThreshold = (step - 1) * 25; // 0, 25, 50, 75 for steps 1-4
+      const nextThreshold = step * 25; // 25, 50, 75, 100 for steps 1-4
+      
+      if (progress >= nextThreshold) {
+        setStatus('complete');
+      } else if (progress >= stepThreshold) {
+        setStatus('processing');
+      } else {
+        setStatus('pending');
+      }
+    } else {
+      // Fallback to original timer-based approach
+      const timer1 = setTimeout(() => {
+        setStatus('processing');
+      }, duration);
+      
+      const timer2 = setTimeout(() => {
+        setStatus('complete');
+      }, duration + 2500);
+      
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
+    }
+  }, [duration, progress, step]);
   
   return (
-    <div className={`flex items-center gap-3 transition-all duration-500 ${
+    <div className={`flex items-center gap-4 transition-all duration-700 ${
       status === 'pending' ? 'opacity-40' : 'opacity-100'
     }`}>
       {/* Status Icon */}
       <div className="relative">
         {status === 'complete' ? (
-          <div className="w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center">
-            <Check className="w-4 h-4 text-white" />
+          <div className="w-10 h-10 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center shadow-lg">
+            <Check className="w-5 h-5 text-white" />
           </div>
         ) : status === 'processing' ? (
-          <div className="w-8 h-8 rounded-full border-2 border-white/20 flex items-center justify-center">
-            <div className="w-6 h-6 rounded-full border-2 border-t-[#1DD1A1] border-r-[#B91372] border-b-transparent border-l-transparent animate-spin" />
+          <div className="w-10 h-10 rounded-full border-2 border-white/20 flex items-center justify-center relative">
+            <div className="w-8 h-8 rounded-full border-2 border-t-[#1DD1A1] border-r-[#B91372] border-b-transparent border-l-transparent animate-spin" />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 animate-pulse" />
           </div>
         ) : (
-          <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
-            {React.cloneElement(icon, { className: 'w-4 h-4 text-white/40' })}
+          <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-white/5 backdrop-blur-sm">
+            {React.cloneElement(icon, { className: 'w-5 h-5 text-white/40' })}
           </div>
         )}
       </div>
       
       {/* Label */}
       <div className="flex-1">
-        <p className={`text-sm transition-colors duration-500 ${
+        <p className={`text-sm font-medium transition-colors duration-500 ${
           status === 'complete' ? 'text-white' : 
-          status === 'processing' ? 'text-white/80' : 
-          'text-white/40'
+          status === 'processing' ? 'text-white/90' : 
+          'text-white/50'
         }`}>
           {label}
         </p>
         
         {/* Progress line */}
         {status === 'processing' && (
-          <div className="mt-1 h-0.5 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] animate-gradient-x" />
+          <div className="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] animate-gradient-x shadow-sm" />
           </div>
         )}
       </div>
@@ -2117,25 +2133,26 @@ const HOMECreatorFlow = () => {
 
       {screen === 'transition' && (
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
-          <div className="max-w-md w-full">
+          <div className="max-w-lg w-full">
             <div className="animate-fadeIn">
-              {/* Main Content Container - matching unified style */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+              {/* Main Content Container - Enhanced styling */}
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-10 overflow-hidden shadow-2xl">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
-                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
-                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                  <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-3xl animate-pulse" />
+                  <div className="absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
                   
                   {/* Floating particles */}
-                  {[...Array(8)].map((_, i) => (
+                  {[...Array(12)].map((_, i) => (
                     <div
                       key={i}
-                      className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                      className="absolute w-1 h-1 bg-white/30 rounded-full"
                       style={{
                         left: `${Math.random() * 100}%`,
                         top: `${Math.random() * 100}%`,
-                        animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-                        animationDelay: `${Math.random() * 2}s`
+                        animation: `float ${4 + Math.random() * 3}s ease-in-out infinite`,
+                        animationDelay: `${Math.random() * 3}s`
                       }}
                     />
                   ))}
@@ -2144,40 +2161,44 @@ const HOMECreatorFlow = () => {
                 {/* Content */}
                 <div className="relative z-10 text-center">
                   {/* Header badge */}
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
-                    <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                  <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8 backdrop-blur-sm">
+                    <Sparkles className="w-5 h-5 text-[#1DD1A1] animate-pulse" />
                     <span className="text-sm font-semibold text-white">AI Analysis</span>
                   </div>
                   
-                  <h2 className="text-2xl font-bold mb-8 text-white">
+                  <h2 className="text-3xl font-bold mb-3 text-white bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
                     Crafting Your Strategic Roadmap
                   </h2>
                   
+                  <p className="text-gray-400 text-sm mb-10 leading-relaxed max-w-md mx-auto">
+                    Our AI is analyzing your responses to create a personalized pathway for your music career
+                  </p>
+                  
                   {/* Process Steps */}
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <AIProcessStep 
                       step={1}
                       label="Analyzing your creative priorities"
                       duration={1500}
-                      icon={<Target className="w-4 h-4" />}
+                      icon={<Target className="w-5 h-5" />}
                     />
                     <AIProcessStep 
                       step={2}
                       label="Mapping your optimal career path"
                       duration={4000}
-                      icon={<MapPin className="w-4 h-4" />}
+                      icon={<MapPin className="w-5 h-5" />}
                     />
                     <AIProcessStep 
                       step={3}
                       label="Identifying strategic next steps"
                       duration={6500}
-                      icon={<ListChecks className="w-4 h-4" />}
+                      icon={<ListChecks className="w-5 h-5" />}
                     />
                     <AIProcessStep 
                       step={4}
                       label="Crafting your personalized roadmap"
                       duration={9000}
-                      icon={<Sparkles className="w-4 h-4" />}
+                      icon={<Sparkles className="w-5 h-5" />}
                     />
                   </div>
                 </div>
@@ -2372,23 +2393,24 @@ const HOMECreatorFlow = () => {
               </div>
             ) : (
               <div className="animate-fadeIn">
-                {/* Main Content Container - matching unified style */}
-                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                {/* Main Content Container - Enhanced styling */}
+                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-10 overflow-hidden shadow-2xl">
                   {/* Animated background elements */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
-                    <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
+                    <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute bottom-0 right-0 w-48 h-48 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/10 to-[#B91372]/10 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
                     
                     {/* Floating particles */}
-                    {[...Array(6)].map((_, i) => (
+                    {[...Array(10)].map((_, i) => (
                       <div
                         key={i}
-                        className="absolute w-1 h-1 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full opacity-20"
+                        className="absolute w-1 h-1 bg-white/30 rounded-full"
                         style={{
                           left: `${Math.random() * 100}%`,
                           top: `${Math.random() * 100}%`,
-                          animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-                          animationDelay: `${Math.random() * 2}s`
+                          animation: `float ${4 + Math.random() * 3}s ease-in-out infinite`,
+                          animationDelay: `${Math.random() * 3}s`
                         }}
                       />
                     ))}
@@ -2397,22 +2419,26 @@ const HOMECreatorFlow = () => {
                   {/* Content */}
                   <div className="relative z-10 text-center">
                     {/* Header badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8">
-                      <Check className="w-4 h-4 text-[#1DD1A1]" />
+                    <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-8 backdrop-blur-sm">
+                      <Check className="w-5 h-5 text-[#1DD1A1] animate-pulse" />
                       <span className="text-sm font-semibold text-white">Final Processing</span>
                     </div>
                     
-                    <h2 className="text-2xl font-bold mb-8 text-white">
+                    <h2 className="text-3xl font-bold mb-3 text-white bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
                       Creating Your Strategic Roadmap
                     </h2>
                     
+                    <p className="text-gray-400 text-sm mb-10 leading-relaxed max-w-md mx-auto">
+                      Finalizing your personalized music career pathway
+                    </p>
+                    
                     {/* Process Steps - fast completion */}
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       <AIProcessStep 
                         step={1}
                         label="Finalizing your strategic roadmap"
                         duration={1000}
-                        icon={<Check className="w-4 h-4" />}
+                        icon={<Check className="w-5 h-5" />}
                       />
                     </div>
                   </div>
@@ -2679,6 +2705,17 @@ const HOMECreatorFlow = () => {
                         </div>
                       ))}
                     </div>
+                  </div>
+                  
+                  {/* Disclaimer */}
+                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-4 mb-6">
+                    <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                      <span className="text-white font-medium">Important:</span> This tool is developed by{' '}
+                      <span className="text-[#1DD1A1]">homeformusic.org</span> as a creative guidance resource.
+                    </p>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                      No tool or person can promise or guarantee results in the music industry. Success depends on talent, dedication, market conditions, and many other factors beyond any assessment.
+                    </p>
                   </div>
                   
                   {/* Navigation Button */}
