@@ -31,7 +31,7 @@
     @page {
       background: #000000 !important;
       margin: 0 !important;
-      size: A4;
+      size: A3;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
@@ -46,7 +46,7 @@
     }
     
     .container {
-      max-width: 750px;
+      max-width: 1000px;
       margin: 0 auto;
       background: #000000 !important;
       background-color: #000000 !important;
@@ -1305,18 +1305,6 @@
             <span class="action-check">✅</span>
             <span class="action-text">{{detail}}</span>
           </div>
-          <div class="action-item">
-            <span class="action-check">✅</span>
-            <span class="action-text">Set specific, measurable goals for this step</span>
-          </div>
-          <div class="action-item">
-            <span class="action-check">✅</span>
-            <span class="action-text">Connect with others who have succeeded in this area</span>
-          </div>
-          <div class="action-item">
-            <span class="action-check">✅</span>
-            <span class="action-text">Track results and optimize your approach</span>
-          </div>
         </div>
         
         <div class="detail-box">
@@ -1325,9 +1313,7 @@
             HOME Resources
           </h3>
           {{#each ../pathway.resources}}
-          {{#if (lt @index 3)}}
           <div class="resource-item">{{this}}</div>
-          {{/if}}
           {{/each}}
         </div>
       </div>
