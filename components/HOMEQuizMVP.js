@@ -1293,7 +1293,6 @@ const HOMECreatorFlow = () => {
   const [pathwayBlend, setPathwayBlend] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [processingStartTime, setProcessingStartTime] = useState(null);
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   const currentCheckpoint = getCurrentCheckpoint(screen, questionIndex, currentStep);
   const showProgress = screen !== 'landing';
@@ -1928,7 +1927,7 @@ const HOMECreatorFlow = () => {
                 {/* CTA Button - Prominent */}
                 <div className="mb-8 sm:mb-12">
                   <button
-                    onClick={() => setShowDisclaimer(true)}
+                    onClick={() => setScreen('intro')}
                     className="group relative inline-flex items-center gap-3 px-8 py-4 text-lg font-medium rounded-2xl transition-all duration-500 hover:scale-105 animate-scaleIn text-white overflow-hidden transform-gpu"
                     style={{ transformStyle: 'preserve-3d' }}
                   >
@@ -3019,61 +3018,6 @@ const HOMECreatorFlow = () => {
         </div>
       )}
       
-      {/* Disclaimer Popup Overlay */}
-      {showDisclaimer && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-6">
-          <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 max-w-md w-full animate-scaleIn">
-            {/* Animated background elements */}
-            <div className="absolute inset-0 overflow-hidden rounded-3xl">
-              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
-              <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B91372]/20 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}} />
-            </div>
-            
-            {/* Content */}
-            <div className="relative z-10">
-              {/* Header */}
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-4">
-                  <Target className="w-4 h-4 text-[#1DD1A1]" />
-                  <span className="text-sm font-semibold text-white">Important Notice</span>
-                </div>
-                <h2 className="text-xl font-bold text-white mb-4">Before We Begin</h2>
-              </div>
-              
-              {/* Disclaimer Text */}
-              <div className="bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] backdrop-blur-xl rounded-2xl border border-white/10 p-6 mb-6 text-left">
-                <p className="text-sm text-gray-300 leading-relaxed mb-4">
-                  <span className="text-white font-medium">Important:</span> This tool is developed by{' '}
-                  <span className="text-[#1DD1A1]">homeformusic.app</span> as a creative guidance resource.
-                </p>
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  No tool or person can promise or guarantee results in the music industry. Success depends on talent, dedication, market conditions, and many other factors beyond any assessment.
-                </p>
-              </div>
-              
-              {/* CTA Button */}
-              <button
-                onClick={() => {
-                  setShowDisclaimer(false);
-                  setScreen('intro');
-                }}
-                className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-[#B91372]/25 hover:scale-[1.02] text-white text-lg"
-              >
-                {/* Simple gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl" />
-                
-                {/* Shine effect */}
-                <div className="absolute inset-0 rounded-xl overflow-hidden">
-                  <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/20 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
-                </div>
-                
-                <span className="relative z-10">I Understand, Continue</span>
-                <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Smart Brand Footer - Adapts to page content length */}
       <BrandFooter currentScreen={screen} />
