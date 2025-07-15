@@ -136,6 +136,10 @@ export default async function handler(req, res) {
       }
     });
 
+    Handlebars.registerHelper('gte', function(a, b) {
+      return a >= b;
+    });
+
     // Prepare template data
     const templateData = {
       ...pathwayData,

@@ -216,13 +216,60 @@
     
     .archetype-primary {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(29, 209, 161, 0.3);
+      box-shadow: 0 0 20px rgba(29, 209, 161, 0.1);
+    }
+    
+    .archetype-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .rank-indicator {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      z-index: 10;
+    }
+    
+    .rank-primary {
+      background: linear-gradient(135deg, #1DD1A1, #B91372);
+    }
+    
+    .rank-secondary {
+      background: linear-gradient(135deg, #6b7280, #9ca3af);
     }
     
     .archetype-header {
       display: flex;
       align-items: flex-start;
+      justify-content: space-between;
       margin-bottom: 12px;
+    }
+    
+    .archetype-right {
+      text-align: right;
+    }
+    
+    .percentage {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+    
+    .percentage-primary {
+      color: #1DD1A1;
+    }
+    
+    .alignment-text {
+      font-size: 11px;
+      color: #9ca3af;
     }
     
     .archetype-left {
@@ -241,7 +288,7 @@
       flex-shrink: 0;
     }
     
-    .archetype-icon-container:nth-child(1) {
+    .archetype-card:nth-child(1) .archetype-icon-container {
       background: linear-gradient(135deg, #3b82f6, #9333ea);
     }
     
@@ -251,6 +298,10 @@
     
     .archetype-card:nth-child(3) .archetype-icon-container {
       background: linear-gradient(135deg, #10b981, #14b8a6);
+    }
+    
+    .icon-primary {
+      box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
     }
     
     .archetype-icon {
@@ -276,6 +327,10 @@
       font-size: 18px;
       font-weight: 700;
       color: #ffffff;
+    }
+    
+    .name-primary {
+      color: #1DD1A1;
     }
     
     .archetype-level-icon {
@@ -473,6 +528,53 @@
     .strategy-label {
       color: #1DD1A1;
       font-weight: 500;
+    }
+    
+    /* Summary Section */
+    .summary-section {
+      margin-top: 32px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(185, 19, 114, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+    
+    .summary-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    
+    .summary-content {
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.6;
+    }
+    
+    .summary-text {
+      margin-bottom: 12px;
+    }
+    
+    .summary-strategy {
+      color: #1DD1A1;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    
+    .summary-quote {
+      color: #B91372;
+      font-weight: 500;
+      text-align: center;
+      font-style: italic;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .highlight {
+      color: #ffffff;
+      font-weight: 600;
     }
     
     /* Roadmap Steps */
@@ -784,26 +886,36 @@
       
       <!-- Creative Profile -->
       <div class="section">
-        <h3 class="section-title">Your Creative Archetypes</h3>
-        <p class="section-subtitle">Your unique creator blueprint</p>
+        <h3 class="section-title">Your Creative Profile</h3>
+        <p class="section-subtitle">Ranked by alignment with your answers</p>
         
         <div>
           {{#each fuzzyScoresArray}}
-          <div class="archetype-card {{#if isFirst}}archetype-primary{{/if}}">
+          <div class="archetype-card {{#if isFirst}}archetype-primary{{/if}} {{#if @index}}{{#if (eq @index 1)}}archetype-secondary{{/if}}{{/if}}">
+            {{#if isFirst}}
+            <div class="rank-indicator rank-primary">#1 PRIMARY</div>
+            {{else if (eq @index 1)}}
+            <div class="rank-indicator rank-secondary">#2 SECONDARY</div>
+            {{/if}}
+            
             <div class="archetype-header">
               <div class="archetype-left">
-                <div class="archetype-icon-container">
+                <div class="archetype-icon-container {{#if isFirst}}icon-primary{{/if}}">
                   <span class="archetype-icon">{{icon}}</span>
                 </div>
                 <div class="archetype-info">
                   <div class="archetype-name-row">
-                    <span class="archetype-name">{{name}}</span>
+                    <span class="archetype-name {{#if isFirst}}name-primary{{/if}}">{{name}}</span>
                     <span class="archetype-level-icon">{{archetypeIcon}}</span>
                   </div>
                   <span class="archetype-level {{#if (eq archetypeLevel 'Core')}}level-core{{else if (eq archetypeLevel 'Engine')}}level-engine{{else if (eq archetypeLevel 'Emerging')}}level-emerging{{else}}level-hidden{{/if}}">
                     {{archetypeLevel}} • {{archetypeDescription}}
                   </span>
                 </div>
+              </div>
+              <div class="archetype-right">
+                <div class="percentage {{#if isFirst}}percentage-primary{{/if}}">{{percentage}}%</div>
+                <div class="alignment-text">alignment</div>
               </div>
             </div>
             
@@ -842,6 +954,52 @@
           </div>
           {{/unless}}
           {{/if}}
+          
+          <!-- Summary Section -->
+          <div class="summary-section">
+            <h4 class="summary-title">🧭 Summary</h4>
+            <div class="summary-content">
+              <p class="summary-text">
+                <span class="highlight">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at {{fuzzyScoresArray.[0].percentage}}% alignment. 
+                {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core')}}
+                Your {{fuzzyScoresArray.[0].name}} identity is crystal clear and drives your creative decisions.
+                {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Engine')}}
+                {{fuzzyScoresArray.[0].name}} powers your creativity, while you're still exploring other facets of your artistic identity.
+                {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Emerging')}}
+                You're growing into your {{fuzzyScoresArray.[0].name}} strengths, with room to develop this pathway further.
+                {{else}}
+                Your {{fuzzyScoresArray.[0].name}} traits represent untapped potential waiting to be unlocked.
+                {{/if}}
+              </p>
+              
+              {{#if fuzzyScoresArray.[1]}}
+              {{#if (gte fuzzyScoresArray.[1].percentage 55)}}
+              <p class="summary-text">
+                Your secondary <span class="highlight">{{fuzzyScoresArray.[1].name}}</span> traits ({{fuzzyScoresArray.[1].percentage}}%) complement your primary path, creating unique creative opportunities.
+              </p>
+              {{/if}}
+              {{/if}}
+              
+              <p class="summary-strategy">
+                Strategy: 
+                {{#if pathwayBlend}}
+                {{#if (eq pathwayBlend.type 'hybrid')}}
+                Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.
+                {{else if (eq pathwayBlend.type 'blend')}}
+                Focus 70% on your {{fuzzyScoresArray.[0].name}} strengths while developing your {{fuzzyScoresArray.[1].name}} skills as a strategic advantage.
+                {{else}}
+                Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
+                {{/if}}
+                {{else}}
+                Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
+                {{/if}}
+              </p>
+              
+              <p class="summary-quote">
+                You're not trying to fit into systems — you're creating better ones.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       
