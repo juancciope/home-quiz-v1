@@ -872,64 +872,64 @@
     
     .products-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-bottom: 32px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
     }
     
     .product-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px;
       text-align: center;
     }
     
     .product-icon {
-      font-size: 32px;
-      margin-bottom: 12px;
+      font-size: 24px;
+      margin-bottom: 8px;
       display: block;
       font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', sans-serif;
     }
     
     .product-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    
+    .product-description {
+      font-size: 11px;
+      color: #d1d5db;
+      line-height: 1.4;
+    }
+    
+    /* How to Connect Section */
+    .connect-section {
+      background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 16px;
+    }
+    
+    .connect-title {
       font-size: 16px;
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 8px;
     }
     
-    .product-description {
-      font-size: 13px;
-      color: #d1d5db;
-      line-height: 1.5;
-    }
-    
-    /* How to Connect Section */
-    .connect-section {
-      background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      margin-top: 24px;
-    }
-    
-    .connect-title {
-      font-size: 18px;
-      font-weight: 700;
+    .connect-description {
+      font-size: 12px;
       color: #ffffff;
+      line-height: 1.4;
       margin-bottom: 12px;
     }
     
-    .connect-description {
-      font-size: 14px;
-      color: #ffffff;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    
     .connect-info {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: #ffffff;
     }
@@ -1044,6 +1044,17 @@
               </p>
             </div>
           </div>
+          
+          <!-- Focus Section -->
+          <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
+            <h4 style="font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 16px;">Focus Changes Everything</h4>
+            <blockquote style="color: #1DD1A1; font-size: 16px; font-style: italic; margin: 0 0 16px 0; font-weight: 500;">
+              "Be like a postage stamp - stick to one thing until you get there"
+            </blockquote>
+            <p style="color: #d1d5db; font-size: 14px; line-height: 1.6; margin: 0;">
+              While you may identify with multiple paths, <strong style="color: #1DD1A1;">focus creates breakthroughs</strong>. This roadmap reveals your highest-impact priority and the path that will <strong style="color: #ffffff;">accelerate your music career</strong>.
+            </p>
+          </div>
         </div>
       </div>
       
@@ -1122,6 +1133,8 @@
             </div>
           </div>
           
+          <h2 style="font-size: 24px; font-weight: 700; color: #ffffff; text-align: center; margin-bottom: 24px;">Your Blueprint for Breakthrough Success</h2>
+          
           <div style="text-align: center; margin-bottom: 32px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
             <blockquote style="color: #1DD1A1; font-size: 16px; font-style: italic; margin: 0 0 12px 0; font-weight: 500;">
               "Be like a postage stamp - stick to one thing until you get there"
@@ -1154,7 +1167,7 @@
       
       <!-- PAGES 4-7: Detailed Action Steps (Do not change anything) -->
       {{#each pathway.nextSteps}}
-      <div class="detail-section">
+      <div class="detail-section" style="padding: 60px 40px 80px 40px; page-break-before: always; margin: 0;">
         <!-- Page Header for each step -->
         <div style="text-align: center; margin-bottom: 24px;">
           <div class="page-header-badge">
@@ -1232,31 +1245,41 @@
           </h2>
           
           <!-- THE WHY -->
-          <div style="text-align: center; margin-bottom: 40px; padding: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
-            <p style="color: #d1d5db; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">{{pathway.homeConnection}}</p>
-            <p style="color: #ffffff; font-size: 16px; font-weight: 600;">You now have your personalized roadmap. The question is: will you execute it alone, or accelerate your journey with the right community and resources?</p>
+          <div style="text-align: center; margin-bottom: 24px; padding: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;">
+            <p style="color: #d1d5db; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">
+              {{#if (eq fuzzyScoresArray.[0].key 'touring-performer')}}
+              As a {{fuzzyScoresArray.[0].name}}, you need stages to practice, equipment to perfect your sound, and connections to book your next gig.
+              {{else if (eq fuzzyScoresArray.[0].key 'creative-artist')}}
+              As a {{fuzzyScoresArray.[0].name}}, you need creative spaces, content creation tools, and a community that understands your artistic vision.
+              {{else if (eq fuzzyScoresArray.[0].key 'writer-producer')}}
+              As a {{fuzzyScoresArray.[0].name}}, you need professional studios, industry connections, and collaborators who share your creative standards.
+              {{else}}
+              As a music creator, you need the right environment, tools, and community to turn your potential into success.
+              {{/if}}
+            </p>
+            <p style="color: #ffffff; font-size: 14px; font-weight: 600;">Will you execute your plan alone, or accelerate your journey with the right support?</p>
           </div>
           
           <!-- THE WHAT - Main Products -->
           <div class="main-products">
-            <h3 class="main-products-title">What We Offer</h3>
+            <h3 class="main-products-title" style="font-size: 18px; margin-bottom: 16px;">What We Offer</h3>
             <div class="products-grid">
               <div class="product-card">
                 <span class="product-icon">🤝</span>
                 <h4 class="product-title">Online Community</h4>
-                <p class="product-description">Connect with 1,000+ ambitious music creators, attend weekly virtual events, workshops, and learn from successful artists in our supportive community platform.</p>
+                <p class="product-description">1,000+ creators, weekly events, workshops, and mentorship opportunities</p>
               </div>
               
               <div class="product-card">
                 <span class="product-icon">🎤</span>
                 <h4 class="product-title">Studio/Rehearsal Space</h4>
-                <p class="product-description">Access our 250-capacity performance venue, professional recording studios with 24/7 availability, and rehearsal spaces equipped with industry-standard equipment.</p>
+                <p class="product-description">250-capacity venue, recording studios, and rehearsal spaces with 24/7 access</p>
               </div>
               
               <div class="product-card">
                 <span class="product-icon">📈</span>
                 <h4 class="product-title">Expert Guidance</h4>
-                <p class="product-description">Get mentorship from successful creators, attend masterclasses, receive personalized strategy sessions, and access our network of industry professionals.</p>
+                <p class="product-description">Industry mentorship, masterclasses, and personalized strategy sessions</p>
               </div>
             </div>
           </div>
@@ -1265,11 +1288,10 @@
           <div class="connect-section">
             <h3 class="connect-title">Ready to Accelerate Your Journey?</h3>
             <p class="connect-description">
-              Join HOME's community of ambitious music creators. Start with our free community platform or book a strategy session to explore our premium facilities and mentorship programs.
+              Join HOME's community of ambitious music creators. Start with our free platform or book a strategy session.
             </p>
             <div class="connect-info">
-              🌐 Visit: homeformusic.app<br>
-              📧 Email: hello@homeformusic.app
+              🌐 homeformusic.app • 📧 hello@homeformusic.app
             </div>
           </div>
         </div>
