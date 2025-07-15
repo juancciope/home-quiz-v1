@@ -1360,16 +1360,16 @@ const HOMECreatorFlow = () => {
         let currentStep = 0;
         const progressInterval = setInterval(() => {
           setLoadingProgress(prev => {
-            if (prev >= 90) return prev; // Don't go to 100% until actually done
+            if (prev >= 95) return prev; // Don't go to 100% until actually done
             
             // Gradual progress increase with step-based milestones
-            const targetProgress = Math.min(currentStep * 25 + Math.random() * 20, 90);
+            const targetProgress = Math.min(currentStep * 25 + Math.random() * 15, 95);
             if (prev < targetProgress) {
-              return Math.min(prev + 3 + Math.random() * 5, targetProgress);
+              return Math.min(prev + 2 + Math.random() * 3, targetProgress);
             }
             return prev;
           });
-        }, 800);
+        }, 600);
         
         try {
           console.log('🤖 Calling AI endpoint with responses:', finalResponses);
@@ -1380,15 +1380,11 @@ const HOMECreatorFlow = () => {
           setFuzzyScores(calculatedScores);
           setPathwayBlend(calculatedBlend);
           
-          // Allow first step to complete gradually
-          setTimeout(() => {
-            currentStep = 1;
-          }, 1500);
-          
-          // Start second step after slight delay
-          setTimeout(() => {
-            currentStep = 2;
-          }, 2800);
+          // Progressive step completion
+          setTimeout(() => { currentStep = 1; }, 1200);
+          setTimeout(() => { currentStep = 2; }, 2500);
+          setTimeout(() => { currentStep = 3; }, 4000);
+          setTimeout(() => { currentStep = 4; }, 5500);
           
           // Call AI endpoint for personalized pathway
           const aiResponse = await fetch('/api/generate-pathway', {
@@ -1401,18 +1397,11 @@ const HOMECreatorFlow = () => {
             })
           });
           
-          // Third step - AI processing
+          // Ensure step 4 has time to process, then complete
           setTimeout(() => {
-            currentStep = 3;
-          }, 4200);
-          
-          // Fourth step - finalizing roadmap
-          setTimeout(() => {
-            currentStep = 4;
-          }, 6000);
-          
-          clearInterval(progressInterval);
-          setLoadingProgress(100); // Complete
+            clearInterval(progressInterval);
+            setLoadingProgress(100);
+          }, Math.max(7000, Date.now() - processingStartTime + 2000));
           
           if (aiResponse.ok) {
             const aiPathway = await aiResponse.json();
@@ -1451,13 +1440,16 @@ const HOMECreatorFlow = () => {
           }
         } catch (error) {
           console.error('❌ Error generating AI pathway:', error);
-          clearInterval(progressInterval);
           
           // Complete remaining steps quickly on error
           setTimeout(() => {
             currentStep = 4;
-            setLoadingProgress(100);
           }, 1000);
+          
+          setTimeout(() => {
+            clearInterval(progressInterval);
+            setLoadingProgress(100);
+          }, 2500);
           
           // Fallback to template
           const pathwayKey = determinePathway(finalResponses);
