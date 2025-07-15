@@ -1963,7 +1963,7 @@ const HOMECreatorFlow = () => {
                   </button>
                   
                   <p className="text-sm text-gray-400 mt-4 animate-fadeIn">
-                    2-minute assessment • instant roadmap
+                    Designed by Artists for Artists
                   </p>
                 </div>
                 
