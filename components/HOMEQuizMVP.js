@@ -913,10 +913,9 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
   
   // Map scores to archetype levels
   const getArchetypeLevel = (percentage) => {
-    if (percentage >= 85) return { level: 'Core', icon: '🔥', description: 'This is your essence' };
-    if (percentage >= 70) return { level: 'Engine', icon: '⚡', description: 'Powers your creativity' };
-    if (percentage >= 55) return { level: 'Emerging', icon: '🌱', description: 'Growing stronger' };
-    return { level: 'Hidden Power', icon: '💫', description: 'Untapped potential' };
+    if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '' };
+    if (percentage >= 55) return { level: 'Potential Distraction', icon: '⚡', description: '' };
+    return { level: 'Noise', icon: '💫', description: '' };
   };
   
   const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
@@ -973,12 +972,11 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
                         <span className="text-sm">{archetypeLevel.icon}</span>
                       </div>
                       <span className={`text-xs font-medium ${
-                        archetypeLevel.level === 'Core' ? 'text-orange-400' :
-                        archetypeLevel.level === 'Engine' ? 'text-yellow-400' :
-                        archetypeLevel.level === 'Emerging' ? 'text-green-400' :
+                        archetypeLevel.level === 'Core Focus' ? 'text-orange-400' :
+                        archetypeLevel.level === 'Potential Distraction' ? 'text-yellow-400' :
                         'text-purple-400'
                       }`}>
-                        {archetypeLevel.level} • {archetypeLevel.description}
+                        {archetypeLevel.level}
                       </span>
                     </div>
                   </div>
@@ -1032,14 +1030,12 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
             
             // Generate insights based on fuzzy logic alignment
             const generateInsights = () => {
-              if (primaryLevel.level === 'Core') {
-                return `Your ${primaryInfo.name} identity is crystal clear and drives your creative decisions.`;
-              } else if (primaryLevel.level === 'Engine') {
-                return `${primaryInfo.name} powers your creativity, while you're still exploring other facets of your artistic identity.`;
-              } else if (primaryLevel.level === 'Emerging') {
-                return `You're growing into your ${primaryInfo.name} strengths, with room to develop this pathway further.`;
+              if (primaryLevel.level === 'Core Focus') {
+                return `Your ${primaryInfo.name} identity is your Core Focus and drives your creative decisions.`;
+              } else if (primaryLevel.level === 'Potential Distraction') {
+                return `${primaryInfo.name} could be a Potential Distraction from your main creative path.`;
               } else {
-                return `Your ${primaryInfo.name} traits represent untapped potential waiting to be unlocked.`;
+                return `Your ${primaryInfo.name} traits are currently Noise in your creative journey.`;
               }
             };
             
@@ -2458,10 +2454,9 @@ const HOMECreatorFlow = () => {
                         
                         {(() => {
                           const getArchetypeLevel = (percentage) => {
-                            if (percentage >= 85) return { level: 'Core', icon: '🔥', description: 'This is your essence', color: '#fb923c' };
-                            if (percentage >= 70) return { level: 'Engine', icon: '⚡', description: 'Powers your creativity', color: '#facc15' };
-                            if (percentage >= 55) return { level: 'Emerging', icon: '🌱', description: 'Growing stronger', color: '#4ade80' };
-                            return { level: 'Hidden Power', icon: '💫', description: 'Untapped potential', color: '#c084fc' };
+                            if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '', color: '#fb923c' };
+                            if (percentage >= 55) return { level: 'Potential Distraction', icon: '⚡', description: '', color: '#facc15' };
+                            return { level: 'Noise', icon: '💫', description: '', color: '#c084fc' };
                           };
                           
                           const topScore = Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][1];
