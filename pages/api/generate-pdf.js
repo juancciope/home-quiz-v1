@@ -35,13 +35,33 @@ export default async function handler(req, res) {
       });
     }
 
+    // Detect selected pathways for conditional person messaging
+    const detectSelectedPathways = (responses) => {
+      const touringAnswers = ['stage-energy', 'performing', 'touring-artist', 'live-performer'];
+      const creativeAnswers = ['creative-expression', 'creating-content', 'creative-brand', 'online-audience'];
+      const producerAnswers = ['behind-scenes', 'studio-work', 'in-demand-producer', 'songwriter'];
+      
+      const hasSelectedTouring = Object.values(responses).some(answer => touringAnswers.includes(answer));
+      const hasSelectedCreative = Object.values(responses).some(answer => creativeAnswers.includes(answer));
+      const hasSelectedProducer = Object.values(responses).some(answer => producerAnswers.includes(answer));
+      
+      return {
+        'touring-performer': hasSelectedTouring,
+        'creative-artist': hasSelectedCreative,
+        'writer-producer': hasSelectedProducer
+      };
+    };
+
     // Prepare data for template
+    const selectedPathways = detectSelectedPathways(pathwayData.responses || {});
     const pathwayInfo = {
       'touring-performer': { 
         name: 'Touring Performer', 
         icon: '🎤', 
         color: '#3b82f6',
-        description: 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.',
+        description: selectedPathways['touring-performer'] 
+          ? 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.'
+          : 'Touring Performers live for the stage. The energy of a live audience fuels their soul. They build their legacy one performance at a time.',
         traits: 'Stage presence, audience connection, tour resilience, live energy',
         shadow: 'Burnout from constant travel, missing stability, addiction to applause'
       },
@@ -49,7 +69,9 @@ export default async function handler(req, res) {
         name: 'Creative Artist', 
         icon: '🎨', 
         color: '#ec4899',
-        description: 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.',
+        description: selectedPathways['creative-artist']
+          ? 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.'
+          : 'Creative Artists are driven to make things — music that moves, content that connects. They don\'t just imagine — they build and share.',
         traits: 'Creative flow, artistic vision, digital presence, authenticity',
         shadow: 'Over-identifying with your work, creative blocks, comparison trap'
       },
@@ -57,7 +79,9 @@ export default async function handler(req, res) {
         name: 'Writer/Producer', 
         icon: '🎹', 
         color: '#10b981',
-        description: 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.',
+        description: selectedPathways['writer-producer']
+          ? 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.'
+          : 'Writer-Producers are the builders behind the scenes. They craft the sonic landscapes where others perform. Their art is in the details.',
         traits: 'Technical mastery, sonic vision, collaboration, patience',
         shadow: 'Perfectionism, staying too hidden, undervaluing your contribution'
       }

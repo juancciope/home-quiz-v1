@@ -460,6 +460,23 @@ const getCurrentCheckpoint = (screen, questionIndex, currentStep) => {
   return 0;
 };
 
+// Detect which pathways user selected based on their answers
+const detectSelectedPathways = (responses) => {
+  const touringAnswers = ['stage-energy', 'performing', 'touring-artist', 'live-performer'];
+  const creativeAnswers = ['creative-expression', 'creating-content', 'creative-brand', 'online-audience'];
+  const producerAnswers = ['behind-scenes', 'studio-work', 'in-demand-producer', 'songwriter'];
+  
+  const hasSelectedTouring = Object.values(responses).some(answer => touringAnswers.includes(answer));
+  const hasSelectedCreative = Object.values(responses).some(answer => creativeAnswers.includes(answer));
+  const hasSelectedProducer = Object.values(responses).some(answer => producerAnswers.includes(answer));
+  
+  return {
+    'touring-performer': hasSelectedTouring,
+    'creative-artist': hasSelectedCreative,
+    'writer-producer': hasSelectedProducer
+  };
+};
+
 // Transform AI steps to component format
 const transformAIStepsToComponentFormat = (aiPathway) => {
   const steps = aiPathway.nextSteps || [];
@@ -880,14 +897,18 @@ const FuzzyScorePreview = ({ scores, blend }) => {
 };
 
 // --- Full Fuzzy Score Display Component ---
-const FuzzyScoreDisplay = ({ scores, blend }) => {
+const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
+  const selectedPathways = detectSelectedPathways(responses);
+  
   const pathwayInfo = {
     'touring-performer': { 
       name: 'Touring Performer', 
       icon: '🎤', 
       color: 'from-blue-500 to-purple-600', 
       baseColor: '#3B82F6',
-      description: 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.',
+      description: selectedPathways['touring-performer'] 
+        ? 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.'
+        : 'Touring Performers live for the stage. The energy of a live audience fuels their soul. They build their legacy one performance at a time.',
       traits: 'Stage presence, audience connection, tour resilience, live energy',
       shadow: 'Burnout from constant travel, missing stability, addiction to applause'
     },
@@ -896,7 +917,9 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
       icon: '🎨', 
       color: 'from-pink-500 to-orange-500', 
       baseColor: '#EC4899',
-      description: 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.',
+      description: selectedPathways['creative-artist']
+        ? 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.'
+        : 'Creative Artists are driven to make things — music that moves, content that connects. They don\'t just imagine — they build and share.',
       traits: 'Creative flow, artistic vision, digital presence, authenticity',
       shadow: 'Over-identifying with your work, creative blocks, comparison trap'
     },
@@ -905,7 +928,9 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
       icon: '🎹', 
       color: 'from-green-500 to-teal-500', 
       baseColor: '#10B981',
-      description: 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.',
+      description: selectedPathways['writer-producer']
+        ? 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.'
+        : 'Writer-Producers are the builders behind the scenes. They craft the sonic landscapes where others perform. Their art is in the details.',
       traits: 'Technical mastery, sonic vision, collaboration, patience',
       shadow: 'Perfectionism, staying too hidden, undervaluing your contribution'
     }
@@ -1030,12 +1055,21 @@ const FuzzyScoreDisplay = ({ scores, blend }) => {
             
             // Generate insights based on fuzzy logic alignment
             const generateInsights = () => {
+              const pathwayKey = primaryArchetype[0];
+              const isSelected = selectedPathways[pathwayKey];
+              
               if (primaryLevel.level === 'Core Focus') {
-                return `Your ${primaryInfo.name} identity is your Core Focus and drives your creative decisions.`;
+                return isSelected 
+                  ? `Your ${primaryInfo.name} identity is your Core Focus and drives your creative decisions.`
+                  : `The ${primaryInfo.name} identity represents a Core Focus that drives creative decisions.`;
               } else if (primaryLevel.level === 'Potential Distraction') {
-                return `${primaryInfo.name} could be a Potential Distraction from your main creative path.`;
+                return isSelected
+                  ? `${primaryInfo.name} could be a Potential Distraction from your main creative path.`
+                  : `${primaryInfo.name} could be a Potential Distraction from one's main creative path.`;
               } else {
-                return `Your ${primaryInfo.name} traits are currently Noise in your creative journey.`;
+                return isSelected
+                  ? `Your ${primaryInfo.name} traits are currently Noise in your creative journey.`
+                  : `${primaryInfo.name} traits are currently Noise in the creative journey.`;
               }
             };
             
@@ -2751,7 +2785,7 @@ const HOMECreatorFlow = () => {
                   {/* Full Fuzzy Score Display */}
                   {fuzzyScores && (
                     <div className="mb-8">
-                      <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} />
+                      <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} responses={responses} />
                     </div>
                   )}
                   

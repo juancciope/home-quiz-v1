@@ -163,6 +163,22 @@ Always respond with valid JSON in this exact format:
 - "Your balanced alignment across pathways means you can pursue multiple revenue streams"
 - Recommend resources that serve multiple interests
 
+## CONDITIONAL PERSON MESSAGING
+**CRITICAL**: Based on the user's quiz responses, use conditional person messaging:
+
+**Second Person ("you/your")**: Use when the user selected answers that align with a specific pathway:
+- Touring Performer: If they selected stage-energy, performing, touring-artist, or live-performer
+- Creative Artist: If they selected creative-expression, creating-content, creative-brand, or online-audience  
+- Writer-Producer: If they selected behind-scenes, studio-work, in-demand-producer, or songwriter
+
+**Third Person ("they/their")**: Use when the user did NOT select answers for that pathway
+
+Example:
+- If user selected "stage-energy": "You live for the stage energy..." (second person)
+- If user did NOT select touring answers: "Touring Performers live for the stage energy..." (third person)
+
+This creates more personal, relevant guidance for pathways they showed interest in during the quiz.
+
 ## TONE & STYLE GUIDELINES
 
 **personalizedDescription**: 
@@ -170,7 +186,8 @@ Always respond with valid JSON in this exact format:
 - Reference their exact motivation, success definition (40% weight), AND percentage alignments with archetype levels
 - For blend/hybrid: celebrate their multi-faceted nature using archetype language
 - Be encouraging but realistic about the work required
-- Use archetype level terminology (Core/Engine/Emerging/Hidden Power) to validate their identity
+- Use archetype level terminology (Core Focus/Potential Distraction/Noise) to validate their identity
+- Apply conditional person messaging based on their pathway selections
 - NO mention of HOME or any specific company
 
 **customNextSteps**: 
