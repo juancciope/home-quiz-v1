@@ -62,8 +62,8 @@ export default async function handler(req, res) {
         description: selectedPathways['touring-performer'] 
           ? 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.'
           : 'Touring Performers live for the stage. The energy of a live audience fuels their soul. They build their legacy one performance at a time.',
-        traits: 'Stage presence, audience connection, tour resilience, live energy',
-        shadow: 'Burnout from constant travel, missing stability, addiction to applause'
+        focusAreas: 'Stage presence, audience connection, live performance skills, touring strategy',
+        distractionRisk: 'Over-focusing on studio perfectionism, social media obsession, avoiding live venues'
       },
       'creative-artist': { 
         name: 'Creative Artist', 
@@ -72,8 +72,8 @@ export default async function handler(req, res) {
         description: selectedPathways['creative-artist']
           ? 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.'
           : 'Creative Artists are driven to make things — music that moves, content that connects. They don\'t just imagine — they build and share.',
-        traits: 'Creative flow, artistic vision, digital presence, authenticity',
-        shadow: 'Over-identifying with your work, creative blocks, comparison trap'
+        focusAreas: 'Brand development, content creation, digital marketing, revenue diversification',
+        distractionRisk: 'Chasing every trend, over-producing content, neglecting core artistic development'
       },
       'writer-producer': { 
         name: 'Writer/Producer', 
@@ -82,8 +82,8 @@ export default async function handler(req, res) {
         description: selectedPathways['writer-producer']
           ? 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.'
           : 'Writer-Producers are the builders behind the scenes. They craft the sonic landscapes where others perform. Their art is in the details.',
-        traits: 'Technical mastery, sonic vision, collaboration, patience',
-        shadow: 'Perfectionism, staying too hidden, undervaluing your contribution'
+        focusAreas: 'Production skills, collaboration network, business development, royalty optimization',
+        distractionRisk: 'Solo artist aspirations, live performance pressure, avoiding business relationships'
       }
     };
     

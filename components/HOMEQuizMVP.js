@@ -90,8 +90,8 @@ const pathwayTemplates = {
     title: 'The Touring Performer Path',
     icon: '🎤',
     color: 'from-[#1DD1A1] to-[#B91372]',
-    description: 'Your energy comes alive on stage. You\'re built for the big venues, the tours, and creating unforgettable live experiences.',
-    baseDescription: 'Your energy comes alive on stage. You\'re built for the big venues, the tours, and creating unforgettable live experiences.',
+    description: 'Your priority is live performance and direct audience connection. Focus here to build a sustainable touring career with devoted fans.',
+    baseDescription: 'Your priority is live performance and direct audience connection. Focus here to build a sustainable touring career with devoted fans.',
     homeConnection: 'HOME\'s 250-capacity venue and rehearsal facilities provide the perfect environment to develop your live show.',
     planPreview: [
       'Master Your Stage Presence',
@@ -174,8 +174,8 @@ const pathwayTemplates = {
     title: 'The Creative Artist Path', 
     icon: '🎨',
     color: 'from-[#1DD1A1] to-[#B91372]',
-    description: 'You\'re driven by authentic self-expression and building multiple creative revenue streams through your artistry.',
-    baseDescription: 'You\'re driven by authentic self-expression and building multiple creative revenue streams through your artistry.',
+    description: 'Your priority is creative expression and building diverse revenue streams. Focus here to develop sustainable income through your artistry.',
+    baseDescription: 'Your priority is creative expression and building diverse revenue streams. Focus here to develop sustainable income through your artistry.',
     homeConnection: 'HOME\'s content creation facilities and collaborative artist community provide the tools to build your creative empire.',
     planPreview: [
       'Define Your Artist Brand',
@@ -258,8 +258,8 @@ const pathwayTemplates = {
     title: 'The Writer-Producer Path',
     icon: '🎹',
     color: 'from-[#1DD1A1] to-[#B91372]',
-    description: 'You thrive behind the scenes, crafting the perfect sound for other artists and building a reputation for excellence.',
-    baseDescription: 'You thrive behind the scenes, crafting the perfect sound for other artists and building a reputation for excellence.',
+    description: 'Your priority is technical mastery and collaborative partnerships. Focus here to build high-value relationships and consistent royalty income.',
+    baseDescription: 'Your priority is technical mastery and collaborative partnerships. Focus here to build high-value relationships and consistent royalty income.',
     homeConnection: 'HOME\'s professional studios and A&R program provide the perfect ecosystem for producers to create and collaborate.',
     planPreview: [
       'Master Production Skills',
@@ -907,10 +907,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
       color: 'from-blue-500 to-purple-600', 
       baseColor: '#3B82F6',
       description: selectedPathways['touring-performer'] 
-        ? 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.'
-        : 'Touring Performers live for the stage. The energy of a live audience fuels their soul. They build their legacy one performance at a time.',
-      traits: 'Stage presence, audience connection, tour resilience, live energy',
-      shadow: 'Burnout from constant travel, missing stability, addiction to applause'
+        ? 'Your priority is live performance and audience connection. Focus here to build a sustainable touring career with strong fan loyalty.'
+        : 'Touring Performers prioritize live performance and audience connection. Focus here builds sustainable touring careers with strong fan loyalty.',
+      focusAreas: 'Stage presence, audience connection, live performance skills, touring strategy',
+      distractionRisk: 'Over-focusing on studio perfectionism, social media obsession, avoiding live venues'
     },
     'creative-artist': { 
       name: 'Creative Artist', 
@@ -918,10 +918,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
       color: 'from-pink-500 to-orange-500', 
       baseColor: '#EC4899',
       description: selectedPathways['creative-artist']
-        ? 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.'
-        : 'Creative Artists are driven to make things — music that moves, content that connects. They don\'t just imagine — they build and share.',
-      traits: 'Creative flow, artistic vision, digital presence, authenticity',
-      shadow: 'Over-identifying with your work, creative blocks, comparison trap'
+        ? 'Your priority is creative expression and building sustainable revenue streams. Focus here to develop multiple income sources through your artistry.'
+        : 'Creative Artists prioritize creative expression and building sustainable revenue streams. Focus here develops multiple income sources through artistry.',
+      focusAreas: 'Brand development, content creation, digital marketing, revenue diversification',
+      distractionRisk: 'Chasing every trend, over-producing content, neglecting core artistic development'
     },
     'writer-producer': { 
       name: 'Writer/Producer', 
@@ -929,10 +929,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
       color: 'from-green-500 to-teal-500', 
       baseColor: '#10B981',
       description: selectedPathways['writer-producer']
-        ? 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.'
-        : 'Writer-Producers are the builders behind the scenes. They craft the sonic landscapes where others perform. Their art is in the details.',
-      traits: 'Technical mastery, sonic vision, collaboration, patience',
-      shadow: 'Perfectionism, staying too hidden, undervaluing your contribution'
+        ? 'Your priority is technical mastery and collaborative creation. Focus here to build high-value partnerships and consistent royalty income.'
+        : 'Writer-Producers prioritize technical mastery and collaborative creation. Focus here builds high-value partnerships and consistent royalty income.',
+      focusAreas: 'Production skills, collaboration network, business development, royalty optimization',
+      distractionRisk: 'Solo artist aspirations, live performance pressure, avoiding business relationships'
     }
   };
   
@@ -947,8 +947,8 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
   
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Creative Profile</h3>
-      <p className="text-xs text-gray-400 text-center mb-6">Ranked by alignment with your answers</p>
+      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Priority Focus Areas</h3>
+      <p className="text-xs text-gray-400 text-center mb-6">Ranked by your responses - helping you find clarity in a scattered industry</p>
       
       <div className="space-y-6">
         {sortedScores.map(([pathway, percentage], index) => {
@@ -1017,16 +1017,16 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
                   {info.description}
                 </p>
                 
-                {/* Traits & Shadow */}
+                {/* Focus Areas & Distraction Risks */}
                 {index === 0 && (
                   <div className="space-y-2 pt-2 border-t border-white/10">
                     <div>
-                      <span className="text-xs font-semibold text-white">Key Traits: </span>
-                      <span className="text-xs text-gray-400">{info.traits}</span>
+                      <span className="text-xs font-semibold text-white">Focus Areas: </span>
+                      <span className="text-xs text-gray-400">{info.focusAreas}</span>
                     </div>
                     <div>
-                      <span className="text-xs font-semibold text-white">Shadow Side: </span>
-                      <span className="text-xs text-gray-400">{info.shadow}</span>
+                      <span className="text-xs font-semibold text-white">Distraction Risks: </span>
+                      <span className="text-xs text-gray-400">{info.distractionRisk}</span>
                     </div>
                   </div>
                 )}
@@ -1038,7 +1038,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
       
       {/* Summary Section */}
       <div className="mt-8 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
-        <h4 className="text-sm font-bold text-white mb-3">🧭 Summary</h4>
+        <h4 className="text-sm font-bold text-white mb-3">🎯 Your Priority Focus</h4>
         <div className="text-xs text-gray-300 space-y-2">
           {(() => {
             // Use existing sortedScores to avoid scope confusion
@@ -1060,16 +1060,16 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
               
               if (primaryLevel.level === 'Core Focus') {
                 return isSelected 
-                  ? `Your ${primaryInfo.name} identity is your Core Focus and drives your creative decisions.`
-                  : `The ${primaryInfo.name} identity represents a Core Focus that drives creative decisions.`;
+                  ? `This should be your primary focus area where you invest 80% of your time and energy.`
+                  : `This represents the primary focus area where one should invest 80% of time and energy.`;
               } else if (primaryLevel.level === 'Potential Distraction') {
                 return isSelected
-                  ? `${primaryInfo.name} could be a Potential Distraction from your main creative path.`
-                  : `${primaryInfo.name} could be a Potential Distraction from one's main creative path.`;
+                  ? `This could distract from your main priorities if you're not strategic about it.`
+                  : `This could distract from main priorities if not approached strategically.`;
               } else {
                 return isSelected
-                  ? `Your ${primaryInfo.name} traits are currently Noise in your creative journey.`
-                  : `${primaryInfo.name} traits are currently Noise in the creative journey.`;
+                  ? `These activities are currently creating noise in your career focus.`
+                  : `These activities currently create noise in career focus.`;
               }
             };
             
@@ -1088,13 +1088,13 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
             return (
               <div className="space-y-3">
                 <p className="leading-relaxed">
-                  <span className="text-white font-medium">{primaryInfo.name}</span> is your primary creative archetype at {primaryArchetype[1]}% alignment. 
+                  <span className="text-white font-medium">{primaryInfo.name}</span> is your strongest priority area at {primaryArchetype[1]}% alignment. 
                   {' '}{generateInsights()}
                 </p>
                 
                 {secondaryArchetype && secondaryArchetype[1] >= 55 && (
                   <p className="leading-relaxed">
-                    Your secondary <span className="text-white font-medium">{pathwayInfo[secondaryArchetype[0]].name}</span> traits ({secondaryArchetype[1]}%) complement your primary path, creating unique creative opportunities.
+                    Your secondary focus <span className="text-white font-medium">{pathwayInfo[secondaryArchetype[0]].name}</span> ({secondaryArchetype[1]}%) complements your primary path, creating strategic opportunities for growth.
                   </p>
                 )}
                 
@@ -1106,7 +1106,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
           })()}
           
           <p className="text-[#B91372] font-medium text-center mt-3">
-            You're not trying to fit into systems — you're creating better ones.
+            Clarity creates focus. Focus creates momentum. Momentum creates results.
           </p>
         </div>
       </div>

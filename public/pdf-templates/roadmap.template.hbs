@@ -1179,12 +1179,12 @@
               {{#if isFirst}}
               <div class="archetype-details">
                 <div class="detail-row">
-                  <span class="detail-label">Key Traits:</span>
-                  <span class="detail-text">{{traits}}</span>
+                  <span class="detail-label">Focus Areas:</span>
+                  <span class="detail-text">{{focusAreas}}</span>
                 </div>
                 <div class="detail-row">
-                  <span class="detail-label">Shadow Side:</span>
-                  <span class="detail-text">{{shadow}}</span>
+                  <span class="detail-label">Distraction Risks:</span>
+                  <span class="detail-text">{{distractionRisk}}</span>
                 </div>
               </div>
               {{/if}}
@@ -1196,24 +1196,24 @@
           <div class="cover-summary-enhanced" style="margin-top: 40px;">
             <div style="position: relative; z-index: 2;">
               <h4 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 20px; text-align: center;">
-                🧭 Your Creative Blueprint
+                🎯 Your Priority Focus Blueprint
               </h4>
               <div style="text-align: center;">
                 <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
-                  <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
+                  <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your strongest priority area at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
                   {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core Focus')}}
-                  Your {{fuzzyScoresArray.[0].name}} identity is your Core Focus and drives your creative decisions.
+                  This should be your primary focus area where you invest 80% of your time and energy.
                   {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Potential Distraction')}}
-                  {{fuzzyScoresArray.[0].name}} could be a Potential Distraction from your main creative path.
+                  This could distract from your main priorities if you're not strategic about it.
                   {{else}}
-                  Your {{fuzzyScoresArray.[0].name}} traits are currently Noise in your creative journey.
+                  These activities are currently creating noise in your career focus.
                   {{/if}}
                 </p>
                 
                 {{#if fuzzyScoresArray.[1]}}
                 {{#if (gte fuzzyScoresArray.[1].percentage 55)}}
                 <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
-                  Your secondary <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[1].name}}</span> traits (<span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[1].percentage}}%</span>) complement your primary path, creating unique creative opportunities.
+                  Your secondary focus <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[1].name}}</span> (<span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[1].percentage}}%</span>) complements your primary path, creating strategic opportunities for growth.
                 </p>
                 {{/if}}
                 {{/if}}
