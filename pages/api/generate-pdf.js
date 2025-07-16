@@ -65,10 +65,9 @@ export default async function handler(req, res) {
     
     // Map scores to archetype levels
     const getArchetypeLevel = (percentage) => {
-      if (percentage >= 85) return { level: 'Core', icon: '🔥', description: 'This is your essence' };
-      if (percentage >= 70) return { level: 'Engine', icon: '⚡', description: 'Powers your creativity' };
-      if (percentage >= 55) return { level: 'Emerging', icon: '🌱', description: 'Growing stronger' };
-      return { level: 'Hidden Power', icon: '💫', description: 'Untapped potential' };
+      if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '' };
+      if (percentage >= 55) return { level: 'Potential Distraction', icon: '⚡', description: '' };
+      return { level: 'Noise', icon: '💫', description: '' };
     };
 
     // Transform fuzzyScores into array for handlebars

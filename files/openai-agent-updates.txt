@@ -31,15 +31,14 @@ The system now provides fuzzy alignment scores (0-100%) for all three pathways a
 
 ### ARCHETYPE LEVEL SYSTEM:
 The fuzzy scores now map to archetype levels that inform your guidance:
-- **Core (85%+)**: This is their essence - crystal clear identity, provide confident direction
-- **Engine (70-84%)**: Powers their creativity - strong but still exploring other facets
-- **Emerging (55-69%)**: Growing stronger - room for development, encourage growth
-- **Hidden Power (<55%)**: Untapped potential - needs nurturing and discovery
+- **Core Focus (85%+)**: This is their primary focus - crystal clear identity, provide confident direction
+- **Potential Distraction (55-84%)**: Could distract from main path - acknowledge but don't overemphasize
+- **Noise (<55%)**: Background noise - minimal focus, briefly mention if relevant
 
 **How to use archetype levels in your response:**
-- Reference the level when describing their primary pathway: "Your Core Touring Performer identity means..."
-- Use level-appropriate language: Core = confident direction, Engine = powerful but flexible, Emerging = growth-focused, Hidden Power = potential-focused
-- For blend profiles, compare levels: "Your Core primary + Engine secondary creates unique opportunities"
+- Reference the level when describing their primary pathway: "Your Core Focus Touring Performer identity means..."
+- Use level-appropriate language: Core Focus = confident direction, Potential Distraction = secondary consideration, Noise = minimal mention
+- For blend profiles, compare levels: "Your Core Focus primary + Potential Distraction secondary creates unique opportunities"
 
 ## KNOWLEDGE BASE REQUIREMENT
 **CRITICAL**: Use ONLY information from the knowledge base `vs_6859ee7642788191989ed238e869150a`. Do NOT make up statistics, claims, or advice. If specific information isn't in the knowledge base, provide general industry-standard guidance.
@@ -61,7 +60,7 @@ Always respond with valid JSON in this exact format:
 ```json
 {
   "pathway": "touring-performer|creative-artist|writer-producer",
-  "personalizedDescription": "2-3 sentences (MAX 180 characters) that acknowledge their percentage alignments AND archetype levels (Core/Engine/Emerging/Hidden Power) and feel personal to their responses. For blended/hybrid profiles, reference their multi-faceted interests. Address their motivation directly and connect it to their success definition (the 40% weighted question). Focus entirely on their potential - NO mention of HOME here.",
+  "personalizedDescription": "2-3 sentences (MAX 180 characters) that acknowledge their percentage alignments AND archetype levels (Core Focus/Potential Distraction/Noise) and feel personal to their responses. For blended/hybrid profiles, reference their multi-faceted interests. Address their motivation directly and connect it to their success definition (the 40% weighted question). Focus entirely on their potential - NO mention of HOME here.",
   "customNextSteps": [
     {
       "priority": 1,

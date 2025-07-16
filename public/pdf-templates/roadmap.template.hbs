@@ -1163,8 +1163,8 @@
                       <span class="archetype-name {{#if isFirst}}name-primary{{/if}}">{{name}}</span>
                       <span class="archetype-level-icon">{{archetypeIcon}}</span>
                     </div>
-                    <span class="archetype-level {{#if (eq archetypeLevel 'Core')}}level-core{{else if (eq archetypeLevel 'Engine')}}level-engine{{else if (eq archetypeLevel 'Emerging')}}level-emerging{{else}}level-hidden{{/if}}">
-                      {{archetypeLevel}} • {{archetypeDescription}}
+                    <span class="archetype-level {{#if (eq archetypeLevel 'Core Focus')}}level-core{{else if (eq archetypeLevel 'Potential Distraction')}}level-potential{{else}}level-noise{{/if}}">
+                      {{archetypeLevel}}
                     </span>
                   </div>
                 </div>
@@ -1201,14 +1201,12 @@
               <div style="text-align: center;">
                 <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
                   <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your primary creative archetype at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
-                  {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core')}}
-                  Your {{fuzzyScoresArray.[0].name}} identity is crystal clear and drives your creative decisions.
-                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Engine')}}
-                  {{fuzzyScoresArray.[0].name}} powers your creativity, while you're still exploring other facets of your artistic identity.
-                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Emerging')}}
-                  You're growing into your {{fuzzyScoresArray.[0].name}} strengths, with room to develop this pathway further.
+                  {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core Focus')}}
+                  Your {{fuzzyScoresArray.[0].name}} identity is your Core Focus and drives your creative decisions.
+                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Potential Distraction')}}
+                  {{fuzzyScoresArray.[0].name}} could be a Potential Distraction from your main creative path.
                   {{else}}
-                  Your {{fuzzyScoresArray.[0].name}} traits represent untapped potential waiting to be unlocked.
+                  Your {{fuzzyScoresArray.[0].name}} traits are currently Noise in your creative journey.
                   {{/if}}
                 </p>
                 
