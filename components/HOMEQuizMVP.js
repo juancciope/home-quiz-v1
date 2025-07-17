@@ -839,6 +839,13 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
   const absScores = scoreResult ? scoreResult.absPct : null;
   const levels = scoreResult ? scoreResult.levels : null;
   
+  console.log('🔍 FuzzyScoreDisplay received:', {
+    scoreResult: scoreResult,
+    levels: levels,
+    absScores: absScores,
+    displayScores: displayScores
+  });
+  
   const pathwayInfo = {
     'touring-performer': { 
       name: 'Touring Performer', 
@@ -1508,6 +1515,12 @@ const HOMECreatorFlow = () => {
           // Calculate scores using v2 logic
           const { scoreUser } = await import('../lib/scoring/index.js');
           const result = scoreUser(finalResponses);
+          console.log('🎯 Score Result from v2:', {
+            displayPct: result.displayPct,
+            absPct: result.absPct,
+            levels: result.levels,
+            recommendation: result.recommendation
+          });
           setScoreResult(result);
           
           // For backwards compatibility in API calls
