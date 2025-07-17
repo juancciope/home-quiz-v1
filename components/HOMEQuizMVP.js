@@ -344,18 +344,7 @@ const pathwayTemplates = {
   }
 };
 // --- Helpers ---
-// Backwards compatibility wrapper for old calculateFuzzyScores calls
-const calculateFuzzyScores = (responses) => {
-  const result = scoreUser(responses);
-  return result.displayPct;
-};
-
-// Get primary pathway (for backwards compatibility)
-const determinePathway = (responses) => {
-  const result = scoreUser(responses);
-  const sorted = Object.entries(result.displayPct).sort((a, b) => b[1] - a[1]);
-  return sorted[0][0];
-};
+// Legacy functions removed - now using scoreResult directly
 
 // Get pathway blend description (updated for v2)
 const getPathwayBlend = (scoreResult) => {
@@ -1596,7 +1585,7 @@ const HOMECreatorFlow = () => {
           } else {
             // Fallback to template if AI fails
             console.warn('❌ AI generation failed, using fallback');
-            const pathwayKey = determinePathway(finalResponses);
+            const pathwayKey = result.recommendation.path;
             setPathway(pathwayTemplates[pathwayKey]);
           }
         } catch (error) {
@@ -1613,7 +1602,7 @@ const HOMECreatorFlow = () => {
           }, 2500);
           
           // Fallback to template
-          const pathwayKey = determinePathway(finalResponses);
+          const pathwayKey = result.recommendation.path;
           setPathway(pathwayTemplates[pathwayKey]);
         }
         
@@ -1751,7 +1740,7 @@ const HOMECreatorFlow = () => {
       
       // Prepare the results object with AI-generated content or fallback data
       const results = {
-        pathway: aiGeneratedPathway?.pathway || pathway?.pathway || determinePathway(responses),
+        pathway: aiGeneratedPathway?.pathway || pathway?.pathway || scoreResult?.recommendation?.path || 'touring-performer',
         title: pathway?.title || 'Your Music Creator Path',
         description: pathway?.description || pathway?.baseDescription || '',
         icon: pathway?.icon || '🎵',
@@ -2434,7 +2423,7 @@ const HOMECreatorFlow = () => {
             {!isProcessing ? (
               <div className="animate-fadeIn">
                 {/* Unified Email Capture Experience */}
-                {fuzzyScores && (
+                {scoreResult && (
                   <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
                     {/* Animated background elements */}
                     <div className="absolute inset-0 overflow-hidden">
@@ -2471,8 +2460,8 @@ const HOMECreatorFlow = () => {
                       {/* Consolidated Pathway & Email Section */}
                       <div className="text-center">
                         {(() => {
-                          // Use scoreResult if available, fallback to fuzzyScores
-                          const topId = scoreResult?.recommendation?.path || Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][0];
+                          // Use scoreResult (guaranteed to be available due to condition)
+                          const topId = scoreResult.recommendation.path;
                           const topName = PATH_LABELS[topId] || topId;
                           const topIcon = PATH_ICONS[topId] || '🎵';
                           
@@ -2800,9 +2789,9 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   {/* Full Fuzzy Score Display */}
-                  {fuzzyScores && (
+                  {scoreResult && (
                     <div className="mb-8">
-                      <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} responses={responses} scoreResult={scoreResult} />
+                      <FuzzyScoreDisplay scores={scoreResult.displayPct} blend={pathwayBlend} responses={responses} scoreResult={scoreResult} />
                     </div>
                   )}
                   
