@@ -92,13 +92,18 @@ export default async function handler(req, res) {
     
     // Map scores to archetype levels
     const getArchetypeLevel = (percentage) => {
-      if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '' };
-      if (percentage >= 55) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
+      if (percentage >= 80) return { level: 'Core Focus', icon: '🔥', description: '' };
+      if (percentage >= 45) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
       return { level: 'Noise', icon: '💫', description: '' };
     };
 
-    // Transform fuzzyScores into array for handlebars
-    const fuzzyScoresArray = Object.entries(pathwayData.fuzzyScores || {})
+    // Transform scores into array for handlebars (prefer scoreResult v2 data)
+    const scoreData = pathwayData.scoreResult || {};
+    const scores = scoreData.displayPct || pathwayData.fuzzyScores || {};
+    const levels = scoreData.levels || {};
+    const absPct = scoreData.absPct || {};
+    
+    const fuzzyScoresArray = Object.entries(scores)
       .sort((a, b) => b[1] - a[1])
       .map(([key, percentage], index) => {
         const info = pathwayInfo[key] || { 
@@ -109,14 +114,18 @@ export default async function handler(req, res) {
           traits: '',
           shadow: ''
         };
-        const archetypeLevel = getArchetypeLevel(percentage);
-        const isPrimary = pathwayData.pathwayBlend?.primary === key;
-        const isSecondary = pathwayData.pathwayBlend?.secondary === key;
+        // Use scoreResult levels if available, otherwise calculate
+        const archetypeLevel = levels[key] 
+          ? { level: levels[key], icon: levels[key] === 'Core Focus' ? '🔥' : levels[key] === 'Strategic Secondary' ? '⚡' : '💫', description: '' }
+          : getArchetypeLevel(absPct[key] || percentage);
+        const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;
+        const isSecondary = index === 1 && !isPrimary;
         
         return {
           key,
           percentage,
-          name: info.name,
+          absolutePercentage: Math.round(absPct[key] || percentage),
+          name: PATH_LABELS[key] || info.name,
           icon: info.icon,
           color: info.color,
           description: info.description,

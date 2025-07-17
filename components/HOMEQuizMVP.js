@@ -886,10 +886,11 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
     }
   };
   
-  // Map scores to archetype levels (using v2 thresholds)
+  // Fallback level calculation (should rarely be used with v2 scoring)
   const getArchetypeLevel = (percentage, absPct = null) => {
-    // If we have absolute percentage from v2, use that for level determination
+    // Always prefer absolute percentage for level determination
     const checkPct = absPct !== null ? absPct : percentage;
+    // Use same thresholds as scoring system: 80% and 45%
     if (checkPct >= 80) return { level: 'Core Focus', icon: '🔥', description: '' };
     if (checkPct >= 45) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
     return { level: 'Noise', icon: '💫', description: '' };
@@ -1026,15 +1027,20 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
             const scoreSpread = primaryArchetype[1] - (sortedScores[2] ? sortedScores[2][1] : 0);
             const isBalanced = scoreSpread < 20; // Less than 20% difference indicates balance
             
-            // Generate insights based on fuzzy logic alignment
+            // Generate insights based on recommendation system
             const generateInsights = () => {
+              const rec = scoreResult?.recommendation;
               const pathwayKey = primaryArchetype[0];
               const isSelected = selectedPathways[pathwayKey];
               
-              if (primaryLevel.level === 'Core Focus') {
+              if (rec?.promoted) {
                 return isSelected 
-                  ? `This should be your primary focus area where you invest 80% of your time and energy.`
-                  : `This represents the primary focus area where one should invest 80% of time and energy.`;
+                  ? `Start with this area to build momentum, then gradually add your secondary interests.`
+                  : `Starting with this area builds momentum before adding secondary interests.`;
+              } else if (primaryLevel.level === 'Core Focus') {
+                return isSelected 
+                  ? `This should be your primary focus area where you invest ~80% of your time and energy.`
+                  : `This represents the primary focus area where one should invest ~80% of time and energy.`;
               } else if (primaryLevel.level === 'Strategic Secondary') {
                 return isSelected
                   ? `This could distract from your main priorities if you're not strategic about it.`
@@ -1545,9 +1551,10 @@ const HOMECreatorFlow = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
               responses: finalResponses,
-              fuzzyScores: calculatedScores,
-              pathwayBlend: calculatedBlend,
-              scoreResult: result
+              scoreResult: result,
+              // Legacy fallback for API compatibility
+              fuzzyScores: result.displayPct,
+              pathwayBlend: { type: result.blendType, primary: result.recommendation.path }
             })
           });
           
@@ -1658,10 +1665,14 @@ const HOMECreatorFlow = () => {
       const sessionId = Date.now().toString();
       const pdfData = {
         pathway: aiGeneratedPathway || pathway,
-        fuzzyScores,
-        pathwayBlend,
         responses,
-        scoreResult
+        scoreResult,
+        // Legacy fallback for PDF compatibility
+        fuzzyScores: scoreResult?.displayPct || fuzzyScores,
+        pathwayBlend: scoreResult ? { 
+          type: scoreResult.blendType, 
+          primary: scoreResult.recommendation.path 
+        } : pathwayBlend
       };
       
       sessionStorage.setItem(`pdf-data-${sessionId}`, JSON.stringify(pdfData));
