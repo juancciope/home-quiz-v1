@@ -1163,7 +1163,7 @@
                       <span class="archetype-name {{#if isFirst}}name-primary{{/if}}">{{name}}</span>
                       <span class="archetype-level-icon">{{archetypeIcon}}</span>
                     </div>
-                    <span class="archetype-level {{#if (eq archetypeLevel 'Core Focus')}}level-core{{else if (eq archetypeLevel 'Potential Distraction')}}level-potential{{else}}level-noise{{/if}}">
+                    <span class="archetype-level {{#if (eq archetypeLevel 'Core Focus')}}level-core{{else if (eq archetypeLevel 'Strategic Secondary')}}level-potential{{else}}level-noise{{/if}}">
                       {{archetypeLevel}}
                     </span>
                   </div>
@@ -1203,7 +1203,7 @@
                   <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your strongest priority area at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
                   {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core Focus')}}
                   This should be your primary focus area where you invest 80% of your time and energy.
-                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Potential Distraction')}}
+                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Strategic Secondary')}}
                   This could distract from your main priorities if you're not strategic about it.
                   {{else}}
                   These activities are currently creating noise in your career focus.

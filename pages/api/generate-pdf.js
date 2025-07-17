@@ -13,6 +13,9 @@ export default async function handler(req, res) {
   
   try {
     const { sessionId, pathwayData } = req.body;
+    
+    // Import PATH_LABELS for display names
+    const { PATH_LABELS } = await import('../../lib/quiz/ui.js');
 
     if (!pathwayData) {
       return res.status(400).json({
@@ -90,7 +93,7 @@ export default async function handler(req, res) {
     // Map scores to archetype levels
     const getArchetypeLevel = (percentage) => {
       if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '' };
-      if (percentage >= 55) return { level: 'Potential Distraction', icon: '⚡', description: '' };
+      if (percentage >= 55) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
       return { level: 'Noise', icon: '💫', description: '' };
     };
 
@@ -281,11 +284,19 @@ export default async function handler(req, res) {
       }));
     }
 
-    // Prepare template data
+    // Prepare template data with scoreResult support
+    const rec = pathwayData.scoreResult?.recommendation;
+    const topPath = rec?.path || fuzzyScoresArray[0]?.key;
+    const topLabel = rec?.promoted ? 'Recommended Focus' : 'Core Focus';
+    const topPathName = PATH_LABELS[topPath] || topPath;
+    
     const templateData = {
       ...pathwayData,
       fuzzyScoresArray,
       recommendation: pathwayData.scoreResult?.recommendation,
+      topLabel,
+      topPathName,
+      stageLevel: pathwayData.scoreResult?.stageLevel,
       currentDate: new Date().toLocaleDateString()
     };
 

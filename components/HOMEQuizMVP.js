@@ -17,8 +17,10 @@ import {
   Users,
   ArrowRight,
   Circle,
-  CheckCircle2
+  CheckCircle2,
+  Lock
 } from 'lucide-react';
+import { PATH_LABELS, PATH_ICONS, STAGE_COPY } from '../lib/quiz/ui.js';
 
 // --- Assessment Questions ---
 const questions = [
@@ -84,12 +86,7 @@ const checkpoints = [
   { id: 'execute', label: 'Start Journey', icon: Rocket }
 ];
 
-// Path label mappings
-const PATH_LABELS = {
-  'touring-performer': 'Performer',
-  'creative-artist': 'Artist',
-  'writer-producer': 'Producer',
-};
+// Path label mappings (now imported from ui.js)
 
 // --- Pathway Templates ---
 const pathwayTemplates = {
@@ -900,8 +897,23 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
   
   const sortedScores = Object.entries(displayScores).sort((a, b) => b[1] - a[1]);
   
+  // Generate headline from recommendation
+  const rec = scoreResult?.recommendation;
+  const topId = rec?.path || sortedScores[0][0];
+  const topName = PATH_LABELS[topId] || topId;
+  const headline = rec?.promoted ? `Recommended Focus: ${topName}` : `Core Focus: ${topName}`;
+  const subcopy = rec?.promoted
+    ? `You're split across lanes. Start with ${topName} to build momentum; keep your next path light.`
+    : `You're strongly aligned with ${topName}. Put ~80% of your energy here for fastest progress.`;
+  
   return (
     <div className="mb-8">
+      {/* Recommendation headline */}
+      <div className="text-center mb-6">
+        <h2 className="text-xl font-bold text-white mb-2">{headline}</h2>
+        <p className="text-sm text-gray-300 max-w-md mx-auto">{subcopy}</p>
+      </div>
+      
       <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Priority Focus Areas</h3>
       <p className="text-xs text-gray-400 text-center mb-6">Ranked by your responses - helping you find clarity in a scattered industry</p>
       
@@ -951,12 +963,12 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className={`text-base font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{info.name}</span>
+                        <span className={`text-base font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{PATH_LABELS[pathway] || info.name}</span>
                         <span className="text-sm">{archetypeLevel.icon}</span>
                       </div>
                       <span className={`text-xs font-medium ${
                         archetypeLevel.level === 'Core Focus' ? 'text-orange-400' :
-                        archetypeLevel.level === 'Potential Distraction' ? 'text-yellow-400' :
+                        archetypeLevel.level === 'Strategic Secondary' ? 'text-yellow-400' :
                         'text-purple-400'
                       }`}>
                         {archetypeLevel.level}
@@ -966,6 +978,9 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
                   <div className="text-right">
                     <div className={`text-xl font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{percentage}%</div>
                     <div className="text-xs text-gray-400">alignment</div>
+                    {absScores && (
+                      <div className="text-xs text-gray-500">({Math.round(absScores[pathway])}% abs)</div>
+                    )}
                   </div>
                 </div>
                 </div>
@@ -1020,7 +1035,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
                 return isSelected 
                   ? `This should be your primary focus area where you invest 80% of your time and energy.`
                   : `This represents the primary focus area where one should invest 80% of time and energy.`;
-              } else if (primaryLevel.level === 'Potential Distraction') {
+              } else if (primaryLevel.level === 'Strategic Secondary') {
                 return isSelected
                   ? `This could distract from your main priorities if you're not strategic about it.`
                   : `This could distract from main priorities if not approached strategically.`;
@@ -1134,6 +1149,26 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
           </svg>
         </button>
       </div>
+      
+      {/* Stage Roadmap */}
+      {scoreResult?.stageLevel && (
+        <div className="mt-8 stage-roadmap">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <Target className="w-5 h-5 text-[#1DD1A1]" />
+              {STAGE_COPY[scoreResult.stageLevel]?.title || 'Next Steps'}
+            </h3>
+            <ul className="space-y-2">
+              {(STAGE_COPY[scoreResult.stageLevel]?.lines || []).map((line, index) => (
+                <li key={index} className="text-sm text-gray-300 flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -2424,58 +2459,54 @@ const HOMECreatorFlow = () => {
                       
                       {/* Consolidated Pathway & Email Section */}
                       <div className="text-center">
-                        <div className="relative inline-block mb-6">
-                          <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
-                          <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-3xl shadow-xl">
-                            {(() => {
-                              const pathwayInfo = {
-                                'touring-performer': '🎤',
-                                'creative-artist': '🎨', 
-                                'writer-producer': '🎹'
-                              };
-                              const sortedScores = Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1]);
-                              return pathwayInfo[sortedScores[0][0]];
-                            })()}
-                          </div>
-                        </div>
-                        
-                        <h3 className="text-2xl font-bold text-white mb-2">
-                          {(() => {
-                            const pathwayInfo = {
-                              'touring-performer': 'Touring Performer',
-                              'creative-artist': 'Creative Artist', 
-                              'writer-producer': 'Writer/Producer'
-                            };
-                            const sortedScores = Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1]);
-                            return pathwayInfo[sortedScores[0][0]];
-                          })()}
-                        </h3>
-                        
                         {(() => {
-                          const getArchetypeLevel = (percentage) => {
-                            if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '', color: '#fb923c' };
-                            if (percentage >= 55) return { level: 'Potential Distraction', icon: '⚡', description: '', color: '#facc15' };
-                            return { level: 'Noise', icon: '💫', description: '', color: '#c084fc' };
-                          };
-                          
-                          const topScore = Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][1];
-                          const archetype = getArchetypeLevel(topScore);
+                          // Use scoreResult if available, fallback to fuzzyScores
+                          const topId = scoreResult?.recommendation?.path || Object.entries(fuzzyScores).sort((a, b) => b[1] - a[1])[0][0];
+                          const topName = PATH_LABELS[topId] || topId;
+                          const topIcon = PATH_ICONS[topId] || '🎵';
                           
                           return (
                             <>
-                              <div className="inline-flex items-center gap-3 text-2xl font-bold text-white mb-4">
-                                <span className="text-3xl">{archetype.icon}</span>
-                                <span style={{ color: archetype.color }}>{archetype.level}</span>
+                              <div className="relative inline-block mb-6">
+                                <div className="absolute -inset-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full blur-lg opacity-20 animate-pulse" />
+                                <div className="relative w-16 h-16 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center text-3xl shadow-xl">
+                                  {topIcon}
+                                </div>
                               </div>
                               
-                              <p className="text-sm text-gray-300 mb-6 max-w-xs mx-auto">
-                                {archetype.description}
+                              <h2 className="text-2xl font-bold text-white mb-2">Your Focus Profile Is Ready</h2>
+                              <p className="text-sm text-gray-300 mb-6 leading-relaxed">
+                                See Core vs Secondary priorities + a 4-step roadmap.
                               </p>
                               
-                              {/* Simple value proposition */}
-                              <p className="text-sm text-gray-300 mb-8 leading-relaxed">
-                                Get your complete personalized roadmap with all creator profiles and strategic next steps.
-                              </p>
+                              {/* Locked preview bars */}
+                              <div className="space-y-3 mb-8 max-w-xs mx-auto">
+                                {/* Top path - unlocked preview */}
+                                <div className="flex items-center gap-3">
+                                  <span className="text-lg">{topIcon}</span>
+                                  <div className="flex-1 bg-white/10 rounded-full h-2 relative overflow-hidden">
+                                    <div 
+                                      className="h-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full transition-all duration-1000"
+                                      style={{ width: '60%' }}
+                                    />
+                                  </div>
+                                  <span className="text-sm text-white font-medium">{topName}</span>
+                                </div>
+                                
+                                {/* Other paths - locked */}
+                                {Object.keys(PATH_LABELS).filter(id => id !== topId).map(pathId => (
+                                  <div key={pathId} className="flex items-center gap-3 opacity-50">
+                                    <span className="text-lg">{PATH_ICONS[pathId]}</span>
+                                    <div className="flex-1 bg-white/10 rounded-full h-2 relative overflow-hidden">
+                                      <div className="h-full bg-gray-500 rounded-full" style={{ width: '30%' }} />
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <Lock className="w-3 h-3 text-gray-400" />
+                                      <span className="text-sm text-gray-400">{PATH_LABELS[pathId]}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </>
                           );
                         })()}
