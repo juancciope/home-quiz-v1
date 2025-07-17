@@ -875,15 +875,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
     }
   };
   
-  // Fallback level calculation (should rarely be used with v2 scoring)
-  const getArchetypeLevel = (percentage, absPct = null) => {
-    // Always prefer absolute percentage for level determination
-    const checkPct = absPct !== null ? absPct : percentage;
-    // Use same thresholds as scoring system: 80% and 45%
-    if (checkPct >= 80) return { level: 'Core Focus', icon: '🔥', description: '' };
-    if (checkPct >= 45) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
-    return { level: 'Noise', icon: '💫', description: '' };
-  };
+  // getArchetypeLevel function removed - scoreResult.levels used exclusively
   
   const sortedScores = Object.entries(displayScores).sort((a, b) => b[1] - a[1]);
   
@@ -910,10 +902,12 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
       <div className="space-y-6">
         {sortedScores.map(([pathway, percentage], index) => {
           const info = pathwayInfo[pathway];
-          // Use levels from scoreResult if available, otherwise calculate
-          const archetypeLevel = levels 
-            ? { level: levels[pathway], icon: levels[pathway] === 'Core Focus' ? '🔥' : levels[pathway] === 'Strategic Secondary' ? '⚡' : '💫', description: '' }
-            : getArchetypeLevel(percentage, absScores ? absScores[pathway] : null);
+          // ALWAYS use levels from scoreResult - no fallbacks to old logic
+          const archetypeLevel = { 
+            level: levels?.[pathway] || 'Strategic Secondary', 
+            icon: (levels?.[pathway] === 'Core Focus') ? '🔥' : (levels?.[pathway] === 'Strategic Secondary') ? '⚡' : '💫', 
+            description: '' 
+          };
           const isPrimary = index === 0;
           const isSecondary = index === 1;
           
@@ -999,41 +993,32 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
         })}
       </div>
       
-      {/* Summary Section */}
+      {/* Summary Section - Using scoreResult v2 */}
       <div className="mt-8 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
         <h4 className="text-sm font-bold text-white mb-3">🎯 Your Priority Focus</h4>
         <div className="text-xs text-gray-300 space-y-2">
           {(() => {
-            // Use existing sortedScores to avoid scope confusion
-            const primaryArchetype = sortedScores[0];
-            const secondaryArchetype = sortedScores[1];
-            const tertiaryArchetype = sortedScores[2];
+            const rec = scoreResult?.recommendation;
+            const topPath = rec?.path || sortedScores[0][0];
+            const topName = PATH_LABELS[topPath] || pathwayInfo[topPath]?.name || topPath;
+            const topAbsPct = absScores ? Math.round(absScores[topPath]) : sortedScores[0][1];
+            const topLevel = levels?.[topPath] || 'Strategic Secondary';
+            const isSelected = selectedPathways[topPath];
             
-            const primaryInfo = pathwayInfo[primaryArchetype[0]];
-            const primaryLevel = getArchetypeLevel(primaryArchetype[1]);
-            
-            // Calculate spread for blend analysis
-            const scoreSpread = primaryArchetype[1] - (sortedScores[2] ? sortedScores[2][1] : 0);
-            const isBalanced = scoreSpread < 20; // Less than 20% difference indicates balance
-            
-            // Generate insights based on recommendation system
+            // Generate insights based on scoreResult v2 logic
             const generateInsights = () => {
-              const rec = scoreResult?.recommendation;
-              const pathwayKey = primaryArchetype[0];
-              const isSelected = selectedPathways[pathwayKey];
-              
               if (rec?.promoted) {
                 return isSelected 
                   ? `Start with this area to build momentum, then gradually add your secondary interests.`
                   : `Starting with this area builds momentum before adding secondary interests.`;
-              } else if (primaryLevel.level === 'Core Focus') {
+              } else if (topLevel === 'Core Focus') {
                 return isSelected 
                   ? `This should be your primary focus area where you invest ~80% of your time and energy.`
                   : `This represents the primary focus area where one should invest ~80% of time and energy.`;
-              } else if (primaryLevel.level === 'Strategic Secondary') {
+              } else if (topLevel === 'Strategic Secondary') {
                 return isSelected
-                  ? `This could distract from your main priorities if you're not strategic about it.`
-                  : `This could distract from main priorities if not approached strategically.`;
+                  ? `This area shows promise but needs strategic balance with your other interests.`
+                  : `This area shows promise but needs strategic balance with other interests.`;
               } else {
                 return isSelected
                   ? `These activities are currently creating noise in your career focus.`
@@ -1042,27 +1027,28 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
             };
             
             const getBlendStrategy = () => {
-              if (blend?.type === 'hybrid') {
+              const blendType = scoreResult?.blendType || 'Focused';
+              if (blendType === 'Hybrid Multi-Creator') {
                 return 'Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.';
-              } else if (blend?.type === 'blend') {
-                return `Focus 70% on your ${primaryInfo.name} strengths while developing your ${pathwayInfo[secondaryArchetype[0]].name} skills as a strategic advantage.`;
-              } else if (isBalanced) {
-                return 'Your balanced profile suggests you can adapt to market opportunities while maintaining artistic integrity.';
+              } else if (blendType.includes('Blend')) {
+                const secondaryPath = sortedScores[1]?.[0];
+                const secondaryName = PATH_LABELS[secondaryPath] || pathwayInfo[secondaryPath]?.name;
+                return `Focus 70% on your ${topName} strengths while developing your ${secondaryName} skills as a strategic advantage.`;
               } else {
-                return `Your clear ${primaryInfo.name} direction allows for deep specialization and expertise building.`;
+                return `Your clear ${topName} direction allows for deep specialization and expertise building.`;
               }
             };
             
             return (
               <div className="space-y-3">
                 <p className="leading-relaxed">
-                  <span className="text-white font-medium">{primaryInfo.name}</span> is your strongest priority area at {primaryArchetype[1]}% alignment. 
+                  <span className="text-white font-medium">{topName}</span> is your strongest priority area at {topAbsPct}% alignment. 
                   {' '}{generateInsights()}
                 </p>
                 
-                {secondaryArchetype && secondaryArchetype[1] >= 55 && (
+                {sortedScores[1] && levels?.[sortedScores[1][0]] === 'Strategic Secondary' && (
                   <p className="leading-relaxed">
-                    Your secondary focus <span className="text-white font-medium">{pathwayInfo[secondaryArchetype[0]].name}</span> ({secondaryArchetype[1]}%) complements your primary path, creating strategic opportunities for growth.
+                    Your secondary focus <span className="text-white font-medium">{PATH_LABELS[sortedScores[1][0]] || pathwayInfo[sortedScores[1][0]]?.name}</span> ({Math.round(absScores?.[sortedScores[1][0]] || sortedScores[1][1])}%) complements your primary path, creating strategic opportunities for growth.
                   </p>
                 )}
                 
