@@ -74,7 +74,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { responses, fuzzyScores, pathwayBlend } = req.body;
+    const { responses, fuzzyScores, pathwayBlend, scoreResult } = req.body;
     
     console.log('🤖 Generate pathway API called with:');
     console.log('📊 Fuzzy scores:', fuzzyScores);
@@ -122,7 +122,15 @@ PATHWAY BLEND ANALYSIS:
 - Primary Path: ${pathwayBlend?.primary || 'touring-performer'}
 - Secondary Path: ${pathwayBlend?.secondary || 'none'}
 
-Based on these fuzzy scores and blend analysis, please provide a nuanced recommendation that:
+SCORING V2 FOCUS LEVELS (use for guidance):
+${scoreResult ? `
+- Touring Performer: ${scoreResult.levels['touring-performer']} (${Math.round(scoreResult.absPct['touring-performer'])}% absolute)
+- Creative Artist: ${scoreResult.levels['creative-artist']} (${Math.round(scoreResult.absPct['creative-artist'])}% absolute)
+- Writer-Producer: ${scoreResult.levels['writer-producer']} (${Math.round(scoreResult.absPct['writer-producer'])}% absolute)
+- Blend Type: ${scoreResult.blendType}
+- Stage Level: ${scoreResult.stageLevel}` : 'Not available'}
+
+Based on these fuzzy scores, blend analysis, and focus levels, please provide a nuanced recommendation that:
 1. Acknowledges their percentage alignments across all pathways
 2. Provides strategies that blend their primary and secondary pathways if scores are close
 3. Offers specific advice for balancing multiple interests
@@ -216,6 +224,7 @@ const result = {
   })),
   resources: aiResponse.recommendedResources,
   homeConnection: aiResponse.homeConnection,
+  recommendation: scoreResult?.recommendation,
   isPersonalized: true,
   assistantUsed: true
 };
@@ -271,6 +280,7 @@ console.log('✅ Successfully generated personalized pathway:', {
       nextSteps: template.nextSteps,
       resources: template.resources,
       homeConnection: template.homeConnection, // 🔥 Now uses improved template content
+      recommendation: scoreResult?.recommendation,
       isPersonalized: false,
       assistantUsed: false
     };

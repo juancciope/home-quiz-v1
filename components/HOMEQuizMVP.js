@@ -84,6 +84,13 @@ const checkpoints = [
   { id: 'execute', label: 'Start Journey', icon: Rocket }
 ];
 
+// Path label mappings
+const PATH_LABELS = {
+  'touring-performer': 'Performer',
+  'creative-artist': 'Artist',
+  'writer-producer': 'Producer',
+};
+
 // --- Pathway Templates ---
 const pathwayTemplates = {
   'touring-performer': {
@@ -340,86 +347,29 @@ const pathwayTemplates = {
   }
 };
 // --- Helpers ---
-// Fuzzy logic scoring with percentage alignments
+// Backwards compatibility wrapper for old calculateFuzzyScores calls
 const calculateFuzzyScores = (responses) => {
-  const scores = {
-    'touring-performer': 0,
-    'creative-artist': 0,
-    'writer-producer': 0
-  };
-  
-  // Fuzzy scoring matrix - each answer contributes to multiple pathways
-  const fuzzyMatrix = {
-    motivation: {
-      'stage-energy': { 'touring-performer': 1.0, 'creative-artist': 0.3, 'writer-producer': 0.1 },
-      'creative-expression': { 'touring-performer': 0.2, 'creative-artist': 1.0, 'writer-producer': 0.4 },
-      'behind-scenes': { 'touring-performer': 0.1, 'creative-artist': 0.3, 'writer-producer': 1.0 }
-    },
-    'ideal-day': {
-      'performing': { 'touring-performer': 1.0, 'creative-artist': 0.4, 'writer-producer': 0.1 },
-      'creating-content': { 'touring-performer': 0.3, 'creative-artist': 1.0, 'writer-producer': 0.3 },
-      'studio-work': { 'touring-performer': 0.1, 'creative-artist': 0.4, 'writer-producer': 1.0 }
-    },
-    'success-vision': {
-      'touring-artist': { 'touring-performer': 1.0, 'creative-artist': 0.5, 'writer-producer': 0.2 },
-      'creative-brand': { 'touring-performer': 0.3, 'creative-artist': 1.0, 'writer-producer': 0.3 },
-      'in-demand-producer': { 'touring-performer': 0.2, 'creative-artist': 0.4, 'writer-producer': 1.0 }
-    },
-    'success-definition': {
-      'live-performer': { 'touring-performer': 1.0, 'creative-artist': 0.2, 'writer-producer': 0.1 },
-      'online-audience': { 'touring-performer': 0.2, 'creative-artist': 1.0, 'writer-producer': 0.2 },
-      'songwriter': { 'touring-performer': 0.1, 'creative-artist': 0.3, 'writer-producer': 1.0 }
-    },
-    'stage-level': {
-      'planning': { 'touring-performer': 0.33, 'creative-artist': 0.33, 'writer-producer': 0.34 },
-      'production': { 'touring-performer': 0.33, 'creative-artist': 0.34, 'writer-producer': 0.33 },
-      'scale': { 'touring-performer': 0.34, 'creative-artist': 0.33, 'writer-producer': 0.33 }
-    }
-  };
-  
-  // Question weights based on importance
-  const questionWeights = {
-    motivation: 0.25,
-    'ideal-day': 0.20,
-    'success-vision': 0.10,
-    'success-definition': 0.40,
-    'stage-level': 0.05
-  };
-  
-  // Calculate weighted scores
-  Object.entries(responses).forEach(([question, answer]) => {
-    if (fuzzyMatrix[question] && fuzzyMatrix[question][answer]) {
-      const weight = questionWeights[question] || 0.2;
-      Object.entries(fuzzyMatrix[question][answer]).forEach(([pathway, value]) => {
-        scores[pathway] += value * weight;
-      });
-    }
-  });
-  
-  // Convert to percentages
-  const maxPossibleScore = Object.values(questionWeights).reduce((a, b) => a + b, 0);
-  const percentages = {};
-  Object.entries(scores).forEach(([pathway, score]) => {
-    percentages[pathway] = Math.round((score / maxPossibleScore) * 100);
-  });
-  
-  return percentages;
+  const result = scoreUser(responses);
+  return result.displayPct;
 };
 
 // Get primary pathway (for backwards compatibility)
 const determinePathway = (responses) => {
-  const percentages = calculateFuzzyScores(responses);
-  return Object.keys(percentages).reduce((a, b) => percentages[a] > percentages[b] ? a : b);
+  const result = scoreUser(responses);
+  const sorted = Object.entries(result.displayPct).sort((a, b) => b[1] - a[1]);
+  return sorted[0][0];
 };
 
-// Get pathway blend description
-const getPathwayBlend = (percentages) => {
-  const sorted = Object.entries(percentages).sort((a, b) => b[1] - a[1]);
+// Get pathway blend description (updated for v2)
+const getPathwayBlend = (scoreResult) => {
+  const sorted = Object.entries(scoreResult.displayPct).sort((a, b) => b[1] - a[1]);
   const primary = sorted[0];
   const secondary = sorted[1];
   
-  if (primary[1] - secondary[1] < 10) {
-    // Very close scores - true hybrid
+  // Use the blendType from v2 scoring
+  const blendType = scoreResult.blendType;
+  
+  if (blendType === 'Hybrid Multi-Creator') {
     return {
       type: 'hybrid',
       description: `You're a true hybrid creator with nearly equal alignment to multiple paths`,
@@ -427,8 +377,7 @@ const getPathwayBlend = (percentages) => {
       secondary: secondary[0],
       balance: true
     };
-  } else if (secondary[1] > 30) {
-    // Strong secondary influence
+  } else if (blendType === 'Blend 70/30') {
     return {
       type: 'blend',
       description: `You're ${primary[1]}% aligned with your primary path, but show strong ${secondary[1]}% signals toward another`,
@@ -437,7 +386,6 @@ const getPathwayBlend = (percentages) => {
       balance: false
     };
   } else {
-    // Clear primary path
     return {
       type: 'focused',
       description: `You show clear ${primary[1]}% alignment with your primary path`,
@@ -897,8 +845,13 @@ const FuzzyScorePreview = ({ scores, blend }) => {
 };
 
 // --- Full Fuzzy Score Display Component ---
-const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
+const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => {
   const selectedPathways = detectSelectedPathways(responses);
+  
+  // Use scoreResult if available (v2), otherwise fall back to old props
+  const displayScores = scoreResult ? scoreResult.displayPct : scores;
+  const absScores = scoreResult ? scoreResult.absPct : null;
+  const levels = scoreResult ? scoreResult.levels : null;
   
   const pathwayInfo = {
     'touring-performer': { 
@@ -936,14 +889,16 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
     }
   };
   
-  // Map scores to archetype levels
-  const getArchetypeLevel = (percentage) => {
-    if (percentage >= 85) return { level: 'Core Focus', icon: '🔥', description: '' };
-    if (percentage >= 55) return { level: 'Potential Distraction', icon: '⚡', description: '' };
+  // Map scores to archetype levels (using v2 thresholds)
+  const getArchetypeLevel = (percentage, absPct = null) => {
+    // If we have absolute percentage from v2, use that for level determination
+    const checkPct = absPct !== null ? absPct : percentage;
+    if (checkPct >= 80) return { level: 'Core Focus', icon: '🔥', description: '' };
+    if (checkPct >= 45) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
     return { level: 'Noise', icon: '💫', description: '' };
   };
   
-  const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const sortedScores = Object.entries(displayScores).sort((a, b) => b[1] - a[1]);
   
   return (
     <div className="mb-8">
@@ -953,7 +908,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses }) => {
       <div className="space-y-6">
         {sortedScores.map(([pathway, percentage], index) => {
           const info = pathwayInfo[pathway];
-          const archetypeLevel = getArchetypeLevel(percentage);
+          // Use levels from scoreResult if available, otherwise calculate
+          const archetypeLevel = levels 
+            ? { level: levels[pathway], icon: levels[pathway] === 'Core Focus' ? '🔥' : levels[pathway] === 'Strategic Secondary' ? '⚡' : '💫', description: '' }
+            : getArchetypeLevel(percentage, absScores ? absScores[pathway] : null);
           const isPrimary = index === 0;
           const isSecondary = index === 1;
           
@@ -1440,8 +1398,10 @@ const HOMECreatorFlow = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [aiGeneratedPathway, setAiGeneratedPathway] = useState(null);
-  const [fuzzyScores, setFuzzyScores] = useState(null);
-  const [pathwayBlend, setPathwayBlend] = useState(null);
+  const [scoreResult, setScoreResult] = useState(null);
+  // Backwards compatibility getters
+  const fuzzyScores = scoreResult ? scoreResult.displayPct : null;
+  const pathwayBlend = scoreResult ? getPathwayBlend(scoreResult) : null;
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [processingStartTime, setProcessingStartTime] = useState(null);
 
@@ -1529,11 +1489,14 @@ const HOMECreatorFlow = () => {
         try {
           console.log('🤖 Calling AI endpoint with responses:', finalResponses);
           
-          // Calculate fuzzy scores
-          const calculatedScores = calculateFuzzyScores(finalResponses);
-          const calculatedBlend = getPathwayBlend(calculatedScores);
-          setFuzzyScores(calculatedScores);
-          setPathwayBlend(calculatedBlend);
+          // Calculate scores using v2 logic
+          const { scoreUser } = await import('../lib/scoring/index.js');
+          const result = scoreUser(finalResponses);
+          setScoreResult(result);
+          
+          // For backwards compatibility in API calls
+          const calculatedScores = result.displayPct;
+          const calculatedBlend = getPathwayBlend(result);
           
           // Progressive step completion
           setTimeout(() => { currentStep = 1; }, 1200);
@@ -1548,7 +1511,8 @@ const HOMECreatorFlow = () => {
             body: JSON.stringify({ 
               responses: finalResponses,
               fuzzyScores: calculatedScores,
-              pathwayBlend: calculatedBlend
+              pathwayBlend: calculatedBlend,
+              scoreResult: result
             })
           });
           
@@ -1661,7 +1625,8 @@ const HOMECreatorFlow = () => {
         pathway: aiGeneratedPathway || pathway,
         fuzzyScores,
         pathwayBlend,
-        responses
+        responses,
+        scoreResult
       };
       
       sessionStorage.setItem(`pdf-data-${sessionId}`, JSON.stringify(pdfData));
@@ -2766,7 +2731,17 @@ const HOMECreatorFlow = () => {
                         </div>
                       </div>
                       
-                      <h1 className="text-2xl font-bold mb-4 text-white">{pathway.title}</h1>
+                      {(() => {
+                        const rec = scoreResult?.recommendation;
+                        let resultHeadline = pathway.title;
+                        if (rec) {
+                          const name = PATH_LABELS[rec.path] || rec.path;
+                          resultHeadline = rec.promoted
+                            ? `Recommended Focus: ${name}`
+                            : `Core Focus: ${name}`;
+                        }
+                        return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
+                      })()}
                       <p className="text-sm text-gray-300 leading-relaxed">{pathway.description}</p>
                     </div>
                     
@@ -2785,7 +2760,7 @@ const HOMECreatorFlow = () => {
                   {/* Full Fuzzy Score Display */}
                   {fuzzyScores && (
                     <div className="mb-8">
-                      <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} responses={responses} />
+                      <FuzzyScoreDisplay scores={fuzzyScores} blend={pathwayBlend} responses={responses} scoreResult={scoreResult} />
                     </div>
                   )}
                   

@@ -285,6 +285,7 @@ export default async function handler(req, res) {
     const templateData = {
       ...pathwayData,
       fuzzyScoresArray,
+      recommendation: pathwayData.scoreResult?.recommendation,
       currentDate: new Date().toLocaleDateString()
     };
 
