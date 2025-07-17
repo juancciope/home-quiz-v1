@@ -175,10 +175,19 @@ Do not box them into a single category - acknowledge their unique blend and prov
 const responseText = assistantMessage.content[0].text.value;
 console.log('🎯 Assistant response received');
 
+// TEMPORARY FIX: Replace old terminology until OpenAI assistant is updated
+const sanitizedText = responseText
+  .replace(/Potential Distraction/g, 'Strategic Secondary')
+  .replace(/potential distraction/g, 'strategic secondary')
+  .replace(/85%\+/g, '80%+')
+  .replace(/55-84%/g, '45-79%')
+  .replace(/\b85%/g, '80%')
+  .replace(/\b55%/g, '45%');
+
 let aiResponse;
 try {
   // Extract JSON from the response
-  const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+  const jsonMatch = sanitizedText.match(/\{[\s\S]*\}/);
   if (jsonMatch) {
     aiResponse = JSON.parse(jsonMatch[0]);
   } else {
@@ -210,6 +219,13 @@ const pathwayTitles = {
   'creative-artist': 'The Creative Artist Path',
   'writer-producer': 'The Writer-Producer Path'
 };
+
+// Sanitize description field as well
+if (aiResponse.personalizedDescription) {
+  aiResponse.personalizedDescription = aiResponse.personalizedDescription
+    .replace(/Potential Distraction/g, 'Strategic Secondary')
+    .replace(/potential distraction/g, 'strategic secondary');
+}
 
 // Format the response for the frontend
 const result = {
