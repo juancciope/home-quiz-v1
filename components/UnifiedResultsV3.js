@@ -68,12 +68,17 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
     : `Recommended Focus: ${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name}`;
   
   const strategy = (() => {
+    const stage = responses['stage-level'];
+    const topPathLabel = PATH_LABELS[topPath.path];
+    
     if (isCoreFocus && sortedPaths[1]?.level === 'Strategic Secondary') {
-      return `Focus 70% on ${PATH_LABELS[topPath.path]}, leverage 30% on ${PATH_LABELS[sortedPaths[1].path]} as strategic support`;
+      return `Focus 70% on ${topPathLabel}, leverage 30% on ${PATH_LABELS[sortedPaths[1].path]} as strategic support`;
     } else if (isCoreFocus) {
-      return `Dedicate 80% of your energy to mastering ${PATH_LABELS[topPath.path]}`;
+      const verb = stage === 'scale' ? 'Scale your expertise in' : stage === 'production' ? 'Master your skills in' : 'Build your foundation in';
+      return `${verb} ${topPathLabel} - dedicate 80% of your energy here`;
     } else {
-      return `Start with ${PATH_LABELS[topPath.path]} to build momentum and clarity`;
+      const verb = stage === 'scale' ? 'Optimize and scale' : stage === 'production' ? 'Develop mastery in' : 'Start with';
+      return `${verb} ${topPathLabel} to build momentum and clarity`;
     }
   })();
   
@@ -116,18 +121,18 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
                 </p>
               </div>
               
-              {/* Percentage with Bar */}
-              <div className="text-right w-24">
-                <div className="text-lg font-bold text-white">{pathData.displayPct}%</div>
-                <div className="w-full bg-gray-700 rounded-full h-1.5 mt-1">
+              {/* Progress Bar with Signal */}
+              <div className="text-right w-32">
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
                   <div 
                     className={`h-full rounded-full bg-gradient-to-r ${info.color}`}
                     style={{ width: `${pathData.displayPct}%` }}
                   />
                 </div>
-                {pathData.absPct !== pathData.displayPct && (
-                  <div className="text-[10px] text-gray-500 mt-0.5">Signal: {Math.round(pathData.absPct)}%</div>
-                )}
+                <div className="flex justify-between items-center text-[10px]">
+                  <span className="text-gray-400">📡 {Math.round(pathData.absPct)}%</span>
+                  <span className="text-white font-medium">{pathData.displayPct}%</span>
+                </div>
               </div>
             </div>
           );
@@ -164,9 +169,14 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
           ))}
         </div>
         
-        <p className="text-xs text-gray-400 mt-4 italic">
-          Why this matters: Clear focus accelerates progress. These steps build momentum in your strongest area while maintaining strategic balance.
-        </p>
+        <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
+          <p className="text-xs text-gray-400 mb-2">
+            <span className="text-white font-semibold">📡 Signal:</span> Your raw alignment based on quiz responses
+          </p>
+          <p className="text-xs text-gray-400 italic">
+            Why this matters: Clear focus accelerates progress. These steps build momentum in your strongest area while maintaining strategic balance.
+          </p>
+        </div>
       </div>
     </div>
   );
