@@ -8,7 +8,7 @@
 import React from 'react';
 import { PATH_LABELS } from '../lib/quiz/ui.js';
 
-const UnifiedResultsV3 = ({ scoreResult, responses }) => {
+const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
   if (!scoreResult) return null;
   
   const { displayPct, absPct, levels, recommendation } = scoreResult;
@@ -91,12 +91,8 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
       {/* Main Headline Section */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">{headline}</h2>
-        <p className="text-sm text-gray-300 max-w-md mx-auto">{strategy}</p>
       </div>
       
-      {/* Your Focus Areas */}
-      <h3 className="text-lg font-semibold mb-4 text-white text-center">Your Focus Areas</h3>
-      <p className="text-xs text-gray-400 text-center mb-6">Ranked by your responses - helping you find clarity in a scattered industry</p>
       
       <div className="space-y-6 mb-8">
         {sortedPaths.map((pathData, index) => {
@@ -108,17 +104,6 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
           
           return (
             <div key={pathData.path} className="relative">
-              {/* Rank indicator */}
-              {isPrimary && (
-                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white text-xs font-bold px-2 py-1 rounded-full z-10">
-                  #1 PRIMARY
-                </div>
-              )}
-              {isSecondary && (
-                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-gray-400 to-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
-                  #2 SECONDARY
-                </div>
-              )}
               
               {/* Archetype Card */}
               <div className={`p-4 rounded-xl bg-gradient-to-r ${
@@ -143,23 +128,13 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className={`text-base font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{PATH_LABELS[pathData.path] || info.name}</span>
                           <span className={`px-2 py-1 rounded-full text-xs font-medium border ${levelStyle.badge} whitespace-nowrap`}>
-                            {levelStyle.icon} {pathData.level}
+                            {levelStyle.icon} {pathData.level === 'Strategic Secondary' ? 'Secondary' : pathData.level}
                           </span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <div className="flex items-center gap-1">
-                        <span className={`text-lg font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{alignmentScore}%</span>
-                        <div className="group relative">
-                          <span className="text-gray-400 cursor-help text-xs">ⓘ</span>
-                          <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 p-3 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 z-10">
-                            <div className="font-semibold text-white mb-1">Alignment Score</div>
-                            How well this path matches your quiz responses. Higher scores mean stronger natural fit based on your motivation, vision, and success definition.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-400">alignment</div>
+                      <span className={`text-lg font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{alignmentScore}%</span>
                     </div>
                   </div>
                   
@@ -198,38 +173,36 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
           </span>
         </div>
         
-        {/* Next 90 Days Section */}
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-[#1DD1A1] mb-3">Next 90 Days - Foundation Building</h4>
-          <div className="space-y-3">
-            {[
-              `Double down on ${PATH_LABELS[topPath.path]} mastery and opportunities`,
-              'Set up weekly progress check-ins and accountability',
-              'Connect with 3 successful people in your focus area',
-              'Define one major 90-day milestone and track it'
-            ].map((item, index) => (
-              <div key={index} className="flex gap-3">
-                <div className={`
-                  w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
-                  bg-gradient-to-r ${index === 0 ? 'from-[#1DD1A1] to-[#B91372]' : 'from-gray-500 to-gray-600'}
-                  text-white flex-shrink-0
-                `}>
-                  {index + 1}
-                </div>
-                <p className="text-sm text-gray-300">{item}</p>
+        {/* Strategic Roadmap Steps */}
+        <div className="space-y-3">
+          {pathway?.planPreview?.map((step, index) => (
+            <div key={index} className="flex gap-3">
+              <div className={`
+                w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
+                bg-gradient-to-r ${index === 0 ? 'from-[#1DD1A1] to-[#B91372]' : 'from-gray-500 to-gray-600'}
+                text-white flex-shrink-0
+              `}>
+                {index + 1}
               </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Strategic Actions Section */}
-        <div className="pt-4 border-t border-white/20">
-          <h4 className="text-sm font-semibold text-[#B91372] mb-3">Strategic Actions - High Impact</h4>
-          <div className="grid gap-3">
-            <div className="text-sm text-gray-300">
-              Get specific, actionable steps tailored to your {PATH_LABELS[topPath.path]} path and {responses['stage-level']} stage in your detailed roadmap.
+              <p className="text-sm text-gray-300">{step}</p>
             </div>
-          </div>
+          )) || [
+            `Double down on ${PATH_LABELS[topPath.path]} mastery and opportunities`,
+            'Set up weekly progress check-ins and accountability',
+            'Connect with 3 successful people in your focus area',
+            'Define one major 90-day milestone and track it'
+          ].map((item, index) => (
+            <div key={index} className="flex gap-3">
+              <div className={`
+                w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
+                bg-gradient-to-r ${index === 0 ? 'from-[#1DD1A1] to-[#B91372]' : 'from-gray-500 to-gray-600'}
+                text-white flex-shrink-0
+              `}>
+                {index + 1}
+              </div>
+              <p className="text-sm text-gray-300">{item}</p>
+            </div>
+          ))}
         </div>
         
         <p className="text-xs text-gray-400 mt-4 italic">

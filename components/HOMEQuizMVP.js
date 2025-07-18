@@ -2799,71 +2799,18 @@ const HOMECreatorFlow = () => {
                   {/* Full Fuzzy Score Display */}
                   {scoreResult && (
                     <div className="mb-8">
-                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} />
+                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} pathway={pathway} />
                     </div>
                   )}
                   
-                  {/* Action Plan Preview - compact for mobile */}
-                  <div className="mb-8">
-                    <h2 className="text-lg font-bold mb-4 text-center text-white">Your Strategic Roadmap</h2>
-                    
-                    <div className="space-y-3 mb-6">
-                      {pathway.planPreview.map((step, index) => (
-                        <div key={index} className="flex items-center gap-3 group">
-                          <div className="relative group overflow-hidden">
-                            {/* Liquid animation background for circular brand-colored elements */}
-                            <div className="absolute inset-0 rounded-xl overflow-hidden">
-                              <div className="absolute top-0 left-0 w-full h-full">
-                                <div className="absolute top-1/4 left-1/4 w-6 h-6 bg-[#1DD1A1] rounded-full filter blur-sm opacity-60 animate-liquid-blob" />
-                                <div className="absolute bottom-1/4 right-1/4 w-4 h-4 bg-[#B91372] rounded-full filter blur-sm opacity-40 animate-liquid-blob-reverse" />
-                              </div>
-                            </div>
-                            <div className="relative w-8 h-8 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-xl flex items-center justify-center font-bold text-white text-sm z-10">
-                              {index + 1}
-                            </div>
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-sm font-medium text-white">{step}</h3>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    {/* Enhanced CTA Button */}
+                  {/* CTA Button for Next Steps */}
+                  <div className="text-center">
                     <button
                       onClick={goNext}
-                      className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
-                      style={{ transformStyle: 'preserve-3d' }}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold text-white hover:scale-105 transition-transform"
                     >
-                      {/* 3D Liquid layers */}
-                      <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
-                      </div>
-                      
-                      {/* Animated liquid blobs */}
-                      <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
-                        <div className="absolute top-0 left-0 w-full h-full">
-                          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
-                          <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
-                          <div className="absolute top-1/2 left-1/2 w-28 h-28 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
-                          <div className="absolute top-1/3 right-1/3 w-20 h-20 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
-                          <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
-                        </div>
-                      </div>
-                      
-                      {/* Glass effect overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/0 rounded-2xl" style={{ transform: 'translateZ(0px)' }} />
-                      
-                      {/* Shine effect */}
-                      <div className="absolute inset-0 rounded-2xl overflow-hidden" style={{ transform: 'translateZ(1px)' }}>
-                        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
-                      </div>
-                      
-                      {/* Outer glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
-                      
-                      <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>View My Roadmap</span>
-                      <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
+                      <span>Get Your Full Roadmap</span>
+                      <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
