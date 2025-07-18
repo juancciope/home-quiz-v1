@@ -173,6 +173,10 @@ export default async function handler(req, res) {
       return a >= b;
     });
 
+    Handlebars.registerHelper('or', function(a, b) {
+      return a || b;
+    });
+
     // Generate pathway-specific action items (same logic as in quiz component)
     const generateActionsForStep = (stepTitle, stepIndex, pathway) => {
       const pathwayType = pathway.title ? pathway.title.toLowerCase() : '';
