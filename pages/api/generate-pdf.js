@@ -123,9 +123,14 @@ export default async function handler(req, res) {
         const aiPathwayDetails = pathwayData.pathwayDetails || {};
         const pathwayDetail = aiPathwayDetails[key] || {};
         
+        // Calculate relative percentages that add up to 100%
+        const totalAbsPct = Object.values(absPct).reduce((sum, pct) => sum + pct, 0);
+        const relativePct = Math.round((absPct[key] / totalAbsPct) * 100) || percentage;
+        
         return {
           key,
           percentage,
+          relativePct,
           absolutePercentage: Math.round(absPct[key] || percentage),
           name: PATH_LABELS[key] || info.name,
           icon: info.icon,
@@ -315,6 +320,7 @@ export default async function handler(req, res) {
       topLabel,
       topPathName,
       stageLevel: pathwayData.scoreResult?.stageLevel,
+      personalizedDescription: pathwayData.pathway?.personalizedDescription || pathwayData.pathway?.description,
       currentDate: new Date().toLocaleDateString()
     };
 
