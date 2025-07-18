@@ -38,55 +38,22 @@ export default async function handler(req, res) {
       });
     }
 
-    // Detect selected pathways for conditional person messaging
-    const detectSelectedPathways = (responses) => {
-      const touringAnswers = ['stage-energy', 'performing', 'touring-artist', 'live-performer'];
-      const creativeAnswers = ['creative-expression', 'creating-content', 'creative-brand', 'online-audience'];
-      const producerAnswers = ['behind-scenes', 'studio-work', 'in-demand-producer', 'songwriter'];
-      
-      const hasSelectedTouring = Object.values(responses).some(answer => touringAnswers.includes(answer));
-      const hasSelectedCreative = Object.values(responses).some(answer => creativeAnswers.includes(answer));
-      const hasSelectedProducer = Object.values(responses).some(answer => producerAnswers.includes(answer));
-      
-      return {
-        'touring-performer': hasSelectedTouring,
-        'creative-artist': hasSelectedCreative,
-        'writer-producer': hasSelectedProducer
-      };
-    };
-
-    // Prepare data for template
-    const selectedPathways = detectSelectedPathways(pathwayData.responses || {});
+    // Path metadata - icons and colors only (content comes from AI)
     const pathwayInfo = {
       'touring-performer': { 
         name: 'Touring Performer', 
         icon: '🎤', 
-        color: '#3b82f6',
-        description: selectedPathways['touring-performer'] 
-          ? 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.'
-          : 'Live performance can amplify your main path.',
-        focusAreas: 'Stage presence • Audience connection • Live sound • Touring strategy',
-        growthAreas: 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
+        color: '#3b82f6'
       },
       'creative-artist': { 
         name: 'Creative Artist', 
         icon: '🎨', 
-        color: '#ec4899',
-        description: selectedPathways['creative-artist']
-          ? 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.'
-          : 'Creative skills can enhance your primary focus.',
-        focusAreas: 'Brand development • Content creation • Digital marketing • Revenue streams',
-        growthAreas: 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
+        color: '#ec4899'
       },
       'writer-producer': { 
         name: 'Writer/Producer', 
         icon: '🎹', 
-        color: '#10b981',
-        description: selectedPathways['writer-producer']
-          ? 'You excel behind the scenes, crafting the foundation that makes others shine. Your technical skills and collaborative nature are your pathway to consistent income and creative fulfillment.'
-          : 'Production expertise can support your main strengths.',
-        focusAreas: 'Production skills • Collaboration network • Business development • Royalty optimization',
-        growthAreas: 'Balance solo creativity with collaboration • Explore performance opportunities • Build strategic partnerships'
+        color: '#10b981'
       }
     };
     
@@ -104,12 +71,10 @@ export default async function handler(req, res) {
         const info = pathwayInfo[key] || { 
           name: key, 
           icon: '🎵', 
-          color: '#1DD1A1',
-          description: '',
-          traits: '',
-          shadow: ''
+          color: '#1DD1A1'
         };
-        // Use scoreResult levels exclusively - no fallbacks
+        
+        // Use scoreResult levels exclusively
         const levelName = levels[key] || 'Noise';
         const archetypeLevel = { 
           level: levelName, 
@@ -119,7 +84,7 @@ export default async function handler(req, res) {
         const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;
         const isSecondary = index === 1 && !isPrimary;
         
-        // Use AI-generated pathway details if available, fallback to default
+        // Use ONLY AI-generated pathway details - no fallbacks
         const aiPathwayDetails = pathwayData.pathwayDetails || {};
         const pathwayDetail = aiPathwayDetails[key] || {};
         
@@ -135,12 +100,10 @@ export default async function handler(req, res) {
           name: PATH_LABELS[key] || info.name,
           icon: info.icon,
           color: info.color,
-          description: info.description,
-          focusMessage: pathwayDetail.focusMessage || info.description,
-          focusAreas: pathwayDetail.focusAreas || info.focusAreas,
-          growthAreas: pathwayDetail.growthAreas || info.growthAreas,
-          traits: info.traits,
-          shadow: info.shadow,
+          // Use ONLY AI-generated content
+          focusMessage: pathwayDetail.focusMessage,
+          focusAreas: pathwayDetail.focusAreas,
+          growthAreas: pathwayDetail.growthAreas,
           archetypeLevel: archetypeLevel.level,
           archetypeIcon: archetypeLevel.icon,
           archetypeDescription: archetypeLevel.description,

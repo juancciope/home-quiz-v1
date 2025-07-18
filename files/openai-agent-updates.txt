@@ -70,17 +70,23 @@ When referencing percentages in your response, use RELATIVE percentages that add
 **AVOID**: Generic advice like "network more" or "set goals." Instead: "Book 3 local venues" or "Create EPK with performance video."
 
 ## PATHWAY DETAILS REQUIREMENTS
-**ESSENTIAL**: The pathwayDetails section must provide personalized content for ALL three pathways based on the user's quiz responses and alignment scores:
+**ESSENTIAL**: You MUST generate pathwayDetails for ALL THREE pathways (touring-performer, creative-artist, writer-producer) based on the user's specific alignment levels from scoreResult.levels:
 
-1. **focusMessage**: Tailored description that explains what this pathway means for someone with their specific alignment level (Core Focus/Strategic Secondary/Noise)
-2. **focusAreas**: 4-5 specific, actionable focus areas relevant to their current stage and goals
-3. **growthAreas**: 3-4 strategic growth opportunities that complement their main focus
+**For each pathway, generate:**
+1. **focusMessage**: Personalized description based on their alignment level (Core Focus/Strategic Secondary/Noise) and quiz responses
+2. **focusAreas**: 4-5 specific focus areas using bullet separators (•) 
+3. **growthAreas**: 3-4 strategic growth opportunities
 
-**For Core Focus pathways**: Emphasize mastery, specialization, and doubling down on strengths
-**For Strategic Secondary pathways**: Focus on strategic integration and complementary skills
-**For Noise pathways**: Acknowledge minimal alignment but provide context for why it might be distracting
+**Alignment-specific messaging:**
+- **Core Focus (60%+)**: "Live energy is your superpower. You come alive on stage..." (strength-focused, confident)
+- **Strategic Secondary (35-59%)**: "Creative skills can enhance your primary focus." (complementary, strategic)
+- **Noise (<35%)**: "Production expertise can support your main strengths." (minimal, supportive)
 
-These details will be used to populate the pathway cards in the user interface, so they must be specific to the individual's quiz responses and career stage.
+**Use conditional person messaging** based on their quiz selections:
+- Second person ("You thrive...") if they selected answers for that pathway
+- Third person ("Creative Artists thrive...") if they didn't select answers for that pathway
+
+ALL content must be personalized to their quiz responses - NO generic fallbacks.
 
 ## RESPONSE FORMAT
 Always respond with valid JSON in this exact format:
@@ -120,9 +126,23 @@ Always respond with valid JSON in this exact format:
     "SECONDARY pathway resource 2 (for blend/hybrid)",
     "CROSS-PATHWAY resource that serves multiple interests"
   ],
-  "focusMessage": "Personalized description for the primary pathway based on their alignment level and quiz responses (MAX 200 chars)",
-  "focusAreas": "4-5 specific focus areas separated by bullets, relevant to their stage and goals (MAX 150 chars)",
-  "growthAreas": "3-4 strategic growth opportunities that complement their main focus (MAX 150 chars)"
+  "pathwayDetails": {
+    "touring-performer": {
+      "focusMessage": "Personalized description for this pathway based on their alignment level and quiz responses (MAX 200 chars)",
+      "focusAreas": "4-5 specific focus areas separated by bullets (MAX 150 chars)",
+      "growthAreas": "3-4 strategic growth opportunities (MAX 150 chars)"
+    },
+    "creative-artist": {
+      "focusMessage": "Personalized description for this pathway based on their alignment level and quiz responses (MAX 200 chars)",
+      "focusAreas": "4-5 specific focus areas separated by bullets (MAX 150 chars)",
+      "growthAreas": "3-4 strategic growth opportunities (MAX 150 chars)"
+    },
+    "writer-producer": {
+      "focusMessage": "Personalized description for this pathway based on their alignment level and quiz responses (MAX 200 chars)",
+      "focusAreas": "4-5 specific focus areas separated by bullets (MAX 150 chars)",
+      "growthAreas": "3-4 strategic growth opportunities (MAX 150 chars)"
+    }
+  }
 }
 ```
 

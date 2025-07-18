@@ -36,25 +36,25 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails })
         name: 'Touring Performer',
         icon: '🎤',
         color: 'from-blue-500 to-purple-600',
-        focusMessage: aiPathwayDetails?.['touring-performer']?.focusMessage || (isSelected ? 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.' : 'Live performance can amplify your main path.'),
-        focusAreas: aiPathwayDetails?.['touring-performer']?.focusAreas || 'Stage presence • Audience connection • Live sound • Touring strategy',
-        growthAreas: aiPathwayDetails?.['touring-performer']?.growthAreas || 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
+        focusMessage: aiPathwayDetails?.['touring-performer']?.focusMessage,
+        focusAreas: aiPathwayDetails?.['touring-performer']?.focusAreas,
+        growthAreas: aiPathwayDetails?.['touring-performer']?.growthAreas
       },
       'creative-artist': {
         name: 'Creative Artist', 
         icon: '🎨',
         color: 'from-pink-500 to-orange-500',
-        focusMessage: aiPathwayDetails?.['creative-artist']?.focusMessage || (isSelected ? 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.' : 'Creative skills can enhance your primary focus.'),
-        focusAreas: aiPathwayDetails?.['creative-artist']?.focusAreas || 'Brand development • Content creation • Digital marketing • Revenue streams',
-        growthAreas: aiPathwayDetails?.['creative-artist']?.growthAreas || 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
+        focusMessage: aiPathwayDetails?.['creative-artist']?.focusMessage,
+        focusAreas: aiPathwayDetails?.['creative-artist']?.focusAreas,
+        growthAreas: aiPathwayDetails?.['creative-artist']?.growthAreas
       },
       'writer-producer': {
         name: 'Writer/Producer',
         icon: '🎹', 
         color: 'from-green-500 to-teal-500',
-        focusMessage: aiPathwayDetails?.['writer-producer']?.focusMessage || (isSelected ? 'You excel at crafting sonic experiences and building behind-the-scenes partnerships. Your technical mastery and collaborative approach create lasting value, generating income through royalties, production credits, and high-value creative relationships.' : 'Production expertise can support your main strengths.'),
-        focusAreas: aiPathwayDetails?.['writer-producer']?.focusAreas || 'Production mastery • Collaboration network • Business development • Royalty optimization',
-        growthAreas: aiPathwayDetails?.['writer-producer']?.growthAreas || 'Balance solo work with collaboration • Explore performance opportunities • Build strategic partnerships'
+        focusMessage: aiPathwayDetails?.['writer-producer']?.focusMessage,
+        focusAreas: aiPathwayDetails?.['writer-producer']?.focusAreas,
+        growthAreas: aiPathwayDetails?.['writer-producer']?.growthAreas
       }
     };
     return base[path] || {};

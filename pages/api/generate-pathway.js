@@ -193,9 +193,13 @@ try {
 if (!aiResponse.pathway || 
     !aiResponse.customNextSteps || 
     !aiResponse.homeConnection ||
-    !aiResponse.recommendedResources) {
+    !aiResponse.recommendedResources ||
+    !aiResponse.pathwayDetails ||
+    !aiResponse.pathwayDetails['touring-performer'] ||
+    !aiResponse.pathwayDetails['creative-artist'] ||
+    !aiResponse.pathwayDetails['writer-producer']) {
   console.error('Incomplete response:', aiResponse);
-  throw new Error('Incomplete assistant response');
+  throw new Error('Incomplete assistant response - missing pathwayDetails for all pathways');
 }
         
 // Get pathway metadata
@@ -227,14 +231,8 @@ const result = {
   resources: aiResponse.recommendedResources,
   homeConnection: aiResponse.homeConnection,
   recommendation: scoreResult?.recommendation,
-  // Include pathway details for components and PDF generation
-  pathwayDetails: {
-    [aiResponse.pathway]: {
-      focusMessage: aiResponse.focusMessage || `Your ${pathwayTitles[aiResponse.pathway]} focus is your primary strength.`,
-      focusAreas: aiResponse.focusAreas || 'Focus areas to be determined',
-      growthAreas: aiResponse.growthAreas || 'Growth areas to be determined'
-    }
-  },
+  // Include AI-generated pathway details for all pathways
+  pathwayDetails: aiResponse.pathwayDetails,
   isPersonalized: true,
   assistantUsed: true
 };
