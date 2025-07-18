@@ -193,7 +193,10 @@ try {
 if (!aiResponse.pathway || 
     !aiResponse.customNextSteps || 
     !aiResponse.homeConnection ||
-    !aiResponse.recommendedResources) {
+    !aiResponse.recommendedResources ||
+    !aiResponse.focusMessage ||
+    !aiResponse.focusAreas ||
+    !aiResponse.growthAreas) {
   console.error('Incomplete response:', aiResponse);
   throw new Error('Incomplete assistant response');
 }
@@ -227,6 +230,14 @@ const result = {
   resources: aiResponse.recommendedResources,
   homeConnection: aiResponse.homeConnection,
   recommendation: scoreResult?.recommendation,
+  // Include pathway details for components and PDF generation
+  pathwayDetails: {
+    [aiResponse.pathway]: {
+      focusMessage: aiResponse.focusMessage,
+      focusAreas: aiResponse.focusAreas,
+      growthAreas: aiResponse.growthAreas
+    }
+  },
   isPersonalized: true,
   assistantUsed: true
 };

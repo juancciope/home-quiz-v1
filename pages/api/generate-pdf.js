@@ -307,11 +307,26 @@ export default async function handler(req, res) {
       }));
     }
 
-    // Prepare template data with scoreResult support
+    // Generate description using same logic as app
     const rec = pathwayData.scoreResult?.recommendation;
     const topPath = rec?.path || fuzzyScoresArray[0]?.key;
     const topLabel = rec?.promoted ? 'Recommended Focus' : 'Core Focus';
     const topPathName = PATH_LABELS[topPath] || topPath;
+    
+    // Generate description using EXACT same logic as app
+    const sortedPaths = fuzzyScoresArray;
+    const primary = sortedPaths[0];
+    const secondary = sortedPaths[1];
+    const stage = pathwayData.responses?.['stage-level'] || 'planning';
+    
+    let dynamicDescription;
+    if (primary?.archetypeLevel === 'Core Focus' && secondary?.archetypeLevel === 'Strategic Secondary') {
+      dynamicDescription = `Your ${PATH_LABELS[primary.key]} strength should lead your strategy, with your ${PATH_LABELS[secondary.key]} skills as strategic support. This balance creates the fastest path to your vision.`;
+    } else if (primary?.archetypeLevel === 'Core Focus') {
+      dynamicDescription = `Your ${PATH_LABELS[primary.key]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
+    } else {
+      dynamicDescription = `Your ${PATH_LABELS[primary.key]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
+    }
     
     const templateData = {
       ...pathwayData,
@@ -320,7 +335,7 @@ export default async function handler(req, res) {
       topLabel,
       topPathName,
       stageLevel: pathwayData.scoreResult?.stageLevel,
-      personalizedDescription: pathwayData.pathway?.personalizedDescription || pathwayData.pathway?.description,
+      dynamicDescription,
       currentDate: new Date().toLocaleDateString()
     };
 

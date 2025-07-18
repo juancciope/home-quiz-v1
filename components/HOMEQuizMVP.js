@@ -1583,6 +1583,8 @@ const HOMECreatorFlow = () => {
               steps: transformAIStepsToComponentFormat(aiPathway),
               isPersonalized: aiPathway.isPersonalized,
               assistantUsed: aiPathway.assistantUsed,
+              // Include pathway details for UnifiedResultsV3 and PDF generation
+              pathwayDetails: aiPathway.pathwayDetails,
               // Store original AI data
               originalNextSteps: aiPathway.nextSteps,
               originalResources: aiPathway.resources
@@ -1664,6 +1666,8 @@ const HOMECreatorFlow = () => {
         pathway: aiGeneratedPathway || pathway,
         responses,
         scoreResult,
+        // Include AI-generated pathway details for PDF
+        pathwayDetails: (aiGeneratedPathway || pathway)?.pathwayDetails,
         // Legacy fallback for PDF compatibility
         fuzzyScores: scoreResult?.displayPct || fuzzyScores,
         pathwayBlend: scoreResult ? { 
