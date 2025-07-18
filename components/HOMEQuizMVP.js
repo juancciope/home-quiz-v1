@@ -1,3 +1,9 @@
+/**
+ * HOME Quiz MVP Component
+ * Last Updated: 2025-01-18T11:00:00Z
+ * Version: 3.0.0
+ */
+
 import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import {
   ChevronRight,
@@ -21,6 +27,7 @@ import {
   Lock
 } from 'lucide-react';
 import { PATH_LABELS, PATH_ICONS, STAGE_COPY } from '../lib/quiz/ui.js';
+import UnifiedResultsV3 from './UnifiedResultsV3.js';
 
 // --- Assessment Questions ---
 const questions = [
@@ -2792,7 +2799,7 @@ const HOMECreatorFlow = () => {
                   {/* Full Fuzzy Score Display */}
                   {scoreResult && (
                     <div className="mb-8">
-                      <FuzzyScoreDisplay scores={scoreResult.displayPct} blend={pathwayBlend} responses={responses} scoreResult={scoreResult} />
+                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} />
                     </div>
                   )}
                   
