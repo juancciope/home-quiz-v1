@@ -2776,8 +2776,8 @@ const HOMECreatorFlow = () => {
                         if (rec) {
                           const pathLabel = PATH_LABELS[rec.path] || rec.path;
                           resultHeadline = rec.promoted
-                            ? `${pathway.icon} ${pathLabel} - Recommended`
-                            : `${pathway.icon} ${pathLabel} - Core`;
+                            ? `${pathLabel} - Recommended`
+                            : `${pathLabel} - Core`;
                         }
                         return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
                       })()}
@@ -2823,7 +2823,7 @@ const HOMECreatorFlow = () => {
                   {/* Full Fuzzy Score Display */}
                   {scoreResult && (
                     <div className="mb-8">
-                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} pathway={pathway} />
+                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} pathway={pathway} aiPathwayDetails={pathway?.pathwayDetails} />
                     </div>
                   )}
                   

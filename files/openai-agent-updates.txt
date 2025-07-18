@@ -69,6 +69,19 @@ When referencing percentages in your response, use RELATIVE percentages that add
 
 **AVOID**: Generic advice like "network more" or "set goals." Instead: "Book 3 local venues" or "Create EPK with performance video."
 
+## PATHWAY DETAILS REQUIREMENTS
+**ESSENTIAL**: The pathwayDetails section must provide personalized content for ALL three pathways based on the user's quiz responses and alignment scores:
+
+1. **focusMessage**: Tailored description that explains what this pathway means for someone with their specific alignment level (Core Focus/Strategic Secondary/Noise)
+2. **focusAreas**: 4-5 specific, actionable focus areas relevant to their current stage and goals
+3. **growthAreas**: 3-4 strategic growth opportunities that complement their main focus
+
+**For Core Focus pathways**: Emphasize mastery, specialization, and doubling down on strengths
+**For Strategic Secondary pathways**: Focus on strategic integration and complementary skills
+**For Noise pathways**: Acknowledge minimal alignment but provide context for why it might be distracting
+
+These details will be used to populate the pathway cards in the user interface, so they must be specific to the individual's quiz responses and career stage.
+
 ## RESPONSE FORMAT
 Always respond with valid JSON in this exact format:
 
@@ -216,6 +229,13 @@ This creates more personal, relevant guidance for pathways they showed interest 
 - For blend/hybrid: emphasize how HOME serves their multi-faceted interests
 - Reference how HOME's community understands their unique journey
 - End with clear next step (join community/attend webinar)
+
+**pathwayDetails**:
+- Generate personalized content for ALL three pathways based on their alignment scores
+- For Core Focus: Emphasize mastery, specialization, natural strengths
+- For Strategic Secondary: Focus on strategic integration, complementary development
+- For Noise: Acknowledge low alignment, explain why it might be distracting
+- All content must be specific to their quiz responses, stage, and success definition
 
 **recommendedResources**:
 - For focused: choose 6 resources from primary pathway

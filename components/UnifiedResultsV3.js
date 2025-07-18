@@ -8,7 +8,7 @@
 import React from 'react';
 import { PATH_LABELS } from '../lib/quiz/ui.js';
 
-const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
+const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails }) => {
   if (!scoreResult) return null;
   
   const { displayPct, absPct, levels, recommendation } = scoreResult;
@@ -35,25 +35,25 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
         name: 'Touring Performer',
         icon: '🎤',
         color: 'from-blue-500 to-purple-600',
-        focusMessage: isSelected ? 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.' : 'Live performance can amplify your main path.',
-        focusAreas: 'Stage presence • Audience connection • Live sound • Touring strategy',
-        growthAreas: 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
+        focusMessage: aiPathwayDetails?.['touring-performer']?.focusMessage || (isSelected ? 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.' : 'Live performance can amplify your main path.'),
+        focusAreas: aiPathwayDetails?.['touring-performer']?.focusAreas || 'Stage presence • Audience connection • Live sound • Touring strategy',
+        growthAreas: aiPathwayDetails?.['touring-performer']?.growthAreas || 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
       },
       'creative-artist': {
         name: 'Creative Artist', 
         icon: '🎨',
         color: 'from-pink-500 to-orange-500',
-        focusMessage: isSelected ? 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.' : 'Creative skills can enhance your primary focus.',
-        focusAreas: 'Brand development • Content creation • Digital marketing • Revenue streams',
-        growthAreas: 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
+        focusMessage: aiPathwayDetails?.['creative-artist']?.focusMessage || (isSelected ? 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.' : 'Creative skills can enhance your primary focus.'),
+        focusAreas: aiPathwayDetails?.['creative-artist']?.focusAreas || 'Brand development • Content creation • Digital marketing • Revenue streams',
+        growthAreas: aiPathwayDetails?.['creative-artist']?.growthAreas || 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
       },
       'writer-producer': {
         name: 'Writer/Producer',
         icon: '🎹', 
         color: 'from-green-500 to-teal-500',
-        focusMessage: isSelected ? 'You excel at crafting sonic experiences and building behind-the-scenes partnerships. Your technical mastery and collaborative approach create lasting value, generating income through royalties, production credits, and high-value creative relationships.' : 'Production expertise can support your main strengths.',
-        focusAreas: 'Production mastery • Collaboration network • Business development • Royalty optimization',
-        growthAreas: 'Balance solo work with collaboration • Explore performance opportunities • Build strategic partnerships'
+        focusMessage: aiPathwayDetails?.['writer-producer']?.focusMessage || (isSelected ? 'You excel at crafting sonic experiences and building behind-the-scenes partnerships. Your technical mastery and collaborative approach create lasting value, generating income through royalties, production credits, and high-value creative relationships.' : 'Production expertise can support your main strengths.'),
+        focusAreas: aiPathwayDetails?.['writer-producer']?.focusAreas || 'Production mastery • Collaboration network • Business development • Royalty optimization',
+        growthAreas: aiPathwayDetails?.['writer-producer']?.growthAreas || 'Balance solo work with collaboration • Explore performance opportunities • Build strategic partnerships'
       }
     };
     return base[path] || {};
@@ -169,10 +169,16 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                     isPrimary ? '' : ''
                   }`}>
                     {info.focusMessage}
-                    {isPrimary && pathData.level === 'Core Focus' && (
+                    {pathData.level === 'Core Focus' && (
                       <span className="block mt-2 text-gray-400">
                         This is your natural strength. The skills, mindset, and approach that come most easily to you. 
                         When you lean into this path, work feels more like play and progress accelerates.
+                      </span>
+                    )}
+                    {pathData.level === 'Strategic Secondary' && (
+                      <span className="block mt-2 text-gray-400">
+                        This complements your primary focus. These skills can enhance your main path when developed strategically. 
+                        Consider integrating these elements to create a more well-rounded approach.
                       </span>
                     )}
                   </p>
