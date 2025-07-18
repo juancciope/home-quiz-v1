@@ -13,10 +13,17 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
   
   const { displayPct, absPct, levels, recommendation } = scoreResult;
   
+  // Convert to relative percentages that add up to 100%
+  const totalAbsPct = Object.values(absPct).reduce((sum, pct) => sum + pct, 0);
+  const relativePct = {};
+  Object.entries(absPct).forEach(([path, pct]) => {
+    relativePct[path] = Math.round((pct / totalAbsPct) * 100);
+  });
+  
   // Sort paths by absolute percentage
   const sortedPaths = Object.entries(absPct)
     .sort((a, b) => b[1] - a[1])
-    .map(([path, pct]) => ({ path, absPct: pct, displayPct: displayPct[path], level: levels[path] }));
+    .map(([path, pct]) => ({ path, absPct: pct, relativePct: relativePct[path], displayPct: displayPct[path], level: levels[path] }));
   
   const topPath = sortedPaths[0];
   const isCoreFocus = topPath.level === 'Core Focus';
@@ -100,7 +107,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
           const isSecondary = index === 1;
           const info = getPathInfo(pathData.path, pathData.level, isPrimary);
           const levelStyle = getLevelStyle(pathData.level);
-          const alignmentScore = Math.round(pathData.absPct);
+          const relativeScore = pathData.relativePct;
           
           return (
             <div key={pathData.path} className="relative">
@@ -134,7 +141,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <span className={`text-lg font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{alignmentScore}%</span>
+                      <span className={`text-lg font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{relativeScore}%</span>
                     </div>
                   </div>
                   

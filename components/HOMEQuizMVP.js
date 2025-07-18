@@ -2803,16 +2803,18 @@ const HOMECreatorFlow = () => {
                     </div>
                   )}
                   
-                  {/* CTA Button for Next Steps */}
-                  <div className="text-center">
-                    <button
-                      onClick={goNext}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold text-white hover:scale-105 transition-transform"
-                    >
-                      <span>Get Your Full Roadmap</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
+                  {/* Enhanced CTA Button */}
+                  <button
+                    onClick={goNext}
+                    className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-[#B91372]/25 hover:scale-[1.02] text-white text-lg"
+                  >
+                    <div className="absolute inset-0 rounded-xl overflow-hidden">
+                      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/20 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+                    </div>
+                    
+                    <span className="relative z-10">Get Your Full Roadmap</span>
+                    <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
               </div>
             </div>
