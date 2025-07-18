@@ -35,7 +35,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
         name: 'Touring Performer',
         icon: '🎤',
         color: 'from-blue-500 to-purple-600',
-        focusMessage: isSelected ? 'Live energy is your superpower. Own the stage.' : 'Live performance can amplify your main path.',
+        focusMessage: isSelected ? 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.' : 'Live performance can amplify your main path.',
         focusAreas: 'Stage presence • Audience connection • Live sound • Touring strategy',
         growthAreas: 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
       },
@@ -43,7 +43,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
         name: 'Creative Artist', 
         icon: '🎨',
         color: 'from-pink-500 to-orange-500',
-        focusMessage: isSelected ? 'Your creative vision builds lasting impact and income.' : 'Creative skills can enhance your primary focus.',
+        focusMessage: isSelected ? 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.' : 'Creative skills can enhance your primary focus.',
         focusAreas: 'Brand development • Content creation • Digital marketing • Revenue streams',
         growthAreas: 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
       },
@@ -51,7 +51,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
         name: 'Writer/Producer',
         icon: '🎹', 
         color: 'from-green-500 to-teal-500',
-        focusMessage: isSelected ? 'Your technical skills create lasting value and partnerships.' : 'Production expertise can support your main strengths.',
+        focusMessage: isSelected ? 'You excel at crafting sonic experiences and building behind-the-scenes partnerships. Your technical mastery and collaborative approach create lasting value, generating income through royalties, production credits, and high-value creative relationships.' : 'Production expertise can support your main strengths.',
         focusAreas: 'Production mastery • Collaboration network • Business development • Royalty optimization',
         growthAreas: 'Balance solo work with collaboration • Explore performance opportunities • Build strategic partnerships'
       }
@@ -110,11 +110,6 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
   
   return (
     <div className="mb-8">
-      {/* Main Headline Section */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white mb-2">{headline}</h2>
-        <p className="text-sm text-gray-300 max-w-lg mx-auto leading-relaxed">{generateDescription()}</p>
-      </div>
       
       <div className="space-y-6 mb-8">
         {sortedPaths.map((pathData, index) => {
@@ -155,7 +150,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                         </div>
                       </div>
                     </div>
-                    {/* Alignment Bar */}
+                    {/* Natural Fit Indicator */}
                     <div className="w-24 ml-4">
                       <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
                         <div 
@@ -163,7 +158,10 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                           style={{ width: `${relativeScore}%` }}
                         />
                       </div>
-                      <div className="text-xs text-gray-400 text-center">alignment</div>
+                      <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
+                        <span className="text-yellow-400">⭐</span>
+                        <span>{relativeScore >= 40 ? 'Strong Fit' : relativeScore >= 25 ? 'Good Fit' : 'Light Fit'}</span>
+                      </div>
                     </div>
                   </div>
                   

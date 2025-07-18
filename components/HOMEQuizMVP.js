@@ -2748,13 +2748,7 @@ const HOMECreatorFlow = () => {
                 <div className="relative z-10">
                   {/* Header */}
                   <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
-                      <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
-                      <span className="text-sm font-semibold text-white">Your Path</span>
-                      <Sparkles className="w-4 h-4 text-[#B91372]" />
-                    </div>
-                    
-                    {/* Path result */}
+                    {/* Path result with icon */}
                     <div className="mb-6">
                       <div className="relative inline-block mb-4 group">
                         {/* Liquid animation for main icon */}
@@ -2776,8 +2770,8 @@ const HOMECreatorFlow = () => {
                         if (rec) {
                           const name = PATH_LABELS[rec.path] || rec.path;
                           resultHeadline = rec.promoted
-                            ? `Recommended Focus: ${name}`
-                            : `Core Focus: ${name}`;
+                            ? `Your Path ${pathway.icon} ${name} - Recommended`
+                            : `Your Path ${pathway.icon} ${name} - Core`;
                         }
                         return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
                       })()}
@@ -2793,6 +2787,31 @@ const HOMECreatorFlow = () => {
                         </span>
                       </span>
                     </div>
+                    
+                    {/* Main Description */}
+                    {scoreResult && (() => {
+                      const { displayPct, absPct, levels } = scoreResult;
+                      const sortedPaths = Object.entries(absPct)
+                        .sort((a, b) => b[1] - a[1]);
+                      const primary = sortedPaths[0];
+                      const secondary = sortedPaths[1];
+                      const stage = responses['stage-level'];
+                      
+                      let description;
+                      if (levels[primary[0]] === 'Core Focus' && levels[secondary[0]] === 'Strategic Secondary') {
+                        description = `Your ${PATH_LABELS[primary[0]]} strength should lead your strategy, with your ${PATH_LABELS[secondary[0]]} skills as strategic support. This balance creates the fastest path to your vision.`;
+                      } else if (levels[primary[0]] === 'Core Focus') {
+                        description = `Your ${PATH_LABELS[primary[0]]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
+                      } else {
+                        description = `Your ${PATH_LABELS[primary[0]]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
+                      }
+                      
+                      return (
+                        <p className="text-sm text-gray-300 leading-relaxed mb-8 text-center max-w-lg mx-auto">
+                          {description}
+                        </p>
+                      );
+                    })()}
                   </div>
                   
                   {/* Full Fuzzy Score Display */}
