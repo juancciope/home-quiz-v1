@@ -73,10 +73,10 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
     }
   };
   
-  // Generate main headline and strategy
+  // Generate main headline 
   const headline = isCoreFocus 
-    ? `${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name} - Core Focus`
-    : `${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name} - Recommended Focus`;
+    ? `${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name} - Core`
+    : `${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name} - Recommended`;
   
   const strategy = (() => {
     const stage = responses['stage-level'];
@@ -93,18 +93,18 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
     }
   })();
   
-  // Generate description using relative percentages
+  // Generate description without percentages
   const generateDescription = () => {
     const primary = sortedPaths[0];
     const secondary = sortedPaths[1];
     const stage = responses['stage-level'];
     
     if (primary.level === 'Core Focus' && secondary.level === 'Strategic Secondary') {
-      return `Your ${PATH_LABELS[primary.path]} strength (${primary.relativePct}%) should lead your strategy, with your ${PATH_LABELS[secondary.path]} skills (${secondary.relativePct}%) as strategic support. This balance creates the fastest path to your vision.`;
+      return `Your ${PATH_LABELS[primary.path]} strength should lead your strategy, with your ${PATH_LABELS[secondary.path]} skills as strategic support. This balance creates the fastest path to your vision.`;
     } else if (primary.level === 'Core Focus') {
-      return `Your ${PATH_LABELS[primary.path]} strength (${primary.relativePct}%) is your clear advantage. Focus here to build momentum and achieve your ${stage} stage goals.`;
+      return `Your ${PATH_LABELS[primary.path]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
     } else {
-      return `Your ${PATH_LABELS[primary.path]} path (${primary.relativePct}%) shows the strongest potential. Start here to build clarity and momentum.`;
+      return `Your ${PATH_LABELS[primary.path]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
     }
   };
   
@@ -115,7 +115,6 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
         <h2 className="text-2xl font-bold text-white mb-2">{headline}</h2>
         <p className="text-sm text-gray-300 max-w-lg mx-auto leading-relaxed">{generateDescription()}</p>
       </div>
-      
       
       <div className="space-y-6 mb-8">
         {sortedPaths.map((pathData, index) => {
@@ -156,14 +155,29 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="text-right ml-4">
-                      <span className={`text-lg font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{relativeScore}%</span>
+                    {/* Alignment Bar */}
+                    <div className="w-24 ml-4">
+                      <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+                        <div 
+                          className={`h-full rounded-full bg-gradient-to-r ${info.color} transition-all duration-1000 ease-out`}
+                          style={{ width: `${relativeScore}%` }}
+                        />
+                      </div>
+                      <div className="text-xs text-gray-400 text-center">alignment</div>
                     </div>
                   </div>
                   
                   {/* Description */}
-                  <p className="text-xs text-gray-300 mb-3 leading-relaxed">
+                  <p className={`text-xs text-gray-300 mb-3 leading-relaxed ${
+                    isPrimary ? '' : ''
+                  }`}>
                     {info.focusMessage}
+                    {isPrimary && pathData.level === 'Core Focus' && (
+                      <span className="block mt-2 text-gray-400">
+                        This is your natural strength. The skills, mindset, and approach that come most easily to you. 
+                        When you lean into this path, work feels more like play and progress accelerates.
+                      </span>
+                    )}
                   </p>
                   
                   {/* Focus Areas & Growth Areas - Only for Core Focus */}
