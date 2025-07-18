@@ -119,7 +119,10 @@ Always respond with valid JSON in this exact format:
     "SECONDARY pathway resource 1 (for blend/hybrid)",
     "SECONDARY pathway resource 2 (for blend/hybrid)",
     "CROSS-PATHWAY resource that serves multiple interests"
-  ]
+  ],
+  "focusMessage": "Personalized description for the primary pathway based on their alignment level and quiz responses (MAX 200 chars)",
+  "focusAreas": "4-5 specific focus areas separated by bullets, relevant to their stage and goals (MAX 150 chars)",
+  "growthAreas": "3-4 strategic growth opportunities that complement their main focus (MAX 150 chars)"
 }
 ```
 

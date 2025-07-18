@@ -11,6 +11,7 @@ import { PATH_LABELS } from '../lib/quiz/ui.js';
 const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails }) => {
   if (!scoreResult) return null;
   
+  
   const { displayPct, absPct, levels, recommendation } = scoreResult;
   
   // Convert to relative percentages that add up to 100%
@@ -98,6 +99,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails })
     const primary = sortedPaths[0];
     const secondary = sortedPaths[1];
     const stage = responses['stage-level'];
+    
     
     if (primary.level === 'Core Focus' && secondary.level === 'Strategic Secondary') {
       return `Your ${PATH_LABELS[primary.path]} strength should lead your strategy, with your ${PATH_LABELS[secondary.path]} skills as strategic support. This balance creates the fastest path to your vision.`;

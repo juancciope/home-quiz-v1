@@ -63,30 +63,30 @@ export default async function handler(req, res) {
         icon: '🎤', 
         color: '#3b82f6',
         description: selectedPathways['touring-performer'] 
-          ? 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.'
-          : 'Touring Performers live for the stage. The energy of a live audience fuels their soul. They build their legacy one performance at a time.',
-        focusAreas: 'Stage presence, audience connection, live performance skills, touring strategy',
-        growthAreas: 'Balance studio time with live performance, maintain authentic social presence, embrace venue opportunities'
+          ? 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.'
+          : 'Live performance can amplify your main path.',
+        focusAreas: 'Stage presence • Audience connection • Live sound • Touring strategy',
+        growthAreas: 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
       },
       'creative-artist': { 
         name: 'Creative Artist', 
         icon: '🎨', 
         color: '#ec4899',
         description: selectedPathways['creative-artist']
-          ? 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.'
-          : 'Creative Artists are driven to make things — music that moves, content that connects. They don\'t just imagine — they build and share.',
-        focusAreas: 'Brand development, content creation, digital marketing, revenue diversification',
-        growthAreas: 'Stay authentic to your vision, balance content creation with artistic growth, maintain creative focus'
+          ? 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.'
+          : 'Creative skills can enhance your primary focus.',
+        focusAreas: 'Brand development • Content creation • Digital marketing • Revenue streams',
+        growthAreas: 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
       },
       'writer-producer': { 
         name: 'Writer/Producer', 
         icon: '🎹', 
         color: '#10b981',
         description: selectedPathways['writer-producer']
-          ? 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.'
-          : 'Writer-Producers are the builders behind the scenes. They craft the sonic landscapes where others perform. Their art is in the details.',
-        focusAreas: 'Production skills, collaboration network, business development, royalty optimization',
-        growthAreas: 'Balance solo creativity with collaboration, explore comfortable performance opportunities, build strategic partnerships'
+          ? 'You excel behind the scenes, crafting the foundation that makes others shine. Your technical skills and collaborative nature are your pathway to consistent income and creative fulfillment.'
+          : 'Production expertise can support your main strengths.',
+        focusAreas: 'Production skills • Collaboration network • Business development • Royalty optimization',
+        growthAreas: 'Balance solo creativity with collaboration • Explore performance opportunities • Build strategic partnerships'
       }
     };
     

@@ -2845,7 +2845,7 @@ const HOMECreatorFlow = () => {
                   {/* Full Fuzzy Score Display */}
                   {scoreResult && (
                     <div className="mb-8">
-                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} pathway={pathway} aiPathwayDetails={pathway?.pathwayDetails} />
+                      <UnifiedResultsV3 scoreResult={scoreResult} responses={responses} pathway={pathway} aiPathwayDetails={pathway?.pathwayDetails || aiGeneratedPathway?.pathwayDetails} />
                     </div>
                   )}
                   

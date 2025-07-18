@@ -193,10 +193,7 @@ try {
 if (!aiResponse.pathway || 
     !aiResponse.customNextSteps || 
     !aiResponse.homeConnection ||
-    !aiResponse.recommendedResources ||
-    !aiResponse.focusMessage ||
-    !aiResponse.focusAreas ||
-    !aiResponse.growthAreas) {
+    !aiResponse.recommendedResources) {
   console.error('Incomplete response:', aiResponse);
   throw new Error('Incomplete assistant response');
 }
@@ -233,9 +230,9 @@ const result = {
   // Include pathway details for components and PDF generation
   pathwayDetails: {
     [aiResponse.pathway]: {
-      focusMessage: aiResponse.focusMessage,
-      focusAreas: aiResponse.focusAreas,
-      growthAreas: aiResponse.growthAreas
+      focusMessage: aiResponse.focusMessage || `Your ${pathwayTitles[aiResponse.pathway]} focus is your primary strength.`,
+      focusAreas: aiResponse.focusAreas || 'Focus areas to be determined',
+      growthAreas: aiResponse.growthAreas || 'Growth areas to be determined'
     }
   },
   isPersonalized: true,
