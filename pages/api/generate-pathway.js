@@ -175,19 +175,10 @@ Do not box them into a single category - acknowledge their unique blend and prov
 const responseText = assistantMessage.content[0].text.value;
 console.log('🎯 Assistant response received');
 
-// TEMPORARY FIX: Replace old terminology until OpenAI assistant is updated
-const sanitizedText = responseText
-  .replace(/Potential Distraction/g, 'Strategic Secondary')
-  .replace(/potential distraction/g, 'strategic secondary')
-  .replace(/85%\+/g, '80%+')
-  .replace(/55-84%/g, '45-79%')
-  .replace(/\b85%/g, '80%')
-  .replace(/\b55%/g, '45%');
-
 let aiResponse;
 try {
   // Extract JSON from the response
-  const jsonMatch = sanitizedText.match(/\{[\s\S]*\}/);
+  const jsonMatch = responseText.match(/\{[\s\S]*\}/);
   if (jsonMatch) {
     aiResponse = JSON.parse(jsonMatch[0]);
   } else {
@@ -220,40 +211,7 @@ const pathwayTitles = {
   'writer-producer': 'The Writer-Producer Path'
 };
 
-// Comprehensive sanitization of ALL AI response fields
-const sanitizeText = (text) => {
-  if (!text) return text;
-  return text
-    .replace(/Potential Distraction/g, 'Strategic Secondary')
-    .replace(/potential distraction/g, 'strategic secondary')
-    .replace(/85%\+/g, '80%+')
-    .replace(/55-84%/g, '45-79%')
-    .replace(/\b85%/g, '80%')
-    .replace(/\b55%/g, '45%');
-};
-
-// Sanitize all text fields
-if (aiResponse.personalizedDescription) {
-  aiResponse.personalizedDescription = sanitizeText(aiResponse.personalizedDescription);
-}
-
-if (aiResponse.homeConnection) {
-  aiResponse.homeConnection = sanitizeText(aiResponse.homeConnection);
-}
-
-if (aiResponse.customNextSteps) {
-  aiResponse.customNextSteps = aiResponse.customNextSteps.map(step => ({
-    ...step,
-    step: sanitizeText(step.step),
-    detail: sanitizeText(step.detail)
-  }));
-}
-
-if (aiResponse.recommendedResources) {
-  aiResponse.recommendedResources = aiResponse.recommendedResources.map(resource => 
-    sanitizeText(resource)
-  );
-}
+// REMOVED: All sanitization code - OpenAI assistant should use correct terminology
 
 // Format the response for the frontend
 const result = {

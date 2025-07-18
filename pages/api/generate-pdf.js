@@ -90,12 +90,7 @@ export default async function handler(req, res) {
       }
     };
     
-    // Map scores to archetype levels
-    const getArchetypeLevel = (percentage) => {
-      if (percentage >= 80) return { level: 'Core Focus', icon: '🔥', description: '' };
-      if (percentage >= 45) return { level: 'Strategic Secondary', icon: '⚡', description: '' };
-      return { level: 'Noise', icon: '💫', description: '' };
-    };
+    // REMOVED: Old getArchetypeLevel function - scoreResult.levels used exclusively
 
     // Transform scores into array for handlebars (prefer scoreResult v2 data)
     const scoreData = pathwayData.scoreResult || {};
@@ -114,10 +109,13 @@ export default async function handler(req, res) {
           traits: '',
           shadow: ''
         };
-        // Use scoreResult levels if available, otherwise calculate
-        const archetypeLevel = levels[key] 
-          ? { level: levels[key], icon: levels[key] === 'Core Focus' ? '🔥' : levels[key] === 'Strategic Secondary' ? '⚡' : '💫', description: '' }
-          : getArchetypeLevel(absPct[key] || percentage);
+        // Use scoreResult levels exclusively - no fallbacks
+        const levelName = levels[key] || 'Noise';
+        const archetypeLevel = { 
+          level: levelName, 
+          icon: levelName === 'Core Focus' ? '🔥' : levelName === 'Strategic Secondary' ? '⚡' : '💫', 
+          description: '' 
+        };
         const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;
         const isSecondary = index === 1 && !isPrimary;
         

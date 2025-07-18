@@ -839,37 +839,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
   const absScores = scoreResult ? scoreResult.absPct : null;
   const levels = scoreResult ? scoreResult.levels : null;
   
-  console.log('🔍 FuzzyScoreDisplay received:', {
-    scoreResult: scoreResult,
-    levels: levels,
-    absScores: absScores,
-    displayScores: displayScores,
-    hasValidLevels: levels && Object.keys(levels).length > 0
-  });
-  
-  // CRITICAL: Manually fix levels if they're wrong (emergency fallback)
-  const correctedLevels = {};
-  if (levels && absScores) {
-    Object.entries(levels).forEach(([pathway, level]) => {
-      const absPct = absScores[pathway];
-      console.log(`🎯 Level Debug - ${pathway}: "${level}" (${absPct}% abs)`);
-      
-      // Manual verification and correction
-      const expectedLevel = absPct >= 80 ? 'Core Focus' : absPct >= 45 ? 'Strategic Secondary' : 'Noise';
-      
-      if (level !== expectedLevel || level === 'Potential Distraction' || level === 'potential distraction') {
-        console.error(`🚨 FIXING LEVEL - ${pathway}: Expected "${expectedLevel}" but got "${level}"`);
-        correctedLevels[pathway] = expectedLevel;
-      } else {
-        correctedLevels[pathway] = level;
-      }
-    });
-  } else {
-    console.error('🚨 CRITICAL: levels object is null/undefined');
-  }
-  
-  // Use corrected levels instead of original
-  const finalLevels = Object.keys(correctedLevels).length > 0 ? correctedLevels : levels;
+  // REMOVED: All emergency fallback and debugging logic
   
   const pathwayInfo = {
     'touring-performer': { 
@@ -935,14 +905,8 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
         {sortedScores.map(([pathway, percentage], index) => {
           const info = pathwayInfo[pathway];
           // ALWAYS use levels from scoreResult - no fallbacks to old logic
-          // DEFENSIVE: Ensure we never show old terminology
-          let pathLevel = finalLevels?.[pathway] || 'Strategic Secondary';
-          
-          // CRITICAL: Replace any possible old terminology that might leak through
-          if (pathLevel === 'Potential Distraction' || pathLevel === 'potential distraction') {
-            pathLevel = 'Strategic Secondary';
-            console.warn('🚨 Fixed old terminology leak:', pathway, pathLevel);
-          }
+          // Use levels from scoreResult
+          const pathLevel = levels?.[pathway] || 'Strategic Secondary';
           
           const archetypeLevel = { 
             level: pathLevel, 
@@ -1043,7 +1007,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
             const topPath = rec?.path || sortedScores[0][0];
             const topName = PATH_LABELS[topPath] || pathwayInfo[topPath]?.name || topPath;
             const topAbsPct = absScores ? Math.round(absScores[topPath]) : sortedScores[0][1];
-            const topLevel = finalLevels?.[topPath] || 'Strategic Secondary';
+            const topLevel = levels?.[topPath] || 'Strategic Secondary';
             const isSelected = selectedPathways[topPath];
             
             // Generate insights based on scoreResult v2 logic
@@ -1087,7 +1051,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
                   {' '}{generateInsights()}
                 </p>
                 
-                {sortedScores[1] && finalLevels?.[sortedScores[1][0]] === 'Strategic Secondary' && (
+                {sortedScores[1] && levels?.[sortedScores[1][0]] === 'Strategic Secondary' && (
                   <p className="leading-relaxed">
                     Your secondary focus <span className="text-white font-medium">{PATH_LABELS[sortedScores[1][0]] || pathwayInfo[sortedScores[1][0]]?.name}</span> ({Math.round(absScores?.[sortedScores[1][0]] || sortedScores[1][1])}%) complements your primary path, creating strategic opportunities for growth.
                   </p>
@@ -1112,12 +1076,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
           onClick={() => {
             const primaryPath = Object.entries(displayScores).sort((a, b) => b[1] - a[1])[0];
             const pathName = pathwayInfo[primaryPath[0]].name;
-            // DEFENSIVE: Ensure we never show old terminology in sharing
-            let shareLevel = finalLevels?.[primaryPath[0]] || 'Strategic Secondary';
-            if (shareLevel === 'Potential Distraction' || shareLevel === 'potential distraction') {
-              shareLevel = 'Strategic Secondary';
-            }
-            
+            const shareLevel = levels?.[primaryPath[0]] || 'Strategic Secondary';
             const archetypeLevel = { 
               level: shareLevel, 
               icon: (shareLevel === 'Core Focus') ? '🔥' : (shareLevel === 'Strategic Secondary') ? '⚡' : '💫' 
@@ -1555,9 +1514,8 @@ const HOMECreatorFlow = () => {
         try {
           console.log('🤖 Calling AI endpoint with responses:', finalResponses);
           
-          // Calculate scores using v2 logic - FORCE FRESH IMPORT
-          delete require.cache[require.resolve('../lib/scoring/index.js')];
-          const { scoreUser } = await import('../lib/scoring/index.js?' + Date.now());
+          // Calculate scores using v2 logic
+          const { scoreUser } = await import('../lib/scoring/index.js');
           const result = scoreUser(finalResponses);
           console.log('🎯 Score Result from v2:', {
             displayPct: result.displayPct,
