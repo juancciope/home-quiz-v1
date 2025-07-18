@@ -848,10 +848,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
       color: 'from-blue-500 to-purple-600', 
       baseColor: '#3B82F6',
       description: selectedPathways['touring-performer'] 
-        ? 'Your priority is live performance and audience connection. Focus here to build a sustainable touring career with strong fan loyalty.'
+        ? 'Your strength lies in live performance and audience connection. Focus here to build a sustainable touring career with strong fan loyalty.'
         : 'Touring Performers prioritize live performance and audience connection. Focus here builds sustainable touring careers with strong fan loyalty.',
       focusAreas: 'Stage presence, audience connection, live performance skills, touring strategy',
-      distractionRisk: 'Over-focusing on studio perfectionism, social media obsession, avoiding live venues'
+      growthAreas: 'Balance studio time with live performance, maintain authentic social presence, embrace venue opportunities'
     },
     'creative-artist': { 
       name: 'Creative Artist', 
@@ -859,10 +859,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
       color: 'from-pink-500 to-orange-500', 
       baseColor: '#EC4899',
       description: selectedPathways['creative-artist']
-        ? 'Your priority is creative expression and building sustainable revenue streams. Focus here to develop multiple income sources through your artistry.'
+        ? 'Your strength lies in creative expression and building sustainable revenue streams. Focus here to develop multiple income sources through your artistry.'
         : 'Creative Artists prioritize creative expression and building sustainable revenue streams. Focus here develops multiple income sources through artistry.',
       focusAreas: 'Brand development, content creation, digital marketing, revenue diversification',
-      distractionRisk: 'Chasing every trend, over-producing content, neglecting core artistic development'
+      growthAreas: 'Stay authentic to your vision, balance content creation with artistic growth, maintain creative focus'
     },
     'writer-producer': { 
       name: 'Writer/Producer', 
@@ -870,10 +870,10 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
       color: 'from-green-500 to-teal-500', 
       baseColor: '#10B981',
       description: selectedPathways['writer-producer']
-        ? 'Your priority is technical mastery and collaborative creation. Focus here to build high-value partnerships and consistent royalty income.'
+        ? 'Your strength lies in technical mastery and collaborative creation. Focus here to build high-value partnerships and consistent royalty income.'
         : 'Writer-Producers prioritize technical mastery and collaborative creation. Focus here builds high-value partnerships and consistent royalty income.',
       focusAreas: 'Production skills, collaboration network, business development, royalty optimization',
-      distractionRisk: 'Solo artist aspirations, live performance pressure, avoiding business relationships'
+      growthAreas: 'Balance solo creativity with collaboration, explore comfortable performance opportunities, build strategic partnerships'
     }
   };
   
@@ -898,7 +898,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
         <p className="text-sm text-gray-300 max-w-md mx-auto">{subcopy}</p>
       </div>
       
-      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Priority Focus Areas</h3>
+      <h3 className="text-lg font-semibold mb-2 text-white text-center">Your Focus Areas</h3>
       <p className="text-xs text-gray-400 text-center mb-6">Ranked by your responses - helping you find clarity in a scattered industry</p>
       
       <div className="space-y-6">
@@ -987,8 +987,8 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
                       <span className="text-xs text-gray-400">{info.focusAreas}</span>
                     </div>
                     <div>
-                      <span className="text-xs font-semibold text-white">Distraction Risks: </span>
-                      <span className="text-xs text-gray-400">{info.distractionRisk}</span>
+                      <span className="text-xs font-semibold text-white">Growth Areas: </span>
+                      <span className="text-xs text-gray-400">{info.growthAreas}</span>
                     </div>
                   </div>
                 )}
@@ -1000,7 +1000,7 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
       
       {/* Summary Section - Using scoreResult v2 */}
       <div className="mt-8 p-4 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl border border-white/10">
-        <h4 className="text-sm font-bold text-white mb-3">🎯 Your Priority Focus</h4>
+        <h4 className="text-sm font-bold text-white mb-3">🎯 Your Core Focus</h4>
         <div className="text-xs text-gray-300 space-y-2">
           {(() => {
             const rec = scoreResult?.recommendation;

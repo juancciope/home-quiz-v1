@@ -66,7 +66,7 @@ export default async function handler(req, res) {
           ? 'You live for the stage. The energy of a live audience fuels your soul. You build your legacy one performance at a time.'
           : 'Touring Performers live for the stage. The energy of a live audience fuels their soul. They build their legacy one performance at a time.',
         focusAreas: 'Stage presence, audience connection, live performance skills, touring strategy',
-        distractionRisk: 'Over-focusing on studio perfectionism, social media obsession, avoiding live venues'
+        growthAreas: 'Balance studio time with live performance, maintain authentic social presence, embrace venue opportunities'
       },
       'creative-artist': { 
         name: 'Creative Artist', 
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
           ? 'You\'re driven to make things — music that moves, content that connects. You don\'t just imagine — you build and share.'
           : 'Creative Artists are driven to make things — music that moves, content that connects. They don\'t just imagine — they build and share.',
         focusAreas: 'Brand development, content creation, digital marketing, revenue diversification',
-        distractionRisk: 'Chasing every trend, over-producing content, neglecting core artistic development'
+        growthAreas: 'Stay authentic to your vision, balance content creation with artistic growth, maintain creative focus'
       },
       'writer-producer': { 
         name: 'Writer/Producer', 
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
           ? 'You\'re the builder behind the scenes. You craft the sonic landscapes where others perform. Your art is in the details.'
           : 'Writer-Producers are the builders behind the scenes. They craft the sonic landscapes where others perform. Their art is in the details.',
         focusAreas: 'Production skills, collaboration network, business development, royalty optimization',
-        distractionRisk: 'Solo artist aspirations, live performance pressure, avoiding business relationships'
+        growthAreas: 'Balance solo creativity with collaboration, explore comfortable performance opportunities, build strategic partnerships'
       }
     };
     
