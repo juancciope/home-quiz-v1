@@ -68,8 +68,8 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
   
   // Generate main headline and strategy
   const headline = isCoreFocus 
-    ? `Core Focus: ${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name}`
-    : `Recommended Focus: ${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name}`;
+    ? `${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name} - Core Focus`
+    : `${PATH_LABELS[topPath.path] || getPathInfo(topPath.path).name} - Recommended Focus`;
   
   const strategy = (() => {
     const stage = responses['stage-level'];
@@ -94,101 +94,142 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
         <p className="text-sm text-gray-300 max-w-md mx-auto">{strategy}</p>
       </div>
       
-      {/* Path Cards */}
-      <div className="space-y-4 mb-8">
+      {/* Your Focus Areas */}
+      <h3 className="text-lg font-semibold mb-4 text-white text-center">Your Focus Areas</h3>
+      <p className="text-xs text-gray-400 text-center mb-6">Ranked by your responses - helping you find clarity in a scattered industry</p>
+      
+      <div className="space-y-6 mb-8">
         {sortedPaths.map((pathData, index) => {
           const isPrimary = index === 0;
+          const isSecondary = index === 1;
           const info = getPathInfo(pathData.path, pathData.level, isPrimary);
           const levelStyle = getLevelStyle(pathData.level);
           const alignmentScore = Math.round(pathData.absPct);
           
           return (
-            <div key={pathData.path} className={`
-              rounded-xl p-5 transition-all
-              ${isPrimary ? 'bg-gradient-to-r from-white/15 to-white/8 border-2 border-white/30' : 'bg-white/5 border border-white/10'}
-              ${isPrimary ? 'ring-1 ring-white/20' : ''}
-            `}>
-              {/* Header Row */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${info.color} flex items-center justify-center shadow-lg`}>
-                    <span className="text-xl">{info.icon}</span>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-lg font-bold text-white">{PATH_LABELS[pathData.path] || info.name}</span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${levelStyle.badge}`}>
-                        {levelStyle.icon} {pathData.level}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-300">
-                      {info.focusMessage}
-                    </p>
-                  </div>
-                </div>
-                
-                {/* Single Alignment Score */}
-                <div className="text-right">
-                  <div className="flex items-center gap-1">
-                    <span className="text-2xl font-bold text-white">{alignmentScore}%</span>
-                    <div className="group relative">
-                      <span className="text-gray-400 cursor-help text-sm">ⓘ</span>
-                      <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 p-3 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 z-10">
-                        <div className="font-semibold text-white mb-1">Alignment Score</div>
-                        How well this path matches your quiz responses. Higher scores mean stronger natural fit based on your motivation, vision, and success definition.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-400 mt-1">alignment</div>
-                </div>
-              </div>
-              
-              {/* Focus & Growth Areas (only for Core Focus) */}
-              {pathData.level === 'Core Focus' && (
-                <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
-                  <div>
-                    <span className="text-xs font-semibold text-green-400">🎯 Focus Areas:</span>
-                    <p className="text-xs text-gray-300 mt-1">{info.focusAreas}</p>
-                  </div>
-                  <div>
-                    <span className="text-xs font-semibold text-blue-400">📈 Growth Areas:</span>
-                    <p className="text-xs text-gray-300 mt-1">{info.growthAreas}</p>
-                  </div>
+            <div key={pathData.path} className="relative">
+              {/* Rank indicator */}
+              {isPrimary && (
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                  #1 PRIMARY
                 </div>
               )}
+              {isSecondary && (
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-gray-400 to-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                  #2 SECONDARY
+                </div>
+              )}
+              
+              {/* Archetype Card */}
+              <div className={`p-4 rounded-xl bg-gradient-to-r ${
+                isPrimary ? 'from-white/15 to-white/8 border-2 border-[#1DD1A1]/30' : 
+                isSecondary ? 'from-white/10 to-white/5 border border-white/20' :
+                'from-white/5 to-white/[0.02] border border-white/10'
+              } backdrop-blur-sm relative overflow-hidden`}>
+                
+                {/* Glow effect for primary */}
+                {isPrimary && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl" />
+                )}
+                
+                <div className="relative z-10">
+                  {/* Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-12 h-12 bg-gradient-to-br ${info.color} rounded-full flex items-center justify-center shadow-lg ${isPrimary ? 'ring-2 ring-[#1DD1A1]/50' : ''}`}>
+                        <span className="text-xl">{info.icon}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`text-base font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{PATH_LABELS[pathData.path] || info.name}</span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${levelStyle.badge} whitespace-nowrap`}>
+                            {levelStyle.icon} {pathData.level}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right ml-4">
+                      <div className="flex items-center gap-1">
+                        <span className={`text-lg font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{alignmentScore}%</span>
+                        <div className="group relative">
+                          <span className="text-gray-400 cursor-help text-xs">ⓘ</span>
+                          <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 p-3 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 z-10">
+                            <div className="font-semibold text-white mb-1">Alignment Score</div>
+                            How well this path matches your quiz responses. Higher scores mean stronger natural fit based on your motivation, vision, and success definition.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-400">alignment</div>
+                    </div>
+                  </div>
+                  
+                  {/* Description */}
+                  <p className="text-xs text-gray-300 mb-3 leading-relaxed">
+                    {info.focusMessage}
+                  </p>
+                  
+                  {/* Focus Areas & Growth Areas - Only for Core Focus */}
+                  {pathData.level === 'Core Focus' && (
+                    <div className="space-y-2 pt-2 border-t border-white/10">
+                      <div>
+                        <span className="text-xs font-semibold text-green-400">🎯 Focus Areas: </span>
+                        <span className="text-xs text-gray-300">{info.focusAreas}</span>
+                      </div>
+                      <div>
+                        <span className="text-xs font-semibold text-blue-400">📈 Growth Areas: </span>
+                        <span className="text-xs text-gray-300">{info.growthAreas}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           );
         })}
       </div>
       
-      {/* Roadmap Section */}
+      {/* Combined Roadmap Section */}
       <div className="bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 rounded-xl p-6 border border-white/10">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-bold text-white">Your Next 90 Days</h3>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-bold text-white">Your Strategic Roadmap</h3>
           <span className="text-xs bg-white/10 px-3 py-1 rounded-full text-gray-300">
             {responses['stage-level'] === 'planning' ? 'Planning Stage' : 
              responses['stage-level'] === 'production' ? 'Production Stage' : 'Scale Stage'}
           </span>
         </div>
         
-        <div className="space-y-3">
-          {[
-            `Double down on ${PATH_LABELS[topPath.path]} mastery and opportunities`,
-            'Set up weekly progress check-ins and accountability',
-            'Connect with 3 successful people in your focus area',
-            'Define one major 90-day milestone and track it'
-          ].map((item, index) => (
-            <div key={index} className="flex gap-3">
-              <div className={`
-                w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
-                bg-gradient-to-r ${index === 0 ? 'from-[#1DD1A1] to-[#B91372]' : 'from-gray-500 to-gray-600'}
-                text-white flex-shrink-0
-              `}>
-                {index + 1}
+        {/* Next 90 Days Section */}
+        <div className="mb-6">
+          <h4 className="text-sm font-semibold text-[#1DD1A1] mb-3">Next 90 Days - Foundation Building</h4>
+          <div className="space-y-3">
+            {[
+              `Double down on ${PATH_LABELS[topPath.path]} mastery and opportunities`,
+              'Set up weekly progress check-ins and accountability',
+              'Connect with 3 successful people in your focus area',
+              'Define one major 90-day milestone and track it'
+            ].map((item, index) => (
+              <div key={index} className="flex gap-3">
+                <div className={`
+                  w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
+                  bg-gradient-to-r ${index === 0 ? 'from-[#1DD1A1] to-[#B91372]' : 'from-gray-500 to-gray-600'}
+                  text-white flex-shrink-0
+                `}>
+                  {index + 1}
+                </div>
+                <p className="text-sm text-gray-300">{item}</p>
               </div>
-              <p className="text-sm text-gray-300">{item}</p>
+            ))}
+          </div>
+        </div>
+        
+        {/* Strategic Actions Section */}
+        <div className="pt-4 border-t border-white/20">
+          <h4 className="text-sm font-semibold text-[#B91372] mb-3">Strategic Actions - High Impact</h4>
+          <div className="grid gap-3">
+            <div className="text-sm text-gray-300">
+              Get specific, actionable steps tailored to your {PATH_LABELS[topPath.path]} path and {responses['stage-level']} stage in your detailed roadmap.
             </div>
-          ))}
+          </div>
         </div>
         
         <p className="text-xs text-gray-400 mt-4 italic">
