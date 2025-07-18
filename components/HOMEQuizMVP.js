@@ -2827,13 +2827,26 @@ const HOMECreatorFlow = () => {
                     </div>
                   )}
                   
-                  {/* Enhanced CTA Button */}
+                  {/* Enhanced CTA Button with Liquid Animation */}
                   <button
                     onClick={goNext}
-                    className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-[#B91372]/25 hover:scale-[1.02] text-white text-lg"
+                    className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu"
                   >
+                    {/* Animated liquid blobs with continuous movement */}
+                    <div className="absolute inset-0 rounded-xl animate-liquid-rotate">
+                      <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-[#1DD1A1] rounded-full filter blur-xl opacity-80 animate-liquid-blob" />
+                      <div className="absolute bottom-1/4 right-1/4 w-28 h-28 bg-[#B91372] rounded-full filter blur-xl opacity-80 animate-liquid-blob-reverse" />
+                      <div className="absolute top-1/2 left-1/2 w-20 h-20 bg-[#1DD1A1] rounded-full filter blur-lg opacity-60 animate-liquid-blob-slow" />
+                      <div className="absolute top-1/3 right-1/3 w-16 h-16 bg-[#B91372] rounded-full filter blur-lg opacity-50 animate-liquid-blob" style={{animationDelay: '1s'}} />
+                      <div className="absolute bottom-1/3 left-1/3 w-18 h-18 bg-[#1DD1A1] rounded-full filter blur-lg opacity-55 animate-liquid-blob-reverse" style={{animationDelay: '2s'}} />
+                    </div>
+                    
+                    {/* Glass effect overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-xl" />
+                    
+                    {/* Shimmer effect */}
                     <div className="absolute inset-0 rounded-xl overflow-hidden">
-                      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/20 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+                      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                     </div>
                     
                     <span className="relative z-10">Get Your Full Roadmap</span>
