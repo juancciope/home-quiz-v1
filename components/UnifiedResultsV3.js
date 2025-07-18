@@ -93,11 +93,27 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
     }
   })();
   
+  // Generate description using relative percentages
+  const generateDescription = () => {
+    const primary = sortedPaths[0];
+    const secondary = sortedPaths[1];
+    const stage = responses['stage-level'];
+    
+    if (primary.level === 'Core Focus' && secondary.level === 'Strategic Secondary') {
+      return `Your ${PATH_LABELS[primary.path]} strength (${primary.relativePct}%) should lead your strategy, with your ${PATH_LABELS[secondary.path]} skills (${secondary.relativePct}%) as strategic support. This balance creates the fastest path to your vision.`;
+    } else if (primary.level === 'Core Focus') {
+      return `Your ${PATH_LABELS[primary.path]} strength (${primary.relativePct}%) is your clear advantage. Focus here to build momentum and achieve your ${stage} stage goals.`;
+    } else {
+      return `Your ${PATH_LABELS[primary.path]} path (${primary.relativePct}%) shows the strongest potential. Start here to build clarity and momentum.`;
+    }
+  };
+  
   return (
     <div className="mb-8">
       {/* Main Headline Section */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">{headline}</h2>
+        <p className="text-sm text-gray-300 max-w-lg mx-auto leading-relaxed">{generateDescription()}</p>
       </div>
       
       

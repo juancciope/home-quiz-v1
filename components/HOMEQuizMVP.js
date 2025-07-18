@@ -2781,7 +2781,6 @@ const HOMECreatorFlow = () => {
                         }
                         return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
                       })()}
-                      <p className="text-sm text-gray-300 leading-relaxed">{pathway.description}</p>
                     </div>
                     
                     {/* Stage indicator */}
