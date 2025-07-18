@@ -2748,6 +2748,12 @@ const HOMECreatorFlow = () => {
                 <div className="relative z-10">
                   {/* Header */}
                   <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                      <Sparkles className="w-4 h-4 text-[#1DD1A1]" />
+                      <span className="text-sm font-semibold text-white">Your Path</span>
+                      <Sparkles className="w-4 h-4 text-[#B91372]" />
+                    </div>
+                    
                     {/* Path result with icon */}
                     <div className="mb-6">
                       <div className="relative inline-block mb-4 group">
@@ -2768,10 +2774,10 @@ const HOMECreatorFlow = () => {
                         const rec = scoreResult?.recommendation;
                         let resultHeadline = pathway.title;
                         if (rec) {
-                          const name = PATH_LABELS[rec.path] || rec.path;
+                          const pathLabel = PATH_LABELS[rec.path] || rec.path;
                           resultHeadline = rec.promoted
-                            ? `Your Path ${pathway.icon} ${name} - Recommended`
-                            : `Your Path ${pathway.icon} ${name} - Core`;
+                            ? `${pathway.icon} ${pathLabel} Type - Recommended`
+                            : `${pathway.icon} ${pathLabel} Type - Core`;
                         }
                         return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
                       })()}

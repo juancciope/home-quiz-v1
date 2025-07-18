@@ -144,23 +144,22 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className={`text-base font-bold ${isPrimary ? 'text-[#1DD1A1]' : 'text-white'}`}>{PATH_LABELS[pathData.path] || info.name}</span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${levelStyle.badge} whitespace-nowrap`}>
-                            {levelStyle.icon} {pathData.level === 'Strategic Secondary' ? 'Secondary' : pathData.level}
-                          </span>
                         </div>
                       </div>
                     </div>
-                    {/* Natural Fit Indicator */}
+                    {/* Alignment Indicator */}
                     <div className="w-24 ml-4">
-                      <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+                      <div className="w-full bg-gray-700 rounded-full h-2">
                         <div 
                           className={`h-full rounded-full bg-gradient-to-r ${info.color} transition-all duration-1000 ease-out`}
                           style={{ width: `${relativeScore}%` }}
                         />
                       </div>
-                      <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
-                        <span className="text-yellow-400">⭐</span>
-                        <span>{relativeScore >= 40 ? 'Strong Fit' : relativeScore >= 25 ? 'Good Fit' : 'Light Fit'}</span>
+                      {/* Badge under the bar */}
+                      <div className="flex justify-center mt-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${levelStyle.badge} whitespace-nowrap`}>
+                          {levelStyle.icon} {pathData.level === 'Strategic Secondary' ? 'Secondary' : pathData.level}
+                        </span>
                       </div>
                     </div>
                   </div>
