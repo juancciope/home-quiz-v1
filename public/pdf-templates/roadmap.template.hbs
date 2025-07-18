@@ -1110,7 +1110,12 @@
           </div>
           
           <div style="text-align: center; margin-bottom: 40px;">
-            <h1 class="cover-title-enhanced">{{pathway.title}}</h1>
+            <div class="bubble-header" style="margin-bottom: 24px;">
+              <span class="sparkle">✨</span>
+              <span>Your Path</span>
+              <span class="sparkle-pink">✨</span>
+            </div>
+            <h1 class="cover-title-enhanced">{{fuzzyScoresArray.[0].name}} - {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core Focus')}}Core{{else}}Recommended{{/if}}</h1>
             <p class="cover-description-enhanced">{{pathway.description}}</p>
           </div>
           
@@ -1143,11 +1148,6 @@
           <div>
             {{#each fuzzyScoresArray}}
             <div class="archetype-card {{#if isFirst}}archetype-primary{{/if}} {{#if @index}}{{#if (eq @index 1)}}archetype-secondary{{/if}}{{/if}}">
-              {{#if isFirst}}
-              <div class="rank-indicator rank-primary">#1 PRIMARY</div>
-              {{else if (eq @index 1)}}
-              <div class="rank-indicator rank-secondary">#2 SECONDARY</div>
-              {{/if}}
               
               <div class="archetype-header">
                 <div class="archetype-left">
@@ -1167,19 +1167,32 @@
                       <div style="height: 100%; border-radius: 6px; {{#if (eq @index 0)}}background: linear-gradient(135deg, #3b82f6, #9333ea);{{else if (eq @index 1)}}background: linear-gradient(135deg, #ec4899, #f97316);{{else}}background: linear-gradient(135deg, #10b981, #14b8a6);{{/if}} width: {{percentage}}%; transition: all 1s ease-out;"></div>
                     </div>
                     <!-- Badge under the bar -->
-                    <div style="text-align: center;">
-                      <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; border: 1px solid; {{#if (eq archetypeLevel 'Core Focus')}}background: rgba(34, 197, 94, 0.2); color: #22c55e; border-color: rgba(34, 197, 94, 0.3);{{else if (eq archetypeLevel 'Strategic Secondary')}}background: rgba(245, 158, 11, 0.2); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);{{else}}background: rgba(107, 114, 128, 0.2); color: #6b7280; border-color: rgba(107, 114, 128, 0.3);{{/if}}">
-                        <span>{{archetypeIcon}}</span>
-                        <span>{{#if (eq archetypeLevel 'Strategic Secondary')}}Secondary{{else}}{{archetypeLevel}}{{/if}}</span>
+                    <div style="text-align: center; width: 80px;">
+                      <span style="display: inline-flex; align-items: center; gap: 3px; padding: 3px 6px; border-radius: 10px; font-size: 10px; font-weight: 600; border: 1px solid; white-space: nowrap; {{#if (eq archetypeLevel 'Core Focus')}}background: rgba(34, 197, 94, 0.2); color: #22c55e; border-color: rgba(34, 197, 94, 0.3);{{else if (eq archetypeLevel 'Strategic Secondary')}}background: rgba(245, 158, 11, 0.2); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);{{else}}background: rgba(107, 114, 128, 0.2); color: #6b7280; border-color: rgba(107, 114, 128, 0.3);{{/if}}">
+                        <span style="font-size: 8px;">{{archetypeIcon}}</span>
+                        <span style="font-size: 9px;">{{#if (eq archetypeLevel 'Strategic Secondary')}}Secondary{{else}}{{archetypeLevel}}{{/if}}</span>
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
               
-              <p class="archetype-description">{{description}}</p>
+              <!-- Main description -->
+              <p class="archetype-description">{{focusMessage}}</p>
               
-              {{#if (or isFirst (eq @index 1))}}
+              {{#if (eq archetypeLevel 'Core Focus')}}
+              <p style="font-size: 12px; color: #9ca3af; margin-top: 12px; line-height: 1.5;">
+                This is your natural strength. The skills, mindset, and approach that come most easily to you. 
+                When you lean into this path, work feels more like play and progress accelerates.
+              </p>
+              {{else if (eq archetypeLevel 'Strategic Secondary')}}
+              <p style="font-size: 12px; color: #9ca3af; margin-top: 12px; line-height: 1.5;">
+                This complements your primary focus. These skills can enhance your main path when developed strategically. 
+                Consider integrating these elements to create a more well-rounded approach.
+              </p>
+              {{/if}}
+              
+              {{#if (or (eq archetypeLevel 'Core Focus') (eq archetypeLevel 'Strategic Secondary'))}}
               <div class="archetype-details">
                 <div class="detail-row">
                   <span class="detail-label">🎯 Focus Areas:</span>
@@ -1195,53 +1208,6 @@
             {{/each}}
           </div>
           
-          <!-- Creative Blueprint Section -->
-          <div class="cover-summary-enhanced" style="margin-top: 40px;">
-            <div style="position: relative; z-index: 2;">
-              <h4 style="font-size: 20px; font-weight: 700; color: #ffffff; margin-bottom: 20px; text-align: center;">
-                🎯 Your Priority Focus Blueprint
-              </h4>
-              <div style="text-align: center;">
-                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
-                  <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[0].name}}</span> is your strongest priority area at <span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[0].percentage}}%</span> alignment. 
-                  {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core Focus')}}
-                  This should be your primary focus area where you invest 80% of your time and energy.
-                  {{else if (eq fuzzyScoresArray.[0].archetypeLevel 'Strategic Secondary')}}
-                  This area shows promise and can be developed strategically alongside your core focus.
-                  {{else}}
-                  These activities are currently creating noise in your career focus.
-                  {{/if}}
-                </p>
-                
-                {{#if fuzzyScoresArray.[1]}}
-                {{#if (gte fuzzyScoresArray.[1].percentage 35)}}
-                <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin-bottom: 16px;">
-                  Your secondary focus <span style="color: #1DD1A1; font-weight: 600;">{{fuzzyScoresArray.[1].name}}</span> (<span style="color: #B91372; font-weight: 600;">{{fuzzyScoresArray.[1].percentage}}%</span>) complements your primary path, creating strategic opportunities for growth.
-                </p>
-                {{/if}}
-                {{/if}}
-                
-                <p style="color: #1DD1A1; font-size: 15px; font-weight: 600; margin-bottom: 16px;">
-                  Strategy: 
-                  {{#if pathwayBlend}}
-                  {{#if (eq pathwayBlend.type 'hybrid')}}
-                  Your versatility across multiple paths gives you unique opportunities that single-focused creators miss.
-                  {{else if (eq pathwayBlend.type 'blend')}}
-                  Focus 70% on your {{fuzzyScoresArray.[0].name}} strengths while developing your {{fuzzyScoresArray.[1].name}} skills as a strategic advantage.
-                  {{else}}
-                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
-                  {{/if}}
-                  {{else}}
-                  Your clear {{fuzzyScoresArray.[0].name}} direction allows for deep specialization and expertise building.
-                  {{/if}}
-                </p>
-                
-                <p style="color: #B91372; font-weight: 600; font-style: italic; text-align: center; margin-top: 20px; font-size: 16px;">
-                  You're not trying to fit into systems — you're creating better ones.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       

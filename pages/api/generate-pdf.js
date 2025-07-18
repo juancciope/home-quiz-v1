@@ -119,6 +119,10 @@ export default async function handler(req, res) {
         const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;
         const isSecondary = index === 1 && !isPrimary;
         
+        // Use AI-generated pathway details if available, fallback to default
+        const aiPathwayDetails = pathwayData.pathwayDetails || {};
+        const pathwayDetail = aiPathwayDetails[key] || {};
+        
         return {
           key,
           percentage,
@@ -127,6 +131,9 @@ export default async function handler(req, res) {
           icon: info.icon,
           color: info.color,
           description: info.description,
+          focusMessage: pathwayDetail.focusMessage || info.description,
+          focusAreas: pathwayDetail.focusAreas || info.focusAreas,
+          growthAreas: pathwayDetail.growthAreas || info.growthAreas,
           traits: info.traits,
           shadow: info.shadow,
           archetypeLevel: archetypeLevel.level,
