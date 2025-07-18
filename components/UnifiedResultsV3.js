@@ -1,7 +1,8 @@
 /**
  * Unified Results Component V3
- * Last Updated: 2025-01-18T11:00:00Z
- * Version: 3.0.0
+ * Last Updated: 2025-01-18T11:20:00Z
+ * Version: 3.1.0
+ * Changes: Single metric, better mobile layout, focus/growth areas
  */
 
 import React from 'react';
@@ -20,29 +21,32 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
   const topPath = sortedPaths[0];
   const isCoreFocus = topPath.level === 'Core Focus';
   
-  // Path metadata
-  const getPathInfo = (path) => {
+  // Path metadata with focus/growth areas
+  const getPathInfo = (path, level, isSelected) => {
     const base = {
       'touring-performer': {
         name: 'Touring Performer',
         icon: '🎤',
         color: 'from-blue-500 to-purple-600',
-        focusMessage: 'Live performance drives your success. Build your touring career through consistent shows and fan connection.',
-        supportMessage: 'Use performance skills to enhance your main focus area.'
+        focusMessage: isSelected ? 'Live energy is your superpower. Own the stage.' : 'Live performance can amplify your main path.',
+        focusAreas: 'Stage presence • Audience connection • Live sound • Touring strategy',
+        growthAreas: 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
       },
       'creative-artist': {
-        name: 'Creative Artist',
+        name: 'Creative Artist', 
         icon: '🎨',
         color: 'from-pink-500 to-orange-500',
-        focusMessage: 'Creative expression fuels your career. Build sustainable income through your artistic vision.',
-        supportMessage: 'Let creativity complement your primary path.'
+        focusMessage: isSelected ? 'Your creative vision builds lasting impact and income.' : 'Creative skills can enhance your primary focus.',
+        focusAreas: 'Brand development • Content creation • Digital marketing • Revenue streams',
+        growthAreas: 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
       },
       'writer-producer': {
         name: 'Writer/Producer',
-        icon: '🎹',
+        icon: '🎹', 
         color: 'from-green-500 to-teal-500',
-        focusMessage: 'Technical mastery creates opportunity. Build partnerships and royalty income through your production skills.',
-        supportMessage: 'Production skills can amplify your main strengths.'
+        focusMessage: isSelected ? 'Your technical skills create lasting value and partnerships.' : 'Production expertise can support your main strengths.',
+        focusAreas: 'Production mastery • Collaboration network • Business development • Royalty optimization',
+        growthAreas: 'Balance solo work with collaboration • Explore performance opportunities • Build strategic partnerships'
       }
     };
     return base[path] || {};
@@ -72,13 +76,13 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
     const topPathLabel = PATH_LABELS[topPath.path];
     
     if (isCoreFocus && sortedPaths[1]?.level === 'Strategic Secondary') {
-      return `Focus 70% on ${topPathLabel}, leverage 30% on ${PATH_LABELS[sortedPaths[1].path]} as strategic support`;
+      return `Your ${topPathLabel} strength is your main driver. Use your ${PATH_LABELS[sortedPaths[1].path]} skills as strategic support.`;
     } else if (isCoreFocus) {
       const verb = stage === 'scale' ? 'Scale your expertise in' : stage === 'production' ? 'Master your skills in' : 'Build your foundation in';
-      return `${verb} ${topPathLabel} - dedicate 80% of your energy here`;
+      return `${verb} ${topPathLabel}. This is where you naturally excel and should focus most of your energy.`;
     } else {
-      const verb = stage === 'scale' ? 'Optimize and scale' : stage === 'production' ? 'Develop mastery in' : 'Start with';
-      return `${verb} ${topPathLabel} to build momentum and clarity`;
+      const verb = stage === 'scale' ? 'Optimize and scale your' : stage === 'production' ? 'Develop mastery in' : 'Start with';
+      return `${verb} ${topPathLabel} path. This has the strongest potential based on your responses.`;
     }
   })();
   
@@ -90,50 +94,68 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
         <p className="text-sm text-gray-300 max-w-md mx-auto">{strategy}</p>
       </div>
       
-      {/* Compact Path Rows */}
-      <div className="space-y-3 mb-8">
+      {/* Path Cards */}
+      <div className="space-y-4 mb-8">
         {sortedPaths.map((pathData, index) => {
-          const info = getPathInfo(pathData.path);
-          const levelStyle = getLevelStyle(pathData.level);
           const isPrimary = index === 0;
+          const info = getPathInfo(pathData.path, pathData.level, isPrimary);
+          const levelStyle = getLevelStyle(pathData.level);
+          const alignmentScore = Math.round(pathData.absPct);
           
           return (
             <div key={pathData.path} className={`
-              flex items-center gap-4 p-4 rounded-lg
-              ${isPrimary ? 'bg-gradient-to-r from-white/10 to-white/5 border border-white/20' : 'bg-white/5 border border-white/10'}
-              transition-all hover:bg-white/10
+              rounded-xl p-5 transition-all
+              ${isPrimary ? 'bg-gradient-to-r from-white/15 to-white/8 border-2 border-white/30' : 'bg-white/5 border border-white/10'}
+              ${isPrimary ? 'ring-1 ring-white/20' : ''}
             `}>
-              {/* Icon */}
-              <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${info.color} flex items-center justify-center`}>
-                <span className="text-lg">{info.icon}</span>
+              {/* Header Row */}
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                    <span className="text-xl">{info.icon}</span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-lg font-bold text-white">{PATH_LABELS[pathData.path] || info.name}</span>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${levelStyle.badge}`}>
+                        {levelStyle.icon} {pathData.level}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-300">
+                      {info.focusMessage}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Single Alignment Score */}
+                <div className="text-right">
+                  <div className="flex items-center gap-1">
+                    <span className="text-2xl font-bold text-white">{alignmentScore}%</span>
+                    <div className="group relative">
+                      <span className="text-gray-400 cursor-help text-sm">ⓘ</span>
+                      <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 p-3 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 z-10">
+                        <div className="font-semibold text-white mb-1">Alignment Score</div>
+                        How well this path matches your quiz responses. Higher scores mean stronger natural fit based on your motivation, vision, and success definition.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">alignment</div>
+                </div>
               </div>
               
-              {/* Path Info */}
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-white">{PATH_LABELS[pathData.path] || info.name}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-xs border ${levelStyle.badge}`}>
-                    {levelStyle.icon} {pathData.level}
-                  </span>
+              {/* Focus & Growth Areas (only for Core Focus) */}
+              {pathData.level === 'Core Focus' && (
+                <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
+                  <div>
+                    <span className="text-xs font-semibold text-green-400">🎯 Focus Areas:</span>
+                    <p className="text-xs text-gray-300 mt-1">{info.focusAreas}</p>
+                  </div>
+                  <div>
+                    <span className="text-xs font-semibold text-blue-400">📈 Growth Areas:</span>
+                    <p className="text-xs text-gray-300 mt-1">{info.growthAreas}</p>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">
-                  {isPrimary ? info.focusMessage : info.supportMessage}
-                </p>
-              </div>
-              
-              {/* Progress Bar with Signal */}
-              <div className="text-right w-32">
-                <div className="w-full bg-gray-700 rounded-full h-2 mb-1">
-                  <div 
-                    className={`h-full rounded-full bg-gradient-to-r ${info.color}`}
-                    style={{ width: `${pathData.displayPct}%` }}
-                  />
-                </div>
-                <div className="flex justify-between items-center text-[10px]">
-                  <span className="text-gray-400">📡 {Math.round(pathData.absPct)}%</span>
-                  <span className="text-white font-medium">{pathData.displayPct}%</span>
-                </div>
-              </div>
+              )}
             </div>
           );
         })}
@@ -151,10 +173,10 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
         
         <div className="space-y-3">
           {[
-            `Focus 70% on ${PATH_LABELS[topPath.path]} to build momentum`,
-            'Create consistent progress tracking system',
-            'Connect with 3 people in your focus area',
-            'Set measurable 90-day milestone'
+            `Double down on ${PATH_LABELS[topPath.path]} mastery and opportunities`,
+            'Set up weekly progress check-ins and accountability',
+            'Connect with 3 successful people in your focus area',
+            'Define one major 90-day milestone and track it'
           ].map((item, index) => (
             <div key={index} className="flex gap-3">
               <div className={`
@@ -169,14 +191,9 @@ const UnifiedResultsV3 = ({ scoreResult, responses }) => {
           ))}
         </div>
         
-        <div className="mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
-          <p className="text-xs text-gray-400 mb-2">
-            <span className="text-white font-semibold">📡 Signal:</span> Your raw alignment based on quiz responses
-          </p>
-          <p className="text-xs text-gray-400 italic">
-            Why this matters: Clear focus accelerates progress. These steps build momentum in your strongest area while maintaining strategic balance.
-          </p>
-        </div>
+        <p className="text-xs text-gray-400 mt-4 italic">
+          Why this matters: Clear focus accelerates progress. These steps build momentum in your strongest area while maintaining strategic balance.
+        </p>
       </div>
     </div>
   );
