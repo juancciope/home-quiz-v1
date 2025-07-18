@@ -2776,8 +2776,8 @@ const HOMECreatorFlow = () => {
                         if (rec) {
                           const pathLabel = PATH_LABELS[rec.path] || rec.path;
                           resultHeadline = rec.promoted
-                            ? `${pathway.icon} ${pathLabel} Type - Recommended`
-                            : `${pathway.icon} ${pathLabel} Type - Core`;
+                            ? `${pathway.icon} ${pathLabel} - Recommended`
+                            : `${pathway.icon} ${pathLabel} - Core`;
                         }
                         return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
                       })()}

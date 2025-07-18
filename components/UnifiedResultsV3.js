@@ -177,8 +177,8 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway }) => {
                     )}
                   </p>
                   
-                  {/* Focus Areas & Growth Areas - Only for Core Focus */}
-                  {pathData.level === 'Core Focus' && (
+                  {/* Focus Areas & Growth Areas - For Core Focus and Strategic Secondary */}
+                  {(pathData.level === 'Core Focus' || pathData.level === 'Strategic Secondary') && (
                     <div className="space-y-2 pt-2 border-t border-white/10">
                       <div>
                         <span className="text-xs font-semibold text-green-400">🎯 Focus Areas: </span>
