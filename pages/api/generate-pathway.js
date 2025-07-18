@@ -220,11 +220,39 @@ const pathwayTitles = {
   'writer-producer': 'The Writer-Producer Path'
 };
 
-// Sanitize description field as well
-if (aiResponse.personalizedDescription) {
-  aiResponse.personalizedDescription = aiResponse.personalizedDescription
+// Comprehensive sanitization of ALL AI response fields
+const sanitizeText = (text) => {
+  if (!text) return text;
+  return text
     .replace(/Potential Distraction/g, 'Strategic Secondary')
-    .replace(/potential distraction/g, 'strategic secondary');
+    .replace(/potential distraction/g, 'strategic secondary')
+    .replace(/85%\+/g, '80%+')
+    .replace(/55-84%/g, '45-79%')
+    .replace(/\b85%/g, '80%')
+    .replace(/\b55%/g, '45%');
+};
+
+// Sanitize all text fields
+if (aiResponse.personalizedDescription) {
+  aiResponse.personalizedDescription = sanitizeText(aiResponse.personalizedDescription);
+}
+
+if (aiResponse.homeConnection) {
+  aiResponse.homeConnection = sanitizeText(aiResponse.homeConnection);
+}
+
+if (aiResponse.customNextSteps) {
+  aiResponse.customNextSteps = aiResponse.customNextSteps.map(step => ({
+    ...step,
+    step: sanitizeText(step.step),
+    detail: sanitizeText(step.detail)
+  }));
+}
+
+if (aiResponse.recommendedResources) {
+  aiResponse.recommendedResources = aiResponse.recommendedResources.map(resource => 
+    sanitizeText(resource)
+  );
 }
 
 // Format the response for the frontend

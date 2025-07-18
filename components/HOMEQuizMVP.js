@@ -843,7 +843,8 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
     scoreResult: scoreResult,
     levels: levels,
     absScores: absScores,
-    displayScores: displayScores
+    displayScores: displayScores,
+    hasValidLevels: levels && Object.keys(levels).length > 0
   });
   
   const pathwayInfo = {
@@ -910,9 +911,18 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
         {sortedScores.map(([pathway, percentage], index) => {
           const info = pathwayInfo[pathway];
           // ALWAYS use levels from scoreResult - no fallbacks to old logic
+          // DEFENSIVE: Ensure we never show old terminology
+          let pathLevel = levels?.[pathway] || 'Strategic Secondary';
+          
+          // CRITICAL: Replace any possible old terminology that might leak through
+          if (pathLevel === 'Potential Distraction' || pathLevel === 'potential distraction') {
+            pathLevel = 'Strategic Secondary';
+            console.warn('🚨 Fixed old terminology leak:', pathway, pathLevel);
+          }
+          
           const archetypeLevel = { 
-            level: levels?.[pathway] || 'Strategic Secondary', 
-            icon: (levels?.[pathway] === 'Core Focus') ? '🔥' : (levels?.[pathway] === 'Strategic Secondary') ? '⚡' : '💫', 
+            level: pathLevel, 
+            icon: (pathLevel === 'Core Focus') ? '🔥' : (pathLevel === 'Strategic Secondary') ? '⚡' : '💫', 
             description: '' 
           };
           const isPrimary = index === 0;
@@ -1076,9 +1086,18 @@ const FuzzyScoreDisplay = ({ scores, blend, responses, scoreResult = null }) => 
       <div className="mt-6 text-center">
         <button
           onClick={() => {
-            const primaryPath = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+            const primaryPath = Object.entries(displayScores).sort((a, b) => b[1] - a[1])[0];
             const pathName = pathwayInfo[primaryPath[0]].name;
-            const archetypeLevel = getArchetypeLevel(primaryPath[1]);
+            // DEFENSIVE: Ensure we never show old terminology in sharing
+            let shareLevel = levels?.[primaryPath[0]] || 'Strategic Secondary';
+            if (shareLevel === 'Potential Distraction' || shareLevel === 'potential distraction') {
+              shareLevel = 'Strategic Secondary';
+            }
+            
+            const archetypeLevel = { 
+              level: shareLevel, 
+              icon: (shareLevel === 'Core Focus') ? '🔥' : (shareLevel === 'Strategic Secondary') ? '⚡' : '💫' 
+            };
             
             const options = [
               {

@@ -159,7 +159,7 @@ Always respond with valid JSON in this exact format:
 ### FOR BLEND PROFILES (secondary >30%):
 - Acknowledge both primary and secondary pathways with their archetype levels
 - Provide integrated action steps that serve both interests where possible
-- "Your Core Touring Performer identity (87%) combined with Engine Creative Artist traits (73%) means..."
+- "Your Core Touring Performer identity (87%) combined with Strategic Secondary Creative Artist traits (73%) means..."
 - Focus 70% on primary, 30% on secondary in recommendations
 - Reference how their archetype levels inform their strategy
 
