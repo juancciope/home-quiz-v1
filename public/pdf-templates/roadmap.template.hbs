@@ -61,7 +61,7 @@
     
     /* Consistent page structure - adjusted for A4 with proper margins */
     .pdf-page {
-      min-height: calc(100vh - 40mm); /* Account for top/bottom margins (20mm each) */
+      min-height: calc(100vh - 30mm); /* Account for top/bottom margins (15mm each) */
       padding: 15px 0;
       page-break-after: always;
       page-break-inside: avoid;
@@ -78,9 +78,9 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 40mm);
+      max-height: calc(100vh - 30mm);
       justify-content: flex-start;
-      padding: 0 25px; /* Add internal padding for consistent spacing */
+      padding: 0 30px; /* Add internal padding for consistent spacing */
     }
     
     .page-header {
@@ -1293,47 +1293,49 @@
       <!-- PAGES 4-7: Detailed Action Steps (Do not change anything) -->
       {{#each pathway.nextSteps}}
       <div class="pdf-page detail-section" style="page-break-before: always;">
-        <!-- Page Header for each step -->
-        <div style="text-align: center; margin-bottom: 24px;">
-          <div class="page-header-badge">
-            <span class="sparkle">✨</span>
-            Step {{add @index 1}} Strategic Roadmap
-            <span class="sparkle-pink">✨</span>
+        <div class="page-content">
+          <!-- Page Header for each step -->
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div class="page-header-badge">
+              <span class="sparkle">✨</span>
+              Step {{add @index 1}} Strategic Roadmap
+              <span class="sparkle-pink">✨</span>
+            </div>
           </div>
-        </div>
-        <h2 class="detail-section-title">{{step}}</h2>
-        
-        <div class="detail-box">
-          <h3 class="detail-box-title">
-            <span class="why-icon">⭐</span>
-            Why This Matters
-          </h3>
-          <p style="color: #d1d5db; font-size: 14px; line-height: 1.5;">{{detail}}</p>
-        </div>
-        
-        <div class="detail-box">
-          <h3 class="detail-box-title">
-            <span class="action-icon">🎯</span>
-            Your Action Items
-          </h3>
-          {{#each actions}}
-          <div class="action-item">
-            <span class="action-number">{{add @index 1}}</span>
-            <span class="action-text">{{this}}</span>
+          <h2 class="detail-section-title">{{step}}</h2>
+          
+          <div class="detail-box">
+            <h3 class="detail-box-title">
+              <span class="why-icon">⭐</span>
+              Why This Matters
+            </h3>
+            <p style="color: #d1d5db; font-size: 14px; line-height: 1.5;">{{detail}}</p>
           </div>
-          {{/each}}
-        </div>
-        
-        <div class="detail-box">
-          <h3 class="home-resources-title">
-            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
-            HOME Resources
-          </h3>
-          {{#each ../pathway.resources}}
-          {{#if @first}}<div class="resource-item">{{this}}</div>{{/if}}
-          {{#if (eq @index 1)}}<div class="resource-item">{{this}}</div>{{/if}}
-          {{#if (eq @index 2)}}<div class="resource-item">{{this}}</div>{{/if}}
-          {{/each}}
+          
+          <div class="detail-box">
+            <h3 class="detail-box-title">
+              <span class="action-icon">🎯</span>
+              Your Action Items
+            </h3>
+            {{#each actions}}
+            <div class="action-item">
+              <span class="action-number">{{add @index 1}}</span>
+              <span class="action-text">{{this}}</span>
+            </div>
+            {{/each}}
+          </div>
+          
+          <div class="detail-box">
+            <h3 class="home-resources-title">
+              <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
+              HOME Resources
+            </h3>
+            {{#each ../pathway.resources}}
+            {{#if @first}}<div class="resource-item">{{this}}</div>{{/if}}
+            {{#if (eq @index 1)}}<div class="resource-item">{{this}}</div>{{/if}}
+            {{#if (eq @index 2)}}<div class="resource-item">{{this}}</div>{{/if}}
+            {{/each}}
+          </div>
         </div>
       </div>
       {{/each}}
