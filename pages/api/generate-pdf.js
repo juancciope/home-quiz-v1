@@ -316,13 +316,26 @@ export default async function handler(req, res) {
 
     console.log('🖥️ Launching browser...');
 
-    // Launch browser
+    // Launch browser with emoji support
     const browser = await puppeteer.launch({
       headless: true,
       ...(isDev ? {
-        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--font-render-hinting=none',
+          '--disable-font-subpixel-positioning',
+          '--enable-font-antialiasing'
+        ]
       } : {
-        args: chromium.args,
+        args: [
+          ...chromium.args,
+          '--font-render-hinting=none',
+          '--disable-font-subpixel-positioning',
+          '--enable-font-antialiasing'
+        ],
         executablePath: await chromium.executablePath(),
       }),
     });
@@ -335,12 +348,42 @@ export default async function handler(req, res) {
       waitUntil: "networkidle0",
       timeout: 30000
     });
+    
+    // Inject emoji font support
+    await page.evaluateOnNewDocument(() => {
+      // Force emoji font loading
+      const style = document.createElement('style');
+      style.textContent = `
+        * {
+          font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'EmojiOne Color', sans-serif !important;
+        }
+        .emoji, [class*="emoji"], [data-emoji] {
+          font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'EmojiOne Color' !important;
+          font-variant-emoji: emoji !important;
+        }
+      `;
+      document.head.appendChild(style);
+    });
 
     // Set media type to screen for proper background rendering
     await page.emulateMediaType('screen');
 
-    // Wait for any fonts to load
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Wait for fonts to load, including emoji fonts
+    await page.evaluate(() => {
+      return Promise.all([
+        document.fonts.ready,
+        new Promise(resolve => {
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(resolve);
+          } else {
+            setTimeout(resolve, 3000);
+          }
+        })
+      ]);
+    });
+
+    // Additional wait for emoji rendering
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     console.log('📄 Generating PDF...');
 
@@ -350,10 +393,10 @@ export default async function handler(req, res) {
       preferCSSPageSize: false,
       omitBackground: false,
       margin: {
-        top: '30mm',
-        bottom: '30mm', 
-        left: '25mm',
-        right: '25mm'
+        top: '25mm',
+        bottom: '25mm', 
+        left: '15mm',
+        right: '15mm'
       }
     });
 

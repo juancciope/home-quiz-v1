@@ -6,6 +6,7 @@
   <title>Music Creator Roadmap - {{pathway.title}}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
     
     * {
       margin: 0;
@@ -17,7 +18,7 @@
       background: #000000 !important;
       background-color: #000000 !important;
       color: #ffffff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'EmojiOne Color', sans-serif;
       line-height: 1.6;
       margin: 0 !important;
       padding: 0 !important;
@@ -26,6 +27,9 @@
       color-adjust: exact !important;
       width: 100%;
       height: 100%;
+      font-variant-emoji: emoji;
+      -webkit-font-variant-emoji: emoji;
+      text-rendering: optimizeLegibility;
     }
     
     @page {
@@ -57,7 +61,7 @@
     
     /* Consistent page structure - adjusted for A4 with proper margins */
     .pdf-page {
-      min-height: calc(100vh - 60mm); /* Account for top/bottom margins (30mm each) */
+      min-height: calc(100vh - 50mm); /* Account for top/bottom margins (25mm each) */
       padding: 15px 0;
       page-break-after: always;
       page-break-inside: avoid;
@@ -74,9 +78,9 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 60mm);
+      max-height: calc(100vh - 50mm);
       justify-content: flex-start;
-      padding: 0 15px; /* Add internal padding for consistent spacing */
+      padding: 0 20px; /* Add internal padding for consistent spacing */
     }
     
     .page-header {
@@ -185,6 +189,9 @@
       border-radius: 24px;
       margin-bottom: 24px;
       font-size: 14px;
+      height: 48px;
+      min-height: 48px;
+      box-sizing: border-box;
       font-weight: 600;
     }
     
@@ -366,6 +373,8 @@
       text-rendering: optimizeLegibility;
       -webkit-font-feature-settings: "liga";
       font-feature-settings: "liga";
+      font-variant-emoji: emoji;
+      -webkit-font-variant-emoji: emoji;
     }
     
     .archetype-info {
@@ -438,6 +447,8 @@
       font-weight: 600;
       color: #ffffff;
       margin-right: 8px;
+      font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', sans-serif;
+      text-rendering: optimizeLegibility;
     }
     
     .detail-text {
@@ -917,6 +928,8 @@
       text-rendering: optimizeLegibility;
       -webkit-font-feature-settings: "liga";
       font-feature-settings: "liga";
+      font-variant-emoji: emoji;
+      -webkit-font-variant-emoji: emoji;
     }
     
     .product-title {
@@ -1195,7 +1208,7 @@
                     <!-- Badge under the bar -->
                     <div style="text-align: center; width: 80px;">
                       <span style="display: inline-flex; align-items: center; gap: 3px; padding: 3px 6px; border-radius: 10px; font-size: 10px; font-weight: 600; border: 1px solid; white-space: nowrap; {{#if (eq archetypeLevel 'Core Focus')}}background: rgba(34, 197, 94, 0.2); color: #22c55e; border-color: rgba(34, 197, 94, 0.3);{{else if (eq archetypeLevel 'Strategic Secondary')}}background: rgba(245, 158, 11, 0.2); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);{{else}}background: rgba(107, 114, 128, 0.2); color: #6b7280; border-color: rgba(107, 114, 128, 0.3);{{/if}}">
-                        <span style="font-size: 8px;">{{archetypeIcon}}</span>
+                        <span style="font-size: 10px; font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;">{{archetypeIcon}}</span>
                         <span style="font-size: 9px;">{{#if (eq archetypeLevel 'Strategic Secondary')}}Secondary{{else}}{{archetypeLevel}}{{/if}}</span>
                       </span>
                     </div>
