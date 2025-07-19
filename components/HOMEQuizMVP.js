@@ -705,7 +705,7 @@ const FuzzyScorePreview = ({ scores, blend }) => {
   const hidden = sortedScores.slice(1);
   
   return (
-    <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8 relative overflow-hidden">
+    <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8 relative overflow-hidden safari-fallback">
       {/* Animated background particles */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
@@ -800,7 +800,7 @@ const FuzzyScorePreview = ({ scores, blend }) => {
                 </div>
                 
                 {/* Hidden pathway content */}
-                <div className="relative p-4 rounded-2xl border border-white/5 bg-white/[0.01]">
+                <div className="relative p-4 rounded-2xl border border-white/5 bg-black/60 safari-fallback">
                   <div className="flex items-center justify-between mb-2 opacity-30">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl filter grayscale">{info.icon}</span>
@@ -2199,7 +2199,7 @@ const HOMECreatorFlow = () => {
                   The secret to breakthrough success? <strong className="text-white">Laser focus</strong> on what matters most.
                 </p>
                 
-                <div className="bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-6 mb-8 text-left">
+                <div className="bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-6 mb-8 text-left safari-fallback">
                   <blockquote className="text-xl font-medium text-white mb-3 leading-relaxed">
                     "Be like a postage stamp - stick to one thing until you get there"
                   </blockquote>
@@ -2331,7 +2331,7 @@ const HOMECreatorFlow = () => {
                           w-full p-4 rounded-2xl border transition-all duration-300 text-left animate-slideUp
                           ${selectedOption === option.value 
                             ? 'border-[#1DD1A1] bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10' 
-                            : 'border-white/10 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.05] hover:border-white/20'
+                            : 'border-white/10 bg-black/70 backdrop-blur-sm hover:bg-black/60 hover:border-white/20 safari-fallback'
                           }
                         `}
                         style={{ animationDelay: `${index * 100}ms` }}
@@ -2356,7 +2356,7 @@ const HOMECreatorFlow = () => {
           <div className="max-w-lg w-full">
             <div className="animate-fadeIn">
               {/* Main Content Container - Enhanced styling */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-10 overflow-hidden shadow-2xl">
+              <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-10 overflow-hidden shadow-2xl safari-fallback">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-3xl animate-pulse" />
@@ -2618,7 +2618,7 @@ const HOMECreatorFlow = () => {
             ) : (
               <div className="animate-fadeIn">
                 {/* Main Content Container - Enhanced styling */}
-                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-10 overflow-hidden shadow-2xl">
+                <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-10 overflow-hidden shadow-2xl safari-fallback">
                   {/* Animated background elements */}
                   <div className="absolute inset-0 overflow-hidden">
                     <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-3xl animate-pulse" />
@@ -2699,7 +2699,7 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   {/* Disclaimer Text */}
-                  <div className="bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] backdrop-blur-xl rounded-2xl border border-white/10 p-6 mb-6 text-left">
+                  <div className="bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 mb-6 text-left safari-fallback">
                     <p className="text-sm text-gray-300 leading-relaxed mb-4">
                       <span className="text-white font-medium">Important:</span> This tool is developed by{' '}
                       <span className="text-[#1DD1A1]">homeformusic.app</span> as a creative guidance resource.
@@ -2949,7 +2949,7 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   {/* Why This Matters */}
-                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6">
+                  <div className="bg-black/80 backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6 safari-fallback">
                     <h3 className="flex items-center gap-2 text-lg font-bold mb-3 text-white">
                       <Sparkles className="w-5 h-5 text-[#B91372]" />
                       Why This Matters
@@ -2958,7 +2958,7 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   {/* Action Items */}
-                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6">
+                  <div className="bg-black/80 backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6 safari-fallback">
                     <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-white">
                       <Target className="w-5 h-5 text-[#1DD1A1]" />
                       Your Action Items
@@ -2976,7 +2976,7 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   {/* HOME Resources */}
-                  <div className="bg-white/[0.02] backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8">
+                  <div className="bg-black/80 backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-8 safari-fallback">
                     <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-white">
                       <img 
                         src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
@@ -3062,7 +3062,7 @@ const HOMECreatorFlow = () => {
               </div>
               
               {/* Fully Managed Option */}
-              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6">
+              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
                 <div className="text-center">
                   <div className="relative inline-block mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
@@ -3101,7 +3101,7 @@ const HOMECreatorFlow = () => {
               </div>
               
               {/* PDF Roadmap Option */}
-              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6">
+              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
                 <div className="text-center">
                   <div className="relative inline-block mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
@@ -3136,7 +3136,7 @@ const HOMECreatorFlow = () => {
               </div>
               
               {/* Community Option */}
-              <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6">
+              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
                 <div className="text-center">
                   <div className="relative inline-block mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
