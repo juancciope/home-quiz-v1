@@ -1771,7 +1771,10 @@ const HOMECreatorFlow = () => {
         ],
         homeConnection: aiGeneratedPathway?.homeConnection || pathway?.homeConnection || '',
         isPersonalized: aiGeneratedPathway?.isPersonalized || pathway?.isPersonalized || false,
-        assistantUsed: aiGeneratedPathway?.assistantUsed || pathway?.assistantUsed || false
+        assistantUsed: aiGeneratedPathway?.assistantUsed || pathway?.assistantUsed || false,
+        // Include scoring data and pathway details for webhook
+        scoreResult: scoreResult,
+        pathwayDetails: aiGeneratedPathway?.pathwayDetails || pathway?.pathwayDetails || {}
       };
       
       const submitData = {

@@ -28,23 +28,42 @@ export default async function handler(req, res) {
     // Extract scoring data if available
     const scoreResult = results?.scoreResult || {};
     const pathwayDetails = results?.pathwayDetails || {};
-    const primaryPath = scoreResult?.recommendation?.path || pathway;
+    
+    // Determine primary path - try multiple sources
+    const primaryPath = scoreResult?.recommendation?.path || 
+                       results?.pathway || 
+                       pathway || 
+                       'touring-performer'; // fallback
+    
     const levels = scoreResult?.levels || {};
     
-    // Determine pathway names
+    // Determine pathway names and keys
     const pathwayNames = {
       'touring-performer': 'Performer',
-      'creative-artist': 'Creative',
+      'creative-artist': 'Creative', 
       'writer-producer': 'Producer'
     };
+    
+    // Handle case where we might get a title instead of a key
+    const pathwayKeyMap = {
+      'The Touring Performer Path': 'touring-performer',
+      'The Creative Artist Path': 'creative-artist',
+      'The Writer-Producer Path': 'writer-producer',
+      'touring-performer': 'touring-performer',
+      'creative-artist': 'creative-artist',
+      'writer-producer': 'writer-producer'
+    };
+    
+    // Convert primaryPath to key if it's a title
+    const primaryPathKey = pathwayKeyMap[primaryPath] || primaryPath;
     
     // Create a flat webhook data structure that GHL can easily parse
     const webhookData = {
       // Core fields
       email: email,
-      pathway: pathwayNames[primaryPath] || 'Unknown',
-      pathway_name: pathwayNames[primaryPath] || 'Unknown',
-      pathway_focus_level: levels[primaryPath] === 'Core Focus' ? 'Core' : 'Recommended',
+      pathway: pathwayNames[primaryPathKey] || 'Unknown',
+      pathway_name: pathwayNames[primaryPathKey] || 'Unknown',
+      pathway_focus_level: levels[primaryPathKey] === 'Core Focus' ? 'Core' : 'Recommended',
       source: source || 'music-creator-roadmap-quiz',
       
       // Individual response fields (flat structure for GHL)
@@ -62,9 +81,9 @@ export default async function handler(req, res) {
       assistant_used: results?.assistantUsed ? 'Yes' : 'No',
       
       // Primary pathway details
-      primary_focus_message: pathwayDetails[primaryPath]?.focusMessage || '',
-      primary_focus_areas: pathwayDetails[primaryPath]?.focusAreas || '',
-      primary_growth_areas: pathwayDetails[primaryPath]?.growthAreas || '',
+      primary_focus_message: pathwayDetails[primaryPathKey]?.focusMessage || '',
+      primary_focus_areas: pathwayDetails[primaryPathKey]?.focusAreas || '',
+      primary_growth_areas: pathwayDetails[primaryPathKey]?.growthAreas || '',
       
       // Secondary pathway details (if exists)
       secondary_pathway_card: generateSecondaryCard(scoreResult, pathwayDetails, pathwayNames),
