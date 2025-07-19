@@ -345,7 +345,7 @@ export default async function handler(req, res) {
     console.log('📄 Generating PDF...');
 
     const pdfBuffer = await page.pdf({
-      format: "A3",
+      format: "A4",
       printBackground: true,
       preferCSSPageSize: false,
       omitBackground: false,
@@ -354,9 +354,7 @@ export default async function handler(req, res) {
         bottom: '0px', 
         left: '0px',
         right: '0px'
-      },
-      width: '297mm',
-      height: '420mm'
+      }
     });
 
     await browser.close();

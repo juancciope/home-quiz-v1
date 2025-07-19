@@ -31,7 +31,7 @@
     @page {
       background: #000000 !important;
       margin: 0 !important;
-      size: A3;
+      size: A4;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
     }
@@ -55,11 +55,12 @@
       min-height: 100vh;
     }
     
-    /* Consistent page structure */
+    /* Consistent page structure - adjusted for A4 */
     .pdf-page {
       min-height: 100vh;
-      padding: 60px 40px 80px 40px;
+      padding: 40px 30px 50px 30px;
       page-break-after: always;
+      page-break-inside: avoid;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
@@ -996,20 +997,20 @@
     }
     
     .cover-title-enhanced {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       color: #ffffff;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     
     .cover-description-enhanced {
-      font-size: 16px;
+      font-size: 14px;
       color: #e5e7eb;
       line-height: 1.6;
       text-align: center;
-      max-width: 500px;
-      margin: 0 auto 40px auto;
+      max-width: 450px;
+      margin: 0 auto 30px auto;
       font-weight: 400;
     }
     
@@ -1265,7 +1266,7 @@
       
       <!-- PAGES 4-7: Detailed Action Steps (Do not change anything) -->
       {{#each pathway.nextSteps}}
-      <div class="detail-section" style="padding: 60px 40px 80px 40px; page-break-before: always; margin: 0;">
+      <div class="pdf-page detail-section" style="page-break-before: always;">
         <!-- Page Header for each step -->
         <div style="text-align: center; margin-bottom: 24px;">
           <div class="page-header-badge">
@@ -1311,7 +1312,7 @@
       
       <!-- LAST PAGE: HOME Connection -->
       {{#if pathway.homeConnection}}
-      <div class="pdf-page">
+      <div class="pdf-page" style="page-break-before: always;">
         <div class="page-content">
           <div style="text-align: center; margin-bottom: 32px;">
             <div class="bubble-header">
