@@ -349,17 +349,30 @@ export default async function handler(req, res) {
       timeout: 30000
     });
     
-    // Inject emoji font support
+    // Inject selective emoji font support
     await page.evaluateOnNewDocument(() => {
-      // Force emoji font loading
+      // Force emoji font loading only for specific emoji elements
       const style = document.createElement('style');
       style.textContent = `
+        /* Default font for all elements - no emoji conversion */
         * {
-          font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'EmojiOne Color', sans-serif !important;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+          font-variant-emoji: text !important;
+          -webkit-font-variant-emoji: text !important;
         }
-        .emoji, [class*="emoji"], [data-emoji] {
+        
+        /* Emoji fonts only for specific emoji elements */
+        .archetype-icon, .product-icon, .detail-label, .why-icon, .action-icon, .sparkle, .sparkle-pink {
           font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'EmojiOne Color' !important;
           font-variant-emoji: emoji !important;
+          -webkit-font-variant-emoji: emoji !important;
+        }
+        
+        /* Ensure numbers stay as regular text */
+        .step-number, .action-number, .page-header-badge {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+          font-variant-emoji: text !important;
+          -webkit-font-variant-emoji: text !important;
         }
       `;
       document.head.appendChild(style);
