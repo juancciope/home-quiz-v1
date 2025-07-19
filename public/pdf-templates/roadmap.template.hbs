@@ -57,8 +57,8 @@
     
     /* Consistent page structure - adjusted for A4 with proper margins */
     .pdf-page {
-      min-height: calc(100vh - 40mm); /* Account for top/bottom margins */
-      padding: 20px 0;
+      min-height: calc(100vh - 60mm); /* Account for top/bottom margins (30mm each) */
+      padding: 15px 0;
       page-break-after: always;
       page-break-inside: avoid;
       display: flex;
@@ -74,8 +74,9 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 40mm);
+      max-height: calc(100vh - 60mm);
       justify-content: flex-start;
+      padding: 0 15px; /* Add internal padding for consistent spacing */
     }
     
     .page-header {
@@ -1303,7 +1304,9 @@
             HOME Resources
           </h3>
           {{#each ../pathway.resources}}
-          <div class="resource-item">{{this}}</div>
+          {{#if @first}}<div class="resource-item">{{this}}</div>{{/if}}
+          {{#if (eq @index 1)}}<div class="resource-item">{{this}}</div>{{/if}}
+          {{#if (eq @index 2)}}<div class="resource-item">{{this}}</div>{{/if}}
           {{/each}}
         </div>
       </div>

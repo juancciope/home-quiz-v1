@@ -350,10 +350,10 @@ export default async function handler(req, res) {
       preferCSSPageSize: false,
       omitBackground: false,
       margin: {
-        top: '20mm',
-        bottom: '20mm', 
-        left: '15mm',
-        right: '15mm'
+        top: '30mm',
+        bottom: '30mm', 
+        left: '25mm',
+        right: '25mm'
       }
     });
 
