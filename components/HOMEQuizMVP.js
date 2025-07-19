@@ -2267,7 +2267,7 @@ const HOMECreatorFlow = () => {
               </button>
               
               {/* Main Content Container - matching email capture style */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+              <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden safari-fallback">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
@@ -2439,7 +2439,7 @@ const HOMECreatorFlow = () => {
               <div className="animate-fadeIn">
                 {/* Unified Email Capture Experience */}
                 {scoreResult && (
-                  <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+                  <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden safari-fallback">
                     {/* Animated background elements */}
                     <div className="absolute inset-0 overflow-hidden">
                       <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
@@ -2680,7 +2680,7 @@ const HOMECreatorFlow = () => {
           
           <div className="max-w-md w-full">
             <div className="animate-fadeIn">
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+              <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden safari-fallback">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
@@ -2748,7 +2748,7 @@ const HOMECreatorFlow = () => {
           <div className="max-w-md w-full">
             <div className="animate-fadeIn">
               {/* Main Content Container - matching email capture style */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+              <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden safari-fallback">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />
@@ -2899,7 +2899,7 @@ const HOMECreatorFlow = () => {
               </button>
               
               {/* Main Content Container - matching email capture style */}
-              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.03] to-white/[0.01] backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden">
+              <div className="relative bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-8 overflow-hidden safari-fallback">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1DD1A1]/20 to-transparent rounded-full blur-2xl animate-pulse" />

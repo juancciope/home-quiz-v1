@@ -32,4 +32,25 @@
   .progress-fill {
     @apply bg-blue-600 h-2 rounded-full transition-all duration-500;
   }
+
+  /* Safari fallbacks for gradient and backdrop-filter issues */
+  .safari-fallback {
+    background: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  /* Safari-specific fixes using @supports */
+  @supports not (backdrop-filter: blur(1px)) {
+    .safari-fallback {
+      background: rgba(0, 0, 0, 0.9) !important;
+      backdrop-filter: none !important;
+    }
+  }
+
+  /* Additional Safari detection using -webkit prefix */
+  @supports (-webkit-backdrop-filter: blur(1px)) and (not (backdrop-filter: blur(1px))) {
+    .safari-fallback {
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(0, 0, 0, 0.85) !important;
+    }
+  }
 }
