@@ -61,8 +61,8 @@
     
     /* Consistent page structure - adjusted for A4 with proper margins */
     .pdf-page {
-      min-height: calc(100vh - 30mm); /* Account for top/bottom margins (15mm each) */
-      padding: 15px 0;
+      min-height: calc(100vh - 18mm); /* Account for top/bottom margins (3mm top + 15mm bottom) */
+      padding: 10px 0;
       page-break-after: always;
       page-break-inside: avoid;
       display: flex;
@@ -78,9 +78,9 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 30mm);
+      max-height: calc(100vh - 18mm);
       justify-content: flex-start;
-      padding: 0 30px; /* Add internal padding for consistent spacing */
+      padding: 0 35px; /* Keep original vertical padding, increase left/right space */
     }
     
     .page-header {
