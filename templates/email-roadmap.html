@@ -25,27 +25,53 @@
             text-decoration: none;
         }
 
-        /* Main styles */
+        /* Main styles with proper theme handling */
         body {
             height: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #000000 !important;
+        }
+        
+        /* Default light mode */
+        body {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        
+        /* Dark mode detection */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #000000 !important;
+                color: #ffffff !important;
+            }
         }
 
         .email-container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #000000 !important;
+            background-color: #ffffff !important;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .email-container {
+                background-color: #000000 !important;
+            }
         }
 
         .header {
-            background: #000000 !important;
+            background: #ffffff !important;
             padding: 40px 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .header {
+                background: #000000 !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
         }
 
         .header-logo {
@@ -59,43 +85,75 @@
             align-items: center;
             gap: 6px;
             padding: 6px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 20px;
-            color: #9ca3af !important;
+            color: #6b7280 !important;
             font-size: 12px;
             font-weight: 500;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             margin-bottom: 16px;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .path-badge {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: #9ca3af !important;
+            }
+        }
 
         .header h1 {
-            color: #ffffff !important;
+            color: #000000 !important;
             font-size: 28px;
             font-weight: 700;
             margin: 0 0 8px 0;
             line-height: 1.2;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .header h1 {
+                color: #ffffff !important;
+            }
+        }
 
         .stage-info {
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgba(0, 0, 0, 0.6) !important;
             font-size: 14px;
             margin: 0 0 20px 0;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .stage-info {
+                color: rgba(255, 255, 255, 0.6) !important;
+            }
+        }
 
         .description-text {
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: rgba(0, 0, 0, 0.8) !important;
             font-size: 16px;
             line-height: 1.6;
             margin: 0;
             max-width: 500px;
             margin: 0 auto;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .description-text {
+                color: rgba(255, 255, 255, 0.8) !important;
+            }
+        }
 
         .content {
             padding: 40px 30px;
-            background-color: #000000 !important;
+            background-color: #ffffff !important;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .content {
+                background-color: #000000 !important;
+            }
         }
 
         /* Profile Cards Section */
@@ -104,11 +162,18 @@
         }
 
         .profile-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 16px;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .profile-card {
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
         }
 
         .profile-header {
@@ -120,6 +185,12 @@
 
         .profile-icon {
             font-size: 32px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .profile-info {
@@ -127,13 +198,20 @@
         }
 
         .profile-name {
-            color: #ffffff !important;
+            color: #000000 !important;
             font-size: 18px;
             font-weight: 600;
             margin: 0;
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .profile-name {
+                color: #ffffff !important;
+            }
         }
 
         .focus-badge {
@@ -167,22 +245,40 @@
         }
 
         .profile-description {
-            color: rgba(255, 255, 255, 0.7) !important;
+            color: rgba(0, 0, 0, 0.7) !important;
             font-size: 14px;
             line-height: 1.6;
             margin: 0 0 16px 0;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .profile-description {
+                color: rgba(255, 255, 255, 0.7) !important;
+            }
+        }
 
         .profile-level-info {
-            color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(0, 0, 0, 0.5) !important;
             font-size: 13px;
             font-style: italic;
             margin: 0 0 16px 0;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .profile-level-info {
+                color: rgba(255, 255, 255, 0.5) !important;
+            }
+        }
 
         .profile-details {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             padding-top: 16px;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .profile-details {
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
         }
 
         .detail-row {
@@ -190,16 +286,28 @@
         }
 
         .detail-label {
-            color: #ffffff !important;
+            color: #000000 !important;
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 4px;
         }
+        
+        @media (prefers-color-scheme: dark) {
+            .detail-label {
+                color: #ffffff !important;
+            }
+        }
 
         .detail-text {
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgba(0, 0, 0, 0.6) !important;
             font-size: 13px;
             line-height: 1.5;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .detail-text {
+                color: rgba(255, 255, 255, 0.6) !important;
+            }
         }
 
         /* How HOME Supports Section */
@@ -209,9 +317,15 @@
             padding: 40px 30px;
             text-align: center;
             margin: 40px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .home-connection {
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
         }
 
         .home-connection::after {
@@ -229,18 +343,30 @@
         .home-connection h3 {
             font-size: 24px;
             font-weight: bold;
-            color: #ffffff !important;
+            color: #000000 !important;
             margin: 0 0 20px 0;
             position: relative;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .home-connection h3 {
+                color: #ffffff !important;
+            }
         }
 
         .home-connection-content {
             font-size: 17px;
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: rgba(0, 0, 0, 0.8) !important;
             line-height: 1.7;
             margin: 0;
             text-align: left;
             position: relative;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .home-connection-content {
+                color: rgba(255, 255, 255, 0.8) !important;
+            }
         }
 
         /* CTA Section */
@@ -345,10 +471,17 @@
 
         /* Footer */
         .footer {
-            background-color: #000000 !important;
+            background-color: #ffffff !important;
             padding: 40px 30px;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .footer {
+                background-color: #000000 !important;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
         }
 
         .footer-logo {
@@ -358,10 +491,16 @@
         }
 
         .footer p {
-            color: rgba(255, 255, 255, 0.5) !important;
+            color: rgba(0, 0, 0, 0.5) !important;
             font-size: 14px;
             margin: 8px 0;
             line-height: 1.5;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .footer p {
+                color: rgba(255, 255, 255, 0.5) !important;
+            }
         }
 
         .footer a {
@@ -381,6 +520,22 @@
             
             .profile-name {
                 font-size: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 12px;
+            }
+            
+            .profile-icon {
+                font-size: 40px;
+                width: 60px;
+                height: 60px;
             }
             
             .cta-button {
@@ -392,12 +547,57 @@
             }
         }
 
-        /* Force dark mode */
-        * { color: inherit !important; }
+        /* Ensure proper text contrast */
+        h2 {
+            color: #000000 !important;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            h2 {
+                color: #ffffff !important;
+            }
+        }
+        
+        /* Fix webinar and other sections */
+        .webinar-offer {
+            background: rgba(0, 0, 0, 0.02) !important;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .webinar-offer {
+                background: rgba(255, 255, 255, 0.02) !important;
+            }
+        }
+        
+        .webinar-offer h4 {
+            color: #1DD1A1 !important;
+        }
+        
+        .webinar-offer p {
+            color: rgba(0, 0, 0, 0.8) !important;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .webinar-offer p {
+                color: rgba(255, 255, 255, 0.8) !important;
+            }
+        }
+        
+        /* Dark mode overrides for inline styles */
+        @media (prefers-color-scheme: dark) {
+            [style*="background: rgba(0, 0, 0"] {
+                background: rgba(255, 255, 255, 0.02) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            [style*="color: rgba(0, 0, 0"] {
+                color: rgba(255, 255, 255, 0.8) !important;
+            }
+        }
     </style>
 </head>
-<body style="background-color: #000000 !important;">
-    <div class="email-container" style="background-color: #000000 !important;">
+<body>
+    <div class="email-container">
         <!-- Header -->
         <div class="header">
             <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="header-logo">
@@ -452,16 +652,16 @@
             <!-- Strategic Roadmap Section -->
             <div class="profile-section">
                 <h2 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 20px;">Your Strategic Roadmap</h2>
-                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px;">
-                    <pre style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.8; color: rgba(255, 255, 255, 0.8) !important; margin: 0; white-space: pre-line;">{{ contact.next_steps_formatted }}</pre>
+                <div style="background: rgba(0, 0, 0, 0.02); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 16px; padding: 24px;">
+                    <pre style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.8; color: rgba(0, 0, 0, 0.8) !important; margin: 0; white-space: pre-line;">{{ contact.next_steps_formatted }}</pre>
                 </div>
             </div>
 
             <!-- Recommended Resources Section -->
             <div class="profile-section">
                 <h2 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 20px;">HOME Resources for Your Path</h2>
-                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px;">
-                    <pre style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.8; color: rgba(255, 255, 255, 0.8) !important; margin: 0; white-space: pre-line;">{{ contact.recommended_resources_formatted }}</pre>
+                <div style="background: rgba(0, 0, 0, 0.02); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 16px; padding: 24px;">
+                    <pre style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.8; color: rgba(0, 0, 0, 0.8) !important; margin: 0; white-space: pre-line;">{{ contact.recommended_resources_formatted }}</pre>
                 </div>
             </div>
 
