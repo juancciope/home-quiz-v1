@@ -61,7 +61,7 @@
     
     /* Consistent page structure - adjusted for A4 with proper margins */
     .pdf-page {
-      min-height: calc(100vh - 50mm); /* Account for top/bottom margins (25mm each) */
+      min-height: calc(100vh - 40mm); /* Account for top/bottom margins (20mm each) */
       padding: 15px 0;
       page-break-after: always;
       page-break-inside: avoid;
@@ -78,9 +78,9 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-height: calc(100vh - 50mm);
+      max-height: calc(100vh - 40mm);
       justify-content: flex-start;
-      padding: 0 20px; /* Add internal padding for consistent spacing */
+      padding: 0 25px; /* Add internal padding for consistent spacing */
     }
     
     .page-header {
@@ -707,7 +707,7 @@
     }
     
     .why-icon {
-      color: #B91372;
+      color: #ff6b6b;
       font-size: 24px;
       font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'Segoe UI Symbol', 'Symbola', sans-serif;
       text-rendering: optimizeLegibility;
@@ -715,6 +715,8 @@
       font-feature-settings: "liga";
       font-weight: normal;
       font-style: normal;
+      font-variant-emoji: emoji;
+      -webkit-font-variant-emoji: emoji;
     }
     
     .action-icon {
@@ -726,6 +728,8 @@
       font-feature-settings: "liga";
       font-weight: normal;
       font-style: normal;
+      font-variant-emoji: emoji;
+      -webkit-font-variant-emoji: emoji;
     }
     
     .action-item {
@@ -735,17 +739,19 @@
       align-items: flex-start;
     }
     
-    .action-check {
-      color: #1DD1A1;
-      font-size: 18px;
+    .action-number {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #1DD1A1 0%, #B91372 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
       flex-shrink: 0;
-      margin-top: 2px;
-      font-weight: normal;
-      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Twemoji Mozilla', 'Android Emoji', 'Segoe UI Symbol', 'Symbola', sans-serif;
-      text-rendering: optimizeLegibility;
-      -webkit-font-feature-settings: "liga";
-      font-feature-settings: "liga";
-      font-style: normal;
+      color: #ffffff;
+      margin-top: 1px;
     }
     
     .action-text {
@@ -1292,7 +1298,7 @@
         
         <div class="detail-box">
           <h3 class="detail-box-title">
-            <span class="why-icon">💡</span>
+            <span class="why-icon">⭐</span>
             Why This Matters
           </h3>
           <p style="color: #d1d5db; font-size: 14px; line-height: 1.5;">{{detail}}</p>
@@ -1300,12 +1306,12 @@
         
         <div class="detail-box">
           <h3 class="detail-box-title">
-            <span class="action-icon">📋</span>
+            <span class="action-icon">🎯</span>
             Your Action Items
           </h3>
           {{#each actions}}
           <div class="action-item">
-            <span class="action-check">✅</span>
+            <span class="action-number">{{add @index 1}}</span>
             <span class="action-text">{{this}}</span>
           </div>
           {{/each}}
