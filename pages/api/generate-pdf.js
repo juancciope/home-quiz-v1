@@ -78,7 +78,7 @@ export default async function handler(req, res) {
         const levelName = levels[key] || 'Noise';
         const archetypeLevel = { 
           level: levelName, 
-          icon: levelName === 'Core Focus' ? '🔥' : levelName === 'Strategic Secondary' ? '⚡' : '💫', 
+          icon: levelName === 'Core Focus' ? '🏆' : levelName === 'Strategic Secondary' ? '⚡' : '', 
           description: '' 
         };
         const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;

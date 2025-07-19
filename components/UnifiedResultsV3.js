@@ -68,7 +68,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails })
   const getLevelStyle = (level) => {
     switch(level) {
       case 'Core Focus':
-        return { badge: 'bg-green-500/20 text-green-400 border-green-500/30', icon: '🎯' };
+        return { badge: 'bg-green-500/20 text-green-400 border-green-500/30', icon: '🏆' };
       case 'Strategic Secondary':
         return { badge: 'bg-amber-500/20 text-amber-400 border-amber-500/30', icon: '⚡' };
       case 'Noise':
