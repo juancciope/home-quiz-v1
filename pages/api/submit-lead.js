@@ -57,6 +57,34 @@ export default async function handler(req, res) {
     // Convert primaryPath to key if it's a title
     const primaryPathKey = pathwayKeyMap[primaryPath] || primaryPath;
     
+    // Generate dynamic description using same logic as app/PDF
+    const generateDynamicDescription = () => {
+      if (!scoreResult?.levels || !scoreResult?.displayPct) {
+        return results?.description || '';
+      }
+      
+      // Sort paths by display percentage to match app logic
+      const sortedPaths = Object.entries(scoreResult.displayPct)
+        .sort((a, b) => b[1] - a[1])
+        .map(([path, percentage]) => ({
+          path,
+          percentage,
+          level: scoreResult.levels[path] || 'Noise'
+        }));
+      
+      const primary = sortedPaths[0];
+      const secondary = sortedPaths[1];
+      const stage = responses?.['stage-level'] || 'planning';
+      
+      if (primary?.level === 'Core Focus' && secondary?.level === 'Strategic Secondary') {
+        return `Your ${pathwayNames[primary.path]} strength should lead your strategy, with your ${pathwayNames[secondary.path]} skills as strategic support. This balance creates the fastest path to your vision.`;
+      } else if (primary?.level === 'Core Focus') {
+        return `Your ${pathwayNames[primary.path]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
+      } else {
+        return `Your ${pathwayNames[primary.path]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
+      }
+    };
+
     // Create a flat webhook data structure that GHL can easily parse
     const webhookData = {
       // Core fields
@@ -75,7 +103,7 @@ export default async function handler(req, res) {
       
       // Results fields
       pathway_icon: results?.icon || '🎵',
-      pathway_description: results?.description || '',
+      pathway_description: generateDynamicDescription(),
       home_connection: results?.homeConnection || '',
       is_personalized: results?.isPersonalized ? 'Yes' : 'No',
       assistant_used: results?.assistantUsed ? 'Yes' : 'No',
