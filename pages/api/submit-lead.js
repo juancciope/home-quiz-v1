@@ -25,17 +25,32 @@ export default async function handler(req, res) {
     console.log('📝 Responses:', responses);
     console.log('📊 Results:', results);
 
+    // Extract scoring data if available
+    const scoreResult = results?.scoreResult || {};
+    const pathwayDetails = results?.pathwayDetails || {};
+    const primaryPath = scoreResult?.recommendation?.path || pathway;
+    const levels = scoreResult?.levels || {};
+    
+    // Determine pathway names
+    const pathwayNames = {
+      'touring-performer': 'Performer',
+      'creative-artist': 'Creative',
+      'writer-producer': 'Producer'
+    };
+    
     // Create a flat webhook data structure that GHL can easily parse
     const webhookData = {
       // Core fields
       email: email,
-      pathway: results?.title || pathway || 'Unknown Pathway',
+      pathway: pathwayNames[primaryPath] || 'Unknown',
+      pathway_name: pathwayNames[primaryPath] || 'Unknown',
+      pathway_focus_level: levels[primaryPath] === 'Core Focus' ? 'Core' : 'Recommended',
       source: source || 'music-creator-roadmap-quiz',
       
       // Individual response fields (flat structure for GHL)
       ideal_day: responses?.['ideal-day'] || '',
       motivation: responses?.motivation || '',
-      stage_level: responses?.['stage-level'] || '',
+      stage_level: responses?.['stage-level'] || 'planning',
       success_vision: responses?.['success-vision'] || '',
       resource_priority: responses?.['resources-priority'] || '',
       
@@ -46,8 +61,25 @@ export default async function handler(req, res) {
       is_personalized: results?.isPersonalized ? 'Yes' : 'No',
       assistant_used: results?.assistantUsed ? 'Yes' : 'No',
       
+      // Primary pathway details
+      primary_focus_message: pathwayDetails[primaryPath]?.focusMessage || '',
+      primary_focus_areas: pathwayDetails[primaryPath]?.focusAreas || '',
+      primary_growth_areas: pathwayDetails[primaryPath]?.growthAreas || '',
+      
+      // Secondary pathway details (if exists)
+      secondary_pathway_card: generateSecondaryCard(scoreResult, pathwayDetails, pathwayNames),
+      
+      // Noise pathway details (if exists)
+      noise_pathway_card: generateNoiseCard(scoreResult, pathwayDetails, pathwayNames),
+      
       // Formatted fields
       quiz_completed_date: new Date().toISOString(),
+      quiz_completion_time: new Date().toLocaleString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      }),
       timestamp: new Date().toISOString(),
       
       // Next steps as simple text
@@ -57,7 +89,12 @@ export default async function handler(req, res) {
       recommended_resources_formatted: formatResources(results?.resources || []),
       
       // All responses as one field for backup
-      quiz_responses: formatResponses(responses)
+      quiz_responses: formatResponses(responses),
+      
+      // Additional fields for email template
+      webinar_offer: 'Free 30-minute Music Career Accelerator Workshop',
+      webinar_schedule: 'Every Tuesday at 7pm CST',
+      community_size: '1000+'
     };
 
     console.log('📤 Webhook data prepared:', JSON.stringify(webhookData, null, 2));
@@ -109,6 +146,79 @@ export default async function handler(req, res) {
 }
 
 // Helper functions
+function generateSecondaryCard(scoreResult, pathwayDetails, pathwayNames) {
+  if (!scoreResult?.levels) return '';
+  
+  // Find secondary pathway (has 'Strategic Secondary' level)
+  const secondaryPath = Object.entries(scoreResult.levels)
+    .find(([path, level]) => level === 'Strategic Secondary')?.[0];
+  
+  if (!secondaryPath || !pathwayDetails[secondaryPath]) return '';
+  
+  const pathwayIcons = {
+    'touring-performer': '🎤',
+    'creative-artist': '🎨',
+    'writer-producer': '🎹'
+  };
+  
+  return `
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-icon">${pathwayIcons[secondaryPath] || '🎵'}</div>
+        <div class="profile-info">
+          <div class="profile-name">
+            ${pathwayNames[secondaryPath] || secondaryPath}
+            <span class="focus-badge secondary">⚡ SECONDARY</span>
+          </div>
+        </div>
+      </div>
+      <p class="profile-description">${pathwayDetails[secondaryPath].focusMessage || ''}</p>
+      <p class="profile-level-info">This complements your primary focus. These skills can enhance your main path when developed strategically. Consider integrating these elements to create a more well-rounded approach.</p>
+      <div class="profile-details">
+        <div class="detail-row">
+          <div class="detail-label">🎯 Focus Areas:</div>
+          <div class="detail-text">${pathwayDetails[secondaryPath].focusAreas || ''}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">📈 Growth Areas:</div>
+          <div class="detail-text">${pathwayDetails[secondaryPath].growthAreas || ''}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function generateNoiseCard(scoreResult, pathwayDetails, pathwayNames) {
+  if (!scoreResult?.levels) return '';
+  
+  // Find noise pathway (has 'Noise' level)
+  const noisePath = Object.entries(scoreResult.levels)
+    .find(([path, level]) => level === 'Noise')?.[0];
+  
+  if (!noisePath || !pathwayDetails[noisePath]) return '';
+  
+  const pathwayIcons = {
+    'touring-performer': '🎤',
+    'creative-artist': '🎨',
+    'writer-producer': '🎹'
+  };
+  
+  return `
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-icon">${pathwayIcons[noisePath] || '🎵'}</div>
+        <div class="profile-info">
+          <div class="profile-name">
+            ${pathwayNames[noisePath] || noisePath}
+            <span class="focus-badge noise">· NOISE</span>
+          </div>
+        </div>
+      </div>
+      <p class="profile-description">${pathwayDetails[noisePath].focusMessage || ''}</p>
+    </div>
+  `;
+}
+
 function formatNextSteps(steps) {
   if (!steps || !Array.isArray(steps)) return 'No steps provided';
   

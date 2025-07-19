@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <title>Your Personalized Music Creator Roadmap</title>
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000000 !important;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #000000 !important;
+        }
+
+        .header {
+            background: #000000 !important;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-logo {
+            height: 32px;
+            margin-bottom: 30px;
+            opacity: 0.6;
+        }
+
+        .path-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: #9ca3af !important;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            color: #ffffff !important;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            line-height: 1.2;
+        }
+
+        .stage-info {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 14px;
+            margin: 0 0 20px 0;
+        }
+
+        .description-text {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .content {
+            padding: 40px 30px;
+            background-color: #000000 !important;
+        }
+
+        /* Profile Cards Section */
+        .profile-section {
+            margin-bottom: 40px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile-icon {
+            font-size: 32px;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            color: #ffffff !important;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .focus-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .focus-badge.core {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444 !important;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .focus-badge.secondary {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24 !important;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .focus-badge.noise {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af !important;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+
+        .profile-description {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 16px 0;
+        }
+
+        .profile-level-info {
+            color: rgba(255, 255, 255, 0.5) !important;
+            font-size: 13px;
+            font-style: italic;
+            margin: 0 0 16px 0;
+        }
+
+        .profile-details {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 16px;
+        }
+
+        .detail-row {
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            color: #ffffff !important;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .detail-text {
+            color: rgba(255, 255, 255, 0.6) !important;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* How HOME Supports Section */
+        .home-connection {
+            background: linear-gradient(to bottom right, rgba(185, 19, 114, 0.05), rgba(29, 209, 161, 0.05));
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-connection::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: url('https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png') no-repeat center;
+            background-size: contain;
+            opacity: 0.2;
+        }
+
+        .home-connection h3 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff !important;
+            margin: 0 0 20px 0;
+            position: relative;
+        }
+
+        .home-connection-content {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.8) !important;
+            line-height: 1.7;
+            margin: 0;
+            text-align: left;
+            position: relative;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1DD1A1, #B91372);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-title {
+            color: #ffffff !important;
+            font-size: 26px;
+            font-weight: bold;
+            margin: 0 0 12px 0;
+            position: relative;
+        }
+
+        .cta-subtitle {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-size: 16px;
+            margin: 0 0 30px 0;
+            position: relative;
+        }
+
+        .cta-button {
+            padding: 16px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-block;
+            margin: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+
+        .cta-button.primary {
+            background-color: #ffffff !important;
+            color: #B91372 !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button.secondary {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Webinar Offer */
+        .webinar-offer {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(29, 209, 161, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .webinar-offer::before {
+            content: '🎁';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            padding: 0 10px;
+            font-size: 24px;
+        }
+
+        .webinar-offer h4 {
+            color: #1DD1A1 !important;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0 10px 0;
+        }
+
+        .webinar-offer p {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-size: 15px;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #000000 !important;
+            padding: 40px 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-logo {
+            height: 24px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.5) !important;
+            font-size: 14px;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .footer a {
+            color: #1DD1A1 !important;
+            text-decoration: none;
+        }
+
+        /* Mobile responsive */
+        @media only screen and (max-width: 600px) {
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .profile-name {
+                font-size: 16px;
+            }
+            
+            .cta-button {
+                padding: 14px 24px;
+                font-size: 15px;
+                display: block;
+                margin: 15px auto;
+                max-width: 250px;
+            }
+        }
+
+        /* Force dark mode */
+        * { color: inherit !important; }
+    </style>
+</head>
+<body style="background-color: #000000 !important;">
+    <div class="email-container" style="background-color: #000000 !important;">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="header-logo">
+            
+            <div class="path-badge">
+                <span>YOUR PATH</span>
+            </div>
+            
+            <h1>{{ contact.pathway }} - {{ contact.pathway_focus_level }}</h1>
+            <p class="stage-info">You're at the {{ contact.stage_level }} Stage</p>
+            <p class="description-text">{{ contact.pathway_description }}</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Creative Profile Section -->
+            <div class="profile-section">
+                <h2 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 20px;">Your Creative Profile</h2>
+                
+                <!-- Primary Pathway Card -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-icon">{{ contact.pathway_icon }}</div>
+                        <div class="profile-info">
+                            <div class="profile-name">
+                                {{ contact.pathway_name }}
+                                <span class="focus-badge core">🎯 CORE FOCUS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="profile-description">{{ contact.primary_focus_message }}</p>
+                    <p class="profile-level-info">This is your natural strength. The skills, mindset, and approach that come most easily to you. When you lean into this path, work feels more like play and progress accelerates.</p>
+                    <div class="profile-details">
+                        <div class="detail-row">
+                            <div class="detail-label">🎯 Focus Areas:</div>
+                            <div class="detail-text">{{ contact.primary_focus_areas }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">📈 Growth Areas:</div>
+                            <div class="detail-text">{{ contact.primary_growth_areas }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Secondary Pathway Card (if applicable) -->
+                {{ contact.secondary_pathway_card }}
+                
+                <!-- Noise Pathway Card (if applicable) -->
+                {{ contact.noise_pathway_card }}
+            </div>
+
+            <!-- Strategic Roadmap Section -->
+            <div class="profile-section">
+                <h2 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 20px;">Your Strategic Roadmap</h2>
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px;">
+                    <pre style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.8; color: rgba(255, 255, 255, 0.8) !important; margin: 0; white-space: pre-line;">{{ contact.next_steps_formatted }}</pre>
+                </div>
+            </div>
+
+            <!-- Recommended Resources Section -->
+            <div class="profile-section">
+                <h2 style="color: #ffffff; font-size: 20px; font-weight: 600; margin-bottom: 20px;">HOME Resources for Your Path</h2>
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 24px;">
+                    <pre style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.8; color: rgba(255, 255, 255, 0.8) !important; margin: 0; white-space: pre-line;">{{ contact.recommended_resources_formatted }}</pre>
+                </div>
+            </div>
+
+            <!-- How HOME Supports Your Journey Section -->
+            <div class="home-connection">
+                <h3>🏡 How HOME Supports Your Journey</h3>
+                <div class="home-connection-content">
+                    {{ contact.home_connection }}
+                </div>
+            </div>
+
+            <!-- Exclusive Webinar Offer -->
+            <div class="webinar-offer">
+                <h4>Exclusive Bonus for Quiz Takers</h4>
+                <p><strong>{{ contact.webinar_offer }}</strong></p>
+                <p>Next session: {{ contact.webinar_schedule }}</p>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <h3 class="cta-title">Ready to Accelerate Your Growth?</h3>
+                <p class="cta-subtitle">Join {{ contact.community_size }} music creators in Nashville's most supportive community</p>
+                <a href="https://homeformusic.org/consultation" class="cta-button primary">Book Consultation</a>
+                <a href="https://homeformusic.org/community" class="cta-button secondary">Join Free Community</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="footer-logo">
+            <p><strong>HOME for Music</strong></p>
+            <p>Nashville's Most Supportive Music Creator Community</p>
+            <p>📍 Nashville, TN | 📧 hello@homeformusic.org</p>
+            <p>
+                <a href="https://homeformusic.org">Visit Our Website</a>
+            </p>
+            <p style="margin-top: 20px; font-size: 12px; color: rgba(255, 255, 255, 0.3) !important;">
+                You received this email because you completed the Music Creator Roadmap Quiz on {{ contact.quiz_completion_time }}
+            </p>
+        </div>
+    </div>
+</body>
+</html>
