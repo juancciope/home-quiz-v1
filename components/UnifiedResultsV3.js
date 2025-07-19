@@ -11,6 +11,10 @@ import { PATH_LABELS } from '../lib/quiz/ui.js';
 const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails }) => {
   if (!scoreResult) return null;
   
+  // Debug log to see what pathway details are available
+  console.log('🔍 UnifiedResultsV3 aiPathwayDetails:', aiPathwayDetails);
+  console.log('🔍 UnifiedResultsV3 pathway.pathwayDetails:', pathway?.pathwayDetails);
+  
   
   const { displayPct, absPct, levels, recommendation } = scoreResult;
   

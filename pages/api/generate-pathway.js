@@ -193,13 +193,17 @@ try {
 if (!aiResponse.pathway || 
     !aiResponse.customNextSteps || 
     !aiResponse.homeConnection ||
-    !aiResponse.recommendedResources ||
-    !aiResponse.pathwayDetails ||
-    !aiResponse.pathwayDetails['touring-performer'] ||
-    !aiResponse.pathwayDetails['creative-artist'] ||
-    !aiResponse.pathwayDetails['writer-producer']) {
+    !aiResponse.recommendedResources) {
   console.error('Incomplete response:', aiResponse);
-  throw new Error('Incomplete assistant response - missing pathwayDetails for all pathways');
+  throw new Error('Incomplete assistant response');
+}
+
+// Log what we got from AI for debugging
+console.log('🔍 AI Response pathwayDetails:', JSON.stringify(aiResponse.pathwayDetails, null, 2));
+
+// Check if pathwayDetails exist and log warning if missing
+if (!aiResponse.pathwayDetails) {
+  console.warn('⚠️ AI did not generate pathwayDetails - using fallback approach');
 }
         
 // Get pathway metadata
@@ -232,7 +236,7 @@ const result = {
   homeConnection: aiResponse.homeConnection,
   recommendation: scoreResult?.recommendation,
   // Include AI-generated pathway details for all pathways
-  pathwayDetails: aiResponse.pathwayDetails,
+  pathwayDetails: aiResponse.pathwayDetails || generateFallbackPathwayDetails(aiResponse.pathway, scoreResult),
   isPersonalized: true,
   assistantUsed: true
 };
@@ -330,6 +334,75 @@ console.log('✅ Successfully generated personalized pathway:', {
     
     res.status(200).json(emergencyFallback);
   }
+}
+
+function generateFallbackPathwayDetails(primaryPathway, scoreResult) {
+  const levels = scoreResult?.levels || {};
+  
+  const pathwayContent = {
+    'touring-performer': {
+      'Core Focus': {
+        focusMessage: 'Live energy is your superpower. You come alive on stage and create magnetic connections with audiences. Your ability to command a room and deliver unforgettable experiences is your path to building a devoted fanbase and sustainable touring career.',
+        focusAreas: 'Stage presence • Audience connection • Live sound • Touring strategy',
+        growthAreas: 'Balance studio time with stage time • Build authentic social presence • Embrace new venues'
+      },
+      'Strategic Secondary': {
+        focusMessage: 'Live performance can enhance your primary focus. Your stage presence and audience connection skills can amplify your main artistic path.',
+        focusAreas: 'Performance skills • Audience engagement • Live presentation • Stage confidence',
+        growthAreas: 'Integrate live elements into main path • Build performance confidence • Connect with live music community'
+      },
+      'Noise': {
+        focusMessage: 'Performance skills can support your main strengths when needed.',
+        focusAreas: 'Basic stage presence • Audience awareness • Live sound basics',
+        growthAreas: 'Focus on main path • Minimal live performance when beneficial'
+      }
+    },
+    'creative-artist': {
+      'Core Focus': {
+        focusMessage: 'You thrive on creative expression and building lasting connections with your audience. Your artistic vision is your competitive advantage in building sustainable income streams and meaningful impact.',
+        focusAreas: 'Brand development • Content creation • Digital marketing • Revenue streams',
+        growthAreas: 'Stay authentic to your vision • Balance content with artistic growth • Focus over trends'
+      },
+      'Strategic Secondary': {
+        focusMessage: 'Creative skills can enhance your primary focus. Your ability to create content and build audience connections supports your main path.',
+        focusAreas: 'Content creation • Visual branding • Social media • Audience building',
+        growthAreas: 'Integrate creativity into main path • Build authentic online presence • Develop unique voice'
+      },
+      'Noise': {
+        focusMessage: 'Creative skills can support your main strengths when strategically applied.',
+        focusAreas: 'Basic content creation • Simple branding • Essential social media',
+        growthAreas: 'Focus on main path • Use creativity to enhance core strengths'
+      }
+    },
+    'writer-producer': {
+      'Core Focus': {
+        focusMessage: 'You excel behind the scenes, crafting the foundation that makes others shine. Your technical skills and collaborative nature are your pathway to consistent income and creative fulfillment.',
+        focusAreas: 'Production skills • Collaboration network • Business development • Royalty optimization',
+        growthAreas: 'Balance solo creativity with collaboration • Explore performance opportunities • Build strategic partnerships'
+      },
+      'Strategic Secondary': {
+        focusMessage: 'Production skills can enhance your primary focus. Your technical abilities and collaborative approach can support your main artistic path.',
+        focusAreas: 'Technical skills • Collaboration • Music production • Business knowledge',
+        growthAreas: 'Apply production skills to main path • Build technical confidence • Network with creators'
+      },
+      'Noise': {
+        focusMessage: 'Production expertise can support your main strengths when beneficial.',
+        focusAreas: 'Basic production knowledge • Technical awareness • Industry understanding',
+        growthAreas: 'Focus on main path • Use production knowledge to enhance core work'
+      }
+    }
+  };
+  
+  const result = {};
+  
+  // Generate content for all three pathways based on their levels
+  ['touring-performer', 'creative-artist', 'writer-producer'].forEach(pathway => {
+    const level = levels[pathway] || 'Noise';
+    const content = pathwayContent[pathway][level] || pathwayContent[pathway]['Noise'];
+    result[pathway] = content;
+  });
+  
+  return result;
 }
 
 function determineFallbackPathway(responses) {
