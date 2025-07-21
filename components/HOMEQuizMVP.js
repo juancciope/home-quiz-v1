@@ -1422,6 +1422,7 @@ const HOMECreatorFlow = () => {
   const [responses, setResponses] = useState({});
   const [pathway, setPathway] = useState(null);
   const [email, setEmail] = useState('');
+  const [artistName, setArtistName] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showResults, setShowResults] = useState(false);
@@ -1779,6 +1780,7 @@ const HOMECreatorFlow = () => {
       
       const submitData = {
         email,
+        artistName,
         pathway: pathway?.title,
         responses,
         source: 'music-creator-roadmap-flow',
@@ -2508,8 +2510,15 @@ const HOMECreatorFlow = () => {
                                   <span className="text-sm text-white font-medium">{topName}</span>
                                 </div>
                                 
-                                {/* Other paths - locked */}
-                                {Object.keys(PATH_LABELS).filter(id => id !== topId).map(pathId => (
+                                {/* Other paths - locked - sorted by score */}
+                                {(() => {
+                                  // Sort the other paths by their scores (descending)
+                                  const sortedOtherPaths = Object.entries(scoreResult.displayPct)
+                                    .filter(([id]) => id !== topId)
+                                    .sort((a, b) => b[1] - a[1])
+                                    .map(([id]) => id);
+                                  
+                                  return sortedOtherPaths.map(pathId => (
                                   <div key={pathId} className="flex items-center gap-3 opacity-50">
                                     <span className="text-lg">{PATH_ICONS[pathId]}</span>
                                     <div className="flex-1 bg-white/10 rounded-full h-2 relative overflow-hidden">
@@ -2520,13 +2529,30 @@ const HOMECreatorFlow = () => {
                                       <span className="text-sm text-gray-400">{PATH_LABELS[pathId]}</span>
                                     </div>
                                   </div>
-                                ))}
+                                  ));
+                                })()}
                               </div>
                             </>
                           );
                         })()}
                         
-                        {/* Clean email input */}
+                        {/* Artist name input */}
+                        <div className="relative mb-4">
+                          <input
+                            type="text"
+                            value={artistName}
+                            onChange={(e) => setArtistName(e.target.value)}
+                            placeholder="Your artist name"
+                            className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl 
+                                     focus:bg-black/50 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
+                                     transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
+                          />
+                          <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            <User className="w-5 h-5 text-gray-400" />
+                          </div>
+                        </div>
+                        
+                        {/* Email input */}
                         <div className="relative mb-8">
                           <input
                             type="email"
@@ -2546,7 +2572,7 @@ const HOMECreatorFlow = () => {
                         <div className="relative">
                           <button
                             onClick={handleEmailSubmit}
-                            disabled={!email || isProcessing}
+                            disabled={!email || !artistName || isProcessing}
                             className="group relative w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-white text-lg overflow-hidden transform-gpu"
                           >
                             {/* Animated liquid blobs with continuous movement */}
