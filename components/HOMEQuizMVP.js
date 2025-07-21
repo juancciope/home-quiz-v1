@@ -2592,7 +2592,7 @@ const HOMECreatorFlow = () => {
                               <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                             </div>
                             
-                            <span className="relative z-10">Get My Personalized Roadmap Download</span>
+                            <span className="relative z-10">Download Roadmap</span>
                             <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                           </button>
                           
@@ -2903,7 +2903,7 @@ const HOMECreatorFlow = () => {
                       <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                     </div>
                     
-                    <span className="relative z-10">Get Your Personalized Roadmap Download</span>
+                    <span className="relative z-10">Download Roadmap</span>
                     <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -3138,7 +3138,7 @@ const HOMECreatorFlow = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-2 text-white">Personalized Roadmap Download</h3>
+                  <h3 className="text-lg font-bold mb-2 text-white">Download Roadmap</h3>
                   <p className="text-sm text-gray-400 mb-4">Your full personalized plan to download</p>
                   
                   <ul className="space-y-2 mb-6 text-left">
@@ -3146,7 +3146,8 @@ const HOMECreatorFlow = () => {
                       'All 4 strategic roadmap steps with details',
                       'Complete action items for each phase',
                       'Your creative profile & pathway analysis',
-                      'HOME resources & next steps guide'
+                      'HOME resources & next steps guide',
+                      'Key companies to have on your radar'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
@@ -3159,7 +3160,7 @@ const HOMECreatorFlow = () => {
                     onClick={handlePDFGeneration}
                     className="w-full"
                   >
-                    Download PDF Roadmap
+                    Download Roadmap
                   </LiquidButton>
                 </div>
               </div>
