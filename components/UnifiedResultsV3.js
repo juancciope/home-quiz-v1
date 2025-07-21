@@ -53,7 +53,7 @@ const UnifiedResultsV3 = ({ scoreResult, responses, pathway, aiPathwayDetails })
         growthAreas: aiPathwayDetails?.['creative-artist']?.growthAreas
       },
       'writer-producer': {
-        name: 'Writer/Producer',
+        name: 'Writer-Producer',
         icon: '🎹', 
         color: 'from-green-500 to-teal-500',
         focusMessage: aiPathwayDetails?.['writer-producer']?.focusMessage,

@@ -2592,7 +2592,7 @@ const HOMECreatorFlow = () => {
                               <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                             </div>
                             
-                            <span className="relative z-10">Get My Complete Roadmap</span>
+                            <span className="relative z-10">Get My Personalized Roadmap Download</span>
                             <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                           </button>
                           
@@ -2839,8 +2839,11 @@ const HOMECreatorFlow = () => {
                       <MapPin className="w-4 h-4 text-[#B91372]" />
                       <span className="text-sm font-medium text-white">
                         You're at the <span className="text-[#B91372]">
-                          {responses['stage-level'] === 'planning' ? 'Planning' : 
-                           responses['stage-level'] === 'production' ? 'Production' : 'Scale'} Stage
+                          {(() => {
+                            console.log('Stage level response:', responses['stage-level']);
+                            return responses['stage-level'] === 'planning' ? 'Planning' : 
+                                   responses['stage-level'] === 'production' ? 'Production' : 'Scale';
+                          })()} Stage
                         </span>
                       </span>
                     </div>
@@ -2900,7 +2903,7 @@ const HOMECreatorFlow = () => {
                       <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                     </div>
                     
-                    <span className="relative z-10">Get Your Full Roadmap</span>
+                    <span className="relative z-10">Get Your Personalized Roadmap Download</span>
                     <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -3135,7 +3138,7 @@ const HOMECreatorFlow = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-2 text-white">Complete PDF Roadmap</h3>
+                  <h3 className="text-lg font-bold mb-2 text-white">Personalized Roadmap Download</h3>
                   <p className="text-sm text-gray-400 mb-4">Your full personalized plan to download</p>
                   
                   <ul className="space-y-2 mb-6 text-left">

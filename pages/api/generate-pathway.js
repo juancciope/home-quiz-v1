@@ -378,7 +378,7 @@ function generateFallbackPathwayDetails(primaryPathway, scoreResult) {
       'Core Focus': {
         focusMessage: 'You excel behind the scenes, crafting the foundation that makes others shine. Your technical skills and collaborative nature are your pathway to consistent income and creative fulfillment.',
         focusAreas: 'Production skills • Collaboration network • Business development • Royalty optimization',
-        growthAreas: 'Balance solo creativity with collaboration • Explore performance opportunities • Build strategic partnerships'
+        growthAreas: 'Balance solo creativity with collaboration • Expand writing room networks • Build strategic partnerships'
       },
       'Strategic Secondary': {
         focusMessage: 'Production skills can enhance your primary focus. Your technical abilities and collaborative approach can support your main artistic path.',

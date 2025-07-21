@@ -1208,7 +1208,7 @@
               <p style="color: #d1d5db; font-size: 13px; line-height: 1.6; margin: 0;">
                 <span style="font-size: 14px;">🎤</span> <strong>Performer</strong> makes their living on the stage<br>
                 <span style="font-size: 14px;">🎨</span> <strong>Creative</strong> makes their living online<br>
-                <span style="font-size: 14px;">🎹</span> <strong>Producer</strong> makes their living in the studio
+                <span style="font-size: 14px;">🎹</span> <strong>Writer-Producer</strong> makes their living in the writing room
               </p>
             </div>
           </div>
@@ -1402,11 +1402,63 @@
               <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
               HOME Resources
             </h3>
-            {{#each ../pathway.resources}}
-            {{#if @first}}<div class="resource-item">{{this}}</div>{{/if}}
-            {{#if (eq @index 1)}}<div class="resource-item">{{this}}</div>{{/if}}
-            {{#if (eq @index 2)}}<div class="resource-item">{{this}}</div>{{/if}}
-            {{/each}}
+            {{#if (eq @index 0)}}
+              {{#if (eq ../pathway.pathway 'touring-performer')}}
+                <div class="resource-item">Rehearsal Facility Access (24/7 at HOME)</div>
+                <div class="resource-item">Live Sound & Performance Equipment</div>
+                <div class="resource-item">Stage Presence Coaching Sessions</div>
+              {{else if (eq ../pathway.pathway 'creative-artist')}}
+                <div class="resource-item">Content Creation Studios & Equipment</div>
+                <div class="resource-item">Brand Development & Visual Design</div>
+                <div class="resource-item">Social Media Strategy & Management</div>
+              {{else if (eq ../pathway.pathway 'writer-producer')}}
+                <div class="resource-item">Professional Recording Studios (24/7 access)</div>
+                <div class="resource-item">Industry-Standard Production Equipment</div>
+                <div class="resource-item">Music Business & Publishing Education</div>
+              {{/if}}
+            {{else if (eq @index 1)}}
+              {{#if (eq ../pathway.pathway 'touring-performer')}}
+                <div class="resource-item">Booking Strategy & Agent Connections</div>
+                <div class="resource-item">Professional Photography & Video</div>
+                <div class="resource-item">Tour Planning & Management Tools</div>
+              {{else if (eq ../pathway.pathway 'creative-artist')}}
+                <div class="resource-item">Revenue Diversification Coaching</div>
+                <div class="resource-item">Video Production & Editing Tools</div>
+                <div class="resource-item">Artist Community & Collaboration Network</div>
+              {{else if (eq ../pathway.pathway 'writer-producer')}}
+                <div class="resource-item">Collaboration Network & Artist Connections</div>
+                <div class="resource-item">Sync Licensing & Placement Opportunities</div>
+                <div class="resource-item">Technical Skill Development Programs</div>
+              {{/if}}
+            {{else if (eq @index 2)}}
+              {{#if (eq ../pathway.pathway 'touring-performer')}}
+                <div class="resource-item">Nashville Venue Network Access</div>
+                <div class="resource-item">Industry Showcases & Events</div>
+                <div class="resource-item">Artist Development Programs</div>
+              {{else if (eq ../pathway.pathway 'creative-artist')}}
+                <div class="resource-item">Creative Collaboration Spaces</div>
+                <div class="resource-item">Marketing & Promotion Support</div>
+                <div class="resource-item">Artist Entrepreneurship Training</div>
+              {{else if (eq ../pathway.pathway 'writer-producer')}}
+                <div class="resource-item">Industry A&R Program Connections</div>
+                <div class="resource-item">Publishing & Rights Management</div>
+                <div class="resource-item">Producer Mentorship Programs</div>
+              {{/if}}
+            {{else}}
+              {{#if (eq ../pathway.pathway 'touring-performer')}}
+                <div class="resource-item">Advanced Performance Training</div>
+                <div class="resource-item">Regional Tour Support Network</div>
+                <div class="resource-item">Music Industry Business Education</div>
+              {{else if (eq ../pathway.pathway 'creative-artist')}}
+                <div class="resource-item">Advanced Content Strategy</div>
+                <div class="resource-item">Multi-Platform Distribution</div>
+                <div class="resource-item">Creative Business Scaling</div>
+              {{else if (eq ../pathway.pathway 'writer-producer')}}
+                <div class="resource-item">Advanced Production Techniques</div>
+                <div class="resource-item">Label & Supervisor Connections</div>
+                <div class="resource-item">Industry Partnership Opportunities</div>
+              {{/if}}
+            {{/if}}
           </div>
         </div>
       </div>
@@ -1452,19 +1504,19 @@
               <div class="product-card">
                 <span class="product-icon">🤝</span>
                 <h4 class="product-title">Online Community</h4>
-                <p class="product-description">1,000+ creators, weekly events, workshops, and mentorship opportunities</p>
+                <p class="product-description">1,500+ creators and industry pros, weekly events, workshops, and networking opportunities online or IRL in Nashville</p>
               </div>
               
               <div class="product-card">
                 <span class="product-icon">🎤</span>
-                <h4 class="product-title">Studio/Rehearsal Space</h4>
-                <p class="product-description">250-capacity venue, recording studios, and rehearsal spaces with 24/7 access</p>
+                <h4 class="product-title">Studios & Writing Rooms</h4>
+                <p class="product-description">Get 24/7 access to Nashville's premier studio hub with pro recording, rehearsal, content, performance, coworking, and recreation spaces</p>
               </div>
               
               <div class="product-card">
                 <span class="product-icon">📈</span>
                 <h4 class="product-title">Expert Guidance</h4>
-                <p class="product-description">Industry mentorship, masterclasses, and personalized strategy sessions</p>
+                <p class="product-description">Industry mentorship, feedback from top producers, pitch opportunities with music executives, 70+ educational videos, contracts and other resources</p>
               </div>
             </div>
           </div>
