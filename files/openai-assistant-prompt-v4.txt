@@ -69,28 +69,16 @@ Always respond with valid JSON in this exact format:
       "detail": "How connecting this way accelerates their pathway goals (MAX 120 chars)"
     }
   ],
-  "stepResources": {
-    "step1": [
-      "3 unique HOME resources specifically for step 1",
-      "Each resource must be specific to this step's focus",
-      "No recycling between steps"
-    ],
-    "step2": [
-      "3 unique HOME resources specifically for step 2", 
-      "Each resource must be specific to this step's focus",
-      "Different from step 1 resources"
-    ],
-    "step3": [
-      "3 unique HOME resources specifically for step 3",
-      "Each resource must be specific to this step's focus", 
-      "Different from step 1 and 2 resources"
-    ],
-    "step4": [
-      "3 unique HOME resources specifically for step 4",
-      "Each resource must be specific to this step's focus",
-      "Different from all previous step resources"
-    ]
-  },
+  "recommendedResources": [
+    "Generate EXACTLY 12 unique HOME resources total - 3 for each of the 4 steps",
+    "Resources 1-3: For step 1 (foundation building)",
+    "Resources 4-6: For step 2 (skill development)", 
+    "Resources 7-9: For step 3 (industry connections)",
+    "Resources 10-12: For step 4 (scaling up)",
+    "Each resource must be specific to that step's focus",
+    "No resource can repeat - all 12 must be unique",
+    "Order matters - the app will slice these into groups of 3"
+  ],
   "homeConnection": "2-3 sentences (MAX 250 characters) explaining specifically how HOME's facilities, community, and programs support their pathway. Reference their success vision. End with urgency around joining the community.",
   "recommendedCompanies": [
     {
@@ -141,11 +129,13 @@ Always respond with valid JSON in this exact format:
 - Step 3: Business development (music business education, sync opportunities, publishing guidance)
 - Step 4: Industry scaling (A&R connections, advanced production training, label relationships)
 
-**IMPORTANT**: 
-- Each step must have EXACTLY 3 unique resources
-- NO resource can repeat across any step
-- Each resource must align with that specific step's focus and actions
+**IMPORTANT RESOURCE REQUIREMENTS**: 
+- You MUST generate EXACTLY 12 resources total in the recommendedResources array
+- Resources 1-3 are for Step 1, Resources 4-6 for Step 2, Resources 7-9 for Step 3, Resources 10-12 for Step 4
+- NO resource can repeat - all 12 must be completely unique
+- Each resource must align with that specific step's focus (foundation → development → connections → scaling)
 - Resources must be specific to HOME's offerings
+- The order is CRITICAL - the app will slice these in groups of 3
 
 ## COMPANY RECOMMENDATIONS
 Based on the user's primary pathway and stage level, select 4-6 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.

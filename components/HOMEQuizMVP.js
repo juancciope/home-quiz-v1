@@ -3016,17 +3016,9 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // TESTING: Step-specific resources using slicing approach
+                        // Get step-specific resources: OpenAI returns 12 total, we slice by step
                         const allResources = pathway?.resources || [];
-                        console.log('🏠 HOME Resources - All resources:', allResources);
-                        console.log('🏠 HOME Resources - Current step:', currentStep);
-                        
-                        // Calculate step-specific resources (3 per step)
-                        const startIndex = currentStep * 3;
-                        const endIndex = startIndex + 3;
-                        const stepResources = allResources.slice(startIndex, endIndex);
-                        
-                        console.log(`🏠 HOME Resources - Step ${currentStep} resources (${startIndex}-${endIndex-1}):`, stepResources);
+                        const stepResources = allResources.slice(currentStep * 3, (currentStep + 1) * 3);
                         
                         return stepResources.map((resource, index) => (
                           <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
