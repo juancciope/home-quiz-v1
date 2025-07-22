@@ -193,7 +193,7 @@ try {
 if (!aiResponse.pathway || 
     !aiResponse.customNextSteps || 
     !aiResponse.homeConnection ||
-    !aiResponse.stepResources) {
+    !aiResponse.recommendedResources) {
   console.error('Incomplete response:', aiResponse);
   throw new Error('Incomplete assistant response');
 }

@@ -3016,21 +3016,10 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // Use step-specific resources from AI-generated pathway
-                        const stepResources = pathway?.stepResources;
-                        let resources = [];
+                        // TEMPORARY: Use existing resources format until OpenAI assistant is updated
+                        const resources = pathway?.resources || [];
                         
-                        if (stepResources) {
-                          switch(currentStep) {
-                            case 0: resources = stepResources.step1 || []; break;
-                            case 1: resources = stepResources.step2 || []; break;
-                            case 2: resources = stepResources.step3 || []; break;
-                            case 3: resources = stepResources.step4 || []; break;
-                            default: resources = stepResources.step1 || [];
-                          }
-                        }
-                        
-                        return resources.map((resource, index) => (
+                        return resources.slice(0, 3).map((resource, index) => (
                           <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
                             <p className="text-sm font-medium text-white">{resource}</p>
                           </div>
