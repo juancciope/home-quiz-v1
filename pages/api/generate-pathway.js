@@ -198,6 +198,9 @@ if (!aiResponse.pathway ||
   throw new Error('Incomplete assistant response');
 }
 
+// Log what we got from AI for companies debugging
+console.log('🔍 AI Response recommendedCompanies:', JSON.stringify(aiResponse.recommendedCompanies, null, 2));
+
 // Log what we got from AI for debugging
 console.log('🔍 AI Response pathwayDetails:', JSON.stringify(aiResponse.pathwayDetails, null, 2));
 

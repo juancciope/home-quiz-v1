@@ -1402,63 +1402,11 @@
               <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
               HOME Resources
             </h3>
-            {{#if (eq @index 0)}}
-              {{#if (eq ../pathway.pathway 'touring-performer')}}
-                <div class="resource-item">Rehearsal Facility Access (24/7 at HOME)</div>
-                <div class="resource-item">Live Sound & Performance Equipment</div>
-                <div class="resource-item">Stage Presence Coaching Sessions</div>
-              {{else if (eq ../pathway.pathway 'creative-artist')}}
-                <div class="resource-item">Content Creation Studios & Equipment</div>
-                <div class="resource-item">Brand Development & Visual Design</div>
-                <div class="resource-item">Social Media Strategy & Management</div>
-              {{else if (eq ../pathway.pathway 'writer-producer')}}
-                <div class="resource-item">Professional Recording Studios (24/7 access)</div>
-                <div class="resource-item">Industry-Standard Production Equipment</div>
-                <div class="resource-item">Music Business & Publishing Education</div>
+            {{#each ../pathway.resources}}
+              {{#if (lt @index 3)}}
+                <div class="resource-item">{{this}}</div>
               {{/if}}
-            {{else if (eq @index 1)}}
-              {{#if (eq ../pathway.pathway 'touring-performer')}}
-                <div class="resource-item">Booking Strategy & Agent Connections</div>
-                <div class="resource-item">Professional Photography & Video</div>
-                <div class="resource-item">Tour Planning & Management Tools</div>
-              {{else if (eq ../pathway.pathway 'creative-artist')}}
-                <div class="resource-item">Revenue Diversification Coaching</div>
-                <div class="resource-item">Video Production & Editing Tools</div>
-                <div class="resource-item">Artist Community & Collaboration Network</div>
-              {{else if (eq ../pathway.pathway 'writer-producer')}}
-                <div class="resource-item">Collaboration Network & Artist Connections</div>
-                <div class="resource-item">Sync Licensing & Placement Opportunities</div>
-                <div class="resource-item">Technical Skill Development Programs</div>
-              {{/if}}
-            {{else if (eq @index 2)}}
-              {{#if (eq ../pathway.pathway 'touring-performer')}}
-                <div class="resource-item">Nashville Venue Network Access</div>
-                <div class="resource-item">Industry Showcases & Events</div>
-                <div class="resource-item">Artist Development Programs</div>
-              {{else if (eq ../pathway.pathway 'creative-artist')}}
-                <div class="resource-item">Creative Collaboration Spaces</div>
-                <div class="resource-item">Marketing & Promotion Support</div>
-                <div class="resource-item">Artist Entrepreneurship Training</div>
-              {{else if (eq ../pathway.pathway 'writer-producer')}}
-                <div class="resource-item">Industry A&R Program Connections</div>
-                <div class="resource-item">Publishing & Rights Management</div>
-                <div class="resource-item">Producer Mentorship Programs</div>
-              {{/if}}
-            {{else}}
-              {{#if (eq ../pathway.pathway 'touring-performer')}}
-                <div class="resource-item">Advanced Performance Training</div>
-                <div class="resource-item">Regional Tour Support Network</div>
-                <div class="resource-item">Music Industry Business Education</div>
-              {{else if (eq ../pathway.pathway 'creative-artist')}}
-                <div class="resource-item">Advanced Content Strategy</div>
-                <div class="resource-item">Multi-Platform Distribution</div>
-                <div class="resource-item">Creative Business Scaling</div>
-              {{else if (eq ../pathway.pathway 'writer-producer')}}
-                <div class="resource-item">Advanced Production Techniques</div>
-                <div class="resource-item">Label & Supervisor Connections</div>
-                <div class="resource-item">Industry Partnership Opportunities</div>
-              {{/if}}
-            {{/if}}
+            {{/each}}
           </div>
         </div>
       </div>

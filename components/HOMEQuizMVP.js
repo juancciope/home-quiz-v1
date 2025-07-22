@@ -2592,7 +2592,7 @@ const HOMECreatorFlow = () => {
                               <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                             </div>
                             
-                            <span className="relative z-10">Download Roadmap</span>
+                            <span className="relative z-10">Get My Roadmap</span>
                             <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                           </button>
                           
@@ -2903,7 +2903,7 @@ const HOMECreatorFlow = () => {
                       <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                     </div>
                     
-                    <span className="relative z-10">Download Roadmap</span>
+                    <span className="relative z-10">See Full Roadmap</span>
                     <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -3016,10 +3016,10 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // Use AI-generated resources from pathway object
+                        // Use AI-generated resources from pathway object - limit to 3
                         const resources = pathway?.resources || [];
                         
-                        return resources.map((resource, index) => (
+                        return resources.slice(0, 3).map((resource, index) => (
                           <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
                             <p className="text-sm font-medium text-white">{resource}</p>
                           </div>

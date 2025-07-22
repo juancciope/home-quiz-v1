@@ -70,9 +70,9 @@ Always respond with valid JSON in this exact format:
     }
   ],
   "recommendedResources": [
-    "Generate 6-8 UNIQUE resources specific to their pathway and stage",
-    "Resources must be HOME-specific and NOT generic industry resources",
-    "Each resource should be different - NO recycling between steps",
+    "Generate EXACTLY 3 UNIQUE resources specific to their pathway and stage",
+    "Resources must be HOME-specific and NOT generic industry resources", 
+    "Each resource should be different - NO recycling between requests",
     "Focus on practical tools and access they get at HOME"
   ],
   "homeConnection": "2-3 sentences (MAX 250 characters) explaining specifically how HOME's facilities, community, and programs support their pathway. Reference their success vision. End with urgency around joining the community.",
@@ -135,7 +135,7 @@ Always respond with valid JSON in this exact format:
 - A&R and label connections
 - Production workflow optimization
 
-**IMPORTANT**: Each resource must be specific to HOME's offerings. Never recycle the same resources - generate fresh, relevant options based on their stage and needs.
+**IMPORTANT**: Generate EXACTLY 3 resources. Each resource must be specific to HOME's offerings. Never recycle the same resources - generate fresh, relevant options based on their stage and needs.
 
 ## COMPANY RECOMMENDATIONS
 Based on the user's primary pathway and stage level, select 4-6 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.
