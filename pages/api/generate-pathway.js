@@ -241,7 +241,7 @@ const result = {
   resources: aiResponse.recommendedResources,
   stepResources: aiResponse.stepResources,
   homeConnection: aiResponse.homeConnection,
-  recommendedCompanies: aiResponse.recommendedCompanies || [],
+  recommendedCompanies: aiResponse.recommendedCompanies || generateFallbackCompanies(aiResponse.pathway, scoreResult),
   recommendation: scoreResult?.recommendation,
   // Include AI-generated pathway details for all pathways
   pathwayDetails: aiResponse.pathwayDetails || generateFallbackPathwayDetails(aiResponse.pathway, scoreResult),
@@ -283,6 +283,7 @@ console.log('✅ Successfully generated personalized pathway:', {
         nextSteps: ultimateFallback.nextSteps,
         resources: ultimateFallback.resources,
         homeConnection: ultimateFallback.homeConnection,
+        recommendedCompanies: generateFallbackCompanies('touring-performer', scoreResult),
         isPersonalized: false,
         assistantUsed: false,
         error: 'Template not found, using default'
@@ -300,6 +301,7 @@ console.log('✅ Successfully generated personalized pathway:', {
       nextSteps: template.nextSteps,
       resources: template.resources,
       homeConnection: template.homeConnection, // 🔥 Now uses improved template content
+      recommendedCompanies: generateFallbackCompanies(fallbackPathway, scoreResult),
       recommendation: scoreResult?.recommendation,
       isPersonalized: false,
       assistantUsed: false
@@ -335,6 +337,7 @@ console.log('✅ Successfully generated personalized pathway:', {
         'Artist Community & Collaboration Network'
       ],
       homeConnection: 'HOME\'s supportive community and professional facilities provide the perfect environment to grow your music career. Our content creation studios, collaborative artist network, and monthly educational webinars can accelerate your progress faster than going it alone. Secure your spot in our next webinar to learn the strategies successful artists use to build sustainable creative careers.',
+      recommendedCompanies: generateFallbackCompanies('creative-artist', scoreResult),
       isPersonalized: false,
       assistantUsed: false,
       error: 'Emergency fallback used'
@@ -342,6 +345,70 @@ console.log('✅ Successfully generated personalized pathway:', {
     
     res.status(200).json(emergencyFallback);
   }
+}
+
+function generateFallbackCompanies(pathway, scoreResult) {
+  const stage = scoreResult?.stageLevel || 'planning';
+  
+  const companiesByPathway = {
+    'touring-performer': [
+      {
+        name: 'Bandsintown',
+        description: 'Concert discovery platform used by 560,000+ artists. Essential for building your live show audience and tracking performance analytics.'
+      },
+      {
+        name: 'High Road Touring',
+        description: 'Respected independent booking agency with boutique approach. Great entry point for developing touring acts.'
+      },
+      {
+        name: 'Live Nation Entertainment',
+        description: "World's largest concert promoter. Key player for scaling your touring career to major venues and festivals."
+      },
+      {
+        name: 'Songkick',
+        description: 'Concert listing service integrated with Spotify. Helps fans discover your shows and builds your live audience.'
+      }
+    ],
+    'creative-artist': [
+      {
+        name: 'DistroKid',
+        description: 'Leading indie distributor handling 30-40% of new releases. Essential for getting your music on all streaming platforms.'
+      },
+      {
+        name: 'Bandcamp',
+        description: 'Direct-to-fan platform that has paid $1.3B+ to artists. Perfect for building a dedicated fanbase and selling music directly.'
+      },
+      {
+        name: 'TuneCore',
+        description: 'Pioneer DIY distributor with one-time fee model. Reliable option for independent artists maintaining ownership.'
+      },
+      {
+        name: 'Spotify',
+        description: "World's most popular streaming service with 675M monthly users. Critical platform for creative artists building audiences."
+      }
+    ],
+    'writer-producer': [
+      {
+        name: 'ASCAP',
+        description: 'Non-profit PRO with 1M+ members, free to join. Essential for collecting performance royalties on your compositions.'
+      },
+      {
+        name: 'Songtradr',
+        description: 'Global licensing marketplace with AI matching. Great platform for getting your productions placed in sync opportunities.'
+      },
+      {
+        name: 'Kobalt Music Publishing',
+        description: 'Tech-forward indie publisher with transparent royalties. Artist-friendly alternative to major publishers.'
+      },
+      {
+        name: 'Universal Music Publishing',
+        description: "World's largest publisher by revenue. Top-tier option when you're ready to scale your writing career."
+      }
+    ]
+  };
+  
+  // Return 4 companies based on pathway
+  return companiesByPathway[pathway] || companiesByPathway['creative-artist'];
 }
 
 function generateFallbackPathwayDetails(primaryPathway, scoreResult) {
