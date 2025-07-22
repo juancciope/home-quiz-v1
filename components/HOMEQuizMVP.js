@@ -3002,11 +3002,11 @@ const HOMECreatorFlow = () => {
                     <p className="text-sm text-gray-300 leading-relaxed">{pathway.steps[currentStep].whyItMatters}</p>
                   </div>
                   
-                  {/* Action Items */}
+                  {/* Other Action Items */}
                   <div className="bg-black/80 backdrop-blur-sm rounded-2xl border border-white/10 p-6 mb-6 safari-fallback">
                     <h3 className="flex items-center gap-2 text-lg font-bold mb-4 text-white">
                       <Target className="w-5 h-5 text-[#1DD1A1]" />
-                      Your Action Items
+                      Other Action Items
                     </h3>
                     <div className="space-y-3">
                       {pathway.steps[currentStep].actions.map((action, index) => (
