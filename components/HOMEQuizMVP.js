@@ -1432,6 +1432,8 @@ const HOMECreatorFlow = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [aiGeneratedPathway, setAiGeneratedPathway] = useState(null);
   const [scoreResult, setScoreResult] = useState(null);
+  const [preGeneratedPDF, setPreGeneratedPDF] = useState(null);
+  const [isPDFGenerating, setIsPDFGenerating] = useState(false);
   // Backwards compatibility getters
   const fuzzyScores = scoreResult ? scoreResult.displayPct : null;
   const pathwayBlend = scoreResult ? getPathwayBlend(scoreResult) : null;
@@ -1593,11 +1595,21 @@ const HOMECreatorFlow = () => {
             
             setPathway(transformedPathway);
             console.log('✅ AI pathway transformed:', transformedPathway);
+            
+            // Pre-generate PDF in background for instant download
+            setTimeout(() => {
+              preGeneratePDF();
+            }, 1000); // Small delay to ensure pathway is fully set
           } else {
             // Fallback to template if AI fails
             console.warn('❌ AI generation failed, using fallback');
             const pathwayKey = result.recommendation.path;
             setPathway(pathwayTemplates[pathwayKey]);
+            
+            // Pre-generate PDF for fallback pathway too
+            setTimeout(() => {
+              preGeneratePDF();
+            }, 1000);
           }
         } catch (error) {
           console.error('❌ Error generating AI pathway:', error);
@@ -1615,6 +1627,11 @@ const HOMECreatorFlow = () => {
           // Fallback to template
           const pathwayKey = result.recommendation.path;
           setPathway(pathwayTemplates[pathwayKey]);
+          
+          // Pre-generate PDF for error fallback too
+          setTimeout(() => {
+            preGeneratePDF();
+          }, 1000);
         }
         
         setIsGenerating(false);
@@ -1658,18 +1675,20 @@ const HOMECreatorFlow = () => {
     }
   };
 
-  // Handle PDF generation (direct download for testing)
-  const handlePDFGeneration = async () => {
+  // Pre-generate PDF in background for instant download
+  const preGeneratePDF = async () => {
+    if (isPDFGenerating || preGeneratedPDF) return; // Don't generate if already generating or done
+    
     try {
-      // Store PDF data in sessionStorage for the PDF page
+      setIsPDFGenerating(true);
+      console.log('🔄 Pre-generating PDF in background...');
+      
       const sessionId = Date.now().toString();
       const pdfData = {
         pathway: aiGeneratedPathway || pathway,
         responses,
         scoreResult,
-        // Include AI-generated pathway details for PDF
         pathwayDetails: (aiGeneratedPathway || pathway)?.pathwayDetails,
-        // Legacy fallback for PDF compatibility
         fuzzyScores: scoreResult?.displayPct || fuzzyScores,
         pathwayBlend: scoreResult ? { 
           type: scoreResult.blendType, 
@@ -1677,37 +1696,78 @@ const HOMECreatorFlow = () => {
         } : pathwayBlend
       };
       
-      sessionStorage.setItem(`pdf-data-${sessionId}`, JSON.stringify(pdfData));
-      
-      // Generate PDF directly
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sessionId,
-          pathwayData: pdfData
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, pathwayData: pdfData }),
       });
 
       if (response.ok) {
-        // Create download link
         const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `music-creator-roadmap-${sessionId}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        setPreGeneratedPDF(blob);
+        console.log('✅ PDF pre-generated successfully');
       } else {
-        alert('Failed to generate PDF. Please try again.');
+        console.error('❌ PDF pre-generation failed');
       }
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Failed to generate PDF. Please try again.');
+      console.error('❌ PDF pre-generation error:', error);
+    } finally {
+      setIsPDFGenerating(false);
+    }
+  };
+
+  // Handle instant PDF download (uses pre-generated PDF)
+  const handlePDFGeneration = async () => {
+    try {
+      let blob = preGeneratedPDF;
+      
+      // If no pre-generated PDF, generate it now (fallback)
+      if (!blob) {
+        console.log('⚠️ No pre-generated PDF, generating now...');
+        const sessionId = Date.now().toString();
+        const pdfData = {
+          pathway: aiGeneratedPathway || pathway,
+          responses,
+          scoreResult,
+          pathwayDetails: (aiGeneratedPathway || pathway)?.pathwayDetails,
+          fuzzyScores: scoreResult?.displayPct || fuzzyScores,
+          pathwayBlend: scoreResult ? { 
+            type: scoreResult.blendType, 
+            primary: scoreResult.recommendation.path 
+          } : pathwayBlend
+        };
+        
+        const response = await fetch('/api/generate-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, pathwayData: pdfData }),
+        });
+
+        if (response.ok) {
+          blob = await response.blob();
+        } else {
+          console.error('❌ PDF generation failed');
+          alert('Failed to generate PDF. Please try again.');
+          return;
+        }
+      } else {
+        console.log('✅ Using pre-generated PDF for instant download');
+      }
+
+      // Create instant download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `music-creator-roadmap-${Date.now()}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+      console.log('✅ PDF downloaded successfully');
+    } catch (error) {
+      console.error('❌ PDF generation error:', error);
+      alert('An error occurred while generating the PDF. Please try again.');
     }
   };
 
@@ -3203,7 +3263,21 @@ const HOMECreatorFlow = () => {
                     onClick={handlePDFGeneration}
                     className="w-full"
                   >
-                    Download Roadmap
+                    {isPDFGenerating ? (
+                      <>
+                        <span className="animate-spin mr-2">⚡</span>
+                        Preparing Download...
+                      </>
+                    ) : preGeneratedPDF ? (
+                      <>
+                        <span className="mr-2">✅</span>
+                        Download Roadmap
+                      </>
+                    ) : (
+                      <>
+                        Download Roadmap
+                      </>
+                    )}
                   </LiquidButton>
                 </div>
               </div>
