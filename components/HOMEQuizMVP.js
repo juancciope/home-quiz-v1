@@ -3023,11 +3023,21 @@ const HOMECreatorFlow = () => {
                           return [];
                         }
                         
-                        // Generate exactly 3 resources for this step by cycling through available resources
+                        // Generate exactly 3 UNIQUE resources for this step
                         const stepResources = [];
+                        const usedIndices = new Set();
+                        
                         for (let i = 0; i < 3; i++) {
-                          // Calculate index using step and position to ensure uniqueness across steps
-                          const resourceIndex = (currentStep * 3 + i) % allResources.length;
+                          let resourceIndex;
+                          let attempts = 0;
+                          
+                          // Find a unique resource index for this position
+                          do {
+                            resourceIndex = (currentStep + i * 4 + attempts) % allResources.length;
+                            attempts++;
+                          } while (usedIndices.has(resourceIndex) && attempts < allResources.length);
+                          
+                          usedIndices.add(resourceIndex);
                           stepResources.push(allResources[resourceIndex]);
                         }
                         

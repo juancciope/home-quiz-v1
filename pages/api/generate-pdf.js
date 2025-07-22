@@ -152,15 +152,27 @@ export default async function handler(req, res) {
       return a || b;
     });
 
-    // Helper to get exactly 3 resources for a step by cycling through available resources
+    // Helper to get exactly 3 UNIQUE resources for a step
     Handlebars.registerHelper('getStepResources', function(allResources, stepIndex) {
       if (!allResources || allResources.length === 0) return [];
       
       const stepResources = [];
+      const usedIndices = new Set();
+      
       for (let i = 0; i < 3; i++) {
-        const resourceIndex = (stepIndex * 3 + i) % allResources.length;
+        let resourceIndex;
+        let attempts = 0;
+        
+        // Find a unique resource index for this position
+        do {
+          resourceIndex = (stepIndex + i * 4 + attempts) % allResources.length;
+          attempts++;
+        } while (usedIndices.has(resourceIndex) && attempts < allResources.length);
+        
+        usedIndices.add(resourceIndex);
         stepResources.push(allResources[resourceIndex]);
       }
+      
       return stepResources;
     });
 
