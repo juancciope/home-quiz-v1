@@ -3015,11 +3015,16 @@ const HOMECreatorFlow = () => {
                       HOME Resources
                     </h3>
                     <div className="space-y-2">
-                      {pathway.steps[currentStep].homeResources.map((resource, index) => (
-                        <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
-                          <p className="text-sm font-medium text-white">{resource}</p>
-                        </div>
-                      ))}
+                      {(() => {
+                        // Use AI-generated resources from pathway object
+                        const resources = pathway?.resources || [];
+                        
+                        return resources.map((resource, index) => (
+                          <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
+                            <p className="text-sm font-medium text-white">{resource}</p>
+                          </div>
+                        ));
+                      })()}
                     </div>
                   </div>
                   
