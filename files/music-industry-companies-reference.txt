@@ -1,0 +1,187 @@
+MUSIC INDUSTRY COMPANIES REFERENCE
+==================================
+For OpenAI Assistant Knowledge Base
+Last Updated: 2025-01-22
+
+This file contains detailed information about key music industry companies organized by artist pathway. Use this reference when making company recommendations based on the user's pathway and stage.
+
+## TOURING PERFORMER COMPANIES
+
+1. **Live Nation Entertainment**
+   - World's largest concert promoter and owner of Ticketmaster
+   - Controls ~60% of US major venue concert promotions
+   - Produces tours and festivals worldwide
+   - Relevance: Essential for artists scaling to arena/stadium level
+
+2. **AEG Presents**
+   - Second-largest global concert promoter (behind Live Nation)
+   - Owns/operates major venues worldwide
+   - Produces Coachella (via Goldenvoice division)
+   - Relevance: Alternative to Live Nation for major tours and festivals
+
+3. **Ticketmaster**
+   - Dominant ticketing platform (owned by Live Nation)
+   - Controls ~80% of major venue ticket sales
+   - Relevance: Gateway to millions of concertgoers
+
+4. **Creative Artists Agency (CAA)**
+   - Premier talent agency
+   - Booked 4 of top 10 highest-grossing 2023 tours
+   - Relevance: Aspirational agency for established touring artists
+
+5. **WME (William Morris Endeavor)**
+   - Leading booking agency
+   - Books 40,000+ concert dates annually
+   - Relevance: Opens doors to major tours and festival slots
+
+6. **UTA (United Talent Agency)**
+   - Top global talent agency
+   - Strong music department across genres
+   - Relevance: Full-service representation including touring
+
+7. **Wasserman Music**
+   - Formed from Paradigm's music business
+   - Emphasizes artist development
+   - Relevance: More accessible than Big 3 for developing acts
+
+8. **Independent Artist Group (IAG)**
+   - Formed 2023 from APA/AGI merger
+   - Personalized service approach
+   - Relevance: Alternative to Big 3 agencies
+
+9. **High Road Touring**
+   - Respected independent booking agency
+   - Boutique approach, offices in CA/NY/Austin
+   - Relevance: Great for club/theater level artists
+
+10. **Another Planet Entertainment**
+    - Top US independent promoter
+    - Based in San Francisco Bay Area
+    - Co-produces Outside Lands festival
+    - Relevance: Regional powerhouse, alternative to corporates
+
+## CREATIVE ARTIST COMPANIES
+
+1. **Spotify**
+   - World's most popular streaming service
+   - 675M monthly users (263M paid)
+   - Relevance: Central platform for music discovery and income
+
+2. **YouTube**
+   - Largest music/video platform
+   - 2B+ monthly music consumers
+   - Relevance: Essential for video content and discovery
+
+3. **TikTok**
+   - Music discovery powerhouse
+   - 84% of Billboard hits start on TikTok
+   - Relevance: Can launch unknown artists overnight
+
+4. **Instagram/Meta**
+   - 2B monthly active users
+   - Essential for artist branding
+   - Relevance: Direct fan engagement and targeted ads
+
+5. **DistroKid**
+   - Distributes 30-40% of all new music
+   - Flat annual fee, unlimited releases
+   - Relevance: Easiest entry to all streaming platforms
+
+6. **TuneCore**
+   - Pioneer DIY distributor
+   - Paid $3B+ to artists
+   - Relevance: One-time fee model, no annual charges
+
+7. **CD Baby**
+   - Original indie distributor
+   - Also handles physical distribution
+   - Relevance: Community-focused, educational resources
+
+8. **UnitedMasters**
+   - "Record label in your pocket"
+   - Apple invested $50M
+   - Relevance: Helps land brand deals and sync placements
+
+9. **AWAL**
+   - Selective distributor (must apply)
+   - Provides marketing support
+   - Sony acquired for $430M
+   - Relevance: Label services while keeping ownership
+
+10. **Bandcamp**
+    - Direct-to-fan sales platform
+    - Paid $1.3B+ to artists
+    - Takes only 10-15% fee
+    - Relevance: Best platform for superfan monetization
+
+## WRITER-PRODUCER COMPANIES
+
+1. **Universal Music Publishing (UMPG)**
+   - Largest publisher by revenue
+   - Global infrastructure
+   - Relevance: Can pitch songs to biggest artists
+
+2. **Sony Music Publishing**
+   - Often largest by market share
+   - Leverages Sony ecosystem
+   - Relevance: Access to Sony labels and Sony Pictures
+
+3. **Warner Chappell Music**
+   - Third major publisher
+   - Strong in Nashville and emerging markets
+   - Relevance: Deep catalog and sync opportunities
+
+4. **Kobalt Music Publishing**
+   - Tech-forward, transparent
+   - Better splits than majors
+   - Relevance: Modern alternative to traditional publishers
+
+5. **BMG**
+   - Integrated publishing and recordings
+   - Artist-friendly philosophy
+   - Relevance: Flexible deals, shorter terms
+
+6. **ASCAP**
+   - Non-profit PRO, 1M+ members
+   - Free to join ($50 for publishers)
+   - Relevance: Collects performance royalties, networking
+
+7. **BMI**
+   - Largest PRO by membership (1.3M)
+   - Strong in country and hip-hop
+   - Relevance: Essential for royalty collection
+
+8. **Songtrust**
+   - Publishing admin for 350,000+ writers
+   - 15% fee, global collection
+   - Relevance: DIY publishing administration
+
+9. **Musicbed**
+   - Curated sync licensing platform
+   - High-quality standards
+   - Relevance: Steady income from sync licenses
+
+10. **The MLC**
+    - Collects streaming mechanicals
+    - Established by law in 2019
+    - Relevance: Essential for collecting streaming royalties
+
+## STAGE-BASED RECOMMENDATIONS
+
+### Planning Stage Artists Should Know:
+- Distribution platforms (DistroKid, CD Baby)
+- PROs (ASCAP, BMI)
+- Discovery platforms (Bandsintown, Songkick)
+- Publishing admin (Songtrust)
+
+### Production Stage Artists Should Know:
+- Mid-tier agencies (High Road, Wasserman)
+- Label services (AWAL, UnitedMasters)
+- Sync platforms (Musicbed, Songtradr)
+- Analytics (Chartmetric)
+
+### Scale Stage Artists Should Know:
+- Major agencies (CAA, WME, UTA)
+- Major publishers (Universal, Sony, Warner)
+- Major promoters (Live Nation, AEG)
+- Premium services (Primary Wave, Kobalt)
