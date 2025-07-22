@@ -3016,10 +3016,19 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // TEMPORARY: Use existing resources format until OpenAI assistant is updated
-                        const resources = pathway?.resources || [];
+                        // TESTING: Step-specific resources using slicing approach
+                        const allResources = pathway?.resources || [];
+                        console.log('🏠 HOME Resources - All resources:', allResources);
+                        console.log('🏠 HOME Resources - Current step:', currentStep);
                         
-                        return resources.slice(0, 3).map((resource, index) => (
+                        // Calculate step-specific resources (3 per step)
+                        const startIndex = currentStep * 3;
+                        const endIndex = startIndex + 3;
+                        const stepResources = allResources.slice(startIndex, endIndex);
+                        
+                        console.log(`🏠 HOME Resources - Step ${currentStep} resources (${startIndex}-${endIndex-1}):`, stepResources);
+                        
+                        return stepResources.map((resource, index) => (
                           <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
                             <p className="text-sm font-medium text-white">{resource}</p>
                           </div>

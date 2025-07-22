@@ -201,6 +201,8 @@ if (!aiResponse.pathway ||
 // Log what we got from AI for debugging
 console.log('🔍 AI Response recommendedCompanies:', JSON.stringify(aiResponse.recommendedCompanies, null, 2));
 console.log('🔍 AI Response stepResources:', JSON.stringify(aiResponse.stepResources, null, 2));
+console.log('🔍 AI Response recommendedResources:', JSON.stringify(aiResponse.recommendedResources, null, 2));
+console.log('🔍 AI Response recommendedResources LENGTH:', aiResponse.recommendedResources?.length || 0);
 
 // Log what we got from AI for debugging
 console.log('🔍 AI Response pathwayDetails:', JSON.stringify(aiResponse.pathwayDetails, null, 2));
