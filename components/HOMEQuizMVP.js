@@ -3016,16 +3016,37 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // TEMPORARY: Show same 3 resources until OpenAI returns 12
+                        // Use dynamic resources based on what OpenAI returns
                         const allResources = pathway?.resources || [];
-                        const stepResources = allResources.slice(0, 3);
                         
-                        return stepResources.map((resource, index) => (
-                          <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
-                            <p className="text-sm font-medium text-white">{resource}</p>
-                          </div>
-                        ));
-                      })()}
+                        // If we have 6+ resources, distribute them across steps (1-2 per step)
+                        if (allResources.length >= 6) {
+                          const resourcesPerStep = Math.ceil(allResources.length / 4);
+                          const startIndex = currentStep * resourcesPerStep;
+                          const endIndex = Math.min(startIndex + resourcesPerStep, allResources.length);
+                          const stepResources = allResources.slice(startIndex, endIndex);
+                          
+                          // If current step has no resources, cycle through available ones
+                          if (stepResources.length === 0) {
+                            return [allResources[currentStep % allResources.length]];
+                          }
+                          return stepResources;
+                        } 
+                        // If we have 4-5 resources, show 1 per step
+                        else if (allResources.length >= 4) {
+                          return [allResources[currentStep % allResources.length]];
+                        } 
+                        // If we have fewer than 4, cycle through them
+                        else if (allResources.length > 0) {
+                          return [allResources[currentStep % allResources.length]];
+                        }
+                        // No resources available
+                        return [];
+                      })().map((resource, index) => (
+                        <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
+                          <p className="text-sm font-medium text-white">{resource}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   
