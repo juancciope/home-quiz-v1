@@ -262,13 +262,7 @@ export default async function handler(req, res) {
       }
     };
 
-    // Add action items to pathway data
-    if (pathwayData.pathway && pathwayData.pathway.nextSteps) {
-      pathwayData.pathway.nextSteps = pathwayData.pathway.nextSteps.map((step, index) => ({
-        ...step,
-        actions: generateActionsForStep(step.step, index, pathwayData.pathway)
-      }));
-    }
+    // Use AI-generated steps - they already contain unique, step-specific content
 
     // Generate description using same logic as app
     const rec = pathwayData.scoreResult?.recommendation;
@@ -313,6 +307,8 @@ export default async function handler(req, res) {
     console.log('📝 HTML preview (first 500 chars):', renderedHtml.substring(0, 500));
     console.log('📝 Template data keys:', Object.keys(templateData));
     console.log('📝 Pathway data:', JSON.stringify(templateData.pathway?.title || 'NO_TITLE'));
+    console.log('🏢 Companies in PDF data:', JSON.stringify(templateData.pathway?.recommendedCompanies, null, 2));
+    console.log('📊 Step Resources in PDF data:', JSON.stringify(templateData.pathway?.stepResources, null, 2));
 
     console.log('🖥️ Launching browser...');
 

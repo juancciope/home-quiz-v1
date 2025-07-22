@@ -1402,11 +1402,23 @@
               <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
               HOME Resources
             </h3>
-            {{#each ../pathway.resources}}
-              {{#if (lt @index 3)}}
+            {{#if (eq @index 0)}}
+              {{#each ../pathway.stepResources.step1}}
                 <div class="resource-item">{{this}}</div>
-              {{/if}}
-            {{/each}}
+              {{/each}}
+            {{else if (eq @index 1)}}
+              {{#each ../pathway.stepResources.step2}}
+                <div class="resource-item">{{this}}</div>
+              {{/each}}
+            {{else if (eq @index 2)}}
+              {{#each ../pathway.stepResources.step3}}
+                <div class="resource-item">{{this}}</div>
+              {{/each}}
+            {{else if (eq @index 3)}}
+              {{#each ../pathway.stepResources.step4}}
+                <div class="resource-item">{{this}}</div>
+              {{/each}}
+            {{/if}}
           </div>
         </div>
       </div>

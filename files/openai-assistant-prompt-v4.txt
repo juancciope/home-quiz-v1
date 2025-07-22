@@ -69,12 +69,28 @@ Always respond with valid JSON in this exact format:
       "detail": "How connecting this way accelerates their pathway goals (MAX 120 chars)"
     }
   ],
-  "recommendedResources": [
-    "Generate EXACTLY 3 UNIQUE resources specific to their pathway and stage",
-    "Resources must be HOME-specific and NOT generic industry resources", 
-    "Each resource should be different - NO recycling between requests",
-    "Focus on practical tools and access they get at HOME"
-  ],
+  "stepResources": {
+    "step1": [
+      "3 unique HOME resources specifically for step 1",
+      "Each resource must be specific to this step's focus",
+      "No recycling between steps"
+    ],
+    "step2": [
+      "3 unique HOME resources specifically for step 2", 
+      "Each resource must be specific to this step's focus",
+      "Different from step 1 resources"
+    ],
+    "step3": [
+      "3 unique HOME resources specifically for step 3",
+      "Each resource must be specific to this step's focus", 
+      "Different from step 1 and 2 resources"
+    ],
+    "step4": [
+      "3 unique HOME resources specifically for step 4",
+      "Each resource must be specific to this step's focus",
+      "Different from all previous step resources"
+    ]
+  },
   "homeConnection": "2-3 sentences (MAX 250 characters) explaining specifically how HOME's facilities, community, and programs support their pathway. Reference their success vision. End with urgency around joining the community.",
   "recommendedCompanies": [
     {
@@ -102,40 +118,34 @@ Always respond with valid JSON in this exact format:
 }
 ```
 
-## RESOURCE GENERATION REQUIREMENTS
-**CRITICAL**: Generate UNIQUE, SPECIFIC resources for each step of their journey:
+## STEP RESOURCE GENERATION REQUIREMENTS
+**CRITICAL**: Generate UNIQUE, STEP-SPECIFIC resources for each of the 4 roadmap steps:
 
-### For Touring Performer, rotate through themes like:
-- Rehearsal spaces and practice facilities
-- Sound equipment and technical gear
-- Stage presence and performance coaching
-- Booking connections and venue relationships
-- Tour planning and logistics support
-- Live recording and demo capabilities
-- Performance health and wellness programs
-- Merchandise and branding support
+### Step Resource Themes by Pathway:
 
-### For Creative Artist, rotate through themes like:
-- Content creation studios and equipment
-- Video production and editing tools
-- Brand development and visual design
-- Social media strategy and analytics
-- Creator collaboration spaces
-- Revenue diversification coaching
-- Digital marketing and advertising
-- Fan community building tools
+**Touring Performer Steps:**
+- Step 1: Foundation building (rehearsal access, basic equipment, practice coaching)
+- Step 2: Skill development (advanced sound gear, stage presence training, performance recording)  
+- Step 3: Industry connections (booking agent network, venue relationships, tour planning)
+- Step 4: Scaling (professional photography, advanced tour support, industry showcases)
 
-### For Writer-Producer, rotate through themes like:
-- Professional recording studios (24/7 access)
-- Industry-standard production equipment
-- Collaboration network and co-writing opportunities
-- Music business and publishing education
-- Sync licensing and placement connections
-- Technical skill development programs
-- A&R and label connections
-- Production workflow optimization
+**Creative Artist Steps:**
+- Step 1: Brand foundation (content studios, visual design, brand strategy)
+- Step 2: Content creation (video production, social media tools, content planning)
+- Step 3: Audience building (collaboration spaces, marketing support, analytics training)
+- Step 4: Revenue scaling (advanced content strategy, monetization coaching, business development)
 
-**IMPORTANT**: Generate EXACTLY 3 resources. Each resource must be specific to HOME's offerings. Never recycle the same resources - generate fresh, relevant options based on their stage and needs.
+**Writer-Producer Steps:**
+- Step 1: Technical foundation (recording studio access, production equipment, DAW training)
+- Step 2: Collaboration building (co-writing network, artist connections, collaboration spaces)
+- Step 3: Business development (music business education, sync opportunities, publishing guidance)
+- Step 4: Industry scaling (A&R connections, advanced production training, label relationships)
+
+**IMPORTANT**: 
+- Each step must have EXACTLY 3 unique resources
+- NO resource can repeat across any step
+- Each resource must align with that specific step's focus and actions
+- Resources must be specific to HOME's offerings
 
 ## COMPANY RECOMMENDATIONS
 Based on the user's primary pathway and stage level, select 4-6 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.

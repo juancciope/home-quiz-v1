@@ -193,13 +193,14 @@ try {
 if (!aiResponse.pathway || 
     !aiResponse.customNextSteps || 
     !aiResponse.homeConnection ||
-    !aiResponse.recommendedResources) {
+    !aiResponse.stepResources) {
   console.error('Incomplete response:', aiResponse);
   throw new Error('Incomplete assistant response');
 }
 
-// Log what we got from AI for companies debugging
+// Log what we got from AI for debugging
 console.log('🔍 AI Response recommendedCompanies:', JSON.stringify(aiResponse.recommendedCompanies, null, 2));
+console.log('🔍 AI Response stepResources:', JSON.stringify(aiResponse.stepResources, null, 2));
 
 // Log what we got from AI for debugging
 console.log('🔍 AI Response pathwayDetails:', JSON.stringify(aiResponse.pathwayDetails, null, 2));
@@ -236,6 +237,7 @@ const result = {
     detail: step.detail
   })),
   resources: aiResponse.recommendedResources,
+  stepResources: aiResponse.stepResources,
   homeConnection: aiResponse.homeConnection,
   recommendedCompanies: aiResponse.recommendedCompanies || [],
   recommendation: scoreResult?.recommendation,
