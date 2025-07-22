@@ -3016,32 +3016,22 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // Use dynamic resources based on what OpenAI returns
+                        // ALWAYS show exactly 3 resources per step
                         const allResources = pathway?.resources || [];
                         
-                        // If we have 6+ resources, distribute them across steps (1-2 per step)
-                        if (allResources.length >= 6) {
-                          const resourcesPerStep = Math.ceil(allResources.length / 4);
-                          const startIndex = currentStep * resourcesPerStep;
-                          const endIndex = Math.min(startIndex + resourcesPerStep, allResources.length);
-                          const stepResources = allResources.slice(startIndex, endIndex);
-                          
-                          // If current step has no resources, cycle through available ones
-                          if (stepResources.length === 0) {
-                            return [allResources[currentStep % allResources.length]];
-                          }
-                          return stepResources;
-                        } 
-                        // If we have 4-5 resources, show 1 per step
-                        else if (allResources.length >= 4) {
-                          return [allResources[currentStep % allResources.length]];
-                        } 
-                        // If we have fewer than 4, cycle through them
-                        else if (allResources.length > 0) {
-                          return [allResources[currentStep % allResources.length]];
+                        if (allResources.length === 0) {
+                          return [];
                         }
-                        // No resources available
-                        return [];
+                        
+                        // Generate exactly 3 resources for this step by cycling through available resources
+                        const stepResources = [];
+                        for (let i = 0; i < 3; i++) {
+                          // Calculate index using step and position to ensure uniqueness across steps
+                          const resourceIndex = (currentStep * 3 + i) % allResources.length;
+                          stepResources.push(allResources[resourceIndex]);
+                        }
+                        
+                        return stepResources;
                       })().map((resource, index) => (
                         <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
                           <p className="text-sm font-medium text-white">{resource}</p>

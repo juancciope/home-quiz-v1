@@ -152,6 +152,18 @@ export default async function handler(req, res) {
       return a || b;
     });
 
+    // Helper to get exactly 3 resources for a step by cycling through available resources
+    Handlebars.registerHelper('getStepResources', function(allResources, stepIndex) {
+      if (!allResources || allResources.length === 0) return [];
+      
+      const stepResources = [];
+      for (let i = 0; i < 3; i++) {
+        const resourceIndex = (stepIndex * 3 + i) % allResources.length;
+        stepResources.push(allResources[resourceIndex]);
+      }
+      return stepResources;
+    });
+
     // Generate pathway-specific action items (same logic as in quiz component)
     const generateActionsForStep = (stepTitle, stepIndex, pathway) => {
       const pathwayType = pathway.title ? pathway.title.toLowerCase() : '';
