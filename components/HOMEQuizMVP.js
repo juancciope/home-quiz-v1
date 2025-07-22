@@ -2127,7 +2127,7 @@ const HOMECreatorFlow = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" style={{ transform: 'translateZ(-15px)' }} />
                     
                     {/* Content */}
-                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Find My Path</span>
+                    <span className="relative z-10" style={{ transform: 'translateZ(10px)' }}>Start</span>
                     <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ transform: 'translateZ(10px)' }} />
                   </button>
                   
@@ -2542,7 +2542,7 @@ const HOMECreatorFlow = () => {
                             type="text"
                             value={artistName}
                             onChange={(e) => setArtistName(e.target.value)}
-                            placeholder="Your artist name"
+                            placeholder="Your Name"
                             className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl 
                                      focus:bg-black/50 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
                                      transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
