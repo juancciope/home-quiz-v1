@@ -1402,32 +1402,12 @@
               <img src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png" alt="HOME" class="home-logo">
               HOME Resources
             </h3>
-            {{!-- Get step-specific resources: slice by current step index --}}
-            {{#if (eq @index 0)}}
-              {{#each ../pathway.resources}}
-                {{#if (and (gte @index 0) (lt @index 3))}}
-                  <div class="resource-item">{{this}}</div>
-                {{/if}}
-              {{/each}}
-            {{else if (eq @index 1)}}
-              {{#each ../pathway.resources}}
-                {{#if (and (gte @index 3) (lt @index 6))}}
-                  <div class="resource-item">{{this}}</div>
-                {{/if}}
-              {{/each}}
-            {{else if (eq @index 2)}}
-              {{#each ../pathway.resources}}
-                {{#if (and (gte @index 6) (lt @index 9))}}
-                  <div class="resource-item">{{this}}</div>
-                {{/if}}
-              {{/each}}
-            {{else if (eq @index 3)}}
-              {{#each ../pathway.resources}}
-                {{#if (and (gte @index 9) (lt @index 12))}}
-                  <div class="resource-item">{{this}}</div>
-                {{/if}}
-              {{/each}}
-            {{/if}}
+            {{!-- TEMPORARY FIX: Show same resources on all steps until we have 12 --}}
+            {{#each ../pathway.resources}}
+              {{#if (lt @index 3)}}
+                <div class="resource-item">{{this}}</div>
+              {{/if}}
+            {{/each}}
           </div>
         </div>
       </div>

@@ -3016,9 +3016,9 @@ const HOMECreatorFlow = () => {
                     </h3>
                     <div className="space-y-2">
                       {(() => {
-                        // Get step-specific resources: OpenAI returns 12 total, we slice by step
+                        // TEMPORARY: Show same 3 resources until OpenAI returns 12
                         const allResources = pathway?.resources || [];
-                        const stepResources = allResources.slice(currentStep * 3, (currentStep + 1) * 3);
+                        const stepResources = allResources.slice(0, 3);
                         
                         return stepResources.map((resource, index) => (
                           <div key={index} className="bg-white/5 rounded-xl p-3 backdrop-blur border border-white/10">
