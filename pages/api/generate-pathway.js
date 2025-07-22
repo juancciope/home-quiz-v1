@@ -204,6 +204,16 @@ console.log('🔍 AI Response stepResources:', JSON.stringify(aiResponse.stepRes
 console.log('🔍 AI Response recommendedResources:', JSON.stringify(aiResponse.recommendedResources, null, 2));
 console.log('🔍 AI Response recommendedResources LENGTH:', aiResponse.recommendedResources?.length || 0);
 
+// CRITICAL DEBUG: Check if OpenAI is actually generating resources
+if (!aiResponse.recommendedResources || aiResponse.recommendedResources.length < 12) {
+  console.error('❌ PROBLEM: OpenAI Assistant is NOT generating 12 resources!');
+  console.error('📊 Expected: 12 unique resources');
+  console.error('📊 Actual:', aiResponse.recommendedResources?.length || 0);
+  console.error('📊 Using fallback resources instead');
+} else {
+  console.log('✅ OpenAI Assistant generated 12 resources correctly');
+}
+
 // Log what we got from AI for debugging
 console.log('🔍 AI Response pathwayDetails:', JSON.stringify(aiResponse.pathwayDetails, null, 2));
 
@@ -238,7 +248,9 @@ const result = {
     step: step.step,
     detail: step.detail
   })),
-  resources: aiResponse.recommendedResources,
+  resources: aiResponse.recommendedResources && aiResponse.recommendedResources.length >= 12 
+    ? aiResponse.recommendedResources 
+    : generateFallbackResources(aiResponse.pathway, scoreResult),
   stepResources: aiResponse.stepResources,
   homeConnection: aiResponse.homeConnection,
   recommendedCompanies: aiResponse.recommendedCompanies || generateFallbackCompanies(aiResponse.pathway, scoreResult),
@@ -345,6 +357,78 @@ console.log('✅ Successfully generated personalized pathway:', {
     
     res.status(200).json(emergencyFallback);
   }
+}
+
+function generateFallbackResources(pathway, scoreResult) {
+  const stage = scoreResult?.stageLevel || 'planning';
+  
+  const resourcesByPathway = {
+    'touring-performer': [
+      // Step 1 - Foundation
+      '24/7 rehearsal facility access for setlist development',
+      'Basic performance equipment and sound system training',
+      'Stage presence coaching with industry professionals',
+      
+      // Step 2 - Skill Development  
+      'Advanced sound engineering and live mixing workshops',
+      'Performance recording capabilities in 250-capacity venue',
+      'Setlist strategy and audience engagement training',
+      
+      // Step 3 - Industry Connections
+      'Booking agent networking events and pitch opportunities',
+      'Venue relationship building through HOME showcase hosting',
+      'Tour planning consultation with experienced managers',
+      
+      // Step 4 - Scaling
+      'Professional photography and videography for EPKs',
+      'Advanced tour logistics and routing strategy sessions',
+      'Industry showcase hosting and A&R networking events'
+    ],
+    'creative-artist': [
+      // Step 1 - Brand Foundation
+      'Content creation studios with professional video equipment',
+      'Brand development coaching and visual identity sessions',
+      'Business planning guides for creative career strategy',
+      
+      // Step 2 - Content Creation
+      'Video production and editing facility access (24/7)',
+      'Social media strategy workshops with marketing experts',
+      'Content planning tools and scheduling system training',
+      
+      // Step 3 - Audience Building
+      'Creator collaboration network within 1,500+ member community',
+      'Digital marketing campaign guidance and analytics training',
+      'Fan community building strategies and engagement tools',
+      
+      // Step 4 - Revenue Scaling
+      'Revenue diversification consultation with business experts',
+      'Partnership facilitation for brand collaborations',
+      'Advanced monetization coaching and e-commerce setup'
+    ],
+    'writer-producer': [
+      // Step 1 - Technical Foundation
+      '24/7 professional recording studio access',
+      'Industry-standard production equipment and software training',
+      'DAW optimization and workflow efficiency workshops',
+      
+      // Step 2 - Collaboration Building
+      'Co-writing network access and collaboration facilitation',
+      'Artist connection events and creative partnership matching',
+      'Collaborative workspace access for team production sessions',
+      
+      // Step 3 - Business Development
+      'Music business and publishing education programs',
+      'Sync licensing connections and placement opportunities',
+      'Royalty collection and publishing administration guidance',
+      
+      // Step 4 - Industry Scaling
+      'A&R network access and label pitch opportunities',
+      'Advanced production training and mixing/mastering workshops',
+      'Industry mentor connections and career advancement coaching'
+    ]
+  };
+  
+  return resourcesByPathway[pathway] || resourcesByPathway['creative-artist'];
 }
 
 function generateFallbackCompanies(pathway, scoreResult) {
