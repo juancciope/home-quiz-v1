@@ -2848,29 +2848,45 @@ const HOMECreatorFlow = () => {
                       </span>
                     </div>
                     
-                    {/* Main Description */}
-                    {scoreResult && (() => {
-                      const { displayPct, absPct, levels } = scoreResult;
-                      const sortedPaths = Object.entries(absPct)
-                        .sort((a, b) => b[1] - a[1]);
-                      const primary = sortedPaths[0];
-                      const secondary = sortedPaths[1];
-                      const stage = responses['stage-level'];
+                    {/* Main Description - Use AI description first, fallback to hardcoded */}
+                    {(() => {
+                      // Use AI-generated description if available
+                      const aiDescription = aiGeneratedPathway?.description || pathway?.description;
                       
-                      let description;
-                      if (levels[primary[0]] === 'Core Focus' && levels[secondary[0]] === 'Strategic Secondary') {
-                        description = `Your ${PATH_LABELS[primary[0]]} strength should lead your strategy, with your ${PATH_LABELS[secondary[0]]} skills as strategic support. This balance creates the fastest path to your vision.`;
-                      } else if (levels[primary[0]] === 'Core Focus') {
-                        description = `Your ${PATH_LABELS[primary[0]]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
-                      } else {
-                        description = `Your ${PATH_LABELS[primary[0]]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
+                      if (aiDescription) {
+                        return (
+                          <p className="text-sm text-gray-300 leading-relaxed mb-8 text-center max-w-lg mx-auto">
+                            {aiDescription}
+                          </p>
+                        );
                       }
                       
-                      return (
-                        <p className="text-sm text-gray-300 leading-relaxed mb-8 text-center max-w-lg mx-auto">
-                          {description}
-                        </p>
-                      );
+                      // Fallback to hardcoded description logic only if no AI description
+                      if (scoreResult) {
+                        const { displayPct, absPct, levels } = scoreResult;
+                        const sortedPaths = Object.entries(absPct)
+                          .sort((a, b) => b[1] - a[1]);
+                        const primary = sortedPaths[0];
+                        const secondary = sortedPaths[1];
+                        const stage = responses['stage-level'];
+                        
+                        let description;
+                        if (levels[primary[0]] === 'Core Focus' && levels[secondary[0]] === 'Strategic Secondary') {
+                          description = `Your ${PATH_LABELS[primary[0]]} strength should lead your strategy, with your ${PATH_LABELS[secondary[0]]} skills as strategic support. This balance creates the fastest path to your vision.`;
+                        } else if (levels[primary[0]] === 'Core Focus') {
+                          description = `Your ${PATH_LABELS[primary[0]]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
+                        } else {
+                          description = `Your ${PATH_LABELS[primary[0]]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
+                        }
+                        
+                        return (
+                          <p className="text-sm text-gray-300 leading-relaxed mb-8 text-center max-w-lg mx-auto">
+                            {description}
+                          </p>
+                        );
+                      }
+                      
+                      return null;
                     })()}
                   </div>
                   
