@@ -1413,7 +1413,9 @@
       {{/each}}
       
       <!-- COMPANIES PAGE: Key Industry Players -->
-      {{#if pathway.recommendedCompanies}}
+      <!-- DEBUG: Companies exist: {{#if pathway.recommendedCompanies}}YES{{else}}NO{{/if}} -->
+      <!-- DEBUG: Companies count: {{pathway.recommendedCompanies.length}} -->
+      {{#if pathway.recommendedCompanies.length}}
       <div class="pdf-page" style="page-break-before: always;">
         <div class="page-content">
           <div style="text-align: center; margin-bottom: 32px;">

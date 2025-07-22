@@ -262,7 +262,13 @@ export default async function handler(req, res) {
       }
     };
 
-    // Use AI-generated steps - they already contain unique, step-specific content
+    // Add action items to pathway data for PDF display
+    if (pathwayData.pathway && pathwayData.pathway.nextSteps) {
+      pathwayData.pathway.nextSteps = pathwayData.pathway.nextSteps.map((step, index) => ({
+        ...step,
+        actions: generateActionsForStep(step.step, index, pathwayData.pathway)
+      }));
+    }
 
     // Generate description using same logic as app
     const rec = pathwayData.scoreResult?.recommendation;
