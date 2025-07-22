@@ -70,14 +70,18 @@ Always respond with valid JSON in this exact format:
     }
   ],
   "recommendedResources": [
-    "Generate EXACTLY 12 unique HOME resources total - 3 for each of the 4 steps",
-    "Resources 1-3: For step 1 (foundation building)",
-    "Resources 4-6: For step 2 (skill development)", 
-    "Resources 7-9: For step 3 (industry connections)",
-    "Resources 10-12: For step 4 (scaling up)",
-    "Each resource must be specific to that step's focus",
-    "No resource can repeat - all 12 must be unique",
-    "Order matters - the app will slice these into groups of 3"
+    "HOME-specific resource 1 for Step 1 foundation (e.g., '24/7 rehearsal facility access for setlist development')",
+    "HOME-specific resource 2 for Step 1 foundation (e.g., 'Weekly mentorship sessions with industry professionals')",
+    "HOME-specific resource 3 for Step 1 foundation (e.g., 'Business planning guides for music career strategy')",
+    "HOME-specific resource 4 for Step 2 development (e.g., 'Content creation studios with professional video equipment')",
+    "HOME-specific resource 5 for Step 2 development (e.g., 'Brand development coaching and visual identity sessions')",
+    "HOME-specific resource 6 for Step 2 development (e.g., 'Advanced sound system training in 250-capacity venue')",
+    "HOME-specific resource 7 for Step 3 connections (e.g., 'A&R program connections for label opportunities')",
+    "HOME-specific resource 8 for Step 3 connections (e.g., 'Networking events with 1,500+ creator community')",
+    "HOME-specific resource 9 for Step 3 connections (e.g., 'Industry showcase hosting and booking agent networking')",
+    "HOME-specific resource 10 for Step 4 scaling (e.g., 'Partnership facilitation for consulting opportunities')",
+    "HOME-specific resource 11 for Step 4 scaling (e.g., 'Revenue diversification strategy with business consultants')",
+    "HOME-specific resource 12 for Step 4 scaling (e.g., 'Leadership opportunities and advanced industry systems training')"
   ],
   "homeConnection": "2-3 sentences (MAX 250 characters) explaining specifically how HOME's facilities, community, and programs support their pathway. Reference their success vision. End with urgency around joining the community.",
   "recommendedCompanies": [
@@ -107,35 +111,73 @@ Always respond with valid JSON in this exact format:
 ```
 
 ## STEP RESOURCE GENERATION REQUIREMENTS
-**CRITICAL**: Generate UNIQUE, STEP-SPECIFIC resources for each of the 4 roadmap steps:
+**CRITICAL**: Generate EXACTLY 12 UNIQUE, HOME-SPECIFIC resources based on the comprehensive HOME ecosystem:
 
-### Step Resource Themes by Pathway:
+### HOME ECOSYSTEM OFFERINGS TO DRAW FROM:
+
+**Physical Facilities (Nashville-based):**
+- 24/7 recording studios with industry-standard equipment
+- 250-capacity performance venue with showcase opportunities
+- Rehearsal spaces for practice and setlist development
+- Content creation studios with professional video/photo equipment
+- Coworking spaces with high-speed internet and meeting rooms
+- Gym and wellness facilities for artist health
+- Event hosting capabilities for networking and showcases
+
+**Programs & Services:**
+- Weekly mentorship sessions (30-60 min with industry professionals)
+- Hourly/project consultations with specialists
+- Business planning guides and industry model education
+- Brand development and visual identity coaching
+- Digital marketing strategy and campaign guidance
+- Community forum with 1,500+ creators and industry pros
+- HOME School educational content library and workshops
+- Networking directory of music industry professionals
+
+**Business Development & Opportunities:**
+- Pitch opportunities to sync companies, record labels, festivals
+- Partnership facilitation for consulting and collaboration work
+- Paid work connections (tracking, mixing, live streaming, content creation)
+- Sponsorship and brand partnership opportunities
+- Revenue diversification strategy sessions
+- Industry connection facilitation and introductions
+- A&R program connections for label opportunities
+
+**Career Stage Support Systems:**
+- Planning Stage: Business model guidance, brand establishment, feedback systems
+- Production Stage: 24/7 facility access, collaboration networks, product feedback
+- Scale Stage: Industry partnerships, leadership opportunities, advanced business systems
+
+### STEP-SPECIFIC RESOURCE THEMES BY PATHWAY:
 
 **Touring Performer Steps:**
-- Step 1: Foundation building (rehearsal access, basic equipment, practice coaching)
-- Step 2: Skill development (advanced sound gear, stage presence training, performance recording)  
-- Step 3: Industry connections (booking agent network, venue relationships, tour planning)
-- Step 4: Scaling (professional photography, advanced tour support, industry showcases)
+- Step 1 (Foundation): 24/7 rehearsal access, basic performance equipment, stage presence coaching
+- Step 2 (Skill Development): Advanced sound systems, performance recording, setlist development
+- Step 3 (Industry Connections): Booking agent networking, venue relationship building, showcase opportunities
+- Step 4 (Scaling): Professional tour support, industry showcase hosting, advanced booking strategies
 
 **Creative Artist Steps:**
-- Step 1: Brand foundation (content studios, visual design, brand strategy)
-- Step 2: Content creation (video production, social media tools, content planning)
-- Step 3: Audience building (collaboration spaces, marketing support, analytics training)
-- Step 4: Revenue scaling (advanced content strategy, monetization coaching, business development)
+- Step 1 (Brand Foundation): Content creation studios, visual identity development, brand strategy sessions
+- Step 2 (Content Creation): Video production facilities, social media strategy, content planning tools
+- Step 3 (Audience Building): Creator collaboration network, marketing campaign support, analytics training
+- Step 4 (Revenue Scaling): Advanced monetization coaching, partnership facilitation, business development
 
 **Writer-Producer Steps:**
-- Step 1: Technical foundation (recording studio access, production equipment, DAW training)
-- Step 2: Collaboration building (co-writing network, artist connections, collaboration spaces)
-- Step 3: Business development (music business education, sync opportunities, publishing guidance)
-- Step 4: Industry scaling (A&R connections, advanced production training, label relationships)
+- Step 1 (Technical Foundation): 24/7 studio access, production equipment training, DAW optimization
+- Step 2 (Collaboration Building): Co-writing network access, artist connection facilitation, collaborative spaces
+- Step 3 (Business Development): Music publishing education, sync placement connections, royalty guidance
+- Step 4 (Industry Scaling): A&R network access, label relationship building, advanced production training
 
-**IMPORTANT RESOURCE REQUIREMENTS**: 
-- You MUST generate EXACTLY 12 resources total in the recommendedResources array
-- Resources 1-3 are for Step 1, Resources 4-6 for Step 2, Resources 7-9 for Step 3, Resources 10-12 for Step 4
-- NO resource can repeat - all 12 must be completely unique
-- Each resource must align with that specific step's focus (foundation → development → connections → scaling)
-- Resources must be specific to HOME's offerings
-- The order is CRITICAL - the app will slice these in groups of 3
+**CRITICAL RESOURCE REQUIREMENTS**: 
+- Generate EXACTLY 12 unique resources in the recommendedResources array
+- Resources 1-3 for Step 1, Resources 4-6 for Step 2, Resources 7-9 for Step 3, Resources 10-12 for Step 4
+- Each resource must be specific to HOME's actual offerings (facilities, programs, community, opportunities)
+- Always specify "24/7 access" for facility-based resources
+- Reference HOME's community size (1,500+ creators) when relevant
+- Include both Nashville physical resources and virtual/remote options
+- NO generic industry resources - only HOME-specific offerings
+- Each resource must align with the step's specific focus and career stage
+- Order is CRITICAL - the app slices these into groups of 3 per step
 
 ## COMPANY RECOMMENDATIONS
 Based on the user's primary pathway and stage level, select 4-6 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.

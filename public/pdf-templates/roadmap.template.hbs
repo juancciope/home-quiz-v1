@@ -1480,12 +1480,16 @@
           <!-- THE WHY -->
           <div style="text-align: center; margin-bottom: 24px; padding: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;">
             <p style="color: #d1d5db; font-size: 14px; line-height: 1.5; margin-bottom: 12px;">
-              {{#if (eq fuzzyScoresArray.[0].key 'touring-performer')}}
-              As a {{fuzzyScoresArray.[0].name}}, you need stages to practice, equipment to perfect your sound, and connections to book your next gig.
-              {{else if (eq fuzzyScoresArray.[0].key 'creative-artist')}}
-              As a {{fuzzyScoresArray.[0].name}}, you need creative spaces, content creation tools, and a community that understands your artistic vision.
-              {{else if (eq fuzzyScoresArray.[0].key 'writer-producer')}}
-              As a {{fuzzyScoresArray.[0].name}}, you need professional studios, industry connections, and collaborators who share your creative standards.
+              {{#if fuzzyScoresArray.[0]}}
+                {{#if (eq fuzzyScoresArray.[0].key 'touring-performer')}}
+                As a {{fuzzyScoresArray.[0].name}}, you need stages to practice, equipment to perfect your sound, and connections to book your next gig.
+                {{else if (eq fuzzyScoresArray.[0].key 'creative-artist')}}
+                As a {{fuzzyScoresArray.[0].name}}, you need creative spaces, content creation tools, and a community that understands your artistic vision.
+                {{else if (eq fuzzyScoresArray.[0].key 'writer-producer')}}
+                As a {{fuzzyScoresArray.[0].name}}, you need professional studios, industry connections, and collaborators who share your creative standards.
+                {{else}}
+                As a {{fuzzyScoresArray.[0].name}}, you need the right environment, tools, and community to turn your potential into success.
+                {{/if}}
               {{else}}
               As a music creator, you need the right environment, tools, and community to turn your potential into success.
               {{/if}}

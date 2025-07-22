@@ -1684,17 +1684,28 @@ const HOMECreatorFlow = () => {
       console.log('🔄 Pre-generating PDF in background...');
       
       const sessionId = Date.now().toString();
+      const currentPathway = aiGeneratedPathway || pathway;
+      
+      // Ensure we have valid data for PDF generation
       const pdfData = {
-        pathway: aiGeneratedPathway || pathway,
-        responses,
-        scoreResult,
-        pathwayDetails: (aiGeneratedPathway || pathway)?.pathwayDetails,
-        fuzzyScores: scoreResult?.displayPct || fuzzyScores,
+        pathway: currentPathway,
+        responses: responses || {},
+        scoreResult: scoreResult || null,
+        pathwayDetails: currentPathway?.pathwayDetails || {},
+        fuzzyScores: scoreResult?.displayPct || fuzzyScores || {},
         pathwayBlend: scoreResult ? { 
-          type: scoreResult.blendType, 
-          primary: scoreResult.recommendation.path 
-        } : pathwayBlend
+          type: scoreResult.blendType || 'focused', 
+          primary: scoreResult.recommendation?.path || 'creative-artist'
+        } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
       };
+      
+      console.log('📋 PDF data being sent:', {
+        hasPathway: !!pdfData.pathway,
+        hasResponses: !!pdfData.responses,
+        hasScoreResult: !!pdfData.scoreResult,
+        hasFuzzyScores: !!pdfData.fuzzyScores && Object.keys(pdfData.fuzzyScores).length > 0,
+        pathwayTitle: pdfData.pathway?.title
+      });
       
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
@@ -1707,7 +1718,8 @@ const HOMECreatorFlow = () => {
         setPreGeneratedPDF(blob);
         console.log('✅ PDF pre-generated successfully');
       } else {
-        console.error('❌ PDF pre-generation failed');
+        const errorText = await response.text();
+        console.error('❌ PDF pre-generation failed:', response.status, errorText);
       }
     } catch (error) {
       console.error('❌ PDF pre-generation error:', error);

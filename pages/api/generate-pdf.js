@@ -65,7 +65,14 @@ export default async function handler(req, res) {
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
     
-    const fuzzyScoresArray = Object.entries(scores)
+    // Ensure we have valid scores data - create fallback if needed
+    const validScores = scores && Object.keys(scores).length > 0 ? scores : {
+      'touring-performer': 33,
+      'creative-artist': 33, 
+      'writer-producer': 34
+    };
+    
+    const fuzzyScoresArray = Object.entries(validScores)
       .sort((a, b) => b[1] - a[1])
       .map(([key, percentage], index) => {
         const info = pathwayInfo[key] || { 
@@ -84,7 +91,7 @@ export default async function handler(req, res) {
         const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;
         const isSecondary = index === 1 && !isPrimary;
         
-        // Use ONLY AI-generated pathway details - no fallbacks
+        // Use AI-generated pathway details with fallbacks
         const aiPathwayDetails = pathwayData.pathwayDetails || {};
         const pathwayDetail = aiPathwayDetails[key] || {};
         
@@ -100,10 +107,10 @@ export default async function handler(req, res) {
           name: PATH_LABELS[key] || info.name,
           icon: info.icon,
           color: info.color,
-          // Use ONLY AI-generated content
-          focusMessage: pathwayDetail.focusMessage,
-          focusAreas: pathwayDetail.focusAreas,
-          growthAreas: pathwayDetail.growthAreas,
+          // Use AI-generated content with fallbacks
+          focusMessage: pathwayDetail.focusMessage || 'This pathway aligns with your creative goals.',
+          focusAreas: pathwayDetail.focusAreas || 'Creative development • Skill building • Community engagement',
+          growthAreas: pathwayDetail.growthAreas || 'Focus on core strengths • Build strategic partnerships',
           archetypeLevel: archetypeLevel.level,
           archetypeIcon: archetypeLevel.icon,
           archetypeDescription: archetypeLevel.description,
@@ -112,6 +119,28 @@ export default async function handler(req, res) {
           isFirst: index === 0
         };
       });
+    
+    // Ensure fuzzyScoresArray always has at least one valid entry
+    if (fuzzyScoresArray.length === 0) {
+      fuzzyScoresArray.push({
+        key: 'creative-artist',
+        percentage: 100,
+        relativePct: 100,
+        absolutePercentage: 100,
+        name: 'Creative Artist',
+        icon: '🎨',
+        color: '#ec4899',
+        focusMessage: 'This pathway aligns with your creative goals.',
+        focusAreas: 'Creative development • Skill building • Community engagement',
+        growthAreas: 'Focus on core strengths • Build strategic partnerships',
+        archetypeLevel: 'Core Focus',
+        archetypeIcon: '🏆',
+        archetypeDescription: '',
+        isPrimary: true,
+        isSecondary: false,
+        isFirst: true
+      });
+    }
 
     // Register handlebars helpers
     Handlebars.registerHelper('index1', function(options) {
