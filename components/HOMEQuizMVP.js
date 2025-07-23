@@ -84,13 +84,369 @@ const questions = [
   }
 ];
 
+// Survey Questions for Launch Environment
+const surveyQuestions = [
+  // Section 1: Your Music Creator Journey (4 questions)
+  {
+    id: 'challenges',
+    section: 'Your Music Creator Journey',
+    question: "What's your current biggest challenge in your music career? (Select top 2)",
+    type: 'multiple',
+    maxSelections: 2,
+    options: [
+      { value: 'collaborators', label: 'Finding quality collaborators/band members' },
+      { value: 'fanbase', label: 'Building and engaging my fanbase' },
+      { value: 'industry-exposure', label: 'Getting my music heard by industry professionals' },
+      { value: 'income', label: 'Generating consistent income from music' },
+      { value: 'recording-quality', label: 'Creating professional-quality recordings' },
+      { value: 'booking-shows', label: 'Booking shows and touring opportunities' },
+      { value: 'music-business', label: 'Understanding music business and contracts' },
+      { value: 'marketing', label: 'Marketing and social media strategy' },
+      { value: 'time-management', label: 'Time management and productivity' },
+      { value: 'equipment-access', label: 'Access to professional equipment/studios' }
+    ]
+  },
+  {
+    id: 'career-stage',
+    section: 'Your Music Creator Journey',
+    question: "Which best describes your current career stage?",
+    type: 'single',
+    options: [
+      { value: 'starting', label: 'Just starting out (0-2 years creating music)' },
+      { value: 'building', label: 'Building momentum (2-5 years, some traction)' },
+      { value: 'local', label: 'Established locally (5+ years, local following)' },
+      { value: 'expanding', label: 'Breaking into larger markets (regional/national reach)' },
+      { value: 'professional', label: 'Professional level (music as primary income)' }
+    ]
+  },
+  {
+    id: 'monthly-investment',
+    section: 'Your Music Creator Journey',
+    question: "What's your average monthly investment in your music career?",
+    type: 'single',
+    options: [
+      { value: 'under-100', label: 'Under $100' },
+      { value: '100-300', label: '$100-$300' },
+      { value: '300-500', label: '$300-$500' },
+      { value: '500-1000', label: '$500-$1,000' },
+      { value: '1000-2500', label: '$1,000-$2,500' },
+      { value: 'over-2500', label: 'Over $2,500' },
+      { value: 'dont-know', label: "I don't know" }
+    ]
+  },
+  {
+    id: 'career-impact',
+    section: 'Your Music Creator Journey',
+    question: "Which outcome would have the biggest impact on your career in the next 6 months?",
+    type: 'single',
+    options: [
+      { value: 'gigs', label: 'Landing 5+ new quality gigs/shows' },
+      { value: 'followers', label: 'Gaining 1,000+ engaged social media followers' },
+      { value: 'sync-deal', label: 'Securing a sync placement or licensing deal' },
+      { value: 'collaborations', label: 'Collaborating with 3+ new artists/producers' },
+      { value: 'income-increase', label: 'Increasing monthly music income by 50%' },
+      { value: 'playlist-features', label: 'Getting featured on major playlists or blogs' },
+      { value: 'album-completion', label: 'Completing a professional-quality EP/album' },
+      { value: 'touring-schedule', label: 'Building a sustainable touring schedule' },
+      { value: 'dont-know', label: "I don't know" }
+    ]
+  },
+
+  // Section 2: Tools & Software Usage (8 questions)
+  {
+    id: 'recording-software',
+    section: 'Tools & Software Usage',
+    question: "Which recording software do you primarily use? (Select all that apply)",
+    type: 'multiple',
+    options: [
+      { value: 'pro-tools', label: 'Pro Tools' },
+      { value: 'logic-pro', label: 'Logic Pro' },
+      { value: 'ableton', label: 'Ableton Live' },
+      { value: 'fl-studio', label: 'FL Studio' },
+      { value: 'reaper', label: 'Reaper' },
+      { value: 'cubase', label: 'Cubase/Nuendo' },
+      { value: 'studio-one', label: 'Studio One' },
+      { value: 'garageband', label: 'GarageBand' },
+      { value: 'other', label: 'Other', hasInput: true }
+    ]
+  },
+  {
+    id: 'gear-purchases',
+    section: 'Tools & Software Usage',
+    question: "What gear are you planning to purchase in the next 12 months? (Select all that apply)",
+    type: 'multiple',
+    options: [
+      { value: 'audio-interface', label: 'Audio interface ($100-$500)' },
+      { value: 'studio-monitors', label: 'Studio monitors ($200-$800)' },
+      { value: 'microphones', label: 'Microphones ($100-$1,000)' },
+      { value: 'midi-controllers', label: 'MIDI controllers/keyboards ($100-$600)' },
+      { value: 'guitar-equipment', label: 'Guitar/bass equipment ($200-$1,500)' },
+      { value: 'headphones', label: 'Headphones/monitoring gear ($100-$400)' },
+      { value: 'acoustic-treatment', label: 'Acoustic treatment/studio setup ($200-$1,000)' },
+      { value: 'drum-machines', label: 'Drum machines/samplers ($200-$800)' },
+      { value: 'software-plugins', label: 'Software/plugins ($50-$500)' },
+      { value: 'live-equipment', label: 'Live performance equipment ($300-$2,000)' },
+      { value: 'no-purchases', label: 'Not planning any purchases' }
+    ]
+  },
+  {
+    id: 'software-subscriptions',
+    section: 'Tools & Software Usage',
+    question: "Which software subscriptions do you currently pay for? (Select all that apply)",
+    type: 'multiple',
+    options: [
+      { value: 'streaming-artists', label: 'Spotify for Artists/Apple Music for Artists' },
+      { value: 'distribution', label: 'DistroKid/CD Baby/TuneCore' },
+      { value: 'samples', label: 'Splice/Loopmasters' },
+      { value: 'ni-komplete', label: 'Native Instruments/Komplete' },
+      { value: 'waves-plugins', label: 'Waves/FabFilter plugins' },
+      { value: 'adobe', label: 'Adobe Creative Suite' },
+      { value: 'design-tools', label: 'Canva Pro/design software' },
+      { value: 'social-media', label: 'Social media management tools' },
+      { value: 'email-marketing', label: 'Email marketing platforms' },
+      { value: 'website-streaming', label: 'Website/streaming platforms' },
+      { value: 'none', label: 'None of the above' }
+    ]
+  },
+  {
+    id: 'valuable-tools',
+    section: 'Tools & Software Usage',
+    question: "Which tools and services would be most valuable for your music career? (Select top 5)",
+    type: 'multiple',
+    maxSelections: 5,
+    options: [
+      { value: 'content-calendar', label: 'Content calendar & viral ideas generator (AI-trained on trending music creator content)' },
+      { value: 'venue-database', label: 'Venue database with contact info for your level/genre' },
+      { value: 'automated-outreach', label: 'Automated venue outreach service (we handle booking emails for you)' },
+      { value: 'website-generator', label: 'Custom website/EPK generator (build from chat conversation)' },
+      { value: 'release-planner', label: 'Music release plan generator (timeline & tasks for any release date)' },
+      { value: 'playlist-tools', label: 'Playlist outreach tools & submission support' },
+      { value: 'budget-optimizer', label: 'Marketing budget optimizer (tells you how to spend your budget)' },
+      { value: 'ad-tools', label: 'Music-specific advertising tools & campaign management' },
+      { value: 'full-marketing', label: 'Full-service music marketing (done-for-you campaigns)' },
+      { value: 'collaborator-matching', label: 'Collaborator matching tool (find artists/producers for your level)' },
+      { value: 'release-management', label: 'Full-service release management and strategy (dedicated guidance and support)' }
+    ]
+  },
+
+  // Pricing questions (Q9-Q14)
+  {
+    id: 'content-calendar-pricing',
+    section: 'Tools & Software Usage',
+    question: "How much would you pay for a content calendar & viral ideas generator?",
+    type: 'single',
+    options: [
+      { value: 'free-only', label: '$0 (would only use if free)' },
+      { value: '15-25', label: '$15-25/month' },
+      { value: '25-40', label: '$25-40/month' },
+      { value: '40-60', label: '$40-60/month' },
+      { value: '60-plus', label: '$60+/month' },
+      { value: 'one-time', label: '$100-200 one-time purchase' }
+    ]
+  },
+  {
+    id: 'venue-database-pricing',
+    section: 'Tools & Software Usage',
+    question: "How much would you pay for a venue database with contact information?",
+    type: 'single',
+    options: [
+      { value: 'free-only', label: '$0 (would only use if free)' },
+      { value: '20-35', label: '$20-35/month' },
+      { value: '35-50', label: '$35-50/month' },
+      { value: '50-75', label: '$50-75/month' },
+      { value: '75-plus', label: '$75+/month' },
+      { value: 'one-time', label: '$150-300 one-time purchase' }
+    ]
+  },
+  {
+    id: 'automated-outreach-pricing',
+    section: 'Tools & Software Usage',
+    question: "How much would you pay monthly for automated venue outreach (we send booking emails for you)?",
+    type: 'single',
+    options: [
+      { value: 'free-only', label: '$0 (would only use if free)' },
+      { value: '50-75', label: '$50-75/month' },
+      { value: '75-100', label: '$75-100/month' },
+      { value: '100-150', label: '$100-150/month' },
+      { value: '150-250', label: '$150-250/month' },
+      { value: '250-plus', label: '$250+/month' }
+    ]
+  },
+  {
+    id: 'website-generator-pricing',
+    section: 'Tools & Software Usage',
+    question: "How much would you pay for a custom website/EPK generator?",
+    type: 'single',
+    options: [
+      { value: 'free-only', label: '$0 (would only use if free)' },
+      { value: '25-40', label: '$25-40/month' },
+      { value: '40-60', label: '$40-60/month' },
+      { value: '60-100', label: '$60-100/month' },
+      { value: '100-plus', label: '$100+/month' },
+      { value: 'one-time', label: '$200-500 one-time purchase' }
+    ]
+  },
+  {
+    id: 'full-marketing-pricing',
+    section: 'Tools & Software Usage',
+    question: "How much would you pay for full-service music marketing (done-for-you campaigns)?",
+    type: 'single',
+    options: [
+      { value: 'free-only', label: '$0 (would only use if free)' },
+      { value: '200-400', label: '$200-400/month' },
+      { value: '400-600', label: '$400-600/month' },
+      { value: '600-1000', label: '$600-1,000/month' },
+      { value: '1000-2000', label: '$1,000-2,000/month' },
+      { value: '2000-plus', label: '$2,000+/month' }
+    ]
+  },
+  {
+    id: 'educational-format',
+    section: 'Tools & Software Usage',
+    question: "Which educational format would you most likely purchase? (Select top 2)",
+    type: 'multiple',
+    maxSelections: 2,
+    options: [
+      { value: 'masterclasses', label: 'Live monthly masterclasses ($25-50/month)' },
+      { value: 'self-paced', label: 'Self-paced online courses ($100-300 one-time)' },
+      { value: 'mentoring', label: '1-on-1 mentoring sessions ($100-200/session)' },
+      { value: 'workshops', label: 'Weekend intensive workshops ($200-500)' },
+      { value: 'cohort-courses', label: 'Cohort-based courses with peers ($300-800)' },
+      { value: 'networking-events', label: 'Industry networking events ($50-150/event)' },
+      { value: 'certification', label: 'Certification programs ($500-1,500)' }
+    ]
+  },
+
+  // Section 3: Collaboration & Community (4 questions)
+  {
+    id: 'genres',
+    section: 'Collaboration & Community',
+    question: "What genres do you create in? (Select all that apply)",
+    type: 'multiple',
+    options: [
+      { value: 'pop', label: 'Pop' },
+      { value: 'rock', label: 'Rock/Alternative' },
+      { value: 'hiphop', label: 'Hip-Hop/Rap' },
+      { value: 'rnb', label: 'R&B/Soul' },
+      { value: 'country', label: 'Country' },
+      { value: 'electronic', label: 'Electronic/EDM' },
+      { value: 'folk', label: 'Folk/Acoustic' },
+      { value: 'jazz', label: 'Jazz' },
+      { value: 'classical', label: 'Classical/Orchestral' },
+      { value: 'metal', label: 'Metal/Hardcore' },
+      { value: 'reggae', label: 'Reggae/World Music' },
+      { value: 'other', label: 'Other', hasInput: true }
+    ]
+  },
+  {
+    id: 'collaboration-skills',
+    section: 'Collaboration & Community',
+    question: "What skills do you bring to collaborations? (Select all that apply)",
+    type: 'multiple',
+    options: [
+      { value: 'songwriting', label: 'Songwriting/lyrics' },
+      { value: 'vocals', label: 'Vocal performance' },
+      { value: 'guitar', label: 'Guitar' },
+      { value: 'piano', label: 'Piano/keyboards' },
+      { value: 'bass', label: 'Bass' },
+      { value: 'drums', label: 'Drums/percussion' },
+      { value: 'engineering', label: 'Audio engineering/mixing' },
+      { value: 'production', label: 'Music production' },
+      { value: 'business', label: 'Music business/marketing' },
+      { value: 'design', label: 'Visual/graphic design' },
+      { value: 'video', label: 'Video production' },
+      { value: 'live-tech', label: 'Live sound/performance tech' }
+    ]
+  },
+  {
+    id: 'seeking-skills',
+    section: 'Collaboration & Community',
+    question: "What skills are you actively seeking in collaborators? (Select top 3)",
+    type: 'multiple',
+    maxSelections: 3,
+    options: [
+      { value: 'songwriting', label: 'Songwriting/lyrics' },
+      { value: 'vocals', label: 'Vocal performance' },
+      { value: 'instrumental', label: 'Instrumental performance' },
+      { value: 'engineering', label: 'Audio engineering/mixing' },
+      { value: 'production', label: 'Music production' },
+      { value: 'business', label: 'Music business/marketing' },
+      { value: 'design', label: 'Visual/graphic design' },
+      { value: 'video', label: 'Video production' },
+      { value: 'content-creation', label: 'Social media/content creation' },
+      { value: 'live-support', label: 'Live performance/touring support' },
+      { value: 'financial', label: 'Financial/business management' }
+    ]
+  },
+
+  // Section 4: Industry Connections & Goals (3 questions)
+  {
+    id: 'industry-connections',
+    section: 'Industry Connections & Goals',
+    question: "Which industry professionals would you most like HOME to connect you with? (Select top 3)",
+    type: 'multiple',
+    maxSelections: 3,
+    options: [
+      { value: 'ar-reps', label: 'A&R representatives' },
+      { value: 'music-supervisors', label: 'Music supervisors (sync licensing)' },
+      { value: 'booking-agents', label: 'Booking agents' },
+      { value: 'managers', label: 'Music managers' },
+      { value: 'label-execs', label: 'Record label executives' },
+      { value: 'publishers', label: 'Music publishers' },
+      { value: 'curators', label: 'Radio/playlist curators' },
+      { value: 'journalists', label: 'Music journalists/bloggers' },
+      { value: 'venue-owners', label: 'Live venue owners/promoters' },
+      { value: 'brand-managers', label: 'Brand partnership managers' },
+      { value: 'lawyers', label: 'Entertainment lawyers' },
+      { value: 'producers', label: 'Verified producers/collaborators' }
+    ]
+  },
+  {
+    id: 'gear-discovery',
+    section: 'Industry Connections & Goals',
+    question: "Where do you discover new music gear and software? (Select all that apply)",
+    type: 'multiple',
+    options: [
+      { value: 'youtube', label: 'YouTube reviews/demos' },
+      { value: 'forums', label: 'Music production forums/Reddit' },
+      { value: 'artist-recommendations', label: 'Artist recommendations/social media' },
+      { value: 'store-staff', label: 'Music store staff recommendations' },
+      { value: 'trade-shows', label: 'Trade shows/conventions (NAMM, AES)' },
+      { value: 'producer-recommendations', label: 'Producer/engineer recommendations' },
+      { value: 'brand-websites', label: 'Brand websites and newsletters' },
+      { value: 'influencer-content', label: 'Sponsored content/influencer posts' },
+      { value: 'home-community', label: 'HOME community recommendations' },
+      { value: 'trial-downloads', label: 'Trial downloads and demos' }
+    ]
+  },
+  {
+    id: 'purchase-incentives',
+    section: 'Industry Connections & Goals',
+    question: "What would make you most likely to purchase through a HOME partnership/affiliate program?",
+    type: 'single',
+    options: [
+      { value: 'discounts', label: 'Exclusive member discounts (10-20% off)' },
+      { value: 'bundles', label: 'Bundle deals with multiple products' },
+      { value: 'warranties', label: 'Extended warranties or return policies' },
+      { value: 'limited-edition', label: 'Access to limited edition or pre-release items' },
+      { value: 'staff-recommendations', label: 'Personal recommendations from HOME staff' },
+      { value: 'member-reviews', label: 'Reviews and demos from HOME members' },
+      { value: 'group-discounts', label: 'Group buying discounts' },
+      { value: 'extended-trials', label: 'FREE trial periods extended for HOME members' },
+      { value: 'financing', label: 'Financing/payment plan options' },
+      { value: 'support', label: 'Direct technical support from HOME' }
+    ]
+  }
+];
+
 // Journey Checkpoints
 const checkpoints = [
   { id: 'assessment', label: 'Discover Path', icon: Target },
   { id: 'ai', label: 'AI Analysis', icon: Sparkles },
   { id: 'profile', label: 'Your Profile', icon: Star },
   { id: 'plan', label: 'Action Plan', icon: ListChecks },
-  { id: 'execute', label: 'Start Journey', icon: Rocket }
+  { id: 'execute', label: 'Start Journey', icon: Rocket },
+  { id: 'survey', label: 'Complete Survey', icon: ListChecks }
 ];
 
 // Path label mappings (now imported from ui.js)
@@ -398,6 +754,7 @@ const getCurrentCheckpoint = (screen, questionIndex, currentStep) => {
   if (screen === 'email' || screen === 'celebration') return 2;
   if (screen === 'plan') return 3;
   if (screen === 'execute') return 4;
+  if (screen === 'survey') return 5;
   return 0;
 };
 
@@ -1434,6 +1791,12 @@ const HOMECreatorFlow = () => {
   const [scoreResult, setScoreResult] = useState(null);
   const [preGeneratedPDF, setPreGeneratedPDF] = useState(null);
   const [isPDFGenerating, setIsPDFGenerating] = useState(false);
+  
+  // Survey state
+  const [surveyResponses, setSurveyResponses] = useState({});
+  const [surveyQuestionIndex, setSurveyQuestionIndex] = useState(0);
+  const [surveyCompleted, setSurveyCompleted] = useState(false);
+  
   // Backwards compatibility getters
   const fuzzyScores = scoreResult ? scoreResult.displayPct : null;
   const pathwayBlend = scoreResult ? getPathwayBlend(scoreResult) : null;
@@ -1907,6 +2270,8 @@ const HOMECreatorFlow = () => {
     } else if (screen === 'execute') {
       setScreen('plan');
       setCurrentStep(3);
+    } else if (screen === 'survey') {
+      setScreen('execute');
     } else if (screen === 'celebration') {
       setScreen('email');
     }
@@ -3205,46 +3570,7 @@ const HOMECreatorFlow = () => {
                 <p className="text-sm text-gray-300 mb-8">Choose how you want to start your journey with HOME</p>
               </div>
               
-              {/* Fully Managed Option */}
-              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
-                <div className="text-center">
-                  <div className="relative inline-block mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
-                      <img 
-                        src="https://storage.googleapis.com/msgsndr/G9A67p2EOSXq4lasgzDq/media/68642fe27345d7e21658ea3b.png"
-                        alt="HOME"
-                        className="h-6 w-auto"
-                      />
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-lg font-bold mb-2 text-white">Fully Managed</h3>
-                  <p className="text-sm text-gray-400 mb-4">We handle everything for you</p>
-                  
-                  <ul className="space-y-2 mb-6 text-left">
-                    {[
-                      'Personal strategy session with our team',
-                      'Custom roadmap execution & accountability',
-                      'Direct access to industry connections',
-                      'Monthly progress reviews & optimization'
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  <LiquidButton
-                    onClick={() => window.open('https://calendly.com/homeformusic', '_blank')}
-                    className="w-full"
-                  >
-                    Talk to Us
-                  </LiquidButton>
-                </div>
-              </div>
-              
-              {/* PDF Roadmap Option */}
+              {/* Complete Roadmap Package */}
               <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
                 <div className="text-center">
                   <div className="relative inline-block mb-4">
@@ -3253,79 +3579,45 @@ const HOMECreatorFlow = () => {
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-2 text-white">Download Roadmap</h3>
-                  <p className="text-sm text-gray-400 mb-4">Your full personalized plan to download</p>
-                  
-                  <ul className="space-y-2 mb-6 text-left">
-                    {[
-                      'All 4 strategic roadmap steps with details',
-                      'Complete action items for each phase',
-                      'Your creative profile & pathway analysis',
-                      'HOME resources & next steps guide',
-                      'Key companies to have on your radar'
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  <LiquidButton
-                    onClick={handlePDFGeneration}
-                    className="w-full"
-                  >
-                    {isPDFGenerating ? (
-                      <>
-                        <span className="animate-spin mr-2">⚡</span>
-                        Preparing Download...
-                      </>
-                    ) : preGeneratedPDF ? (
-                      <>
-                        <span className="mr-2">✅</span>
-                        Download Roadmap
-                      </>
-                    ) : (
-                      <>
-                        Download Roadmap
-                      </>
-                    )}
-                  </LiquidButton>
-                </div>
-              </div>
-              
-              {/* Community Option */}
-              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
-                <div className="text-center">
-                  <div className="relative inline-block mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
-                      <Users className="w-6 h-6 text-[#1DD1A1]" />
+                  <div className="mb-4">
+                    <h3 className="text-xl font-bold mb-2 text-white">Get Your Complete Roadmap</h3>
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-lg text-gray-400 line-through">$50</span>
+                      <span className="text-2xl font-bold text-[#1DD1A1]">Included</span>
                     </div>
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-2 text-white">Community Growth</h3>
-                  <p className="text-sm text-gray-400 mb-4">Start with free access</p>
-                  
-                  <ul className="space-y-2 mb-6 text-left">
-                    {[
-                      'Access to HOME community platform',
-                      'Weekly virtual events & workshops',
-                      'Connect with 1,000+ music creators',
-                      'Learn at your own pace'
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-[#1DD1A1] mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="text-left space-y-4 mb-6">
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-2">📊 Your Complete Strategic Roadmap</h4>
+                      <ul className="space-y-1 text-sm text-gray-300 ml-4">
+                        <li>• Full roadmap breakdown with detailed action items</li>
+                        <li>• HOME resources perfectly matched to your pathway</li>
+                        <li>• Top 10 companies you should have on your radar</li>
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-2">🎨 Bonus: Artists Branding Playbook</h4>
+                      <p className="text-sm text-gray-300 ml-4">8-part comprehensive guide to building your artistic identity</p>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-sm font-semibold text-white mb-2">🚀 Bonus: Successful Music Release Playbook</h4>
+                      <p className="text-sm text-gray-300 ml-4">6-part step-by-step release strategy that works</p>
+                    </div>
+                  </div>
                   
                   <LiquidButton
-                    onClick={() => window.open('https://homeformusic.app/community', '_blank')}
+                    onClick={() => setScreen('survey')}
                     className="w-full"
                   >
-                    Join Free Community
+                    Start Survey →
                   </LiquidButton>
+                  
+                  <p className="text-xs text-gray-400 mt-3">
+                    Complete a quick survey to unlock your roadmap and bonuses
+                  </p>
                 </div>
               </div>
               
@@ -3351,6 +3643,170 @@ const HOMECreatorFlow = () => {
         </div>
       )}
       
+      {/* Survey Screen */}
+      {screen === 'survey' && (
+        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
+          <div className="max-w-lg w-full">
+            <div className="animate-fadeIn">
+              {/* Back button */}
+              <button
+                onClick={() => setScreen('execute')}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Back</span>
+              </button>
+              
+              {/* Progress bar */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-400">
+                    Question {surveyQuestionIndex + 1} of {surveyQuestions.length}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    {Math.round(((surveyQuestionIndex + 1) / surveyQuestions.length) * 100)}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-800 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${((surveyQuestionIndex + 1) / surveyQuestions.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+              
+              {/* Question */}
+              {surveyQuestions[surveyQuestionIndex] && (
+                <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
+                  {/* Section indicator */}
+                  <div className="mb-4">
+                    <span className="text-xs font-medium text-[#1DD1A1] uppercase tracking-wide">
+                      {surveyQuestions[surveyQuestionIndex].section}
+                    </span>
+                  </div>
+                  
+                  {/* Question text */}
+                  <h2 className="text-lg font-bold text-white mb-6">
+                    {surveyQuestions[surveyQuestionIndex].question}
+                  </h2>
+                  
+                  {/* Options */}
+                  <div className="space-y-3 mb-6">
+                    {surveyQuestions[surveyQuestionIndex].options.map((option, index) => {
+                      const currentQuestion = surveyQuestions[surveyQuestionIndex];
+                      const isSelected = currentQuestion.type === 'multiple' 
+                        ? (surveyResponses[currentQuestion.id] || []).includes(option.value)
+                        : surveyResponses[currentQuestion.id] === option.value;
+                      
+                      const isMaxSelected = currentQuestion.type === 'multiple' && 
+                        currentQuestion.maxSelections &&
+                        (surveyResponses[currentQuestion.id] || []).length >= currentQuestion.maxSelections &&
+                        !isSelected;
+                      
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            const questionId = currentQuestion.id;
+                            if (currentQuestion.type === 'multiple') {
+                              const current = surveyResponses[questionId] || [];
+                              if (isSelected) {
+                                // Remove selection
+                                setSurveyResponses(prev => ({
+                                  ...prev,
+                                  [questionId]: current.filter(v => v !== option.value)
+                                }));
+                              } else if (!isMaxSelected) {
+                                // Add selection
+                                setSurveyResponses(prev => ({
+                                  ...prev,
+                                  [questionId]: [...current, option.value]
+                                }));
+                              }
+                            } else {
+                              // Single selection
+                              setSurveyResponses(prev => ({
+                                ...prev,
+                                [questionId]: option.value
+                              }));
+                            }
+                          }}
+                          disabled={isMaxSelected}
+                          className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
+                            isSelected
+                              ? 'bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 border-[#1DD1A1] text-white'
+                              : isMaxSelected
+                              ? 'bg-gray-800/50 border-gray-600 text-gray-500 cursor-not-allowed'
+                              : 'bg-black/50 border-white/20 text-gray-300 hover:bg-white/5 hover:border-white/40'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                              isSelected 
+                                ? 'border-[#1DD1A1] bg-[#1DD1A1]' 
+                                : 'border-gray-400'
+                            }`}>
+                              {isSelected && (
+                                <Check className="w-3 h-3 text-black" />
+                              )}
+                            </div>
+                            <span className="text-sm">{option.label}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Selection helper text */}
+                  {surveyQuestions[surveyQuestionIndex].maxSelections && (
+                    <p className="text-xs text-gray-400 mb-4">
+                      Select up to {surveyQuestions[surveyQuestionIndex].maxSelections} options
+                    </p>
+                  )}
+                  
+                  {/* Navigation buttons */}
+                  <div className="flex gap-3">
+                    {surveyQuestionIndex > 0 && (
+                      <button
+                        onClick={() => setSurveyQuestionIndex(prev => prev - 1)}
+                        className="flex-1 px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-colors"
+                      >
+                        Previous
+                      </button>
+                    )}
+                    
+                    <button
+                      onClick={() => {
+                        if (surveyQuestionIndex < surveyQuestions.length - 1) {
+                          setSurveyQuestionIndex(prev => prev + 1);
+                        } else {
+                          // Survey completed - generate PDF
+                          setSurveyCompleted(true);
+                          handlePDFGeneration();
+                        }
+                      }}
+                      disabled={!surveyResponses[surveyQuestions[surveyQuestionIndex].id]}
+                      className="flex-1 px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {surveyQuestionIndex < surveyQuestions.length - 1 ? 'Next' : 'Complete & Download'}
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {/* Survey completion status */}
+              {surveyCompleted && (
+                <div className="bg-green-900/20 border border-green-400/20 rounded-xl p-4 text-center">
+                  <h3 className="text-green-400 font-semibold mb-2">Survey Complete!</h3>
+                  <p className="text-green-300 text-sm">
+                    {isPDFGenerating ? 'Generating your roadmap...' : 'Your roadmap is ready for download!'}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Smart Brand Footer - Adapts to page content length */}
       <BrandFooter currentScreen={screen} />
