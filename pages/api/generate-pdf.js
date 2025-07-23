@@ -25,13 +25,6 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
-    console.log('📊 PDF Data Summary:', {
-      hasPathway: !!pathwayData.pathway,
-      pathwayTitle: pathwayData.pathway?.title || 'No Title',
-      nextStepsCount: pathwayData.pathway?.nextSteps?.length || 0,
-      resourcesCount: pathwayData.pathway?.resources?.length || 0,
-      companiesCount: pathwayData.pathway?.recommendedCompanies?.length || 0
-    });
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");
@@ -72,10 +65,6 @@ export default async function handler(req, res) {
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
     
-    // Create valid scores if missing
-    if (Object.keys(scores).length === 0) {
-      console.log('⚠️ No fuzzy scores found, using fallback');
-    }
     
     // Ensure we have valid scores data - create fallback if needed
     const validScores = scores && Object.keys(scores).length > 0 ? scores : {
@@ -333,7 +322,6 @@ export default async function handler(req, res) {
         ...step,
         actions: generateActionsForStep(step.step, index, pathwayData.pathway)
       }));
-      console.log('✅ Added actions to', pathwayData.pathway.nextSteps.length, 'steps');
     }
 
     // Generate description using same logic as app
@@ -370,7 +358,7 @@ export default async function handler(req, res) {
       currentDate: new Date().toLocaleDateString()
     };
 
-    console.log('📄 Template data prepared, compiling PDF...');
+    console.log('📄 Template data prepared, compiling...');
 
     // Final validation before template rendering
     if (!fuzzyScoresArray || fuzzyScoresArray.length === 0) {
@@ -392,16 +380,7 @@ export default async function handler(req, res) {
     const template = Handlebars.compile(templateContent);
     const renderedHtml = template(templateData);
 
-    console.log('📝 HTML rendered successfully, length:', renderedHtml.length);
-    
-    // Quick validation
-    const hasContent = renderedHtml.includes('Strategic Roadmap') && 
-                      renderedHtml.includes('HOME Resources') && 
-                      renderedHtml.length > 10000;
-    
-    if (!hasContent) {
-      console.warn('⚠️ HTML may be missing expected content');
-    }
+    console.log('📝 Template rendered successfully');
 
     console.log('🖥️ Launching browser...');
 
@@ -430,8 +409,6 @@ export default async function handler(req, res) {
     });
 
     const page = await browser.newPage();
-    
-    console.log('📋 Setting content...');
     
     await page.setContent(renderedHtml, { 
       waitUntil: "networkidle0",
@@ -487,8 +464,6 @@ export default async function handler(req, res) {
     // Additional wait for emoji rendering
     await new Promise(resolve => setTimeout(resolve, 3000));
 
-    console.log('📄 Generating PDF...');
-
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -505,22 +480,12 @@ export default async function handler(req, res) {
     await browser.close();
 
     console.log('✅ PDF generated successfully, buffer size:', pdfBuffer.length);
-    
-    // Verify PDF starts with PDF header - convert bytes to string properly
-    const pdfHeader = pdfBuffer.slice(0, 4).toString('ascii');
-    console.log('📋 PDF header as string:', pdfHeader);
-    console.log('📋 PDF header bytes:', Array.from(pdfBuffer.slice(0, 4)));
-    
-    // The PDF is valid - the bytes 37,80,68,70 = %PDF in ASCII
-    // Remove the validation that's incorrectly failing
 
     // Send PDF with proper headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="music-creator-roadmap-${sessionId}.pdf"`);
     res.setHeader('Content-Length', pdfBuffer.length);
     res.setHeader('Cache-Control', 'no-cache');
-    
-    console.log('📤 Sending PDF response with', pdfBuffer.length, 'bytes');
     
     // End the response with the buffer
     res.end(pdfBuffer);
