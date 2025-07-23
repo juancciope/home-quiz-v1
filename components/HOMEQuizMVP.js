@@ -243,7 +243,7 @@ const surveyQuestions = [
         min: 0,
         max: 100,
         step: 5,
-        defaultValue: 25
+        defaultValue: 0
       },
       {
         id: 'venue-database',
@@ -252,7 +252,7 @@ const surveyQuestions = [
         min: 0,
         max: 150,
         step: 10,
-        defaultValue: 40
+        defaultValue: 0
       },
       {
         id: 'automated-outreach',
@@ -261,7 +261,7 @@ const surveyQuestions = [
         min: 0,
         max: 400,
         step: 25,
-        defaultValue: 100
+        defaultValue: 0
       },
       {
         id: 'website-generator',
@@ -270,7 +270,7 @@ const surveyQuestions = [
         min: 0,
         max: 200,
         step: 10,
-        defaultValue: 50
+        defaultValue: 0
       },
       {
         id: 'full-marketing',
@@ -279,7 +279,7 @@ const surveyQuestions = [
         min: 0,
         max: 3000,
         step: 100,
-        defaultValue: 500
+        defaultValue: 0
       }
     ]
   },
