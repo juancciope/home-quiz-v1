@@ -2010,6 +2010,13 @@ const HOMECreatorFlow = () => {
     try {
       setIsPDFGenerating(true);
       console.log('🔄 Pre-generating PDF in background...');
+      console.log('🔍 PDF generation context:', {
+        hasExplicitPathway: !!explicitPathway,
+        hasScoreResult: !!scoreResult,
+        scoreResultLevels: scoreResult?.levels,
+        scoreResultRecommendation: scoreResult?.recommendation,
+        scoreResultDisplayPct: scoreResult?.displayPct
+      });
       
       const sessionId = Date.now().toString();
       const currentPathway = explicitPathway || aiGeneratedPathway || pathway;
@@ -2043,7 +2050,11 @@ const HOMECreatorFlow = () => {
         pathwayTitle: pdfData.pathway?.title,
         hasPathwayDetails: !!pdfData.pathwayDetails,
         pathwayDetailsKeys: Object.keys(pdfData.pathwayDetails || {}),
-        pathwayDetailsContent: pdfData.pathwayDetails
+        pathwayDetailsContent: pdfData.pathwayDetails,
+        scoreResultLevels: pdfData.scoreResult?.levels,
+        scoreResultRecommendation: pdfData.scoreResult?.recommendation,
+        scoreResultDisplayPct: pdfData.scoreResult?.displayPct,
+        scoreResultAbsPct: pdfData.scoreResult?.absPct
       });
       
       if (!pdfData.pathway) {

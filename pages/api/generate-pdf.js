@@ -30,6 +30,14 @@ export default async function handler(req, res) {
       pathwayDetailsKeys: Object.keys(pathwayData.pathwayDetails || {}),
       pathwayDetailsContent: pathwayData.pathwayDetails
     });
+    
+    console.log('🔍 PDF scoreResult received:', {
+      hasScoreResult: !!pathwayData.scoreResult,
+      scoreResultLevels: pathwayData.scoreResult?.levels,
+      scoreResultDisplayPct: pathwayData.scoreResult?.displayPct,
+      scoreResultAbsPct: pathwayData.scoreResult?.absPct,
+      scoreResultRecommendation: pathwayData.scoreResult?.recommendation
+    });
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");
@@ -70,6 +78,14 @@ export default async function handler(req, res) {
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
     
+    console.log('🔍 Creating fuzzyScoresArray with:', {
+      scoreDataExists: !!scoreData,
+      scoresKeys: Object.keys(scores),
+      levelsObject: levels,
+      absPctObject: absPct,
+      validScoresWillBe: scores && Object.keys(scores).length > 0 ? scores : 'fallback'
+    });
+    
     
     // Ensure we have valid scores data - create fallback if needed
     const validScores = scores && Object.keys(scores).length > 0 ? scores : {
@@ -89,6 +105,7 @@ export default async function handler(req, res) {
         
         // Use scoreResult levels exclusively
         const levelName = levels[key] || 'Noise';
+        console.log(`🔍 Level for ${key}: ${levelName} (from levels[${key}] = ${levels[key]})`);
         const archetypeLevel = { 
           level: levelName, 
           icon: levelName === 'Core Focus' ? '🏆' : levelName === 'Strategic Secondary' ? '⚡' : '', 
