@@ -1363,6 +1363,7 @@
       </div>
       
       <!-- PAGES 4-7: Detailed Action Steps (Do not change anything) -->
+      {{#if pathway.nextSteps}}
       {{#each pathway.nextSteps}}
       <div class="pdf-page detail-section" style="page-break-before: always;">
         <div class="page-content">
@@ -1389,12 +1390,27 @@
               <span class="action-icon">✅</span>
               Other Action Items
             </h3>
+            {{#if actions}}
             {{#each actions}}
             <div class="action-item">
               <span class="action-number">{{add @index 1}}</span>
               <span class="action-text">{{this}}</span>
             </div>
             {{/each}}
+            {{else}}
+            <div class="action-item">
+              <span class="action-number">1</span>
+              <span class="action-text">Review and refine your strategic roadmap</span>
+            </div>
+            <div class="action-item">
+              <span class="action-number">2</span>
+              <span class="action-text">Connect with the HOME community for support</span>
+            </div>
+            <div class="action-item">
+              <span class="action-number">3</span>
+              <span class="action-text">Start implementing your personalized action items</span>
+            </div>
+            {{/if}}
           </div>
           
           <div class="detail-box">
@@ -1403,13 +1419,20 @@
               HOME Resources
             </h3>
             {{!-- Always show exactly 3 resources per step using helper --}}
+            {{#if ../pathway.resources}}
             {{#each (getStepResources ../pathway.resources @index)}}
               <div class="resource-item">{{this}}</div>
             {{/each}}
+            {{else}}
+              <div class="resource-item">24/7 access to professional recording studios</div>
+              <div class="resource-item">Music business and industry education programs</div>
+              <div class="resource-item">Collaborative workspace and networking opportunities</div>
+            {{/if}}
           </div>
         </div>
       </div>
       {{/each}}
+      {{/if}}
       
       <!-- COMPANIES PAGE: Key Industry Players -->
       <!-- DEBUG: Companies exist: {{#if pathway.recommendedCompanies}}YES{{else}}NO{{/if}} -->

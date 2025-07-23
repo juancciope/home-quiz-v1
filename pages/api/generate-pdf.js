@@ -390,6 +390,14 @@ export default async function handler(req, res) {
       hasKey: !!primary?.key,
       archetypeLevel: primary?.archetypeLevel
     }, null, 2));
+    console.log('🔍 DEBUG - pathway.nextSteps:', JSON.stringify(pathwayData.pathway?.nextSteps?.map(step => ({
+      step: step.step,
+      detail: step.detail,
+      hasActions: !!step.actions,
+      actionsCount: step.actions?.length
+    })), null, 2));
+    console.log('🔍 DEBUG - pathway.resources:', pathwayData.pathway?.resources?.length || 0);
+    console.log('🔍 DEBUG - pathway.recommendedCompanies:', pathwayData.pathway?.recommendedCompanies?.length || 0);
 
     // Final validation before template rendering
     if (!fuzzyScoresArray || fuzzyScoresArray.length === 0) {

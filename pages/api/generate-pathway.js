@@ -491,8 +491,11 @@ function generateFallbackCompanies(pathway, scoreResult) {
     ]
   };
   
-  // Return 4 companies based on pathway
-  return companiesByPathway[pathway] || companiesByPathway['creative-artist'];
+  // Return all companies for the pathway (API will show all 4, but we can expand this list if needed)
+  const companies = companiesByPathway[pathway] || companiesByPathway['creative-artist'];
+  
+  // For now, return the 4 we have, but in the future we should expand each array to have 10 companies
+  return companies;
 }
 
 function generateFallbackPathwayDetails(primaryPathway, scoreResult) {

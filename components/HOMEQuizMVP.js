@@ -418,24 +418,6 @@ const surveyQuestions = [
       { value: 'home-community', label: 'HOME community recommendations' },
       { value: 'trial-downloads', label: 'Trial downloads and demos' }
     ]
-  },
-  {
-    id: 'purchase-incentives',
-    section: 'Industry Connections & Goals',
-    question: "What would make you most likely to purchase through a HOME partnership/affiliate program?",
-    type: 'single',
-    options: [
-      { value: 'discounts', label: 'Exclusive member discounts (10-20% off)' },
-      { value: 'bundles', label: 'Bundle deals with multiple products' },
-      { value: 'warranties', label: 'Extended warranties or return policies' },
-      { value: 'limited-edition', label: 'Access to limited edition or pre-release items' },
-      { value: 'staff-recommendations', label: 'Personal recommendations from HOME staff' },
-      { value: 'member-reviews', label: 'Reviews and demos from HOME members' },
-      { value: 'group-discounts', label: 'Group buying discounts' },
-      { value: 'extended-trials', label: 'FREE trial periods extended for HOME members' },
-      { value: 'financing', label: 'Financing/payment plan options' },
-      { value: 'support', label: 'Direct technical support from HOME' }
-    ]
   }
 ];
 
@@ -2100,16 +2082,17 @@ const HOMECreatorFlow = () => {
       if (!blob) {
         console.log('⚠️ No pre-generated PDF, generating now...');
         const sessionId = Date.now().toString();
+        const currentPathway = aiGeneratedPathway || pathway;
         const pdfData = {
-          pathway: aiGeneratedPathway || pathway,
-          responses,
-          scoreResult,
-          pathwayDetails: (aiGeneratedPathway || pathway)?.pathwayDetails,
-          fuzzyScores: scoreResult?.displayPct || fuzzyScores,
+          pathway: currentPathway,
+          responses: responses || {},
+          scoreResult: scoreResult || null,
+          pathwayDetails: currentPathway?.pathwayDetails || {},
+          fuzzyScores: scoreResult?.displayPct || fuzzyScores || {},
           pathwayBlend: scoreResult ? { 
-            type: scoreResult.blendType, 
-            primary: scoreResult.recommendation.path 
-          } : pathwayBlend
+            type: scoreResult.blendType || 'focused', 
+            primary: scoreResult.recommendation?.path || 'creative-artist'
+          } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
         };
         
         const response = await fetch('/api/generate-pdf', {
