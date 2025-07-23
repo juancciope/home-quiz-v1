@@ -1465,9 +1465,14 @@
                 <h3 style="font-size: 18px; font-weight: 600; color: #1DD1A1; margin-bottom: 8px;">
                   {{this.name}}
                 </h3>
-                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0;">
+                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">
                   {{this.description}}
                 </p>
+                {{#if this.url}}
+                <p style="color: #9ca3af; font-size: 12px; line-height: 1.4; margin: 0; font-style: italic;">
+                  🌐 {{this.url}}
+                </p>
+                {{/if}}
               </div>
             </div>
             {{/if}}
@@ -1513,9 +1518,14 @@
                 <h3 style="font-size: 18px; font-weight: 600; color: #1DD1A1; margin-bottom: 8px;">
                   {{this.name}}
                 </h3>
-                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0;">
+                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">
                   {{this.description}}
                 </p>
+                {{#if this.url}}
+                <p style="color: #9ca3af; font-size: 12px; line-height: 1.4; margin: 0; font-style: italic;">
+                  🌐 {{this.url}}
+                </p>
+                {{/if}}
               </div>
             </div>
             {{/if}}
