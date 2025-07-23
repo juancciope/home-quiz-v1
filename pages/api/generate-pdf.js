@@ -25,16 +25,6 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
-    console.log('🔍 Raw pathwayData received:', JSON.stringify({
-      hasPathway: !!pathwayData.pathway,
-      pathwayTitle: pathwayData.pathway?.title,
-      hasScoreResult: !!pathwayData.scoreResult,
-      hasFuzzyScores: !!pathwayData.fuzzyScores,
-      fuzzyScoresKeys: pathwayData.fuzzyScores ? Object.keys(pathwayData.fuzzyScores) : [],
-      scoreResultKeys: pathwayData.scoreResult ? Object.keys(pathwayData.scoreResult) : [],
-      scoreResultDisplayPct: pathwayData.scoreResult?.displayPct,
-      fuzzyScoresData: pathwayData.fuzzyScores
-    }, null, 2));
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");
@@ -75,15 +65,6 @@ export default async function handler(req, res) {
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
     
-    console.log('🔍 Score transformation debug:', {
-      hasScoreData: !!scoreData,
-      hasDisplayPct: !!scoreData.displayPct,
-      hasFuzzyScores: !!pathwayData.fuzzyScores,
-      scoresKeys: Object.keys(scores),
-      levelsKeys: Object.keys(levels),
-      absPctKeys: Object.keys(absPct),
-      scoresData: scores
-    });
     
     // Ensure we have valid scores data - create fallback if needed
     const validScores = scores && Object.keys(scores).length > 0 ? scores : {
@@ -378,18 +359,6 @@ export default async function handler(req, res) {
     };
 
     console.log('📄 Template data prepared, compiling...');
-    console.log('🔍 DEBUG - fuzzyScoresArray:', JSON.stringify(fuzzyScoresArray.map(item => ({
-      key: item.key,
-      name: item.name,
-      hasKey: !!item.key,
-      archetypeLevel: item.archetypeLevel
-    })), null, 2));
-    console.log('🔍 DEBUG - primary object:', JSON.stringify({
-      key: primary?.key,
-      name: primary?.name,
-      hasKey: !!primary?.key,
-      archetypeLevel: primary?.archetypeLevel
-    }, null, 2));
 
     // Final validation before template rendering
     if (!fuzzyScoresArray || fuzzyScoresArray.length === 0) {
@@ -411,12 +380,7 @@ export default async function handler(req, res) {
     const template = Handlebars.compile(templateContent);
     const renderedHtml = template(templateData);
 
-    console.log('📝 Rendered HTML length:', renderedHtml.length);
-    console.log('📝 HTML preview (first 500 chars):', renderedHtml.substring(0, 500));
-    console.log('📝 Template data keys:', Object.keys(templateData));
-    console.log('📝 Pathway data:', JSON.stringify(templateData.pathway?.title || 'NO_TITLE'));
-    console.log('🏢 Companies in PDF data:', JSON.stringify(templateData.pathway?.recommendedCompanies, null, 2));
-    console.log('📊 Step Resources in PDF data:', JSON.stringify(templateData.pathway?.stepResources, null, 2));
+    console.log('📝 Template rendered successfully');
 
     console.log('🖥️ Launching browser...');
 
@@ -445,8 +409,6 @@ export default async function handler(req, res) {
     });
 
     const page = await browser.newPage();
-    
-    console.log('📋 Setting content...');
     
     await page.setContent(renderedHtml, { 
       waitUntil: "networkidle0",
@@ -502,8 +464,6 @@ export default async function handler(req, res) {
     // Additional wait for emoji rendering
     await new Promise(resolve => setTimeout(resolve, 3000));
 
-    console.log('📄 Generating PDF...');
-
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -520,22 +480,12 @@ export default async function handler(req, res) {
     await browser.close();
 
     console.log('✅ PDF generated successfully, buffer size:', pdfBuffer.length);
-    
-    // Verify PDF starts with PDF header - convert bytes to string properly
-    const pdfHeader = pdfBuffer.slice(0, 4).toString('ascii');
-    console.log('📋 PDF header as string:', pdfHeader);
-    console.log('📋 PDF header bytes:', Array.from(pdfBuffer.slice(0, 4)));
-    
-    // The PDF is valid - the bytes 37,80,68,70 = %PDF in ASCII
-    // Remove the validation that's incorrectly failing
 
     // Send PDF with proper headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="music-creator-roadmap-${sessionId}.pdf"`);
     res.setHeader('Content-Length', pdfBuffer.length);
     res.setHeader('Cache-Control', 'no-cache');
-    
-    console.log('📤 Sending PDF response with', pdfBuffer.length, 'bytes');
     
     // End the response with the buffer
     res.end(pdfBuffer);

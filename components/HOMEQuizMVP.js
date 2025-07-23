@@ -1598,7 +1598,7 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF in background for instant download
             setTimeout(() => {
-              preGeneratePDF();
+              preGeneratePDF(aiPathway);
             }, 1000); // Small delay to ensure pathway is fully set
           } else {
             // Fallback to template if AI fails
@@ -1608,7 +1608,7 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF for fallback pathway too
             setTimeout(() => {
-              preGeneratePDF();
+              preGeneratePDF(pathwayTemplates[pathwayKey]);
             }, 1000);
           }
         } catch (error) {
@@ -1630,7 +1630,7 @@ const HOMECreatorFlow = () => {
           
           // Pre-generate PDF for error fallback too
           setTimeout(() => {
-            preGeneratePDF();
+            preGeneratePDF(pathwayTemplates[pathwayKey]);
           }, 1000);
         }
         
@@ -1676,7 +1676,7 @@ const HOMECreatorFlow = () => {
   };
 
   // Pre-generate PDF in background for instant download
-  const preGeneratePDF = async () => {
+  const preGeneratePDF = async (explicitPathway = null) => {
     if (isPDFGenerating || preGeneratedPDF) return; // Don't generate if already generating or done
     
     try {
@@ -1684,7 +1684,7 @@ const HOMECreatorFlow = () => {
       console.log('🔄 Pre-generating PDF in background...');
       
       const sessionId = Date.now().toString();
-      const currentPathway = aiGeneratedPathway || pathway;
+      const currentPathway = explicitPathway || aiGeneratedPathway || pathway;
       
       // Ensure we have valid data for PDF generation
       const pdfData = {
