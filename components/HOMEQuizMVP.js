@@ -1598,7 +1598,7 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF in background for instant download
             setTimeout(() => {
-              preGeneratePDF(aiPathway);
+              preGeneratePDF(aiPathway, result);
             }, 1000); // Small delay to ensure pathway is fully set
           } else {
             // Fallback to template if AI fails
@@ -1608,7 +1608,7 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF for fallback pathway too
             setTimeout(() => {
-              preGeneratePDF(pathwayTemplates[pathwayKey]);
+              preGeneratePDF(pathwayTemplates[pathwayKey], result);
             }, 1000);
           }
         } catch (error) {
@@ -1630,7 +1630,7 @@ const HOMECreatorFlow = () => {
           
           // Pre-generate PDF for error fallback too
           setTimeout(() => {
-            preGeneratePDF(pathwayTemplates[pathwayKey]);
+            preGeneratePDF(pathwayTemplates[pathwayKey], result);
           }, 1000);
         }
         
@@ -1676,7 +1676,7 @@ const HOMECreatorFlow = () => {
   };
 
   // Pre-generate PDF in background for instant download
-  const preGeneratePDF = async (explicitPathway = null) => {
+  const preGeneratePDF = async (explicitPathway = null, explicitScoreResult = null) => {
     if (isPDFGenerating || preGeneratedPDF) return; // Don't generate if already generating or done
     
     try {
@@ -1686,16 +1686,19 @@ const HOMECreatorFlow = () => {
       const sessionId = Date.now().toString();
       const currentPathway = explicitPathway || aiGeneratedPathway || pathway;
       
+      // Use explicit scoreResult if provided, otherwise use state
+      const currentScoreResult = explicitScoreResult || scoreResult;
+      
       // Ensure we have valid data for PDF generation
       const pdfData = {
         pathway: currentPathway,
         responses: responses || {},
-        scoreResult: scoreResult || null,
+        scoreResult: currentScoreResult || null,
         pathwayDetails: currentPathway?.pathwayDetails || {},
-        fuzzyScores: scoreResult?.displayPct || fuzzyScores || {},
-        pathwayBlend: scoreResult ? { 
-          type: scoreResult.blendType || 'focused', 
-          primary: scoreResult.recommendation?.path || 'creative-artist'
+        fuzzyScores: currentScoreResult?.displayPct || fuzzyScores || {},
+        pathwayBlend: currentScoreResult ? { 
+          type: currentScoreResult.blendType || 'focused', 
+          primary: currentScoreResult.recommendation?.path || 'creative-artist'
         } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
       };
       
@@ -1704,7 +1707,9 @@ const HOMECreatorFlow = () => {
         hasResponses: !!pdfData.responses,
         hasScoreResult: !!pdfData.scoreResult,
         hasFuzzyScores: !!pdfData.fuzzyScores && Object.keys(pdfData.fuzzyScores).length > 0,
-        pathwayTitle: pdfData.pathway?.title
+        hasPathwayDetails: !!pdfData.pathwayDetails && Object.keys(pdfData.pathwayDetails).length > 0,
+        pathwayTitle: pdfData.pathway?.title,
+        explicitDataProvided: !!explicitPathway && !!explicitScoreResult
       });
       
       const response = await fetch('/api/generate-pdf', {
