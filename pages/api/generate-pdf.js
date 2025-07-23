@@ -25,9 +25,14 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
-    console.log('🔍 Raw pathwayData received:', JSON.stringify({
+    console.log('🔍 CRITICAL DEBUG - Full pathwayData structure:', JSON.stringify({
       hasPathway: !!pathwayData.pathway,
       pathwayTitle: pathwayData.pathway?.title,
+      pathwayObject: pathwayData.pathway ? Object.keys(pathwayData.pathway) : 'NO PATHWAY',
+      nextStepsCount: pathwayData.pathway?.nextSteps?.length || 0,
+      firstNextStep: pathwayData.pathway?.nextSteps?.[0] || 'NO NEXT STEPS',
+      resourcesCount: pathwayData.pathway?.resources?.length || 0,
+      companiesCount: pathwayData.pathway?.recommendedCompanies?.length || 0,
       hasScoreResult: !!pathwayData.scoreResult,
       hasFuzzyScores: !!pathwayData.fuzzyScores,
       fuzzyScoresKeys: pathwayData.fuzzyScores ? Object.keys(pathwayData.fuzzyScores) : [],
@@ -35,6 +40,12 @@ export default async function handler(req, res) {
       scoreResultDisplayPct: pathwayData.scoreResult?.displayPct,
       fuzzyScoresData: pathwayData.fuzzyScores
     }, null, 2));
+    
+    // Log the actual pathway object
+    if (pathwayData.pathway) {
+      console.log('🔍 PATHWAY OBJECT KEYS:', Object.keys(pathwayData.pathway));
+      console.log('🔍 PATHWAY nextSteps:', JSON.stringify(pathwayData.pathway.nextSteps?.slice(0, 2), null, 2));
+    }
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");
@@ -337,10 +348,22 @@ export default async function handler(req, res) {
 
     // Add action items to pathway data for PDF display
     if (pathwayData.pathway && pathwayData.pathway.nextSteps) {
+      console.log('🔍 BEFORE adding actions - nextSteps:', JSON.stringify(pathwayData.pathway.nextSteps.map(s => ({step: s.step, detail: s.detail})), null, 2));
+      
       pathwayData.pathway.nextSteps = pathwayData.pathway.nextSteps.map((step, index) => ({
         ...step,
         actions: generateActionsForStep(step.step, index, pathwayData.pathway)
       }));
+      
+      console.log('🔍 AFTER adding actions - nextSteps:', JSON.stringify(pathwayData.pathway.nextSteps.map(s => ({
+        step: s.step, 
+        detail: s.detail, 
+        hasActions: !!s.actions, 
+        actionsCount: s.actions?.length,
+        firstAction: s.actions?.[0]
+      })), null, 2));
+    } else {
+      console.error('❌ CRITICAL: No pathway.nextSteps found!');
     }
 
     // Generate description using same logic as app
@@ -398,6 +421,11 @@ export default async function handler(req, res) {
     })), null, 2));
     console.log('🔍 DEBUG - pathway.resources:', pathwayData.pathway?.resources?.length || 0);
     console.log('🔍 DEBUG - pathway.recommendedCompanies:', pathwayData.pathway?.recommendedCompanies?.length || 0);
+    
+    // FINAL TEMPLATE DATA CHECK
+    console.log('🔍 FINAL templateData.pathway keys:', templateData.pathway ? Object.keys(templateData.pathway) : 'NO PATHWAY IN TEMPLATE DATA');
+    console.log('🔍 FINAL templateData.pathway.nextSteps count:', templateData.pathway?.nextSteps?.length || 0);
+    console.log('🔍 FINAL templateData.fuzzyScoresArray count:', templateData.fuzzyScoresArray?.length || 0);
 
     // Final validation before template rendering
     if (!fuzzyScoresArray || fuzzyScoresArray.length === 0) {
@@ -423,6 +451,21 @@ export default async function handler(req, res) {
     console.log('📝 HTML preview (first 500 chars):', renderedHtml.substring(0, 500));
     console.log('📝 Template data keys:', Object.keys(templateData));
     console.log('📝 Pathway data:', JSON.stringify(templateData.pathway?.title || 'NO_TITLE'));
+    
+    // CRITICAL: Check if HTML contains key sections
+    const hasNextStepsSection = renderedHtml.includes('Strategic Roadmap') || renderedHtml.includes('nextSteps');
+    const hasCompaniesSection = renderedHtml.includes('Key Industry Players') || renderedHtml.includes('recommendedCompanies');
+    const hasResourcesSection = renderedHtml.includes('HOME Resources') || renderedHtml.includes('resource-item');
+    
+    console.log('🔍 HTML CONTENT CHECK:');
+    console.log('  - Has NextSteps section:', hasNextStepsSection);
+    console.log('  - Has Companies section:', hasCompaniesSection);
+    console.log('  - Has Resources section:', hasResourcesSection);
+    
+    // Sample pathway.nextSteps iteration in HTML
+    const nextStepsMatches = renderedHtml.match(/Step \d+ Strategic Roadmap/g);
+    console.log('  - NextSteps found in HTML:', nextStepsMatches?.length || 0);
+    
     console.log('🏢 Companies in PDF data:', JSON.stringify(templateData.pathway?.recommendedCompanies, null, 2));
     console.log('📊 Step Resources in PDF data:', JSON.stringify(templateData.pathway?.stepResources, null, 2));
 

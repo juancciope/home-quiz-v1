@@ -2083,6 +2083,15 @@ const HOMECreatorFlow = () => {
         console.log('⚠️ No pre-generated PDF, generating now...');
         const sessionId = Date.now().toString();
         const currentPathway = aiGeneratedPathway || pathway;
+        
+        console.log('🚨 SURVEY PDF GENERATION DEBUG:');
+        console.log('📊 currentPathway:', currentPathway ? Object.keys(currentPathway) : 'NO PATHWAY');
+        console.log('📊 aiGeneratedPathway:', aiGeneratedPathway ? Object.keys(aiGeneratedPathway) : 'NO AI PATHWAY');
+        console.log('📊 pathway:', pathway ? Object.keys(pathway) : 'NO PATHWAY');
+        console.log('📊 currentPathway.nextSteps:', currentPathway?.nextSteps?.length || 0);
+        console.log('📊 currentPathway.resources:', currentPathway?.resources?.length || 0);
+        console.log('📊 currentPathway.recommendedCompanies:', currentPathway?.recommendedCompanies?.length || 0);
+        
         const pdfData = {
           pathway: currentPathway,
           responses: responses || {},
@@ -2094,6 +2103,14 @@ const HOMECreatorFlow = () => {
             primary: scoreResult.recommendation?.path || 'creative-artist'
           } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
         };
+        
+        console.log('🚨 FINAL pdfData being sent:', {
+          hasPathway: !!pdfData.pathway,
+          pathwayKeys: pdfData.pathway ? Object.keys(pdfData.pathway) : 'NO PATHWAY',
+          nextStepsCount: pdfData.pathway?.nextSteps?.length || 0,
+          resourcesCount: pdfData.pathway?.resources?.length || 0,
+          companiesCount: pdfData.pathway?.recommendedCompanies?.length || 0
+        });
         
         const response = await fetch('/api/generate-pdf', {
           method: 'POST',
