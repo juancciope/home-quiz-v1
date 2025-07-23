@@ -3728,7 +3728,7 @@ const HOMECreatorFlow = () => {
                               </div>
                               <div className="text-right">
                                 <span className="text-[#1DD1A1] font-bold text-lg">
-                                  {currentValue === 0 ? 'Free Only' : `$${currentValue}/mo`}
+                                  $${currentValue}/mo
                                 </span>
                               </div>
                             </div>
