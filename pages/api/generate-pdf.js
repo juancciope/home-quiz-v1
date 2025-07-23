@@ -336,12 +336,14 @@ export default async function handler(req, res) {
     const stage = pathwayData.responses?.['stage-level'] || 'planning';
     
     let dynamicDescription;
-    if (primary?.archetypeLevel === 'Core Focus' && secondary?.archetypeLevel === 'Strategic Secondary') {
+    if (primary?.archetypeLevel === 'Core Focus' && secondary?.archetypeLevel === 'Strategic Secondary' && primary?.key && secondary?.key) {
       dynamicDescription = `Your ${PATH_LABELS[primary.key]} strength should lead your strategy, with your ${PATH_LABELS[secondary.key]} skills as strategic support. This balance creates the fastest path to your vision.`;
-    } else if (primary?.archetypeLevel === 'Core Focus') {
+    } else if (primary?.archetypeLevel === 'Core Focus' && primary?.key) {
       dynamicDescription = `Your ${PATH_LABELS[primary.key]} strength is your clear advantage. This is where you naturally excel and should invest most of your energy for ${stage} stage success.`;
-    } else {
+    } else if (primary?.key) {
       dynamicDescription = `Your ${PATH_LABELS[primary.key]} path shows the strongest potential. Start here to build clarity and momentum in your music career.`;
+    } else {
+      dynamicDescription = `Your music creator path shows strong potential. Start here to build clarity and momentum in your music career.`;
     }
     
     const templateData = {
@@ -356,6 +358,33 @@ export default async function handler(req, res) {
     };
 
     console.log('📄 Template data prepared, compiling...');
+    console.log('🔍 DEBUG - fuzzyScoresArray:', JSON.stringify(fuzzyScoresArray.map(item => ({
+      key: item.key,
+      name: item.name,
+      hasKey: !!item.key,
+      archetypeLevel: item.archetypeLevel
+    })), null, 2));
+    console.log('🔍 DEBUG - primary object:', JSON.stringify({
+      key: primary?.key,
+      name: primary?.name,
+      hasKey: !!primary?.key,
+      archetypeLevel: primary?.archetypeLevel
+    }, null, 2));
+
+    // Final validation before template rendering
+    if (!fuzzyScoresArray || fuzzyScoresArray.length === 0) {
+      console.error('❌ CRITICAL: fuzzyScoresArray is empty or undefined before template rendering');
+      throw new Error('Invalid fuzzyScoresArray data for template rendering');
+    }
+    
+    // Validate that all objects in fuzzyScoresArray have required properties
+    const invalidObjects = fuzzyScoresArray.filter(item => !item.key || !item.name);
+    if (invalidObjects.length > 0) {
+      console.error('❌ CRITICAL: Found objects missing key or name properties:', invalidObjects);
+      throw new Error('Invalid fuzzyScoresArray objects missing required properties');
+    }
+    
+    console.log('✅ fuzzyScoresArray validation passed, rendering template...');
 
     // Read and compile template
     const templateContent = fs.readFileSync(templatePath, "utf-8");
