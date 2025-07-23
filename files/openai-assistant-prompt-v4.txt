@@ -87,7 +87,8 @@ Always respond with valid JSON in this exact format:
   "recommendedCompanies": [
     {
       "name": "Company Name",
-      "description": "1-2 sentence explanation of why this company is specifically relevant to their pathway and current stage"
+      "description": "1-2 sentence explanation of why this company is specifically relevant to their pathway and current stage",
+      "url": "https://www.companywebsite.com"
     }
   ],
   "pathwayDetails": {
@@ -314,6 +315,8 @@ Based on the user's primary pathway and stage level, select 4-6 companies from t
 - **Scale Stage**: Add major players and premium services (Live Nation, Universal Publishing, CAA, Primary Wave)
 
 Always explain WHY each company matters for their specific situation - don't just list them.
+
+**CRITICAL**: When selecting companies, you MUST include the exact URL for each company from the lists above. Each company in your recommendedCompanies array must have the "url" field populated with the correct website from the company lists.
 
 ## PATHWAY DETAILS GENERATION
 For each pathway in pathwayDetails, create personalized content based on their quiz responses:
