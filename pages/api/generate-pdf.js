@@ -25,6 +25,11 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
+    console.log('🔍 PDF pathwayDetails received:', {
+      hasPathwayDetails: !!pathwayData.pathwayDetails,
+      pathwayDetailsKeys: Object.keys(pathwayData.pathwayDetails || {}),
+      pathwayDetailsContent: pathwayData.pathwayDetails
+    });
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");

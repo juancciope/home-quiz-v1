@@ -2040,7 +2040,10 @@ const HOMECreatorFlow = () => {
         hasResponses: !!pdfData.responses,
         hasScoreResult: !!pdfData.scoreResult,
         hasFuzzyScores: !!pdfData.fuzzyScores && Object.keys(pdfData.fuzzyScores).length > 0,
-        pathwayTitle: pdfData.pathway?.title
+        pathwayTitle: pdfData.pathway?.title,
+        hasPathwayDetails: !!pdfData.pathwayDetails,
+        pathwayDetailsKeys: Object.keys(pdfData.pathwayDetails || {}),
+        pathwayDetailsContent: pdfData.pathwayDetails
       });
       
       if (!pdfData.pathway) {
@@ -3254,9 +3257,7 @@ const HOMECreatorFlow = () => {
                         let resultHeadline = pathway.title;
                         if (rec) {
                           const pathLabel = PATH_LABELS[rec.path] || rec.path;
-                          resultHeadline = rec.promoted
-                            ? `${pathLabel} - Recommended`
-                            : `${pathLabel} - Core`;
+                          resultHeadline = pathLabel;
                         }
                         return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
                       })()}
