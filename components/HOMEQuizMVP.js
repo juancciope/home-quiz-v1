@@ -1941,10 +1941,10 @@ const HOMECreatorFlow = () => {
             setPathway(transformedPathway);
             console.log('✅ AI pathway transformed:', transformedPathway);
             
-            // Pre-generate PDF in background for instant download
+            // Pre-generate PDF using the AI pathway directly (no waiting for state)
             setTimeout(() => {
-              preGeneratePDF();
-            }, 1000); // Small delay to ensure pathway is fully set
+              preGeneratePDF(aiPathway);
+            }, 500); // Pass the aiPathway directly
           } else {
             // Fallback to template if AI fails
             console.warn('❌ AI generation failed, using fallback');
@@ -1953,8 +1953,8 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF for fallback pathway too
             setTimeout(() => {
-              preGeneratePDF();
-            }, 1000);
+              preGeneratePDF(pathwayTemplates[pathwayKey]);
+            }, 500);
           }
         } catch (error) {
           console.error('❌ Error generating AI pathway:', error);
@@ -2021,7 +2021,7 @@ const HOMECreatorFlow = () => {
   };
 
   // Pre-generate PDF in background for instant download
-  const preGeneratePDF = async () => {
+  const preGeneratePDF = async (explicitPathway = null) => {
     if (isPDFGenerating || preGeneratedPDF) return; // Don't generate if already generating or done
     
     try {
@@ -2029,7 +2029,15 @@ const HOMECreatorFlow = () => {
       console.log('🔄 Pre-generating PDF in background...');
       
       const sessionId = Date.now().toString();
-      const currentPathway = aiGeneratedPathway || pathway;
+      const currentPathway = explicitPathway || aiGeneratedPathway || pathway;
+      
+      console.log('🔄 Pre-generate PDF using pathway:', {
+        hasExplicitPathway: !!explicitPathway,
+        hasAiGenerated: !!aiGeneratedPathway,
+        hasPathway: !!pathway,
+        finalPathway: !!currentPathway,
+        pathwayTitle: currentPathway?.title
+      });
       
       // Ensure we have valid data for PDF generation
       const pdfData = {
@@ -2051,6 +2059,11 @@ const HOMECreatorFlow = () => {
         hasFuzzyScores: !!pdfData.fuzzyScores && Object.keys(pdfData.fuzzyScores).length > 0,
         pathwayTitle: pdfData.pathway?.title
       });
+      
+      if (!pdfData.pathway) {
+        console.error('❌ Cannot pre-generate PDF: no pathway data available');
+        return;
+      }
       
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
@@ -2091,6 +2104,16 @@ const HOMECreatorFlow = () => {
         console.log('📊 currentPathway.nextSteps:', currentPathway?.nextSteps?.length || 0);
         console.log('📊 currentPathway.resources:', currentPathway?.resources?.length || 0);
         console.log('📊 currentPathway.recommendedCompanies:', currentPathway?.recommendedCompanies?.length || 0);
+        
+        // If no pathway data, we have a critical problem
+        if (!currentPathway) {
+          console.error('🚨 CRITICAL: No pathway data available for PDF generation!');
+          console.error('🚨 This means either aiGeneratedPathway or pathway should have been set but both are null');
+          console.error('🚨 Current screen:', screen);
+          console.error('🚨 Score result:', !!scoreResult);
+          alert('Error: No pathway data available. Please go back and complete the assessment.');
+          return;
+        }
         
         const pdfData = {
           pathway: currentPathway,
