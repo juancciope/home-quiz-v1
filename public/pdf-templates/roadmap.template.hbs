@@ -1450,26 +1450,26 @@
             Key Companies on Your Radar
           </h2>
           
-          <p style="text-align: center; color: #9ca3af; font-size: 14px; line-height: 1.6; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
-            Based on your {{pathway.title}} path and {{responses.stage-level}} stage, these are the industry players you should know about. Understanding who they are and what they do will help you navigate your music career strategically.
+          <p style="text-align: center; color: #9ca3af; font-size: 14px; line-height: 1.5; margin-bottom: 24px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Based on your {{pathway.title}} path and {{responses.stage-level}} stage, these are the industry players you should know about.
           </p>
           
-          <div style="display: grid; gap: 16px;">
+          <div style="display: grid; gap: 12px;">
             {{#each pathway.recommendedCompanies}}
             {{#if (lt @index 5)}}
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 16px; position: relative; overflow: hidden;">
               <!-- Subtle gradient background -->
-              <div style="position: absolute; top: 0; right: 0; width: 200px; height: 100%; background: linear-gradient(90deg, transparent, rgba(29, 209, 161, 0.05)); pointer-events: none;"></div>
+              <div style="position: absolute; top: 0; right: 0; width: 150px; height: 100%; background: linear-gradient(90deg, transparent, rgba(29, 209, 161, 0.05)); pointer-events: none;"></div>
               
               <div style="position: relative; z-index: 1;">
-                <h3 style="font-size: 18px; font-weight: 600; color: #1DD1A1; margin-bottom: 8px;">
+                <h3 style="font-size: 16px; font-weight: 600; color: #1DD1A1; margin-bottom: 6px;">
                   {{this.name}}
                 </h3>
-                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">
+                <p style="color: #e5e7eb; font-size: 13px; line-height: 1.5; margin: 0 0 6px 0;">
                   {{this.description}}
                 </p>
                 {{#if this.url}}
-                <p style="color: #9ca3af; font-size: 12px; line-height: 1.4; margin: 0; font-style: italic;">
+                <p style="color: #1DD1A1; font-size: 11px; line-height: 1.3; margin: 0; font-weight: 500;">
                   🌐 {{this.url}}
                 </p>
                 {{/if}}
@@ -1477,12 +1477,6 @@
             </div>
             {{/if}}
             {{/each}}
-          </div>
-          
-          <div style="margin-top: 32px; padding: 16px; background: rgba(29, 209, 161, 0.1); border: 1px solid rgba(29, 209, 161, 0.2); border-radius: 12px;">
-            <p style="color: #ffffff; font-size: 13px; line-height: 1.6; margin: 0; text-align: center;">
-              <strong>💡 Pro Tip:</strong> Start by researching 2-3 companies that match your current level. Follow their social media, understand their roster, and learn their submission processes. Knowledge is power in the music industry.
-            </p>
           </div>
         </div>
       </div>
@@ -1503,26 +1497,26 @@
             More Key Companies
           </h2>
           
-          <p style="text-align: center; color: #9ca3af; font-size: 14px; line-height: 1.6; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
-            Continue building your industry knowledge with these additional companies relevant to your music career path.
+          <p style="text-align: center; color: #9ca3af; font-size: 14px; line-height: 1.5; margin-bottom: 24px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Continue building your industry knowledge with these additional companies.
           </p>
           
-          <div style="display: grid; gap: 16px;">
+          <div style="display: grid; gap: 12px;">
             {{#each pathway.recommendedCompanies}}
             {{#if (gte @index 5)}}
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 16px; position: relative; overflow: hidden;">
               <!-- Subtle gradient background -->
-              <div style="position: absolute; top: 0; right: 0; width: 200px; height: 100%; background: linear-gradient(90deg, transparent, rgba(29, 209, 161, 0.05)); pointer-events: none;"></div>
+              <div style="position: absolute; top: 0; right: 0; width: 150px; height: 100%; background: linear-gradient(90deg, transparent, rgba(29, 209, 161, 0.05)); pointer-events: none;"></div>
               
               <div style="position: relative; z-index: 1;">
-                <h3 style="font-size: 18px; font-weight: 600; color: #1DD1A1; margin-bottom: 8px;">
+                <h3 style="font-size: 16px; font-weight: 600; color: #1DD1A1; margin-bottom: 6px;">
                   {{this.name}}
                 </h3>
-                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">
+                <p style="color: #e5e7eb; font-size: 13px; line-height: 1.5; margin: 0 0 6px 0;">
                   {{this.description}}
                 </p>
                 {{#if this.url}}
-                <p style="color: #9ca3af; font-size: 12px; line-height: 1.4; margin: 0; font-style: italic;">
+                <p style="color: #1DD1A1; font-size: 11px; line-height: 1.3; margin: 0; font-weight: 500;">
                   🌐 {{this.url}}
                 </p>
                 {{/if}}
@@ -1532,11 +1526,6 @@
             {{/each}}
           </div>
           
-          <div style="margin-top: 32px; padding: 16px; background: rgba(185, 19, 114, 0.1); border: 1px solid rgba(185, 19, 114, 0.2); border-radius: 12px;">
-            <p style="color: #ffffff; font-size: 13px; line-height: 1.6; margin: 0; text-align: center;">
-              <strong>🎯 Strategy:</strong> Focus on building relationships with 3-5 companies that align with your current stage and long-term goals. Quality connections beat quantity every time.
-            </p>
-          </div>
         </div>
       </div>
       {{/if}}
