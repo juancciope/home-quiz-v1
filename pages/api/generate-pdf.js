@@ -25,6 +25,16 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
+    console.log('🔍 Raw pathwayData received:', JSON.stringify({
+      hasPathway: !!pathwayData.pathway,
+      pathwayTitle: pathwayData.pathway?.title,
+      hasScoreResult: !!pathwayData.scoreResult,
+      hasFuzzyScores: !!pathwayData.fuzzyScores,
+      fuzzyScoresKeys: pathwayData.fuzzyScores ? Object.keys(pathwayData.fuzzyScores) : [],
+      scoreResultKeys: pathwayData.scoreResult ? Object.keys(pathwayData.scoreResult) : [],
+      scoreResultDisplayPct: pathwayData.scoreResult?.displayPct,
+      fuzzyScoresData: pathwayData.fuzzyScores
+    }, null, 2));
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");
@@ -64,6 +74,16 @@ export default async function handler(req, res) {
     const scores = scoreData.displayPct || pathwayData.fuzzyScores || {};
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
+    
+    console.log('🔍 Score transformation debug:', {
+      hasScoreData: !!scoreData,
+      hasDisplayPct: !!scoreData.displayPct,
+      hasFuzzyScores: !!pathwayData.fuzzyScores,
+      scoresKeys: Object.keys(scores),
+      levelsKeys: Object.keys(levels),
+      absPctKeys: Object.keys(absPct),
+      scoresData: scores
+    });
     
     // Ensure we have valid scores data - create fallback if needed
     const validScores = scores && Object.keys(scores).length > 0 ? scores : {
