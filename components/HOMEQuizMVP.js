@@ -2097,23 +2097,14 @@ const HOMECreatorFlow = () => {
         const sessionId = Date.now().toString();
         const currentPathway = aiGeneratedPathway || pathway;
         
-        console.log('🚨 SURVEY PDF GENERATION DEBUG:');
-        console.log('📊 currentPathway:', currentPathway ? Object.keys(currentPathway) : 'NO PATHWAY');
-        console.log('📊 aiGeneratedPathway:', aiGeneratedPathway ? Object.keys(aiGeneratedPathway) : 'NO AI PATHWAY');
-        console.log('📊 pathway:', pathway ? Object.keys(pathway) : 'NO PATHWAY');
-        console.log('📊 currentPathway.nextSteps:', currentPathway?.nextSteps?.length || 0);
-        console.log('📊 currentPathway.resources:', currentPathway?.resources?.length || 0);
-        console.log('📊 currentPathway.recommendedCompanies:', currentPathway?.recommendedCompanies?.length || 0);
-        
-        // If no pathway data, we have a critical problem
+        // Ensure we have pathway data
         if (!currentPathway) {
-          console.error('🚨 CRITICAL: No pathway data available for PDF generation!');
-          console.error('🚨 This means either aiGeneratedPathway or pathway should have been set but both are null');
-          console.error('🚨 Current screen:', screen);
-          console.error('🚨 Score result:', !!scoreResult);
-          alert('Error: No pathway data available. Please go back and complete the assessment.');
+          console.error('❌ No pathway data available for PDF generation');
+          alert('Error: Please complete the assessment first.');
           return;
         }
+        
+        console.log('📄 Generating PDF with pathway:', currentPathway?.title || 'Untitled');
         
         const pdfData = {
           pathway: currentPathway,
@@ -2127,13 +2118,7 @@ const HOMECreatorFlow = () => {
           } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
         };
         
-        console.log('🚨 FINAL pdfData being sent:', {
-          hasPathway: !!pdfData.pathway,
-          pathwayKeys: pdfData.pathway ? Object.keys(pdfData.pathway) : 'NO PATHWAY',
-          nextStepsCount: pdfData.pathway?.nextSteps?.length || 0,
-          resourcesCount: pdfData.pathway?.resources?.length || 0,
-          companiesCount: pdfData.pathway?.recommendedCompanies?.length || 0
-        });
+        console.log('📤 Sending PDF data to API...');
         
         const response = await fetch('/api/generate-pdf', {
           method: 'POST',

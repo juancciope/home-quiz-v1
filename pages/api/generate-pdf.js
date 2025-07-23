@@ -25,27 +25,13 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
-    console.log('🔍 CRITICAL DEBUG - Full pathwayData structure:', JSON.stringify({
+    console.log('📊 PDF Data Summary:', {
       hasPathway: !!pathwayData.pathway,
-      pathwayTitle: pathwayData.pathway?.title,
-      pathwayObject: pathwayData.pathway ? Object.keys(pathwayData.pathway) : 'NO PATHWAY',
+      pathwayTitle: pathwayData.pathway?.title || 'No Title',
       nextStepsCount: pathwayData.pathway?.nextSteps?.length || 0,
-      firstNextStep: pathwayData.pathway?.nextSteps?.[0] || 'NO NEXT STEPS',
       resourcesCount: pathwayData.pathway?.resources?.length || 0,
-      companiesCount: pathwayData.pathway?.recommendedCompanies?.length || 0,
-      hasScoreResult: !!pathwayData.scoreResult,
-      hasFuzzyScores: !!pathwayData.fuzzyScores,
-      fuzzyScoresKeys: pathwayData.fuzzyScores ? Object.keys(pathwayData.fuzzyScores) : [],
-      scoreResultKeys: pathwayData.scoreResult ? Object.keys(pathwayData.scoreResult) : [],
-      scoreResultDisplayPct: pathwayData.scoreResult?.displayPct,
-      fuzzyScoresData: pathwayData.fuzzyScores
-    }, null, 2));
-    
-    // Log the actual pathway object
-    if (pathwayData.pathway) {
-      console.log('🔍 PATHWAY OBJECT KEYS:', Object.keys(pathwayData.pathway));
-      console.log('🔍 PATHWAY nextSteps:', JSON.stringify(pathwayData.pathway.nextSteps?.slice(0, 2), null, 2));
-    }
+      companiesCount: pathwayData.pathway?.recommendedCompanies?.length || 0
+    });
 
     // Get template path
     const templatePath = path.join(process.cwd(), "public/pdf-templates/roadmap.template.hbs");
@@ -86,15 +72,10 @@ export default async function handler(req, res) {
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
     
-    console.log('🔍 Score transformation debug:', {
-      hasScoreData: !!scoreData,
-      hasDisplayPct: !!scoreData.displayPct,
-      hasFuzzyScores: !!pathwayData.fuzzyScores,
-      scoresKeys: Object.keys(scores),
-      levelsKeys: Object.keys(levels),
-      absPctKeys: Object.keys(absPct),
-      scoresData: scores
-    });
+    // Create valid scores if missing
+    if (Object.keys(scores).length === 0) {
+      console.log('⚠️ No fuzzy scores found, using fallback');
+    }
     
     // Ensure we have valid scores data - create fallback if needed
     const validScores = scores && Object.keys(scores).length > 0 ? scores : {
@@ -348,22 +329,11 @@ export default async function handler(req, res) {
 
     // Add action items to pathway data for PDF display
     if (pathwayData.pathway && pathwayData.pathway.nextSteps) {
-      console.log('🔍 BEFORE adding actions - nextSteps:', JSON.stringify(pathwayData.pathway.nextSteps.map(s => ({step: s.step, detail: s.detail})), null, 2));
-      
       pathwayData.pathway.nextSteps = pathwayData.pathway.nextSteps.map((step, index) => ({
         ...step,
         actions: generateActionsForStep(step.step, index, pathwayData.pathway)
       }));
-      
-      console.log('🔍 AFTER adding actions - nextSteps:', JSON.stringify(pathwayData.pathway.nextSteps.map(s => ({
-        step: s.step, 
-        detail: s.detail, 
-        hasActions: !!s.actions, 
-        actionsCount: s.actions?.length,
-        firstAction: s.actions?.[0]
-      })), null, 2));
-    } else {
-      console.error('❌ CRITICAL: No pathway.nextSteps found!');
+      console.log('✅ Added actions to', pathwayData.pathway.nextSteps.length, 'steps');
     }
 
     // Generate description using same logic as app
@@ -400,32 +370,7 @@ export default async function handler(req, res) {
       currentDate: new Date().toLocaleDateString()
     };
 
-    console.log('📄 Template data prepared, compiling...');
-    console.log('🔍 DEBUG - fuzzyScoresArray:', JSON.stringify(fuzzyScoresArray.map(item => ({
-      key: item.key,
-      name: item.name,
-      hasKey: !!item.key,
-      archetypeLevel: item.archetypeLevel
-    })), null, 2));
-    console.log('🔍 DEBUG - primary object:', JSON.stringify({
-      key: primary?.key,
-      name: primary?.name,
-      hasKey: !!primary?.key,
-      archetypeLevel: primary?.archetypeLevel
-    }, null, 2));
-    console.log('🔍 DEBUG - pathway.nextSteps:', JSON.stringify(pathwayData.pathway?.nextSteps?.map(step => ({
-      step: step.step,
-      detail: step.detail,
-      hasActions: !!step.actions,
-      actionsCount: step.actions?.length
-    })), null, 2));
-    console.log('🔍 DEBUG - pathway.resources:', pathwayData.pathway?.resources?.length || 0);
-    console.log('🔍 DEBUG - pathway.recommendedCompanies:', pathwayData.pathway?.recommendedCompanies?.length || 0);
-    
-    // FINAL TEMPLATE DATA CHECK
-    console.log('🔍 FINAL templateData.pathway keys:', templateData.pathway ? Object.keys(templateData.pathway) : 'NO PATHWAY IN TEMPLATE DATA');
-    console.log('🔍 FINAL templateData.pathway.nextSteps count:', templateData.pathway?.nextSteps?.length || 0);
-    console.log('🔍 FINAL templateData.fuzzyScoresArray count:', templateData.fuzzyScoresArray?.length || 0);
+    console.log('📄 Template data prepared, compiling PDF...');
 
     // Final validation before template rendering
     if (!fuzzyScoresArray || fuzzyScoresArray.length === 0) {
@@ -447,27 +392,16 @@ export default async function handler(req, res) {
     const template = Handlebars.compile(templateContent);
     const renderedHtml = template(templateData);
 
-    console.log('📝 Rendered HTML length:', renderedHtml.length);
-    console.log('📝 HTML preview (first 500 chars):', renderedHtml.substring(0, 500));
-    console.log('📝 Template data keys:', Object.keys(templateData));
-    console.log('📝 Pathway data:', JSON.stringify(templateData.pathway?.title || 'NO_TITLE'));
+    console.log('📝 HTML rendered successfully, length:', renderedHtml.length);
     
-    // CRITICAL: Check if HTML contains key sections
-    const hasNextStepsSection = renderedHtml.includes('Strategic Roadmap') || renderedHtml.includes('nextSteps');
-    const hasCompaniesSection = renderedHtml.includes('Key Industry Players') || renderedHtml.includes('recommendedCompanies');
-    const hasResourcesSection = renderedHtml.includes('HOME Resources') || renderedHtml.includes('resource-item');
+    // Quick validation
+    const hasContent = renderedHtml.includes('Strategic Roadmap') && 
+                      renderedHtml.includes('HOME Resources') && 
+                      renderedHtml.length > 10000;
     
-    console.log('🔍 HTML CONTENT CHECK:');
-    console.log('  - Has NextSteps section:', hasNextStepsSection);
-    console.log('  - Has Companies section:', hasCompaniesSection);
-    console.log('  - Has Resources section:', hasResourcesSection);
-    
-    // Sample pathway.nextSteps iteration in HTML
-    const nextStepsMatches = renderedHtml.match(/Step \d+ Strategic Roadmap/g);
-    console.log('  - NextSteps found in HTML:', nextStepsMatches?.length || 0);
-    
-    console.log('🏢 Companies in PDF data:', JSON.stringify(templateData.pathway?.recommendedCompanies, null, 2));
-    console.log('📊 Step Resources in PDF data:', JSON.stringify(templateData.pathway?.stepResources, null, 2));
+    if (!hasContent) {
+      console.warn('⚠️ HTML may be missing expected content');
+    }
 
     console.log('🖥️ Launching browser...');
 
