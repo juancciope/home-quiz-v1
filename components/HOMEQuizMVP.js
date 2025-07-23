@@ -1926,8 +1926,8 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF using the AI pathway directly (no waiting for state)
             setTimeout(() => {
-              preGeneratePDF(aiPathway);
-            }, 500); // Pass the aiPathway directly
+              preGeneratePDF(aiPathway, result);
+            }, 500); // Pass the aiPathway and scoreResult directly
           } else {
             // Fallback to template if AI fails
             console.warn('❌ AI generation failed, using fallback');
@@ -1936,7 +1936,7 @@ const HOMECreatorFlow = () => {
             
             // Pre-generate PDF for fallback pathway too
             setTimeout(() => {
-              preGeneratePDF(pathwayTemplates[pathwayKey]);
+              preGeneratePDF(pathwayTemplates[pathwayKey], result);
             }, 500);
           }
         } catch (error) {
@@ -1958,7 +1958,7 @@ const HOMECreatorFlow = () => {
           
           // Pre-generate PDF for error fallback too
           setTimeout(() => {
-            preGeneratePDF();
+            preGeneratePDF(pathwayTemplates[pathwayKey], result);
           }, 1000);
         }
         
@@ -2004,18 +2004,22 @@ const HOMECreatorFlow = () => {
   };
 
   // Pre-generate PDF in background for instant download
-  const preGeneratePDF = async (explicitPathway = null) => {
+  const preGeneratePDF = async (explicitPathway = null, explicitScoreResult = null) => {
     if (isPDFGenerating || preGeneratedPDF) return; // Don't generate if already generating or done
     
     try {
       setIsPDFGenerating(true);
       console.log('🔄 Pre-generating PDF in background...');
+      
+      const currentScoreResult = explicitScoreResult || scoreResult;
       console.log('🔍 PDF generation context:', {
         hasExplicitPathway: !!explicitPathway,
+        hasExplicitScoreResult: !!explicitScoreResult,
         hasScoreResult: !!scoreResult,
-        scoreResultLevels: scoreResult?.levels,
-        scoreResultRecommendation: scoreResult?.recommendation,
-        scoreResultDisplayPct: scoreResult?.displayPct
+        currentScoreResultExists: !!currentScoreResult,
+        scoreResultLevels: currentScoreResult?.levels,
+        scoreResultRecommendation: currentScoreResult?.recommendation,
+        scoreResultDisplayPct: currentScoreResult?.displayPct
       });
       
       const sessionId = Date.now().toString();
@@ -2033,12 +2037,12 @@ const HOMECreatorFlow = () => {
       const pdfData = {
         pathway: currentPathway,
         responses: responses || {},
-        scoreResult: scoreResult || null,
+        scoreResult: currentScoreResult || null,
         pathwayDetails: currentPathway?.pathwayDetails || {},
-        fuzzyScores: scoreResult?.displayPct || fuzzyScores || {},
-        pathwayBlend: scoreResult ? { 
-          type: scoreResult.blendType || 'focused', 
-          primary: scoreResult.recommendation?.path || 'creative-artist'
+        fuzzyScores: currentScoreResult?.displayPct || fuzzyScores || {},
+        pathwayBlend: currentScoreResult ? { 
+          type: currentScoreResult.blendType || 'focused', 
+          primary: currentScoreResult.recommendation?.path || 'creative-artist'
         } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
       };
       
@@ -2054,7 +2058,8 @@ const HOMECreatorFlow = () => {
         scoreResultLevels: pdfData.scoreResult?.levels,
         scoreResultRecommendation: pdfData.scoreResult?.recommendation,
         scoreResultDisplayPct: pdfData.scoreResult?.displayPct,
-        scoreResultAbsPct: pdfData.scoreResult?.absPct
+        scoreResultAbsPct: pdfData.scoreResult?.absPct,
+        actualScoreResultObject: pdfData.scoreResult
       });
       
       if (!pdfData.pathway) {
