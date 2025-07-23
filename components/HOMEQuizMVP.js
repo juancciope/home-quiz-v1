@@ -229,75 +229,58 @@ const surveyQuestions = [
     ]
   },
 
-  // Pricing questions (Q9-Q14)
+  // Consolidated Pricing Question
   {
-    id: 'content-calendar-pricing',
+    id: 'service-pricing',
     section: 'Tools & Software Usage',
-    question: "How much would you pay for a content calendar & viral ideas generator?",
-    type: 'single',
-    options: [
-      { value: 'free-only', label: '$0 (would only use if free)' },
-      { value: '15-25', label: '$15-25/month' },
-      { value: '25-40', label: '$25-40/month' },
-      { value: '40-60', label: '$40-60/month' },
-      { value: '60-plus', label: '$60+/month' },
-      { value: 'one-time', label: '$100-200 one-time purchase' }
-    ]
-  },
-  {
-    id: 'venue-database-pricing',
-    section: 'Tools & Software Usage',
-    question: "How much would you pay for a venue database with contact information?",
-    type: 'single',
-    options: [
-      { value: 'free-only', label: '$0 (would only use if free)' },
-      { value: '20-35', label: '$20-35/month' },
-      { value: '35-50', label: '$35-50/month' },
-      { value: '50-75', label: '$50-75/month' },
-      { value: '75-plus', label: '$75+/month' },
-      { value: 'one-time', label: '$150-300 one-time purchase' }
-    ]
-  },
-  {
-    id: 'automated-outreach-pricing',
-    section: 'Tools & Software Usage',
-    question: "How much would you pay monthly for automated venue outreach (we send booking emails for you)?",
-    type: 'single',
-    options: [
-      { value: 'free-only', label: '$0 (would only use if free)' },
-      { value: '50-75', label: '$50-75/month' },
-      { value: '75-100', label: '$75-100/month' },
-      { value: '100-150', label: '$100-150/month' },
-      { value: '150-250', label: '$150-250/month' },
-      { value: '250-plus', label: '$250+/month' }
-    ]
-  },
-  {
-    id: 'website-generator-pricing',
-    section: 'Tools & Software Usage',
-    question: "How much would you pay for a custom website/EPK generator?",
-    type: 'single',
-    options: [
-      { value: 'free-only', label: '$0 (would only use if free)' },
-      { value: '25-40', label: '$25-40/month' },
-      { value: '40-60', label: '$40-60/month' },
-      { value: '60-100', label: '$60-100/month' },
-      { value: '100-plus', label: '$100+/month' },
-      { value: 'one-time', label: '$200-500 one-time purchase' }
-    ]
-  },
-  {
-    id: 'full-marketing-pricing',
-    section: 'Tools & Software Usage',
-    question: "How much would you pay for full-service music marketing (done-for-you campaigns)?",
-    type: 'single',
-    options: [
-      { value: 'free-only', label: '$0 (would only use if free)' },
-      { value: '200-400', label: '$200-400/month' },
-      { value: '400-600', label: '$400-600/month' },
-      { value: '600-1000', label: '$600-1,000/month' },
-      { value: '1000-2000', label: '$1,000-2,000/month' },
-      { value: '2000-plus', label: '$2,000+/month' }
+    question: "What would you pay monthly for these services? Use the sliders to set your price for each.",
+    type: 'pricing-sliders',
+    services: [
+      {
+        id: 'content-calendar',
+        name: 'Content Calendar & Viral Ideas Generator',
+        description: 'AI-trained on trending music creator content',
+        min: 0,
+        max: 100,
+        step: 5,
+        defaultValue: 25
+      },
+      {
+        id: 'venue-database',
+        name: 'Venue Database with Contact Info',
+        description: 'For your level/genre with booking details',
+        min: 0,
+        max: 150,
+        step: 10,
+        defaultValue: 40
+      },
+      {
+        id: 'automated-outreach',
+        name: 'Automated Venue Outreach Service',
+        description: 'We handle booking emails for you',
+        min: 0,
+        max: 400,
+        step: 25,
+        defaultValue: 100
+      },
+      {
+        id: 'website-generator',
+        name: 'Custom Website/EPK Generator',
+        description: 'Build from chat conversation',
+        min: 0,
+        max: 200,
+        step: 10,
+        defaultValue: 50
+      },
+      {
+        id: 'full-marketing',
+        name: 'Full-Service Music Marketing',
+        description: 'Done-for-you campaigns',
+        min: 0,
+        max: 3000,
+        step: 100,
+        defaultValue: 500
+      }
     ]
   },
   {
@@ -3698,9 +3681,76 @@ const HOMECreatorFlow = () => {
                     {surveyQuestions[surveyQuestionIndex].question}
                   </h2>
                   
-                  {/* Options */}
-                  <div className="space-y-3 mb-6">
-                    {surveyQuestions[surveyQuestionIndex].options.map((option, index) => {
+                  {/* Pricing Sliders */}
+                  {surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' ? (
+                    <div className="space-y-6 mb-6">
+                      {(() => {
+                        // Initialize default values if not already set
+                        if (!surveyResponses[surveyQuestions[surveyQuestionIndex].id]) {
+                          const defaultValues = {};
+                          surveyQuestions[surveyQuestionIndex].services.forEach(s => {
+                            defaultValues[s.id] = s.defaultValue;
+                          });
+                          setSurveyResponses(prev => ({
+                            ...prev,
+                            [surveyQuestions[surveyQuestionIndex].id]: defaultValues
+                          }));
+                        }
+                        return null;
+                      })()}
+                      
+                      {surveyQuestions[surveyQuestionIndex].services.map((service, index) => {
+                        const currentValue = surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.[service.id] || service.defaultValue;
+                        
+                        return (
+                          <div key={index} className="bg-black/30 border border-white/10 rounded-xl p-5">
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <h3 className="text-white font-semibold text-sm">{service.name}</h3>
+                                <p className="text-gray-400 text-xs mt-1">{service.description}</p>
+                              </div>
+                              <div className="text-right">
+                                <span className="text-[#1DD1A1] font-bold text-lg">
+                                  {currentValue === 0 ? 'Free Only' : `$${currentValue}/mo`}
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <div className="mt-4">
+                              <input
+                                type="range"
+                                min={service.min}
+                                max={service.max}
+                                step={service.step}
+                                value={currentValue}
+                                onChange={(e) => {
+                                  const newValue = parseInt(e.target.value);
+                                  setSurveyResponses(prev => ({
+                                    ...prev,
+                                    [surveyQuestions[surveyQuestionIndex].id]: {
+                                      ...prev[surveyQuestions[surveyQuestionIndex].id],
+                                      [service.id]: newValue
+                                    }
+                                  }));
+                                }}
+                                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                                style={{
+                                  background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${(currentValue / service.max) * 100}%, #374151 ${(currentValue / service.max) * 100}%, #374151 100%)`
+                                }}
+                              />
+                              <div className="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>$0</span>
+                                <span>${service.max}+</span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    /* Regular Options */
+                    <div className="space-y-3 mb-6">
+                      {surveyQuestions[surveyQuestionIndex].options.map((option, index) => {
                       const currentQuestion = surveyQuestions[surveyQuestionIndex];
                       const isSelected = currentQuestion.type === 'multiple' 
                         ? (surveyResponses[currentQuestion.id] || []).includes(option.value)
@@ -3763,10 +3813,11 @@ const HOMECreatorFlow = () => {
                         </button>
                       );
                     })}
-                  </div>
+                    </div>
+                  )}
                   
                   {/* Selection helper text */}
-                  {surveyQuestions[surveyQuestionIndex].maxSelections && (
+                  {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && (
                     <p className="text-xs text-gray-400 mb-4">
                       Select up to {surveyQuestions[surveyQuestionIndex].maxSelections} options
                     </p>
@@ -3793,7 +3844,11 @@ const HOMECreatorFlow = () => {
                           handlePDFGeneration();
                         }
                       }}
-                      disabled={!surveyResponses[surveyQuestions[surveyQuestionIndex].id]}
+                      disabled={
+                        surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' 
+                          ? false // Pricing sliders always have default values
+                          : !surveyResponses[surveyQuestions[surveyQuestionIndex].id]
+                      }
                       className="flex-1 px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {surveyQuestionIndex < surveyQuestions.length - 1 ? 'Next' : 'Complete & Download'}
@@ -3823,3 +3878,34 @@ const HOMECreatorFlow = () => {
 };
 
 export default HOMECreatorFlow;
+
+// Add custom CSS for sliders
+const sliderStyles = `
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #1DD1A1;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+  }
+
+  .slider::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #1DD1A1;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffffff;
+  }
+`;
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement("style");
+  styleSheet.innerText = sliderStyles;
+  document.head.appendChild(styleSheet);
+}
