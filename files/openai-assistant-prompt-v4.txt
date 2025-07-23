@@ -183,70 +183,130 @@ Always respond with valid JSON in this exact format:
 Based on the user's primary pathway and stage level, select 4-6 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.
 
 ### TOURING PERFORMER COMPANIES:
-1. Live Nation Entertainment - World's largest concert promoter and ticketing company
-2. AEG Presents - Second-biggest concert promoter globally with major venues and festivals
-3. Ticketmaster - Dominant ticketing platform controlling 80% of major venue sales
-4. Creative Artists Agency (CAA) - Premier talent agency booking top worldwide tours
-5. WME (William Morris Endeavor) - Leading booking agency with 40,000+ annual bookings
-6. UTA (United Talent Agency) - Top global talent agency with strong music department
-7. Wasserman Music - Major agency formed from Paradigm, focuses on artist development
-8. Independent Artist Group (IAG) - Newer agency from APA/AGI merger, accessible to developing acts
-9. High Road Touring - Respected independent booking agency with boutique approach
-10. Another Planet Entertainment - Top independent US promoter, especially West Coast
-11. Red Light Management - World's largest artist management company (200+ artists)
-12. Full Stop Management - Irving Azoff's high-profile management firm (Harry Styles, Eagles)
-13. Maverick Management - Live Nation-backed collective of star managers
-14. Bandsintown - Concert discovery platform used by 560,000+ artists
-15. Pollstar - Trade publication tracking tour grosses and industry data
-16. Songkick - Concert listing service integrated with Spotify and Warner Music
-17. C3 Presents - Festival promoter (Lollapalooza, ACL) now part of Live Nation
-18. Outback Presents - Leading independent promoter specializing in country/Americana
-19. ASM Global - World's largest venue management company (300+ venues)
-20. GigSalad/Patreon Events - Tools for booking private gigs and indie touring
+1. Live Nation Entertainment - World's largest concert promoter controlling ~60% of major US venue promotions. Owns Ticketmaster and produces 40,000+ shows annually.
+   URL: https://www.livenationentertainment.com
+2. AEG Presents - Second-largest global concert promoter. Owns major venues like Staples Center, produces festivals including Coachella.
+   URL: https://www.aegpresents.com
+3. Ticketmaster - Dominant ticketing platform serving 500M+ fans annually, controls ~80% of major venue ticket sales in US.
+   URL: https://www.ticketmaster.com
+4. Creative Artists Agency (CAA) - Premier talent agency representing A-list touring artists. Booked 4 of top 10 highest-grossing 2023 tours.
+   URL: https://www.caa.com
+5. WME (William Morris Endeavor) - Leading global booking agency. Books 40,000+ concert dates annually across all genres.
+   URL: https://www.wmeagency.com
+6. UTA (United Talent Agency) - Top global talent agency with expanding music division offering full-service representation.
+   URL: https://www.unitedtalent.com
+7. Wasserman Music - Major music agency formed after acquiring Paradigm's music business. Emphasizes artist development.
+   URL: https://www.teamwass.com
+8. Independent Artist Group (IAG) - Newer agency launched 2023 from APA/Artist Group International merger. More accessible to developing acts.
+   URL: https://www.independentartistgroup.com
+9. High Road Touring - Respected independent booking agency founded 2001. Known for boutique approach and sustainable career development.
+   URL: https://www.highroadtouring.com
+10. Another Planet Entertainment (APE) - Billboard's #1 independent promoter multiple years. Co-produces Outside Lands festival.
+    URL: https://www.apeconcerts.com
+11. Red Light Management - Largest artist management company globally managing 200+ touring artists. 23 Grammy nominees recently.
+    URL: https://www.redlightmanagement.com
+12. Full Stop Management - High-profile firm led by Irving Azoff. Manages Harry Styles, Eagles, Lizzo.
+    URL: https://www.fullstopmanagement.com
+13. Maverick Management - Collective of star managers with Live Nation partnership. Includes managers of U2, Madonna, The Weeknd.
+    URL: https://www.maverickmanagement.com
+14. Bandsintown - Leading concert discovery platform used by 560,000+ artists including 90% of top 4,000 US artists.
+    URL: https://www.bandsintown.com
+15. Pollstar - Essential trade publication for concert industry (40+ years). Provides tour data and venue analytics.
+    URL: https://www.pollstar.com
+16. Songkick - Major concert listing service (part of Warner Music Group). Powers concert discovery in Spotify.
+    URL: https://www.songkick.com
+17. C3 Presents - Prominent festival producer (Live Nation division). Creates Lollapalooza and Austin City Limits Festival.
+    URL: https://www.c3presents.com
+18. Outback Presents - Leading Nashville-based independent promoter specializing in country and American roots tours.
+    URL: https://www.outbackpresents.com
+19. ASM Global - World's largest venue management company operating 300+ venues including arenas and stadiums.
+    URL: https://www.asmglobal.com
+20. GigSalad - Platform connecting artists with event organizers for private gigs, corporate events, and weddings.
+    URL: https://www.gigsalad.com
 
 ### CREATIVE ARTIST COMPANIES:
-1. Spotify - World's most popular streaming service with 675M monthly users
-2. YouTube - Largest music/video platform with 2B+ monthly music consumers
-3. TikTok - Short-form video app where 84% of Billboard hits start viral
-4. Instagram (Meta) - Essential platform for artist branding and fan engagement
-5. DistroKid - Leading indie distributor handling 30-40% of new releases
-6. TuneCore - Pioneer DIY distributor, paid out $3B+ to artists
-7. CD Baby - Original indie distributor with one-time fee model
-8. UnitedMasters - "Record label in your pocket" with Apple backing
-9. AWAL - Selective distributor offering label services while artists retain ownership
-10. Empire - Independent label/distributor breaking artists like Kendrick, Cardi B
-11. Bandcamp - Direct-to-fan platform, paid $1.3B+ to artists
-12. Patreon - Membership platform enabling recurring fan support
-13. SoundCloud - Platform for indie music with 175M users
-14. Thirty Tigers - Nashville distributor with artist-friendly 75/25 split
-15. Chartmetric - Analytics platform tracking cross-platform performance
-16. Meta Ads - Facebook/Instagram advertising for targeted fan growth
-17. TikTok SoundOn - TikTok's own distribution platform with promotional advantages
-18. Music Marketing Agencies - Specialized promotion services (list examples)
-19. E-commerce/Merch Platforms - Shopify, Bandzoogle for direct sales
-20. Major Record Labels - Universal, Sony, Warner (for upstream deals)
+1. Spotify - World's most popular audio streaming service. 675M monthly users, 263M paid subscribers. Central to modern music consumption.
+   URL: https://www.spotify.com
+2. YouTube - Largest global platform for music and video. 2B+ logged-in monthly music consumers. Functions as streaming and content platform.
+   URL: https://www.youtube.com
+3. TikTok - Short-form video app dominating music discovery. 84% of Billboard Global 200 entries had TikTok viral moments first.
+   URL: https://www.tiktok.com
+4. Instagram (Meta) - Primary social platform for artist branding. 2B monthly active users globally. Essential for image cultivation and fan engagement.
+   URL: https://www.instagram.com
+5. DistroKid - Leading indie distribution service distributing 30-40% of all new music releases worldwide. Flat annual fee, artists keep 100% royalties.
+   URL: https://www.distrokid.com
+6. TuneCore - Pioneer of flat-fee distribution model. Has paid artists over $3B in royalties. Now under Believe Digital.
+   URL: https://www.tunecore.com
+7. CD Baby - Original indie distributor since late '90s. One-time fee model, paid $126M to artists in 2020. Offers physical distribution.
+   URL: https://www.cdbaby.com
+8. UnitedMasters - "Record label in your pocket" founded by Steve Stoute. Apple invested $50M, helps indies land brand deals.
+   URL: https://www.unitedmasters.com
+9. AWAL - Selective distribution with marketing support. Sony acquired for $430M. Offers funding while artists retain ownership.
+   URL: https://www.awal.com
+10. Empire - San Francisco-based independent label/distribution. Launched careers of Kendrick Lamar, Cardi B. Often 50/50 profit splits.
+    URL: https://www.empi.re
+11. Bandcamp - Premier direct-to-fan sales platform. Fans have paid artists $1.3B+. Takes only 10-15% fee.
+    URL: https://www.bandcamp.com
+12. Patreon - Leading creator membership platform. Has paid out $8B+ to creators since inception. Top music creators earn tens of thousands monthly.
+    URL: https://www.patreon.com
+13. SoundCloud - Pioneer platform with 175M global users. Launching pad for SoundCloud rap and electronic genres.
+    URL: https://www.soundcloud.com
+14. Thirty Tigers - Nashville-based distribution/marketing company. Artists keep 75% revenues, retain master ownership.
+    URL: https://www.thirtytigers.com
+15. Chartmetric - Industry-standard analytics platform tracking performance across Spotify, TikTok, YouTube, Instagram, radio.
+    URL: https://www.chartmetric.com
+16. Meta Ads - Facebook/Instagram advertising platform enabling precise targeting for artists to reach fans of similar artists.
+    URL: https://www.facebook.com/business/ads
+17. TikTok SoundOn - TikTok's music distribution platform launched 2022. Distributes to TikTok and other DSPs with promotional support.
+    URL: https://www.soundon.global
+18. Shopify - Powers online stores for major and indie artists. Robust platform for selling merch and music direct-to-fan.
+    URL: https://www.shopify.com
+19. Bandzoogle - Website builder specifically for musicians. Includes built-in store, mailing list, streaming integration.
+    URL: https://www.bandzoogle.com
+20. Universal Music Group - Largest music company globally. Includes Interscope, Republic, Def Jam, Capitol, Motown.
+    URL: https://www.universalmusic.com
 
 ### WRITER-PRODUCER COMPANIES:
-1. Universal Music Publishing (UMPG) - World's largest publisher by revenue
-2. Sony Music Publishing - Major publisher with vast catalog and connections
-3. Warner Chappell Music - Third major publisher with strong sync team
-4. Kobalt Music Publishing - Tech-forward indie with transparent royalties
-5. BMG - Modern publisher/label with flexible, artist-friendly deals
-6. Concord Music Publishing - Diverse catalog spanning Broadway to pop
-7. Reservoir Media - Fast-growing indie with creative focus
-8. Primary Wave - Invests in iconic catalogs and developing writers
-9. Downtown/Songtrust - Publishing admin platform for 350,000+ songwriters
-10. ASCAP - Non-profit PRO with 1M+ members, free to join
-11. BMI - Largest PRO by membership (1.3M songwriters)
-12. SESAC - Invitation-only PRO with boutique service
-13. Global Music Rights (GMR) - Azoff's exclusive PRO for superstars
-14. Musicbed - Curated sync platform for filmmakers and content creators
-15. Songtradr - Global licensing marketplace with AI matching
-16. TAXI Music - A&R service connecting writers to opportunities
-17. The MLC - Collects streaming mechanicals since 2021
-18. Music Supervisors & Sync Agencies - Key gatekeepers for placements
-19. Recording Studios & Gear Companies - Infrastructure partnerships
-20. Entertainment Law Firms & Management - Manatt, Greenberg Traurig, etc.
+1. Universal Music Publishing Group (UMPG) - World's largest music publisher by revenue. Handles Beatles to today's hits with global offices.
+   URL: https://www.umusicpub.com
+2. Sony Music Publishing - Often largest by market share. Absorbed EMI catalog. Represents Motown classics to Ed Sheeran, Olivia Rodrigo.
+   URL: https://www.sonymusicpub.com
+3. Warner Chappell Music - Publishing arm of WMG with deep legacy catalog plus modern hits. Strong Nashville presence for writers.
+   URL: https://www.warnerchappell.com
+4. Kobalt Music Publishing - Disruptive tech-forward publisher with no legacy catalog but better splits, real-time data. Often 10-15% admin deals.
+   URL: https://www.kobaltmusic.com
+5. BMG - Modern company combining publishing and recording established 2008. Artist-focused approach with flexible deals.
+   URL: https://www.bmg.com
+6. Concord Music Publishing - Diversified catalog from Broadway to contemporary. Owns Fantasy, Fearless labels. Strong in theatrical rights.
+   URL: https://www.concordmusicpublishing.com
+7. Reservoir Media - Fast-growing independent through acquisitions. Acquired Sheryl Crow catalog, signed hitmakers like Ali Tamposi.
+   URL: https://www.reservoir-media.com
+8. Primary Wave - Private company investing in iconic catalogs. Does co-publishing, catalog acquisitions. Aggressive marketing for sync.
+   URL: https://www.primarywave.com
+9. Songtrust (Downtown) - World's largest publishing admin platform. 350,000+ songwriters, 3M+ songs. 15% admin fee for global collection.
+   URL: https://www.songtrust.com
+10. ASCAP - Non-profit PRO with 1M+ members. Free to join as writer. Quarterly payments, valuable workshops and showcases.
+    URL: https://www.ascap.com
+11. BMI - Largest US PRO with 1.3M+ members, 20.6M works. Recently shifted to for-profit. Free to join, strong in country/hip-hop.
+    URL: https://www.bmi.com
+12. SESAC - Invitation-only PRO with 30,000 selective members including Adele, Neil Diamond. For-profit with faster distributions.
+    URL: https://www.sesac.com
+13. Global Music Rights (GMR) - Boutique PRO by Irving Azoff for superstars like Drake, Springsteen, Bruno Mars. Few hundred exclusive clients.
+    URL: https://www.globalmusicrights.com
+14. Musicbed - Premium sync platform for filmmakers and brands. Curated cinematic music for commercials and wedding films.
+    URL: https://www.musicbed.com
+15. Songtradr - Global licensing marketplace using AI matching. Non-exclusive with wide client network. Valued $530M in 2023.
+    URL: https://www.songtradr.com
+16. TAXI Music - Independent A&R service since '90s. Members pay fees to submit for opportunities from supervisors and labels.
+    URL: https://www.taxi.com
+17. The Mechanical Licensing Collective (The MLC) - Established by Music Modernization Act 2019. Central hub for streaming mechanical royalties.
+    URL: https://www.themlc.com
+18. Secret Road - Boutique sync agency known for indie artist placements in Grey's Anatomy and Apple ads. Takes 20-50% of license fees.
+    URL: https://www.secretroad.com
+19. Position Music - Hybrid publisher/sync agency with strong placement record. Represents artists for sync while providing publishing services.
+    URL: https://www.positionmusic.com
+20. Milk & Honey - Leading management company specifically for producers and songwriters. Connects clients to writing sessions and production opportunities.
+    URL: https://www.milkandhoneymusic.com
 
 **Selection Guidelines:**
 - **Planning Stage**: Focus on accessible tools and entry-level companies (Bandsintown, DistroKid, Songtrust, High Road Touring)

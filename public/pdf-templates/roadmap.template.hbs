@@ -1174,15 +1174,15 @@
             <h4 style="font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 16px; text-align: center;">The Reality of the Modern Music Industry</h4>
             
             <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0; text-align: center;">
-              <strong style="color: #ffffff;">You are the CEO of your music career.</strong>
+              <strong style="color: #1DD1A1;">You are the CEO of your music career.</strong>
             </p>
             
             <div style="text-align: center; margin-bottom: 16px;">
-              <span style="color: #d1d5db; font-size: 13px;">Your Brand</span>
+              <span style="color: #1DD1A1; font-size: 13px; font-weight: 600;">Your Brand</span>
               <span style="color: #9ca3af; font-size: 13px;"> is your business • </span>
-              <span style="color: #d1d5db; font-size: 13px;">Your Audience</span>
+              <span style="color: #1DD1A1; font-size: 13px; font-weight: 600;">Your Audience</span>
               <span style="color: #9ca3af; font-size: 13px;"> is your market • </span>
-              <span style="color: #d1d5db; font-size: 13px;">Your Music</span>
+              <span style="color: #1DD1A1; font-size: 13px; font-weight: 600;">Your Music</span>
               <span style="color: #9ca3af; font-size: 13px;"> is your product</span>
             </div>
           </div>
@@ -1206,9 +1206,9 @@
             
             <div style="text-align: center;">
               <p style="color: #d1d5db; font-size: 13px; line-height: 1.6; margin: 0;">
-                <span style="font-size: 14px;">🎤</span> <strong>Performer</strong> makes their living on the stage<br>
-                <span style="font-size: 14px;">🎨</span> <strong>Creative</strong> makes their living online<br>
-                <span style="font-size: 14px;">🎹</span> <strong>Writer-Producer</strong> makes their living in the writing room
+                <span style="font-size: 14px;">🎤</span> <strong style="color: #3b82f6;">Touring Performer</strong> makes their living on the stage<br>
+                <span style="font-size: 14px;">🎨</span> <strong style="color: #ec4899;">Creative Artist</strong> makes their living online<br>
+                <span style="font-size: 14px;">🎹</span> <strong style="color: #10b981;">Writer-Producer</strong> makes their living in the writing room
               </p>
             </div>
           </div>
@@ -1234,7 +1234,7 @@
                 "Be like a postage stamp - stick to one thing until you get there"
               </blockquote>
               <p style="color: #e5e7eb; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
-                While you may identify with multiple paths, <strong style="color: #1DD1A1;">focus creates breakthroughs</strong>. This roadmap reveals your highest-impact priority and the path that will <strong style="color: #ffffff;">accelerate your music career</strong>.
+                While you may identify with multiple paths, <strong style="color: #1DD1A1;">focus creates breakthroughs</strong>. This roadmap reveals your highest-impact priority and the path that will <strong style="color: #B91372;">accelerate your music career</strong>.
               </p>
               
               <!-- Repeat and Evolve -->
@@ -1264,7 +1264,7 @@
           <div style="text-align: center; margin-bottom: 24px; padding: 20px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
             <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
               <span class="archetype-icon" style="font-size: 32px;">{{fuzzyScoresArray.[0].icon}}</span>
-              <h1 style="font-size: 28px; font-weight: 700; color: #ffffff; margin: 0;">{{fuzzyScoresArray.[0].name}} - {{#if (eq fuzzyScoresArray.[0].archetypeLevel 'Core Focus')}}Core{{else}}Recommended{{/if}}</h1>
+              <h1 style="font-size: 28px; font-weight: 700; color: #ffffff; margin: 0;">{{fuzzyScoresArray.[0].name}}</h1>
             </div>
             <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0; max-width: 600px; margin: 0 auto;">{{dynamicDescription}}</p>
           </div>
@@ -1363,6 +1363,7 @@
       </div>
       
       <!-- PAGES 4-7: Detailed Action Steps (Do not change anything) -->
+      {{#if pathway.nextSteps}}
       {{#each pathway.nextSteps}}
       <div class="pdf-page detail-section" style="page-break-before: always;">
         <div class="page-content">
@@ -1389,12 +1390,27 @@
               <span class="action-icon">✅</span>
               Other Action Items
             </h3>
+            {{#if actions}}
             {{#each actions}}
             <div class="action-item">
               <span class="action-number">{{add @index 1}}</span>
               <span class="action-text">{{this}}</span>
             </div>
             {{/each}}
+            {{else}}
+            <div class="action-item">
+              <span class="action-number">1</span>
+              <span class="action-text">Review and refine your strategic roadmap</span>
+            </div>
+            <div class="action-item">
+              <span class="action-number">2</span>
+              <span class="action-text">Connect with the HOME community for support</span>
+            </div>
+            <div class="action-item">
+              <span class="action-number">3</span>
+              <span class="action-text">Start implementing your personalized action items</span>
+            </div>
+            {{/if}}
           </div>
           
           <div class="detail-box">
@@ -1403,24 +1419,29 @@
               HOME Resources
             </h3>
             {{!-- Always show exactly 3 resources per step using helper --}}
+            {{#if ../pathway.resources}}
             {{#each (getStepResources ../pathway.resources @index)}}
               <div class="resource-item">{{this}}</div>
             {{/each}}
+            {{else}}
+              <div class="resource-item">24/7 access to professional recording studios</div>
+              <div class="resource-item">Music business and industry education programs</div>
+              <div class="resource-item">Collaborative workspace and networking opportunities</div>
+            {{/if}}
           </div>
         </div>
       </div>
       {{/each}}
+      {{/if}}
       
-      <!-- COMPANIES PAGE: Key Industry Players -->
-      <!-- DEBUG: Companies exist: {{#if pathway.recommendedCompanies}}YES{{else}}NO{{/if}} -->
-      <!-- DEBUG: Companies count: {{pathway.recommendedCompanies.length}} -->
+      <!-- COMPANIES PAGE 1: Key Industry Players (First 5) -->
       {{#if pathway.recommendedCompanies.length}}
       <div class="pdf-page" style="page-break-before: always;">
         <div class="page-content">
           <div style="text-align: center; margin-bottom: 32px;">
             <div class="bubble-header">
               <span class="sparkle">🏢</span>
-              <span>Industry Radar</span>
+              <span>Industry Radar - Part 1</span>
               <span class="sparkle-pink">🎯</span>
             </div>
           </div>
@@ -1435,6 +1456,7 @@
           
           <div style="display: grid; gap: 16px;">
             {{#each pathway.recommendedCompanies}}
+            {{#if (lt @index 5)}}
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
               <!-- Subtle gradient background -->
               <div style="position: absolute; top: 0; right: 0; width: 200px; height: 100%; background: linear-gradient(90deg, transparent, rgba(29, 209, 161, 0.05)); pointer-events: none;"></div>
@@ -1443,11 +1465,17 @@
                 <h3 style="font-size: 18px; font-weight: 600; color: #1DD1A1; margin-bottom: 8px;">
                   {{this.name}}
                 </h3>
-                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0;">
+                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">
                   {{this.description}}
                 </p>
+                {{#if this.url}}
+                <p style="color: #9ca3af; font-size: 12px; line-height: 1.4; margin: 0; font-style: italic;">
+                  🌐 {{this.url}}
+                </p>
+                {{/if}}
               </div>
             </div>
+            {{/if}}
             {{/each}}
           </div>
           
@@ -1458,6 +1486,60 @@
           </div>
         </div>
       </div>
+      
+      <!-- COMPANIES PAGE 2: Key Industry Players (Next 5) -->
+      {{#if (gt pathway.recommendedCompanies.length 5)}}
+      <div class="pdf-page" style="page-break-before: always;">
+        <div class="page-content">
+          <div style="text-align: center; margin-bottom: 32px;">
+            <div class="bubble-header">
+              <span class="sparkle">🏢</span>
+              <span>Industry Radar - Part 2</span>
+              <span class="sparkle-pink">🎯</span>
+            </div>
+          </div>
+          
+          <h2 style="text-align: center; font-size: 28px; font-weight: 700; color: #ffffff; margin-bottom: 16px;">
+            More Key Companies
+          </h2>
+          
+          <p style="text-align: center; color: #9ca3af; font-size: 14px; line-height: 1.6; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Continue building your industry knowledge with these additional companies relevant to your music career path.
+          </p>
+          
+          <div style="display: grid; gap: 16px;">
+            {{#each pathway.recommendedCompanies}}
+            {{#if (gte @index 5)}}
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+              <!-- Subtle gradient background -->
+              <div style="position: absolute; top: 0; right: 0; width: 200px; height: 100%; background: linear-gradient(90deg, transparent, rgba(29, 209, 161, 0.05)); pointer-events: none;"></div>
+              
+              <div style="position: relative; z-index: 1;">
+                <h3 style="font-size: 18px; font-weight: 600; color: #1DD1A1; margin-bottom: 8px;">
+                  {{this.name}}
+                </h3>
+                <p style="color: #e5e7eb; font-size: 14px; line-height: 1.6; margin: 0 0 8px 0;">
+                  {{this.description}}
+                </p>
+                {{#if this.url}}
+                <p style="color: #9ca3af; font-size: 12px; line-height: 1.4; margin: 0; font-style: italic;">
+                  🌐 {{this.url}}
+                </p>
+                {{/if}}
+              </div>
+            </div>
+            {{/if}}
+            {{/each}}
+          </div>
+          
+          <div style="margin-top: 32px; padding: 16px; background: rgba(185, 19, 114, 0.1); border: 1px solid rgba(185, 19, 114, 0.2); border-radius: 12px;">
+            <p style="color: #ffffff; font-size: 13px; line-height: 1.6; margin: 0; text-align: center;">
+              <strong>🎯 Strategy:</strong> Focus on building relationships with 3-5 companies that align with your current stage and long-term goals. Quality connections beat quantity every time.
+            </p>
+          </div>
+        </div>
+      </div>
+      {{/if}}
       {{/if}}
       
       <!-- LAST PAGE: HOME Connection -->
