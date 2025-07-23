@@ -25,18 +25,15 @@ export default async function handler(req, res) {
     }
 
     console.log('🎨 Starting PDF generation for session:', sessionId);
-    console.log('🔍 PDF pathwayDetails received:', {
+    console.log('🔍 PDF data validation:', {
+      hasPathwayData: !!pathwayData,
+      hasPathway: !!pathwayData.pathway,
+      pathwayTitle: pathwayData.pathway?.title,
       hasPathwayDetails: !!pathwayData.pathwayDetails,
       pathwayDetailsKeys: Object.keys(pathwayData.pathwayDetails || {}),
-      pathwayDetailsContent: pathwayData.pathwayDetails
-    });
-    
-    console.log('🔍 PDF scoreResult received:', {
       hasScoreResult: !!pathwayData.scoreResult,
-      scoreResultLevels: pathwayData.scoreResult?.levels,
-      scoreResultDisplayPct: pathwayData.scoreResult?.displayPct,
-      scoreResultAbsPct: pathwayData.scoreResult?.absPct,
-      scoreResultRecommendation: pathwayData.scoreResult?.recommendation
+      scoreResultValid: !!(pathwayData.scoreResult?.levels && pathwayData.scoreResult?.displayPct),
+      hasFuzzyScores: !!(pathwayData.fuzzyScores && Object.keys(pathwayData.fuzzyScores).length > 0)
     });
 
     // Get template path
@@ -103,9 +100,8 @@ export default async function handler(req, res) {
           color: '#1DD1A1'
         };
         
-        // Use scoreResult levels exclusively
-        const levelName = levels[key] || 'Noise';
-        console.log(`🔍 Level for ${key}: ${levelName} (from levels[${key}] = ${levels[key]})`);
+        // Use scoreResult levels with robust fallback
+        const levelName = levels[key] || (index === 0 ? 'Core Focus' : index === 1 ? 'Strategic Secondary' : 'Noise');
         const archetypeLevel = { 
           level: levelName, 
           icon: levelName === 'Core Focus' ? '🏆' : levelName === 'Strategic Secondary' ? '⚡' : '', 
@@ -114,9 +110,13 @@ export default async function handler(req, res) {
         const isPrimary = scoreData.recommendation?.path === key || pathwayData.pathwayBlend?.primary === key;
         const isSecondary = index === 1 && !isPrimary;
         
-        // Use AI-generated pathway details with fallbacks
+        // Use AI-generated pathway details with robust fallbacks
         const aiPathwayDetails = pathwayData.pathwayDetails || {};
-        const pathwayDetail = aiPathwayDetails[key] || {};
+        const pathwayDetail = aiPathwayDetails[key] || {
+          focusMessage: `Your ${info.name} alignment shows ${levelName.toLowerCase()} potential for this path.`,
+          focusAreas: 'Core skills • Strategic development • Community building',
+          growthAreas: 'Focus on strengths • Build strategic partnerships • Develop expertise'
+        };
         
         // Calculate relative percentages that add up to 100%
         const totalAbsPct = Object.values(absPct).reduce((sum, pct) => sum + pct, 0);
@@ -130,10 +130,10 @@ export default async function handler(req, res) {
           name: PATH_LABELS[key] || info.name,
           icon: info.icon,
           color: info.color,
-          // Use AI-generated content with fallbacks
-          focusMessage: pathwayDetail.focusMessage || 'This pathway aligns with your creative goals.',
-          focusAreas: pathwayDetail.focusAreas || 'Creative development • Skill building • Community engagement',
-          growthAreas: pathwayDetail.growthAreas || 'Focus on core strengths • Build strategic partnerships',
+          // Use AI-generated content with robust fallbacks
+          focusMessage: pathwayDetail.focusMessage || `Your ${info.name} alignment shows ${levelName.toLowerCase()} potential for this path.`,
+          focusAreas: pathwayDetail.focusAreas || 'Core skills • Strategic development • Community building',
+          growthAreas: pathwayDetail.growthAreas || 'Focus on strengths • Build strategic partnerships • Develop expertise',
           archetypeLevel: archetypeLevel.level,
           archetypeIcon: archetypeLevel.icon,
           archetypeDescription: archetypeLevel.description,

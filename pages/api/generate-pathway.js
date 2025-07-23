@@ -144,12 +144,14 @@ Do not box them into a single category - acknowledge their unique blend and prov
           assistant_id: ASSISTANT_ID
         });
 
-        // Wait for completion
+        // Wait for completion with shorter timeout
         let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
         let attempts = 0;
+        const maxAttempts = 20; // Reduced from 30 to 20 seconds
         
-        while (runStatus.status !== 'completed' && attempts < 30) {
+        while (runStatus.status !== 'completed' && attempts < maxAttempts) {
           if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
+            console.error(`❌ Assistant run failed with status: ${runStatus.status}`);
             throw new Error(`Assistant run failed: ${runStatus.status}`);
           }
           
@@ -157,9 +159,12 @@ Do not box them into a single category - acknowledge their unique blend and prov
           await new Promise(resolve => setTimeout(resolve, 1000));
           runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
           attempts++;
+          
+          console.log(`🔄 Assistant run status: ${runStatus.status} (attempt ${attempts}/${maxAttempts})`);
         }
 
         if (runStatus.status !== 'completed') {
+          console.error(`❌ Assistant run timed out after ${maxAttempts} seconds`);
           throw new Error('Assistant run timed out');
         }
 
@@ -296,6 +301,8 @@ console.log('✅ Successfully generated personalized pathway:', {
         resources: ultimateFallback.resources,
         homeConnection: ultimateFallback.homeConnection,
         recommendedCompanies: generateFallbackCompanies('touring-performer', scoreResult),
+        // Generate pathway details for emergency fallback
+        pathwayDetails: generateFallbackPathwayDetails('touring-performer', scoreResult),
         isPersonalized: false,
         assistantUsed: false,
         error: 'Template not found, using default'
@@ -315,6 +322,8 @@ console.log('✅ Successfully generated personalized pathway:', {
       homeConnection: template.homeConnection, // 🔥 Now uses improved template content
       recommendedCompanies: generateFallbackCompanies(fallbackPathway, scoreResult),
       recommendation: scoreResult?.recommendation,
+      // Generate pathway details for fallback
+      pathwayDetails: generateFallbackPathwayDetails(fallbackPathway, scoreResult),
       isPersonalized: false,
       assistantUsed: false
     };
@@ -350,6 +359,8 @@ console.log('✅ Successfully generated personalized pathway:', {
       ],
       homeConnection: 'HOME\'s supportive community and professional facilities provide the perfect environment to grow your music career. Our content creation studios, collaborative artist network, and monthly educational webinars can accelerate your progress faster than going it alone. Secure your spot in our next webinar to learn the strategies successful artists use to build sustainable creative careers.',
       recommendedCompanies: generateFallbackCompanies('creative-artist', scoreResult),
+      // Generate pathway details for emergency fallback
+      pathwayDetails: generateFallbackPathwayDetails('creative-artist', scoreResult),
       isPersonalized: false,
       assistantUsed: false,
       error: 'Emergency fallback used'
