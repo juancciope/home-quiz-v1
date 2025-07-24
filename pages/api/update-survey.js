@@ -63,22 +63,40 @@ export default async function handler(req, res) {
     // Update survey insights in artist profile
     console.log('📋 Updating survey insights in artist profile...');
     artistProfile.surveyInsights = {
+      // Core challenges and goals
       primaryChallenges: surveyResponses.challenges || [],
-      goals2025: surveyResponses['goals_2025'] || [],
-      learningPreference: surveyResponses.learning_preference || '',
+      careerStage: surveyResponses['career-stage'] || '',
+      monthlyInvestment: surveyResponses['monthly-investment'] || '',
+      careerImpact: surveyResponses['career-impact'] || '',
+      
+      // Tools and software
+      recordingSoftware: surveyResponses['recording-software'] || [],
+      gearPurchases: surveyResponses['gear-purchases'] || [],
+      softwareSubscriptions: surveyResponses['software-subscriptions'] || [],
+      valuableTools: surveyResponses['valuable-tools'] || [],
+      educationalFormat: surveyResponses['educational-format'] || [],
+      
+      // Pricing preferences
       pricingRange: {
         contentCalendar: surveyResponses.service_pricing?.['content-calendar'] || 0,
+        venueDatabase: surveyResponses.service_pricing?.['venue-database'] || 0,
+        automatedOutreach: surveyResponses.service_pricing?.['automated-outreach'] || 0,
+        websiteGenerator: surveyResponses.service_pricing?.['website-generator'] || 0,
+        fullMarketing: surveyResponses.service_pricing?.['full-marketing'] || 0,
         dataInsights: surveyResponses.service_pricing?.['data-insights'] || 0,
         collaborationMatching: surveyResponses.service_pricing?.['collaboration-matching'] || 0,
         tourPlanning: surveyResponses.service_pricing?.['tour-planning'] || 0,
         marketingServices: surveyResponses.service_pricing?.['marketing-services'] || 0,
         releaseManagement: surveyResponses.service_pricing?.['release-management'] || 0
       },
+      
+      // Music and collaboration
       genres: surveyResponses.genres || [],
       skillsOffered: surveyResponses['collaboration-skills'] || [],
       skillsSeeking: surveyResponses['seeking-skills'] || [],
       industryConnections: surveyResponses['industry-connections'] || [],
       gearDiscovery: surveyResponses['gear-discovery'] || [],
+      
       lastUpdated: new Date()
     };
     

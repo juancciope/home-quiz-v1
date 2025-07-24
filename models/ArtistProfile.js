@@ -130,22 +130,40 @@ const ArtistProfileSchema = new mongoose.Schema({
   
   // Survey insights for retargeting (aggregated from latest survey)
   surveyInsights: {
+    // Core challenges and goals
     primaryChallenges: [String],
-    goals2025: [String],
-    learningPreference: String,
+    careerStage: String,
+    monthlyInvestment: String,
+    careerImpact: String,
+    
+    // Tools and software preferences
+    recordingSoftware: [String],
+    gearPurchases: [String],
+    softwareSubscriptions: [String],
+    valuableTools: [String],
+    educationalFormat: [String],
+    
+    // Pricing preferences
     pricingRange: {
       contentCalendar: Number,
+      venueDatabase: Number,
+      automatedOutreach: Number,
+      websiteGenerator: Number,
+      fullMarketing: Number,
       dataInsights: Number,
       collaborationMatching: Number,
       tourPlanning: Number,
       marketingServices: Number,
       releaseManagement: Number
     },
+    
+    // Music and collaboration
     genres: [String],
     skillsOffered: [String],
     skillsSeeking: [String],
     industryConnections: [String],
     gearDiscovery: [String],
+    
     lastUpdated: Date
   },
   
@@ -166,6 +184,9 @@ ArtistProfileSchema.index({ createdAt: -1 });
 ArtistProfileSchema.index({ 'surveyInsights.genres': 1 });
 ArtistProfileSchema.index({ 'surveyInsights.primaryChallenges': 1 });
 ArtistProfileSchema.index({ 'surveyInsights.industryConnections': 1 });
+ArtistProfileSchema.index({ 'surveyInsights.careerStage': 1 });
+ArtistProfileSchema.index({ 'surveyInsights.monthlyInvestment': 1 });
+ArtistProfileSchema.index({ 'surveyInsights.recordingSoftware': 1 });
 
 // Virtual for full name
 ArtistProfileSchema.virtual('displayName').get(function() {
