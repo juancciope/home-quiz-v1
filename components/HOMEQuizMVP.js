@@ -2156,6 +2156,39 @@ const HOMECreatorFlow = () => {
     }
   };
 
+  // Handle survey submission
+  const handleSurveySubmission = async () => {
+    if (!email || !surveyResponses || Object.keys(surveyResponses).length === 0) {
+      console.log('⚠️ No survey data to submit or no email available');
+      return;
+    }
+
+    try {
+      console.log('📋 Submitting survey responses...');
+      console.log('📧 Email:', email);
+      console.log('📋 Survey data keys:', Object.keys(surveyResponses));
+
+      const response = await fetch('/api/update-survey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          surveyResponses
+        })
+      });
+
+      const responseData = await response.json();
+      
+      if (response.ok) {
+        console.log('✅ Survey responses submitted successfully:', responseData);
+      } else {
+        console.error('❌ Survey submission failed:', responseData);
+      }
+    } catch (error) {
+      console.error('❌ Error submitting survey:', error);
+    }
+  };
+
   // Handle email submission
   const handleEmailSubmit = async () => {
     console.log('🟢 handleEmailSubmit called');
@@ -3856,12 +3889,13 @@ const HOMECreatorFlow = () => {
                     )}
                     
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         if (surveyQuestionIndex < surveyQuestions.length - 1) {
                           setSurveyQuestionIndex(prev => prev + 1);
                         } else {
-                          // Survey completed - generate PDF
+                          // Survey completed - submit survey data and generate PDF
                           setSurveyCompleted(true);
+                          await handleSurveySubmission();
                           handlePDFGeneration();
                         }
                       }}
