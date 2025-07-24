@@ -1,3 +1,9 @@
+import dbConnect from '../../lib/mongoose';
+import ArtistProfile from '../../models/ArtistProfile';
+import QuizSubmission from '../../models/QuizSubmission';
+import LeadEvent from '../../models/LeadEvent';
+import { isValidEmail, validateQuizResponses, sanitizeInput } from '../../lib/validation';
+
 // Main handler function
 export default async function handler(req, res) {
   console.log('🔔 SUBMIT-LEAD API CALLED');
@@ -9,14 +15,36 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Connect to MongoDB
+    await dbConnect();
+    
     const { email, pathway, responses, source, results } = req.body;
     
-    // Basic validation
+    // Enhanced validation
     if (!email) {
       console.error('❌ No email provided');
       return res.status(400).json({ 
         success: false, 
         message: 'Email is required' 
+      });
+    }
+    
+    if (!isValidEmail(email)) {
+      console.error('❌ Invalid email format:', email);
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid email format' 
+      });
+    }
+    
+    // Validate quiz responses
+    const validationErrors = validateQuizResponses(responses);
+    if (validationErrors.length > 0) {
+      console.error('❌ Validation errors:', validationErrors);
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid quiz responses',
+        errors: validationErrors
       });
     }
 
@@ -145,6 +173,97 @@ export default async function handler(req, res) {
     };
 
     console.log('📤 Webhook data prepared:', JSON.stringify(webhookData, null, 2));
+
+    // Store in MongoDB
+    try {
+      console.log('💾 Storing data in MongoDB...');
+      
+      // Find or create artist profile
+      let artistProfile = await ArtistProfile.findOne({ email: email.toLowerCase() });
+      
+      if (!artistProfile) {
+        console.log('👤 Creating new artist profile...');
+        artistProfile = new ArtistProfile({
+          email: email.toLowerCase(),
+          career: {
+            stage: responses?.['stage-level'] || 'planning',
+            startedAt: new Date()
+          },
+          tags: ['quiz-completed']
+        });
+      }
+      
+      // Update pathway scores
+      const fuzzyScores = results?.fuzzyScores || scoreResult?.absPct || {};
+      const recommendation = {
+        pathway: primaryPathKey,
+        levels: levels,
+        pathwayDetails: pathwayDetails
+      };
+      
+      await artistProfile.updatePathwayScores(fuzzyScores, recommendation);
+      
+      // Create quiz submission record
+      const quizSubmission = new QuizSubmission({
+        artistProfileId: artistProfile._id,
+        email: email.toLowerCase(),
+        responses: {
+          motivation: responses?.motivation || '',
+          idealDay: responses?.['ideal-day'] || '',
+          successVision: responses?.['success-vision'] || '',
+          stageLevel: responses?.['stage-level'] || 'planning',
+          successDefinition: responses?.['success-definition'] || '',
+          resourcesPriority: responses?.['resources-priority'] || ''
+        },
+        results: {
+          fuzzyScores: fuzzyScores,
+          recommendation: {
+            pathway: primaryPathKey,
+            description: results?.description || generateDynamicDescription(),
+            nextSteps: results?.nextSteps || [],
+            resources: results?.resources || [],
+            companies: results?.recommendedCompanies || []
+          },
+          pathwayDetails: pathwayDetails,
+          aiGenerated: results?.assistantUsed || false,
+          scoreResult: scoreResult
+        },
+        source: {
+          utm_source: req.query.utm_source || '',
+          utm_medium: req.query.utm_medium || '',
+          utm_campaign: req.query.utm_campaign || '',
+          referrer: req.headers.referer || '',
+          userAgent: req.headers['user-agent'] || ''
+        }
+      });
+      
+      await quizSubmission.save();
+      console.log('✅ Quiz submission saved:', quizSubmission._id);
+      
+      // Create lead event
+      await LeadEvent.createEvent(
+        artistProfile._id,
+        'quiz_completed',
+        {
+          pathway: primaryPathKey,
+          scores: fuzzyScores,
+          stageLevel: responses?.['stage-level']
+        },
+        {
+          ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+          userAgent: req.headers['user-agent'],
+          sessionId: req.cookies?.sessionId
+        }
+      );
+      
+      console.log('✅ Lead event created');
+      console.log('✅ MongoDB storage complete');
+      
+    } catch (dbError) {
+      console.error('❌ MongoDB storage error:', dbError);
+      // Don't fail the request if DB storage fails
+      // We'll still try to send to GHL
+    }
 
     // Send to GHL webhook
     if (process.env.GHL_WEBHOOK_URL) {
