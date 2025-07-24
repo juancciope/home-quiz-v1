@@ -2162,6 +2162,8 @@ const HOMECreatorFlow = () => {
     console.log('📧 Email:', email);
     console.log('🎯 Pathway data:', pathway);
     console.log('🤖 AI Generated data:', aiGeneratedPathway);
+    console.log('📋 Survey Responses available:', surveyResponses);
+    console.log('📋 Survey Response keys:', Object.keys(surveyResponses || {}));
     
     if (!email || isProcessing) {
       console.log('❌ Returning early - no email or already processing');
