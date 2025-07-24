@@ -584,57 +584,57 @@ function determineFallbackPathway(responses) {
   
   console.log('🔍 Scoring responses:', responses);
   
-  // Score based on responses
-  if (responses.motivation === 'live-performance') {
+  // Score based on v2 responses
+  if (responses.motivation === 'stage-energy') {
     scores['touring-performer'] += 4;
-    console.log('+ 4 to touring-performer (motivation: live-performance)');
+    console.log('+ 4 to touring-performer (motivation: stage-energy)');
   }
-  if (responses.motivation === 'artistic-expression') {
+  if (responses.motivation === 'creative-expression') {
     scores['creative-artist'] += 4;
-    console.log('+ 4 to creative-artist (motivation: artistic-expression)');
+    console.log('+ 4 to creative-artist (motivation: creative-expression)');
   }
-  if (responses.motivation === 'collaboration') {
+  if (responses.motivation === 'behind-scenes') {
     scores['writer-producer'] += 4;
-    console.log('+ 4 to writer-producer (motivation: collaboration)');
+    console.log('+ 4 to writer-producer (motivation: behind-scenes)');
   }
   
-  if (responses['ideal-day'] === 'performing-travel') {
+  if (responses['ideal-day'] === 'performing') {
     scores['touring-performer'] += 3;
-    console.log('+ 3 to touring-performer (ideal-day: performing-travel)');
+    console.log('+ 3 to touring-performer (ideal-day: performing)');
   }
-  if (responses['ideal-day'] === 'releasing-music') {
+  if (responses['ideal-day'] === 'creating-content') {
     scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (ideal-day: releasing-music)');
+    console.log('+ 3 to creative-artist (ideal-day: creating-content)');
   }
-  if (responses['ideal-day'] === 'writing-creating') {
+  if (responses['ideal-day'] === 'studio-work') {
     scores['writer-producer'] += 3;
-    console.log('+ 3 to writer-producer (ideal-day: writing-creating)');
+    console.log('+ 3 to writer-producer (ideal-day: studio-work)');
   }
   
-  if (responses['success-vision'] === 'touring-headliner') {
+  if (responses['success-vision'] === 'touring-artist') {
     scores['touring-performer'] += 5;
-    console.log('+ 5 to touring-performer (success-vision: touring-headliner)');
+    console.log('+ 5 to touring-performer (success-vision: touring-artist)');
   }
-  if (responses['success-vision'] === 'passive-income-artist') {
+  if (responses['success-vision'] === 'creative-brand') {
     scores['creative-artist'] += 5;
-    console.log('+ 5 to creative-artist (success-vision: passive-income-artist)');
+    console.log('+ 5 to creative-artist (success-vision: creative-brand)');
   }
-  if (responses['success-vision'] === 'hit-songwriter') {
+  if (responses['success-vision'] === 'in-demand-producer') {
     scores['writer-producer'] += 5;
-    console.log('+ 5 to writer-producer (success-vision: hit-songwriter)');
+    console.log('+ 5 to writer-producer (success-vision: in-demand-producer)');
   }
   
-  if (responses['biggest-challenge'] === 'performance-opportunities') {
+  if (responses['success-definition'] === 'live-performer') {
     scores['touring-performer'] += 3;
-    console.log('+ 3 to touring-performer (biggest-challenge: performance-opportunities)');
+    console.log('+ 3 to touring-performer (success-definition: live-performer)');
   }
-  if (responses['biggest-challenge'] === 'brand-audience') {
+  if (responses['success-definition'] === 'online-audience') {
     scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (biggest-challenge: brand-audience)');
+    console.log('+ 3 to creative-artist (success-definition: online-audience)');
   }
-  if (responses['biggest-challenge'] === 'collaboration-income') {
+  if (responses['success-definition'] === 'songwriter') {
     scores['writer-producer'] += 3;
-    console.log('+ 3 to writer-producer (biggest-challenge: collaboration-income)');
+    console.log('+ 3 to writer-producer (success-definition: songwriter)');
   }
   
   console.log('📊 Final scores:', scores);

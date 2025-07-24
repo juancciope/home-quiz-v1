@@ -137,7 +137,7 @@ const ArtistProfileSchema = new mongoose.Schema({
 });
 
 // Indexes for performance
-ArtistProfileSchema.index({ email: 1 });
+// Note: email already has unique: true which creates an index
 ArtistProfileSchema.index({ 'pathways.primary.type': 1 });
 ArtistProfileSchema.index({ 'career.stage': 1 });
 ArtistProfileSchema.index({ tags: 1 });

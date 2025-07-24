@@ -220,7 +220,12 @@ export default async function handler(req, res) {
           recommendation: {
             pathway: primaryPathKey,
             description: results?.description || generateDynamicDescription(),
-            nextSteps: results?.nextSteps || [],
+            nextSteps: (results?.nextSteps || []).map((step, index) => {
+              if (typeof step === 'string') {
+                return { priority: index + 1, step: step, detail: '' };
+              }
+              return step;
+            }),
             resources: results?.resources || [],
             companies: results?.recommendedCompanies || []
           },
