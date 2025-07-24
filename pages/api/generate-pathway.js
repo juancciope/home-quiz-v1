@@ -87,9 +87,20 @@ export default async function handler(req, res) {
 
     // Try OpenAI Assistant first
     let useAssistant = true;
-    if (!process.env.OPENAI_API_KEY || !ASSISTANT_ID) {
+    
+    // Check if Assistant is disabled via environment variable
+    if (process.env.DISABLE_OPENAI_ASSISTANT === 'true') {
+      console.log('⚠️ OpenAI Assistant disabled via environment variable');
+      useAssistant = false;
+    } else if (!process.env.OPENAI_API_KEY || !ASSISTANT_ID) {
       console.log('⚠️ OpenAI not configured, using fallback only');
       useAssistant = false;
+    }
+    
+    // Log Assistant configuration
+    if (useAssistant) {
+      console.log(`🔧 Assistant ID: ${ASSISTANT_ID}`);
+      console.log(`🔧 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'Missing'}`);
     }
 
     if (useAssistant) {
@@ -144,10 +155,11 @@ Do not box them into a single category - acknowledge their unique blend and prov
           assistant_id: ASSISTANT_ID
         });
 
-        // Wait for completion with shorter timeout
+        // Wait for completion with increased timeout and exponential backoff
         let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
         let attempts = 0;
-        const maxAttempts = 20; // Reduced from 30 to 20 seconds
+        const maxAttempts = 30; // Increased to 30 seconds total
+        let waitTime = 1000; // Start with 1 second
         
         while (runStatus.status !== 'completed' && attempts < maxAttempts) {
           if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
@@ -155,8 +167,10 @@ Do not box them into a single category - acknowledge their unique blend and prov
             throw new Error(`Assistant run failed: ${runStatus.status}`);
           }
           
-          // Wait before checking again
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Wait with exponential backoff (max 3 seconds)
+          await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 3000)));
+          waitTime = waitTime * 1.2; // Increase wait time by 20%
+          
           runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
           attempts++;
           
@@ -164,7 +178,7 @@ Do not box them into a single category - acknowledge their unique blend and prov
         }
 
         if (runStatus.status !== 'completed') {
-          console.error(`❌ Assistant run timed out after ${maxAttempts} seconds`);
+          console.error(`❌ Assistant run timed out after ${maxAttempts} attempts`);
           throw new Error('Assistant run timed out');
         }
 
