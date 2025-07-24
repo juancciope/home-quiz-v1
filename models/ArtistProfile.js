@@ -143,19 +143,8 @@ const ArtistProfileSchema = new mongoose.Schema({
     valuableTools: [String],
     educationalFormat: [String],
     
-    // Pricing preferences
-    pricingRange: {
-      contentCalendar: Number,
-      venueDatabase: Number,
-      automatedOutreach: Number,
-      websiteGenerator: Number,
-      fullMarketing: Number,
-      dataInsights: Number,
-      collaborationMatching: Number,
-      tourPlanning: Number,
-      marketingServices: Number,
-      releaseManagement: Number
-    },
+    // Pricing preferences (flexible schema to handle dynamic survey fields)
+    pricingRange: mongoose.Schema.Types.Mixed,
     
     // Music and collaboration
     genres: [String],

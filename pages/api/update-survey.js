@@ -46,6 +46,7 @@ export default async function handler(req, res) {
 
     console.log('📧 Updating survey data for:', email);
     console.log('📋 Survey responses:', Object.keys(surveyResponses));
+    console.log('💰 Service pricing object:', JSON.stringify(surveyResponses.service_pricing || surveyResponses['service-pricing'], null, 2));
 
     // Find existing artist profile
     const artistProfile = await ArtistProfile.findOne({ email: email.toLowerCase() });
@@ -62,6 +63,10 @@ export default async function handler(req, res) {
 
     // Update survey insights in artist profile
     console.log('📋 Updating survey insights in artist profile...');
+    
+    const pricingData = surveyResponses.service_pricing || surveyResponses['service-pricing'] || {};
+    console.log('💰 Final pricing data to store:', JSON.stringify(pricingData, null, 2));
+    
     artistProfile.surveyInsights = {
       // Core challenges and goals
       primaryChallenges: surveyResponses.challenges || [],
@@ -77,18 +82,7 @@ export default async function handler(req, res) {
       educationalFormat: surveyResponses['educational-format'] || [],
       
       // Pricing preferences
-      pricingRange: {
-        contentCalendar: surveyResponses.service_pricing?.['content-calendar'] || 0,
-        venueDatabase: surveyResponses.service_pricing?.['venue-database'] || 0,
-        automatedOutreach: surveyResponses.service_pricing?.['automated-outreach'] || 0,
-        websiteGenerator: surveyResponses.service_pricing?.['website-generator'] || 0,
-        fullMarketing: surveyResponses.service_pricing?.['full-marketing'] || 0,
-        dataInsights: surveyResponses.service_pricing?.['data-insights'] || 0,
-        collaborationMatching: surveyResponses.service_pricing?.['collaboration-matching'] || 0,
-        tourPlanning: surveyResponses.service_pricing?.['tour-planning'] || 0,
-        marketingServices: surveyResponses.service_pricing?.['marketing-services'] || 0,
-        releaseManagement: surveyResponses.service_pricing?.['release-management'] || 0
-      },
+      pricingRange: pricingData,
       
       // Music and collaboration
       genres: surveyResponses.genres || [],
