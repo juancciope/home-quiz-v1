@@ -2229,7 +2229,8 @@ const HOMECreatorFlow = () => {
         pathway: pathway?.title,
         responses,
         source: 'music-creator-roadmap-flow',
-        results: results
+        results: results,
+        surveyResponses: surveyResponses
       };
       
       console.log('📤 Sending to API:', {
@@ -2238,7 +2239,8 @@ const HOMECreatorFlow = () => {
         hasResults: true,
         nextStepsCount: results.nextSteps.length,
         resourcesCount: results.resources.length,
-        isPersonalized: results.isPersonalized
+        isPersonalized: results.isPersonalized,
+        hasSurveyData: !!surveyResponses && Object.keys(surveyResponses).length > 0
       });
       
       const response = await fetch('/api/submit-lead', {

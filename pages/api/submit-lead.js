@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     // Connect to MongoDB
     await dbConnect();
     
-    const { email, pathway, responses, source, results } = req.body;
+    const { email, pathway, responses, source, results, surveyResponses } = req.body;
     
     // Enhanced validation
     if (!email) {
@@ -52,6 +52,7 @@ export default async function handler(req, res) {
     console.log('🎯 Pathway:', pathway);
     console.log('📝 Responses:', responses);
     console.log('📊 Results:', results);
+    console.log('📋 Survey Responses:', surveyResponses ? 'Present' : 'Not provided');
 
     // Extract scoring data if available
     const scoreResult = results?.scoreResult || {};
@@ -203,6 +204,32 @@ export default async function handler(req, res) {
       
       await artistProfile.updatePathwayScores(fuzzyScores, recommendation);
       
+      // Update survey insights if survey data is provided
+      if (surveyResponses && Object.keys(surveyResponses).length > 0) {
+        console.log('📋 Updating survey insights in artist profile...');
+        artistProfile.surveyInsights = {
+          primaryChallenges: surveyResponses.challenges || [],
+          goals2025: surveyResponses['goals_2025'] || [],
+          learningPreference: surveyResponses.learning_preference || '',
+          pricingRange: {
+            contentCalendar: surveyResponses.service_pricing?.['content-calendar'] || 0,
+            dataInsights: surveyResponses.service_pricing?.['data-insights'] || 0,
+            collaborationMatching: surveyResponses.service_pricing?.['collaboration-matching'] || 0,
+            tourPlanning: surveyResponses.service_pricing?.['tour-planning'] || 0,
+            marketingServices: surveyResponses.service_pricing?.['marketing-services'] || 0,
+            releaseManagement: surveyResponses.service_pricing?.['release-management'] || 0
+          },
+          genres: surveyResponses.genres || [],
+          skillsOffered: surveyResponses['collaboration-skills'] || [],
+          skillsSeeking: surveyResponses['seeking-skills'] || [],
+          industryConnections: surveyResponses['industry-connections'] || [],
+          gearDiscovery: surveyResponses['gear-discovery'] || [],
+          lastUpdated: new Date()
+        };
+        await artistProfile.save();
+        console.log('✅ Survey insights updated in artist profile');
+      }
+      
       // Create quiz submission record
       const quizSubmission = new QuizSubmission({
         artistProfileId: artistProfile._id,
@@ -233,6 +260,7 @@ export default async function handler(req, res) {
           aiGenerated: results?.assistantUsed || false,
           scoreResult: scoreResult
         },
+        surveyResponses: surveyResponses || {},
         source: {
           utm_source: req.query.utm_source || '',
           utm_medium: req.query.utm_medium || '',

@@ -97,6 +97,31 @@ const QuizSubmissionSchema = new mongoose.Schema({
     userAgent: String
   },
   
+  // Survey responses for retargeting
+  surveyResponses: {
+    // Your Music Creator Journey
+    challenges: [String],
+    goals_2025: [String],
+    learning_preference: String,
+    // Tools & Software Usage
+    tool_needs: [String],
+    service_pricing: {
+      'content-calendar': Number,
+      'data-insights': Number,
+      'collaboration-matching': Number,
+      'tour-planning': Number,
+      'marketing-services': Number,
+      'release-management': Number
+    },
+    // Collaboration & Community
+    genres: [String],
+    'collaboration-skills': [String],
+    'seeking-skills': [String],
+    // Industry Connections & Goals
+    'industry-connections': [String],
+    'gear-discovery': [String]
+  },
+  
   submittedAt: {
     type: Date,
     default: Date.now

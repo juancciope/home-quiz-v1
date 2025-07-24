@@ -128,6 +128,27 @@ const ArtistProfileSchema = new mongoose.Schema({
   
   tags: [String],
   
+  // Survey insights for retargeting (aggregated from latest survey)
+  surveyInsights: {
+    primaryChallenges: [String],
+    goals2025: [String],
+    learningPreference: String,
+    pricingRange: {
+      contentCalendar: Number,
+      dataInsights: Number,
+      collaborationMatching: Number,
+      tourPlanning: Number,
+      marketingServices: Number,
+      releaseManagement: Number
+    },
+    genres: [String],
+    skillsOffered: [String],
+    skillsSeeking: [String],
+    industryConnections: [String],
+    gearDiscovery: [String],
+    lastUpdated: Date
+  },
+  
   metadata: {
     type: mongoose.Schema.Types.Mixed,
     default: {}
@@ -142,6 +163,9 @@ ArtistProfileSchema.index({ 'pathways.primary.type': 1 });
 ArtistProfileSchema.index({ 'career.stage': 1 });
 ArtistProfileSchema.index({ tags: 1 });
 ArtistProfileSchema.index({ createdAt: -1 });
+ArtistProfileSchema.index({ 'surveyInsights.genres': 1 });
+ArtistProfileSchema.index({ 'surveyInsights.primaryChallenges': 1 });
+ArtistProfileSchema.index({ 'surveyInsights.industryConnections': 1 });
 
 // Virtual for full name
 ArtistProfileSchema.virtual('displayName').get(function() {
