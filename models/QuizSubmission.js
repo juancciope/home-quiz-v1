@@ -17,17 +17,17 @@ const QuizSubmissionSchema = new mongoose.Schema({
   responses: {
     motivation: {
       type: String,
-      enum: ['live-performance', 'artistic-expression', 'collaboration', 'multiple'],
+      enum: ['stage-energy', 'creative-expression', 'behind-scenes'],
       required: true
     },
     idealDay: {
       type: String,
-      enum: ['performing-travel', 'releasing-music', 'writing-creating', 'varied'],
+      enum: ['performing', 'creating-content', 'studio-work'],
       required: true
     },
     successVision: {
       type: String,
-      enum: ['touring-headliner', 'passive-income-artist', 'hit-songwriter', 'hybrid'],
+      enum: ['touring-artist', 'creative-brand', 'in-demand-producer'],
       required: true
     },
     stageLevel: {
@@ -37,7 +37,7 @@ const QuizSubmissionSchema = new mongoose.Schema({
     },
     successDefinition: {
       type: String,
-      enum: ['audience-impact', 'creative-fulfillment', 'financial-freedom', 'balanced-all'],
+      enum: ['live-performer', 'online-audience', 'songwriter'],
       required: true
     },
     resourcesPriority: String
