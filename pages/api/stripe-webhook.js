@@ -240,7 +240,7 @@ function generateIndustryMapEmail(metadata) {
     <html>
     <head>
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            body { font-family: 'Montserrat', Arial, sans-serif; line-height: 1.6; color: #333; }
             .header { background: linear-gradient(45deg, #1DD1A1, #B91372); padding: 20px; text-align: center; color: white; }
             .content { padding: 20px; }
             .company { margin-bottom: 20px; padding: 15px; border-left: 4px solid #1DD1A1; background: #f9f9f9; }

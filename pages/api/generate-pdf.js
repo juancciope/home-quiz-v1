@@ -444,7 +444,7 @@ export default async function handler(req, res) {
       style.textContent = `
         /* Default font for all elements - no emoji conversion */
         * {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+          font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
           font-variant-emoji: text !important;
           -webkit-font-variant-emoji: text !important;
         }
@@ -458,7 +458,7 @@ export default async function handler(req, res) {
         
         /* Ensure numbers stay as regular text */
         .step-number, .action-number, .page-header-badge {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+          font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
           font-variant-emoji: text !important;
           -webkit-font-variant-emoji: text !important;
         }

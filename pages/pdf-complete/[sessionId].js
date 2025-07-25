@@ -35,7 +35,7 @@ export default function CompletePDFView({ sessionId, pathwayData }) {
           <style dangerouslySetInnerHTML={{__html: `
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { 
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+              font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
               background: #000; 
               color: #fff; 
               line-height: 1.4; 
@@ -105,7 +105,7 @@ export default function CompletePDFView({ sessionId, pathwayData }) {
         <style dangerouslySetInnerHTML={{__html: `
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
             background: #000000; 
             color: #ffffff; 
             line-height: 1.5; 

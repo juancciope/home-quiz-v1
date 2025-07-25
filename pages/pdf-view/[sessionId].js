@@ -65,7 +65,7 @@ export default function PDFView({ sessionId, pathwayData }) {
       color: '#ffffff',
       minHeight: '100vh',
       padding: '40px 20px',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      fontFamily: 'Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       lineHeight: '1.6'
     }}>
       {/* Header */}

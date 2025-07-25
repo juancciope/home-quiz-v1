@@ -119,7 +119,7 @@ export default function PDFView({ sessionId, pathwayData }) {
         <title>Music Creator Roadmap - {pathway.title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style jsx global>{`
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
           
           * {
             box-sizing: border-box;
@@ -128,7 +128,7 @@ export default function PDFView({ sessionId, pathwayData }) {
           }
           
           html, body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
             background: #000000 !important;
             color: #ffffff !important;
             -webkit-font-smoothing: antialiased;
@@ -141,7 +141,7 @@ export default function PDFView({ sessionId, pathwayData }) {
             background: #000000;
             color: #ffffff;
             padding: 32px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
           }
           
           .header {

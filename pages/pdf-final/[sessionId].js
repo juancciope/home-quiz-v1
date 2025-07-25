@@ -33,7 +33,7 @@ export default function PDFPage({ sessionId, pathwayData }) {
     return (
       <html>
         <head><title>No Data</title></head>
-        <body style={{background: '#000', color: '#fff', padding: '20px', fontFamily: 'Arial, sans-serif'}}>
+        <body style={{background: '#000', color: '#fff', padding: '20px', fontFamily: 'Montserrat, sans-serif'}}>
           <h1>No PDF data found</h1>
           <p>Session: {sessionId}</p>
           <p>Please try regenerating the PDF</p>
@@ -52,7 +52,7 @@ export default function PDFPage({ sessionId, pathwayData }) {
         <style>{`
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { 
-            font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; 
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif; 
             background: #000; 
             color: #fff; 
             line-height: 1.4; 
