@@ -2695,7 +2695,7 @@ const HOMECreatorFlow = () => {
                   <p className="text-gray-400 text-sm mb-4 text-center italic">Josh Billings, American writer and humorist</p>
                   
                   <p className="text-gray-300 leading-relaxed">
-                    While you may identify with multiple paths, <strong className="text-[#1DD1A1]">focus creates breakthroughs</strong>. This assessment reveals your highest-impact priority and the path that will <strong className="text-white">accelerate your music career</strong>.
+                    While you may identify with multiple paths, <strong className="text-[#1DD1A1]">focus creates breakthroughs</strong>. This assessment reveals your highest-impact priority and the path that will <strong className="text-white">help you move your music career forward</strong>.
                   </p>
                 </div>
               </div>
