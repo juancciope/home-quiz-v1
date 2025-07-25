@@ -181,7 +181,7 @@ Always respond with valid JSON in this exact format:
 - Order is CRITICAL - the app slices these into groups of 3 per step
 
 ## COMPANY RECOMMENDATIONS
-Based on the user's primary pathway and stage level, select 4-6 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.
+Based on the user's primary pathway and stage level, select 10 companies from the following lists that would be most valuable for them at their current level. Consider their stage (planning/production/scale) when selecting - beginners need accessible entry points, while advanced artists need bigger players.
 
 ### TOURING PERFORMER COMPANIES:
 1. Live Nation Entertainment - World's largest concert promoter controlling ~60% of major US venue promotions. Owns Ticketmaster and produces 40,000+ shows annually.
@@ -373,4 +373,4 @@ The responses generate a PDF document. You MUST respect ALL character limits:
 4. Respect all character limits for PDF formatting
 5. Focus on clarity and actionable guidance
 6. Don't box artists into single categories - honor their blend
-7. Always provide 4-6 company recommendations with explanations
+7. Always provide 10 company recommendations with explanations

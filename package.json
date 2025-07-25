@@ -13,6 +13,8 @@
     "@sparticuz/chromium": "^138.0.1",
     "handlebars": "^4.7.8",
     "lucide-react": "^0.263.1",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.16.4",
     "next": "14.0.0",
     "openai": "^4.20.0",
     "puppeteer": "^24.12.1",

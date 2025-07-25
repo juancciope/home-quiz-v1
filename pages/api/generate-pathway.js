@@ -87,9 +87,20 @@ export default async function handler(req, res) {
 
     // Try OpenAI Assistant first
     let useAssistant = true;
-    if (!process.env.OPENAI_API_KEY || !ASSISTANT_ID) {
+    
+    // Check if Assistant is disabled via environment variable
+    if (process.env.DISABLE_OPENAI_ASSISTANT === 'true') {
+      console.log('⚠️ OpenAI Assistant disabled via environment variable');
+      useAssistant = false;
+    } else if (!process.env.OPENAI_API_KEY || !ASSISTANT_ID) {
       console.log('⚠️ OpenAI not configured, using fallback only');
       useAssistant = false;
+    }
+    
+    // Log Assistant configuration
+    if (useAssistant) {
+      console.log(`🔧 Assistant ID: ${ASSISTANT_ID}`);
+      console.log(`🔧 OpenAI API Key: ${process.env.OPENAI_API_KEY ? 'Configured' : 'Missing'}`);
     }
 
     if (useAssistant) {
@@ -144,10 +155,11 @@ Do not box them into a single category - acknowledge their unique blend and prov
           assistant_id: ASSISTANT_ID
         });
 
-        // Wait for completion with shorter timeout
+        // Wait for completion with increased timeout and exponential backoff
         let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
         let attempts = 0;
-        const maxAttempts = 20; // Reduced from 30 to 20 seconds
+        const maxAttempts = 30; // Increased to 30 seconds total
+        let waitTime = 1000; // Start with 1 second
         
         while (runStatus.status !== 'completed' && attempts < maxAttempts) {
           if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
@@ -155,8 +167,10 @@ Do not box them into a single category - acknowledge their unique blend and prov
             throw new Error(`Assistant run failed: ${runStatus.status}`);
           }
           
-          // Wait before checking again
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Wait with exponential backoff (max 3 seconds)
+          await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 3000)));
+          waitTime = waitTime * 1.2; // Increase wait time by 20%
+          
           runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
           attempts++;
           
@@ -164,7 +178,7 @@ Do not box them into a single category - acknowledge their unique blend and prov
         }
 
         if (runStatus.status !== 'completed') {
-          console.error(`❌ Assistant run timed out after ${maxAttempts} seconds`);
+          console.error(`❌ Assistant run timed out after ${maxAttempts} attempts`);
           throw new Error('Assistant run timed out');
         }
 
@@ -502,8 +516,11 @@ function generateFallbackCompanies(pathway, scoreResult) {
     ]
   };
   
-  // Return 4 companies based on pathway
-  return companiesByPathway[pathway] || companiesByPathway['creative-artist'];
+  // Return all companies for the pathway (API will show all 4, but we can expand this list if needed)
+  const companies = companiesByPathway[pathway] || companiesByPathway['creative-artist'];
+  
+  // For now, return the 4 we have, but in the future we should expand each array to have 10 companies
+  return companies;
 }
 
 function generateFallbackPathwayDetails(primaryPathway, scoreResult) {
@@ -581,57 +598,57 @@ function determineFallbackPathway(responses) {
   
   console.log('🔍 Scoring responses:', responses);
   
-  // Score based on responses
-  if (responses.motivation === 'live-performance') {
+  // Score based on v2 responses
+  if (responses.motivation === 'stage-energy') {
     scores['touring-performer'] += 4;
-    console.log('+ 4 to touring-performer (motivation: live-performance)');
+    console.log('+ 4 to touring-performer (motivation: stage-energy)');
   }
-  if (responses.motivation === 'artistic-expression') {
+  if (responses.motivation === 'creative-expression') {
     scores['creative-artist'] += 4;
-    console.log('+ 4 to creative-artist (motivation: artistic-expression)');
+    console.log('+ 4 to creative-artist (motivation: creative-expression)');
   }
-  if (responses.motivation === 'collaboration') {
+  if (responses.motivation === 'behind-scenes') {
     scores['writer-producer'] += 4;
-    console.log('+ 4 to writer-producer (motivation: collaboration)');
+    console.log('+ 4 to writer-producer (motivation: behind-scenes)');
   }
   
-  if (responses['ideal-day'] === 'performing-travel') {
+  if (responses['ideal-day'] === 'performing') {
     scores['touring-performer'] += 3;
-    console.log('+ 3 to touring-performer (ideal-day: performing-travel)');
+    console.log('+ 3 to touring-performer (ideal-day: performing)');
   }
-  if (responses['ideal-day'] === 'releasing-music') {
+  if (responses['ideal-day'] === 'creating-content') {
     scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (ideal-day: releasing-music)');
+    console.log('+ 3 to creative-artist (ideal-day: creating-content)');
   }
-  if (responses['ideal-day'] === 'writing-creating') {
+  if (responses['ideal-day'] === 'studio-work') {
     scores['writer-producer'] += 3;
-    console.log('+ 3 to writer-producer (ideal-day: writing-creating)');
+    console.log('+ 3 to writer-producer (ideal-day: studio-work)');
   }
   
-  if (responses['success-vision'] === 'touring-headliner') {
+  if (responses['success-vision'] === 'touring-artist') {
     scores['touring-performer'] += 5;
-    console.log('+ 5 to touring-performer (success-vision: touring-headliner)');
+    console.log('+ 5 to touring-performer (success-vision: touring-artist)');
   }
-  if (responses['success-vision'] === 'passive-income-artist') {
+  if (responses['success-vision'] === 'creative-brand') {
     scores['creative-artist'] += 5;
-    console.log('+ 5 to creative-artist (success-vision: passive-income-artist)');
+    console.log('+ 5 to creative-artist (success-vision: creative-brand)');
   }
-  if (responses['success-vision'] === 'hit-songwriter') {
+  if (responses['success-vision'] === 'in-demand-producer') {
     scores['writer-producer'] += 5;
-    console.log('+ 5 to writer-producer (success-vision: hit-songwriter)');
+    console.log('+ 5 to writer-producer (success-vision: in-demand-producer)');
   }
   
-  if (responses['biggest-challenge'] === 'performance-opportunities') {
+  if (responses['success-definition'] === 'live-performer') {
     scores['touring-performer'] += 3;
-    console.log('+ 3 to touring-performer (biggest-challenge: performance-opportunities)');
+    console.log('+ 3 to touring-performer (success-definition: live-performer)');
   }
-  if (responses['biggest-challenge'] === 'brand-audience') {
+  if (responses['success-definition'] === 'online-audience') {
     scores['creative-artist'] += 3;
-    console.log('+ 3 to creative-artist (biggest-challenge: brand-audience)');
+    console.log('+ 3 to creative-artist (success-definition: online-audience)');
   }
-  if (responses['biggest-challenge'] === 'collaboration-income') {
+  if (responses['success-definition'] === 'songwriter') {
     scores['writer-producer'] += 3;
-    console.log('+ 3 to writer-producer (biggest-challenge: collaboration-income)');
+    console.log('+ 3 to writer-producer (success-definition: songwriter)');
   }
   
   console.log('📊 Final scores:', scores);

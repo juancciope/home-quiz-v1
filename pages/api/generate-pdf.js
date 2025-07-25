@@ -75,6 +75,14 @@ export default async function handler(req, res) {
     const levels = scoreData.levels || {};
     const absPct = scoreData.absPct || {};
     
+    console.log('🔍 Creating fuzzyScoresArray with:', {
+      scoreDataExists: !!scoreData,
+      scoresKeys: Object.keys(scores),
+      levelsObject: levels,
+      absPctObject: absPct,
+      validScoresWillBe: scores && Object.keys(scores).length > 0 ? scores : 'fallback'
+    });
+    
     
     // Ensure we have valid scores data - create fallback if needed
     const validScores = scores && Object.keys(scores).length > 0 ? scores : {
