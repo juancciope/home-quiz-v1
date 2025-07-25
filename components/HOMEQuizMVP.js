@@ -1814,7 +1814,7 @@ const HOMECreatorFlow = () => {
     
     // Clear selected option when question changes
     setSelectedOption(null);
-  }, [screen, questionIndex, currentStep]);
+  }, [screen, questionIndex, currentStep, surveyQuestionIndex]);
 
   // Handle quiz answer
   const handleAnswer = async (questionId, value) => {
@@ -3896,7 +3896,11 @@ const HOMECreatorFlow = () => {
                   <div className="flex gap-3">
                     {surveyQuestionIndex > 0 && (
                       <button
-                        onClick={() => setSurveyQuestionIndex(prev => prev - 1)}
+                        onClick={() => {
+                          setSurveyQuestionIndex(prev => prev - 1);
+                          // Scroll to top of the page when going to previous question
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
                         className="flex-1 px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-colors"
                       >
                         Previous
@@ -3907,6 +3911,8 @@ const HOMECreatorFlow = () => {
                       onClick={async () => {
                         if (surveyQuestionIndex < surveyQuestions.length - 1) {
                           setSurveyQuestionIndex(prev => prev + 1);
+                          // Scroll to top of the page when advancing to next question
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
                         } else {
                           // Survey completed - submit survey data and generate PDF
                           setSurveyCompleted(true);
