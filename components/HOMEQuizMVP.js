@@ -2975,9 +2975,9 @@ const HOMECreatorFlow = () => {
                                 </div>
                               </div>
                               
-                              <h2 className="text-2xl font-bold text-white mb-2">Your Focus Profile Is Ready</h2>
+                              <h2 className="text-2xl font-bold text-white mb-2">Your Roadmap is Ready</h2>
                               <p className="text-sm text-gray-300 mb-6 leading-relaxed">
-                                See Core vs Secondary priorities + a 4-step roadmap.
+                                See core focus, a 4-step roadmap + 10 Local companies you must have on your radar
                               </p>
                               
                               {/* Locked preview bars */}
@@ -3042,7 +3042,7 @@ const HOMECreatorFlow = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email address"
+                            placeholder="Your Email"
                             className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl 
                                      focus:bg-black/50 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
                                      transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
@@ -3076,7 +3076,7 @@ const HOMECreatorFlow = () => {
                               <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/30 via-transparent to-transparent rotate-45 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
                             </div>
                             
-                            <span className="relative z-10">Get My Roadmap</span>
+                            <span className="relative z-10">Unlock My Roadmap</span>
                             <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                           </button>
                           
