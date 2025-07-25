@@ -3472,6 +3472,21 @@ const HOMECreatorFlow = () => {
                       <span className="text-sm font-semibold text-white">Strategic Roadmap</span>
                     </div>
                     
+                    {/* Artist's Path Badge */}
+                    {(() => {
+                      const rec = scoreResult?.recommendation;
+                      const topPath = rec?.path || Object.entries(fuzzyScores || {}).sort((a, b) => b[1] - a[1])[0]?.[0];
+                      const topPathName = PATH_LABELS[topPath] || pathway.title || 'Your Path';
+                      const topLabel = rec?.promoted ? 'Recommended Focus' : 'Core Focus';
+                      
+                      return (
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#22c55e]/20 rounded-full border border-[#22c55e]/30 mb-4">
+                          <span className="text-lg">🏆</span>
+                          <span className="text-sm font-semibold text-[#22c55e]">{topLabel}: {topPathName}</span>
+                        </div>
+                      );
+                    })()}
+                    
                     <h2 className="text-2xl font-bold mb-4 text-white">{pathway.steps[currentStep].title}</h2>
                   </div>
                   
