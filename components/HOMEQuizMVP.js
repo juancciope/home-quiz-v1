@@ -2686,10 +2686,12 @@ const HOMECreatorFlow = () => {
                 </p>
                 
                 <div className="bg-black/80 backdrop-blur-xl rounded-3xl border border-white/20 p-6 mb-8 text-left safari-fallback">
-                  <blockquote className="text-xl font-medium text-white mb-3 leading-relaxed">
-                    "Be like a postage stamp - stick to one thing until you get there"
+                  <blockquote className="text-xl font-medium text-white mb-3 leading-relaxed relative pl-6">
+                    <span className="absolute left-0 top-0 text-2xl text-[#1DD1A1] opacity-70">&ldquo;</span>
+                    Be like a postage stamp - stick to one thing until you get there
+                    <span className="text-2xl text-[#1DD1A1] opacity-70">&rdquo;</span>
                   </blockquote>
-                  <p className="text-gray-400 text-sm mb-4">— Josh Billings</p>
+                  <p className="text-gray-400 text-sm mb-4 text-right italic">— Josh Billings, American writer and humorist</p>
                   
                   <p className="text-gray-300 leading-relaxed">
                     While you may identify with multiple paths, <strong className="text-[#1DD1A1]">focus creates breakthroughs</strong>. This assessment reveals your highest-impact priority and the path that will <strong className="text-white">accelerate your music career</strong>.
