@@ -103,34 +103,20 @@ const surveyQuestions = [
       { value: 'music-business', label: 'Understanding music business and contracts' },
       { value: 'marketing', label: 'Marketing and social media strategy' },
       { value: 'time-management', label: 'Time management and productivity' },
-      { value: 'equipment-access', label: 'Access to professional equipment/studios' }
-    ]
-  },
-  {
-    id: 'career-stage',
-    section: 'Your Music Creator Journey',
-    question: "Which best describes your current career stage?",
-    type: 'single',
-    options: [
-      { value: 'starting', label: 'Just starting out (0-2 years creating music)' },
-      { value: 'building', label: 'Building momentum (2-5 years, some traction)' },
-      { value: 'local', label: 'Established locally (5+ years, local following)' },
-      { value: 'expanding', label: 'Breaking into larger markets (regional/national reach)' },
-      { value: 'professional', label: 'Professional level (music as primary income)' }
+      { value: 'equipment-access', label: 'Access to professional equipment/studios' },
+      { value: 'overwhelmed', label: "I'm overwhelmed and don't know where to start" }
     ]
   },
   {
     id: 'monthly-investment',
     section: 'Your Music Creator Journey',
     question: "What's your average monthly investment in your music career?",
-    type: 'single',
+    type: 'investment-slider',
+    min: 0,
+    max: 3000,
+    step: 50,
+    defaultValue: 0,
     options: [
-      { value: 'under-100', label: 'Under $100' },
-      { value: '100-300', label: '$100-$300' },
-      { value: '300-500', label: '$300-$500' },
-      { value: '500-1000', label: '$500-$1,000' },
-      { value: '1000-2500', label: '$1,000-$2,500' },
-      { value: 'over-2500', label: 'Over $2,500' },
       { value: 'dont-know', label: "I don't know" }
     ]
   },
@@ -176,16 +162,15 @@ const surveyQuestions = [
     question: "What gear are you planning to purchase in the next 12 months? (Select all that apply)",
     type: 'multiple',
     options: [
-      { value: 'audio-interface', label: 'Audio interface ($100-$500)' },
-      { value: 'studio-monitors', label: 'Studio monitors ($200-$800)' },
-      { value: 'microphones', label: 'Microphones ($100-$1,000)' },
-      { value: 'midi-controllers', label: 'MIDI controllers/keyboards ($100-$600)' },
-      { value: 'guitar-equipment', label: 'Guitar/bass equipment ($200-$1,500)' },
-      { value: 'headphones', label: 'Headphones/monitoring gear ($100-$400)' },
-      { value: 'acoustic-treatment', label: 'Acoustic treatment/studio setup ($200-$1,000)' },
-      { value: 'drum-machines', label: 'Drum machines/samplers ($200-$800)' },
-      { value: 'software-plugins', label: 'Software/plugins ($50-$500)' },
-      { value: 'live-equipment', label: 'Live performance equipment ($300-$2,000)' },
+      { value: 'audio-interface', label: 'Audio interface' },
+      { value: 'studio-monitors', label: 'Studio monitors' },
+      { value: 'microphones', label: 'Microphones' },
+      { value: 'midi-controllers', label: 'MIDI controllers/keyboards' },
+      { value: 'guitar-equipment', label: 'Guitar/bass equipment' },
+      { value: 'headphones', label: 'Headphones/monitoring gear' },
+      { value: 'drum-machines', label: 'Drum machines/samplers' },
+      { value: 'software-plugins', label: 'Software/plugins' },
+      { value: 'live-equipment', label: 'Live performance equipment' },
       { value: 'no-purchases', label: 'Not planning any purchases' }
     ]
   },
@@ -382,24 +367,6 @@ const surveyQuestions = [
       { value: 'brand-managers', label: 'Brand partnership managers' },
       { value: 'lawyers', label: 'Entertainment lawyers' },
       { value: 'producers', label: 'Verified producers/collaborators' }
-    ]
-  },
-  {
-    id: 'gear-discovery',
-    section: 'Industry Connections & Goals',
-    question: "Where do you discover new music gear and software? (Select all that apply)",
-    type: 'multiple',
-    options: [
-      { value: 'youtube', label: 'YouTube reviews/demos' },
-      { value: 'forums', label: 'Music production forums/Reddit' },
-      { value: 'artist-recommendations', label: 'Artist recommendations/social media' },
-      { value: 'store-staff', label: 'Music store staff recommendations' },
-      { value: 'trade-shows', label: 'Trade shows/conventions (NAMM, AES)' },
-      { value: 'producer-recommendations', label: 'Producer/engineer recommendations' },
-      { value: 'brand-websites', label: 'Brand websites and newsletters' },
-      { value: 'influencer-content', label: 'Sponsored content/influencer posts' },
-      { value: 'home-community', label: 'HOME community recommendations' },
-      { value: 'trial-downloads', label: 'Trial downloads and demos' }
     ]
   }
 ];
@@ -3686,9 +3653,6 @@ const HOMECreatorFlow = () => {
               
               {/* Footer */}
               <div className="text-center space-y-2">
-                <p className="text-gray-400 text-sm">
-                  Not sure? Start with the free community and upgrade anytime.
-                </p>
                 <p className="text-gray-400 text-xs">
                   Have feedback or found an issue? 
                   <a 
@@ -3713,7 +3677,14 @@ const HOMECreatorFlow = () => {
             <div className="animate-fadeIn">
               {/* Back button */}
               <button
-                onClick={() => setScreen('execute')}
+                onClick={() => {
+                  if (surveyQuestionIndex > 0) {
+                    setSurveyQuestionIndex(prev => prev - 1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    setScreen('execute');
+                  }
+                }}
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
               >
                 <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -3753,8 +3724,82 @@ const HOMECreatorFlow = () => {
                     {surveyQuestions[surveyQuestionIndex].question}
                   </h2>
                   
-                  {/* Pricing Sliders */}
-                  {surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' ? (
+                  {/* Investment Slider */}
+                  {surveyQuestions[surveyQuestionIndex].type === 'investment-slider' ? (
+                    <div className="space-y-6 mb-6">
+                      {(() => {
+                        // Initialize default value if not already set
+                        const currentQuestion = surveyQuestions[surveyQuestionIndex];
+                        if (!surveyResponses[currentQuestion.id]) {
+                          setSurveyResponses(prev => ({
+                            ...prev,
+                            [currentQuestion.id]: { amount: currentQuestion.defaultValue, dontKnow: false }
+                          }));
+                        }
+                        return null;
+                      })()}
+                      
+                      <div className="bg-black/30 border border-white/10 rounded-xl p-5">
+                        <div className="mb-4">
+                          <label className="flex items-center gap-3">
+                            <input
+                              type="checkbox"
+                              checked={surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.dontKnow || false}
+                              onChange={(e) => {
+                                setSurveyResponses(prev => ({
+                                  ...prev,
+                                  [surveyQuestions[surveyQuestionIndex].id]: {
+                                    ...prev[surveyQuestions[surveyQuestionIndex].id],
+                                    dontKnow: e.target.checked
+                                  }
+                                }));
+                              }}
+                              className="w-4 h-4 text-[#1DD1A1] bg-gray-700 border-gray-600 rounded focus:ring-[#1DD1A1] focus:ring-2"
+                            />
+                            <span className="text-gray-300 text-sm">I don't know</span>
+                          </label>
+                        </div>
+                        
+                        {!surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.dontKnow && (
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <span className="text-white font-medium">Monthly Investment</span>
+                              <span className="text-[#1DD1A1] font-bold text-lg">
+                                ${surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue}
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min={surveyQuestions[surveyQuestionIndex].min}
+                              max={surveyQuestions[surveyQuestionIndex].max}
+                              step={surveyQuestions[surveyQuestionIndex].step}
+                              value={surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue}
+                              onChange={(e) => {
+                                const newValue = parseInt(e.target.value);
+                                setSurveyResponses(prev => ({
+                                  ...prev,
+                                  [surveyQuestions[surveyQuestionIndex].id]: {
+                                    ...prev[surveyQuestions[surveyQuestionIndex].id],
+                                    amount: newValue
+                                  }
+                                }));
+                              }}
+                              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                              style={{
+                                background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue) / surveyQuestions[surveyQuestionIndex].max) * 100}%, #374151 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue) / surveyQuestions[surveyQuestionIndex].max) * 100}%, #374151 100%)`
+                              }}
+                            />
+                            <div className="flex justify-between text-xs text-gray-400 mt-2">
+                              <span>$0</span>
+                              <span>$3,000+</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ) : 
+                  /* Pricing Sliders */
+                  surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' ? (
                     <div className="space-y-6 mb-6">
                       {(() => {
                         // Initialize default values if not already set
@@ -3889,7 +3934,7 @@ const HOMECreatorFlow = () => {
                   )}
                   
                   {/* Selection helper text */}
-                  {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && (
+                  {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && surveyQuestions[surveyQuestionIndex].type !== 'investment-slider' && (
                     <p className="text-xs text-gray-400 mb-4">
                       Select up to {surveyQuestions[surveyQuestionIndex].maxSelections} options
                     </p>
@@ -3897,19 +3942,6 @@ const HOMECreatorFlow = () => {
                   
                   {/* Navigation buttons */}
                   <div className="flex gap-3">
-                    {surveyQuestionIndex > 0 && (
-                      <button
-                        onClick={() => {
-                          setSurveyQuestionIndex(prev => prev - 1);
-                          // Scroll to top of the page when going to previous question
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                        className="flex-1 px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-colors"
-                      >
-                        Previous
-                      </button>
-                    )}
-                    
                     <button
                       onClick={async () => {
                         if (surveyQuestionIndex < surveyQuestions.length - 1) {
@@ -3924,11 +3956,11 @@ const HOMECreatorFlow = () => {
                         }
                       }}
                       disabled={
-                        surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' 
-                          ? false // Pricing sliders always have default values
+                        surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' || surveyQuestions[surveyQuestionIndex].type === 'investment-slider'
+                          ? false // Sliders always have default values
                           : !surveyResponses[surveyQuestions[surveyQuestionIndex].id]
                       }
-                      className="flex-1 px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {surveyQuestionIndex < surveyQuestions.length - 1 ? 'Next' : 'Complete & Download'}
                     </button>
