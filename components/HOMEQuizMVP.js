@@ -140,23 +140,6 @@ const surveyQuestions = [
 
   // Section 2: Tools & Software Usage (8 questions)
   {
-    id: 'recording-software',
-    section: 'Tools & Software Usage',
-    question: "Which recording software do you primarily use? (Select all that apply)",
-    type: 'multiple',
-    options: [
-      { value: 'pro-tools', label: 'Pro Tools' },
-      { value: 'logic-pro', label: 'Logic Pro' },
-      { value: 'ableton', label: 'Ableton Live' },
-      { value: 'fl-studio', label: 'FL Studio' },
-      { value: 'reaper', label: 'Reaper' },
-      { value: 'cubase', label: 'Cubase/Nuendo' },
-      { value: 'studio-one', label: 'Studio One' },
-      { value: 'garageband', label: 'GarageBand' },
-      { value: 'other', label: 'Other', hasInput: true }
-    ]
-  },
-  {
     id: 'gear-purchases',
     section: 'Tools & Software Usage',
     question: "What gear are you planning to purchase in the next 12 months? (Select all that apply)",
