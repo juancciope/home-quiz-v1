@@ -133,7 +133,7 @@ const ArtistProfileSchema = new mongoose.Schema({
     // Core challenges and goals
     primaryChallenges: [String],
     careerStage: String,
-    monthlyInvestment: String,
+    monthlyInvestment: mongoose.Schema.Types.Mixed,
     careerImpact: String,
     
     // Tools and software preferences
