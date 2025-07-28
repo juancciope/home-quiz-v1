@@ -2847,7 +2847,7 @@ const HOMECreatorFlow = () => {
                   </h2>
                   
                   <p className="text-gray-400 text-sm mb-10 leading-relaxed max-w-md mx-auto">
-                    Our AI is analyzing your responses to create a personalized pathway for your music career
+                    Our AI is analyzing your responses to create a personalized pathway
                   </p>
                   
                   {/* Process Steps */}
