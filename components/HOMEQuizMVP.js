@@ -3940,6 +3940,26 @@ const HOMECreatorFlow = () => {
                         );
                       })}
                     </div>
+                  ) : 
+                  /* Textarea */
+                  surveyQuestions[surveyQuestionIndex].type === 'textarea' ? (
+                    <div className="mb-6">
+                      <textarea
+                        value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || ''}
+                        onChange={(e) => {
+                          setSurveyResponses(prev => ({
+                            ...prev,
+                            [surveyQuestions[surveyQuestionIndex].id]: e.target.value
+                          }));
+                        }}
+                        placeholder={surveyQuestions[surveyQuestionIndex].placeholder}
+                        rows={6}
+                        className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none"
+                      />
+                      <p className="text-xs text-gray-400 mt-2">
+                        {surveyQuestions[surveyQuestionIndex].optional ? 'Optional - feel free to skip if you prefer' : ''}
+                      </p>
+                    </div>
                   ) : (
                     /* Regular Options */
                     <div className="space-y-3 mb-6">
@@ -4007,27 +4027,7 @@ const HOMECreatorFlow = () => {
                       );
                     })}
                     </div>
-                  ) : 
-                  /* Textarea */
-                  surveyQuestions[surveyQuestionIndex].type === 'textarea' ? (
-                    <div className="mb-6">
-                      <textarea
-                        value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || ''}
-                        onChange={(e) => {
-                          setSurveyResponses(prev => ({
-                            ...prev,
-                            [surveyQuestions[surveyQuestionIndex].id]: e.target.value
-                          }));
-                        }}
-                        placeholder={surveyQuestions[surveyQuestionIndex].placeholder}
-                        rows={6}
-                        className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none"
-                      />
-                      <p className="text-xs text-gray-400 mt-2">
-                        {surveyQuestions[surveyQuestionIndex].optional ? 'Optional - feel free to skip if you prefer' : ''}
-                      </p>
-                    </div>
-                  ) : null}
+                  )}
                   
                   {/* Selection helper text */}
                   {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && surveyQuestions[surveyQuestionIndex].type !== 'investment-slider' && surveyQuestions[surveyQuestionIndex].type !== 'nps-slider' && surveyQuestions[surveyQuestionIndex].type !== 'ces-slider' && (
