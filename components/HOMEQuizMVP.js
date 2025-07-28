@@ -215,22 +215,6 @@ const surveyQuestions = [
       }
     ]
   },
-  {
-    id: 'educational-format',
-    section: 'Tools & Software Usage',
-    question: "Which educational format would you most likely purchase? (Select top 2)",
-    type: 'multiple',
-    maxSelections: 2,
-    options: [
-      { value: 'masterclasses', label: 'Live monthly masterclasses ($25-50/month)' },
-      { value: 'self-paced', label: 'Self-paced online courses ($100-300 one-time)' },
-      { value: 'mentoring', label: '1-on-1 mentoring sessions ($100-200/session)' },
-      { value: 'workshops', label: 'Weekend intensive workshops ($200-500)' },
-      { value: 'cohort-courses', label: 'Cohort-based courses with peers ($300-800)' },
-      { value: 'networking-events', label: 'Industry networking events ($50-150/event)' },
-      { value: 'certification', label: 'Certification programs ($500-1,500)' }
-    ]
-  },
 
   // Section 3: Collaboration & Community (4 questions)
   {
