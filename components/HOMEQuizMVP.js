@@ -175,25 +175,6 @@ const surveyQuestions = [
     ]
   },
   {
-    id: 'software-subscriptions',
-    section: 'Tools & Software Usage',
-    question: "Which software subscriptions do you currently pay for? (Select all that apply)",
-    type: 'multiple',
-    options: [
-      { value: 'streaming-artists', label: 'Spotify for Artists/Apple Music for Artists' },
-      { value: 'distribution', label: 'DistroKid/CD Baby/TuneCore' },
-      { value: 'samples', label: 'Splice/Loopmasters' },
-      { value: 'ni-komplete', label: 'Native Instruments/Komplete' },
-      { value: 'waves-plugins', label: 'Waves/FabFilter plugins' },
-      { value: 'adobe', label: 'Adobe Creative Suite' },
-      { value: 'design-tools', label: 'Canva Pro/design software' },
-      { value: 'social-media', label: 'Social media management tools' },
-      { value: 'email-marketing', label: 'Email marketing platforms' },
-      { value: 'website-streaming', label: 'Website/streaming platforms' },
-      { value: 'none', label: 'None of the above' }
-    ]
-  },
-  {
     id: 'valuable-tools',
     section: 'Tools & Software Usage',
     question: "Which tools and services would be most valuable for your music career? (Select top 5)",
