@@ -328,6 +328,16 @@ const surveyQuestions = [
       { value: 'lawyers', label: 'Entertainment lawyers' },
       { value: 'producers', label: 'Verified producers/collaborators' }
     ]
+  },
+  
+  // Feedback
+  {
+    id: 'feedback',
+    section: 'Your Feedback',
+    question: "Is there anything else you'd like to share with us?",
+    type: 'textarea',
+    placeholder: 'Share your thoughts, suggestions, or anything else on your mind...',
+    optional: true
   }
 ];
 
@@ -3997,7 +4007,27 @@ const HOMECreatorFlow = () => {
                       );
                     })}
                     </div>
-                  )}
+                  ) : 
+                  /* Textarea */
+                  surveyQuestions[surveyQuestionIndex].type === 'textarea' ? (
+                    <div className="mb-6">
+                      <textarea
+                        value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || ''}
+                        onChange={(e) => {
+                          setSurveyResponses(prev => ({
+                            ...prev,
+                            [surveyQuestions[surveyQuestionIndex].id]: e.target.value
+                          }));
+                        }}
+                        placeholder={surveyQuestions[surveyQuestionIndex].placeholder}
+                        rows={6}
+                        className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none"
+                      />
+                      <p className="text-xs text-gray-400 mt-2">
+                        {surveyQuestions[surveyQuestionIndex].optional ? 'Optional - feel free to skip if you prefer' : ''}
+                      </p>
+                    </div>
+                  ) : null}
                   
                   {/* Selection helper text */}
                   {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && surveyQuestions[surveyQuestionIndex].type !== 'investment-slider' && surveyQuestions[surveyQuestionIndex].type !== 'nps-slider' && surveyQuestions[surveyQuestionIndex].type !== 'ces-slider' && (
@@ -4025,8 +4055,9 @@ const HOMECreatorFlow = () => {
                         surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' || 
                         surveyQuestions[surveyQuestionIndex].type === 'investment-slider' ||
                         surveyQuestions[surveyQuestionIndex].type === 'nps-slider' ||
-                        surveyQuestions[surveyQuestionIndex].type === 'ces-slider'
-                          ? false // Sliders always have default values
+                        surveyQuestions[surveyQuestionIndex].type === 'ces-slider' ||
+                        surveyQuestions[surveyQuestionIndex].type === 'textarea'
+                          ? false // Sliders always have default values, textarea is optional
                           : !surveyResponses[surveyQuestions[surveyQuestionIndex].id]
                       }
                       className="w-full px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"

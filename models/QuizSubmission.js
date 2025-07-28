@@ -130,7 +130,9 @@ const QuizSubmissionSchema = new mongoose.Schema({
     'seeking-skills': [String],
     // Industry Connections & Goals
     'industry-connections': [String],
-    'gear-discovery': [String]
+    'gear-discovery': [String],
+    // Feedback
+    feedback: String
   },
   
   submittedAt: {

@@ -164,6 +164,9 @@ const ArtistProfileSchema = new mongoose.Schema({
     industryConnections: [String],
     gearDiscovery: [String],
     
+    // Feedback
+    feedback: String,
+    
     lastUpdated: Date
   },
   

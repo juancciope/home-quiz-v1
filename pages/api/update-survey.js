@@ -94,6 +94,9 @@ export default async function handler(req, res) {
       industryConnections: surveyResponses['industry-connections'] || [],
       gearDiscovery: surveyResponses['gear-discovery'] || [],
       
+      // Feedback
+      feedback: surveyResponses.feedback || '',
+      
       lastUpdated: new Date()
     };
     

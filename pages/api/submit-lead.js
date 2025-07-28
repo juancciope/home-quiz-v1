@@ -167,6 +167,7 @@ export default async function handler(req, res) {
           skillsSeeking: surveyResponses['seeking-skills'] || [],
           industryConnections: surveyResponses['industry-connections'] || [],
           gearDiscovery: surveyResponses['gear-discovery'] || [],
+          feedback: surveyResponses.feedback || '',
           lastUpdated: new Date()
         };
         await artistProfile.save();
