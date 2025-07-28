@@ -2533,7 +2533,7 @@ const HOMECreatorFlow = () => {
                 {/* Title - Smaller on mobile */}
                 <div className="mb-8 sm:mb-12 animate-fadeIn">
                   <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white">
-                    Find Your Path on the
+                    Find Your Path <span className="block sm:inline">on the</span>
                     <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
                       Music Creator Roadmap
                     </span>
