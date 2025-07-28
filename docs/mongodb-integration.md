@@ -41,7 +41,7 @@ Tracks all artist interactions:
    - Creates or updates artist profile
    - Stores quiz submission with full results
    - Creates event record
-   - Still sends to GHL webhook if configured (optional)
+   - Returns success response to frontend
 
 ## Data Flow
 
@@ -50,7 +50,7 @@ Tracks all artist interactions:
 3. Artist profile created/updated in MongoDB
 4. Quiz submission stored with all results
 5. Event logged for analytics
-6. Optional: Data forwarded to GHL webhook
+6. Success response sent to frontend
 
 ## Future Enhancements
 

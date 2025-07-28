@@ -39,7 +39,6 @@ Open [http://localhost:3000](http://localhost:3000) to view the quiz.
 ## Environment Variables
 
 - `OPENAI_API_KEY`: Your OpenAI API key for AI-powered pathway generation
-- `GHL_WEBHOOK_URL`: Go High Level webhook URL for lead capture
 
 ## Deployment
 
@@ -54,7 +53,7 @@ This project is configured for automatic deployment via Vercel + GitHub integrat
 
 - `/app` - Next.js app directory with main pages
 - `/components` - React components (quiz interface)
-- `/pages/api` - API routes for OpenAI and GHL integration
+- `/pages/api` - API routes for OpenAI integration and data storage
 - Configuration files for Next.js, Tailwind, etc.
 
 ## Tech Stack

@@ -2258,7 +2258,7 @@ const HOMECreatorFlow = () => {
         console.error('❌ Submit failed:', responseData);
       } else {
         console.log('✅ Lead submitted successfully');
-        console.log('🎉 GHL webhook status:', responseData.data?.ghl);
+        console.log('💾 Data stored in MongoDB successfully');
         console.log('📝 Circle post status:', responseData.data?.circle);
       }
     } catch (error) {

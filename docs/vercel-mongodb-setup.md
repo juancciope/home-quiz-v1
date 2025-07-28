@@ -98,12 +98,9 @@ No manual database or collection creation needed!
    - `quizsubmissions` - Quiz results
    - `leadevents` - Activity tracking
 
-## Optional: Keep GHL Webhook
+## Data Storage
 
-If you want to keep sending to GHL as well:
-- Add `GHL_WEBHOOK_URL` to Vercel environment variables
-- Both MongoDB and GHL will receive data
-
-If you only want MongoDB:
-- Don't add `GHL_WEBHOOK_URL` or leave it empty
-- Data will only go to MongoDB
+All quiz data is now stored exclusively in MongoDB:
+- Lead information stored in artist profiles
+- Quiz responses and results tracked
+- No external webhook integrations needed

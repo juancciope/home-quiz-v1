@@ -50,22 +50,22 @@ Always respond with valid JSON in this exact format:
   "customNextSteps": [
     {
       "priority": 1,
-      "step": "The ONE specific, actionable thing they must start immediately (MAX 80 chars)",
+      "step": "The ONE specific, actionable thing they must start immediately (MAX 80 chars). NO mention of HOME here.",
       "detail": "Why this creates breakthrough momentum for their situation (MAX 120 chars)"
     },
     {
       "priority": 2,
-      "step": "Action that builds on step 1 and leverages secondary strengths (MAX 80 chars)",
+      "step": "Action that builds on step 1 and leverages secondary strengths (MAX 80 chars). NO mention of HOME here.",
       "detail": "How this removes obstacles and accelerates their pathway blend (MAX 120 chars)"
     },
     {
       "priority": 3,
-      "step": "Strategic action bridging current abilities to 3-year vision (MAX 80 chars)",
+      "step": "Strategic action bridging current abilities to 3-year vision (MAX 80 chars)". NO mention of HOME here.,
       "detail": "Why this creates sustainable progress toward success definition (MAX 120 chars)"
     },
     {
       "priority": 4,
-      "step": "Community/network action that multiplies efforts (MAX 80 chars)",
+      "step": "Community/network action that multiplies efforts (MAX 80 chars)". NO mention of HOME here.,
       "detail": "How connecting this way accelerates their pathway goals (MAX 120 chars)"
     }
   ],
