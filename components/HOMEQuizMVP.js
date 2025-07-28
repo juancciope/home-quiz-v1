@@ -2947,7 +2947,7 @@ const HOMECreatorFlow = () => {
                               
                               <h2 className="text-2xl font-bold text-white mb-2">Your Roadmap is Ready</h2>
                               <p className="text-sm text-gray-300 mb-6 leading-relaxed">
-                                See core focus, a 4-step roadmap + 10 Local companies you must have on your radar
+                                Learn about your core focus, get your full Roadmap + 10 companies that need to be on your radar.
                               </p>
                               
                               {/* Locked preview bars */}
