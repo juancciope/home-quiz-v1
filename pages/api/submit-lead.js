@@ -149,6 +149,8 @@ export default async function handler(req, res) {
       if (surveyResponses && Object.keys(surveyResponses).length > 0) {
         console.log('📋 Updating survey insights in artist profile...');
         artistProfile.surveyInsights = {
+          nps: surveyResponses.nps || null,
+          ces: surveyResponses.ces || null,
           primaryChallenges: surveyResponses.challenges || [],
           goals2025: surveyResponses['goals_2025'] || [],
           learningPreference: surveyResponses.learning_preference || '',

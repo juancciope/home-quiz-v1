@@ -130,6 +130,17 @@ const ArtistProfileSchema = new mongoose.Schema({
   
   // Survey insights for retargeting (aggregated from latest survey)
   surveyInsights: {
+    // Experience Metrics
+    nps: {
+      type: Number,
+      min: 1,
+      max: 10
+    },
+    ces: {
+      type: Number,
+      min: 1,
+      max: 10
+    },
     // Core challenges and goals
     primaryChallenges: [String],
     careerStage: String,

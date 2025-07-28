@@ -68,6 +68,9 @@ export default async function handler(req, res) {
     console.log('💰 Final pricing data to store:', JSON.stringify(pricingData, null, 2));
     
     artistProfile.surveyInsights = {
+      // Experience Metrics
+      nps: surveyResponses.nps || null,
+      ces: surveyResponses.ces || null,
       // Core challenges and goals
       primaryChallenges: surveyResponses.challenges || [],
       careerStage: surveyResponses['career-stage'] || '',

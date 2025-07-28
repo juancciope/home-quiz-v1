@@ -99,6 +99,17 @@ const QuizSubmissionSchema = new mongoose.Schema({
   
   // Survey responses for retargeting
   surveyResponses: {
+    // Experience Metrics
+    nps: {
+      type: Number,
+      min: 1,
+      max: 10
+    },
+    ces: {
+      type: Number,
+      min: 1,
+      max: 10
+    },
     // Your Music Creator Journey
     challenges: [String],
     goals_2025: [String],
