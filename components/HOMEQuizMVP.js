@@ -86,6 +86,34 @@ const questions = [
 
 // Survey Questions for Launch Environment
 const surveyQuestions = [
+  // Feedback Questions
+  {
+    id: 'nps',
+    section: 'Your Experience',
+    question: "How likely are you to recommend this roadmap quiz to a fellow music creator?",
+    type: 'nps-slider',
+    min: 1,
+    max: 10,
+    defaultValue: 5,
+    labels: {
+      min: 'Not at all likely',
+      max: 'Extremely likely'
+    }
+  },
+  {
+    id: 'ces',
+    section: 'Your Experience',
+    question: "How easy was it to complete this quiz and get your personalized roadmap?",
+    type: 'ces-slider',
+    min: 1,
+    max: 10,
+    defaultValue: 5,
+    labels: {
+      min: 'Very difficult',
+      max: 'Very easy'
+    }
+  },
+  
   // Section 1: Your Music Creator Journey (4 questions)
   {
     id: 'challenges',
@@ -3730,6 +3758,112 @@ const HOMECreatorFlow = () => {
                       </div>
                     </div>
                   ) : 
+                  /* NPS Slider */
+                  surveyQuestions[surveyQuestionIndex].type === 'nps-slider' ? (
+                    <div className="space-y-6 mb-6">
+                      {(() => {
+                        // Initialize default value if not already set
+                        const currentQuestion = surveyQuestions[surveyQuestionIndex];
+                        if (!surveyResponses[currentQuestion.id]) {
+                          setSurveyResponses(prev => ({
+                            ...prev,
+                            [currentQuestion.id]: currentQuestion.defaultValue
+                          }));
+                        }
+                        return null;
+                      })()}
+                      
+                      <div className="bg-black/30 border border-white/10 rounded-xl p-5">
+                        <div>
+                          <div className="flex justify-between items-center mb-4">
+                            <span className="text-[#1DD1A1] font-bold text-2xl">
+                              {surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min={surveyQuestions[surveyQuestionIndex].min}
+                            max={surveyQuestions[surveyQuestionIndex].max}
+                            step={1}
+                            value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
+                            onChange={(e) => {
+                              const newValue = parseInt(e.target.value);
+                              setSurveyResponses(prev => ({
+                                ...prev,
+                                [surveyQuestions[surveyQuestionIndex].id]: newValue
+                              }));
+                            }}
+                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                            style={{
+                              background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 100%)`
+                            }}
+                          />
+                          <div className="flex justify-between text-xs text-gray-400 mt-3">
+                            <span>{surveyQuestions[surveyQuestionIndex].labels.min}</span>
+                            <span>{surveyQuestions[surveyQuestionIndex].labels.max}</span>
+                          </div>
+                          <div className="flex justify-between text-xs text-gray-500 mt-1">
+                            {[...Array(10)].map((_, i) => (
+                              <span key={i + 1}>{i + 1}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) :
+                  /* CES Slider */
+                  surveyQuestions[surveyQuestionIndex].type === 'ces-slider' ? (
+                    <div className="space-y-6 mb-6">
+                      {(() => {
+                        // Initialize default value if not already set
+                        const currentQuestion = surveyQuestions[surveyQuestionIndex];
+                        if (!surveyResponses[currentQuestion.id]) {
+                          setSurveyResponses(prev => ({
+                            ...prev,
+                            [currentQuestion.id]: currentQuestion.defaultValue
+                          }));
+                        }
+                        return null;
+                      })()}
+                      
+                      <div className="bg-black/30 border border-white/10 rounded-xl p-5">
+                        <div>
+                          <div className="flex justify-between items-center mb-4">
+                            <span className="text-[#1DD1A1] font-bold text-2xl">
+                              {surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min={surveyQuestions[surveyQuestionIndex].min}
+                            max={surveyQuestions[surveyQuestionIndex].max}
+                            step={1}
+                            value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
+                            onChange={(e) => {
+                              const newValue = parseInt(e.target.value);
+                              setSurveyResponses(prev => ({
+                                ...prev,
+                                [surveyQuestions[surveyQuestionIndex].id]: newValue
+                              }));
+                            }}
+                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                            style={{
+                              background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 100%)`
+                            }}
+                          />
+                          <div className="flex justify-between text-xs text-gray-400 mt-3">
+                            <span>{surveyQuestions[surveyQuestionIndex].labels.min}</span>
+                            <span>{surveyQuestions[surveyQuestionIndex].labels.max}</span>
+                          </div>
+                          <div className="flex justify-between text-xs text-gray-500 mt-1">
+                            {[...Array(10)].map((_, i) => (
+                              <span key={i + 1}>{i + 1}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) :
                   /* Pricing Sliders */
                   surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' ? (
                     <div className="space-y-6 mb-6">
@@ -3866,7 +4000,7 @@ const HOMECreatorFlow = () => {
                   )}
                   
                   {/* Selection helper text */}
-                  {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && surveyQuestions[surveyQuestionIndex].type !== 'investment-slider' && (
+                  {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && surveyQuestions[surveyQuestionIndex].type !== 'investment-slider' && surveyQuestions[surveyQuestionIndex].type !== 'nps-slider' && surveyQuestions[surveyQuestionIndex].type !== 'ces-slider' && (
                     <p className="text-xs text-gray-400 mb-4">
                       Select up to {surveyQuestions[surveyQuestionIndex].maxSelections} options
                     </p>
@@ -3888,7 +4022,10 @@ const HOMECreatorFlow = () => {
                         }
                       }}
                       disabled={
-                        surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' || surveyQuestions[surveyQuestionIndex].type === 'investment-slider'
+                        surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' || 
+                        surveyQuestions[surveyQuestionIndex].type === 'investment-slider' ||
+                        surveyQuestions[surveyQuestionIndex].type === 'nps-slider' ||
+                        surveyQuestions[surveyQuestionIndex].type === 'ces-slider'
                           ? false // Sliders always have default values
                           : !surveyResponses[surveyQuestions[surveyQuestionIndex].id]
                       }
