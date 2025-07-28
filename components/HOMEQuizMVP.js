@@ -68,7 +68,7 @@ const questions = [
     options: [
       { value: 'planning', label: 'Figuring out my path and building foundations', emoji: '🌱' },
       { value: 'production', label: 'Actively creating and releasing work', emoji: '🎵' },
-      { value: 'scale', label: 'Ready to grow and expand my existing success', emoji: '📊' }
+      { value: 'scale', label: 'Doing music full-time and building my business.', emoji: '📊' }
     ]
   },
   {
