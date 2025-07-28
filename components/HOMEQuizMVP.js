@@ -137,6 +137,7 @@ const surveyQuestions = [
       { value: 'drum-machines', label: 'Drum machines/samplers' },
       { value: 'software-plugins', label: 'Software/plugins' },
       { value: 'live-equipment', label: 'Live performance equipment' },
+      { value: 'acoustic-treatment', label: 'Acoustic treatment for your studio' },
       { value: 'no-purchases', label: 'Not planning any purchases' }
     ]
   },
