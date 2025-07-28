@@ -39,6 +39,9 @@ Open [http://localhost:3000](http://localhost:3000) to view the quiz.
 ## Environment Variables
 
 - `OPENAI_API_KEY`: Your OpenAI API key for AI-powered pathway generation
+- `BEEHIVE_API_KEY`: Your Beehive API key for email automation (optional)
+- `BEEHIVE_PUBLICATION_ID`: Your Beehive publication ID (optional)
+- `BEEHIVE_AUTOMATION_ID`: Your Beehive automation ID for quiz users (optional)
 
 ## Deployment
 

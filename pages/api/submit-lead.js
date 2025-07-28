@@ -3,6 +3,7 @@ import ArtistProfile from '../../models/ArtistProfile';
 import QuizSubmission from '../../models/QuizSubmission';
 import LeadEvent from '../../models/LeadEvent';
 import { isValidEmail, validateQuizResponses, sanitizeInput } from '../../lib/validation';
+import { enrollInBeehiveAutomation } from '../../lib/beehive';
 
 // Main handler function
 export default async function handler(req, res) {
@@ -231,6 +232,33 @@ export default async function handler(req, res) {
       
       console.log('✅ Lead event created');
       console.log('✅ MongoDB storage complete');
+      
+      // Enroll in Beehive automation sequence
+      try {
+        console.log('🐝 Enrolling user in Beehive automation...');
+        
+        const userProfile = {
+          pathway: pathwayNames[primaryPathKey] || 'Unknown',
+          stage: responses?.['stage-level'] || 'planning',
+          primaryFocus: levels[primaryPathKey] === 'Core Focus' ? 'Core' : 'Recommended',
+          utm_source: source || 'music-creator-roadmap-quiz',
+          utm_medium: 'organic',
+          utm_campaign: 'creator-roadmap',
+          referring_site: req.headers.referer || 'homeformusic.app'
+        };
+        
+        const beehiveResult = await enrollInBeehiveAutomation(email, userProfile);
+        
+        if (beehiveResult.success) {
+          console.log(`✅ Beehive enrollment successful (${beehiveResult.method})`);
+        } else {
+          console.warn(`⚠️ Beehive enrollment failed: ${beehiveResult.reason}`);
+        }
+        
+      } catch (beehiveError) {
+        console.error('❌ Beehive enrollment error:', beehiveError);
+        // Don't fail the entire request if Beehive fails
+      }
       
     } catch (dbError) {
       console.error('❌ MongoDB storage error:', dbError);
