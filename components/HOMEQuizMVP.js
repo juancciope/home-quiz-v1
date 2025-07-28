@@ -120,23 +120,6 @@ const surveyQuestions = [
       { value: 'dont-know', label: "I don't know" }
     ]
   },
-  {
-    id: 'career-impact',
-    section: 'Your Music Creator Journey',
-    question: "Which outcome would have the biggest impact on your career in the next 6 months?",
-    type: 'single',
-    options: [
-      { value: 'gigs', label: 'Landing 5+ new quality gigs/shows' },
-      { value: 'followers', label: 'Gaining 1,000+ engaged social media followers' },
-      { value: 'sync-deal', label: 'Securing a sync placement or licensing deal' },
-      { value: 'collaborations', label: 'Collaborating with 3+ new artists/producers' },
-      { value: 'income-increase', label: 'Increasing monthly music income by 50%' },
-      { value: 'playlist-features', label: 'Getting featured on major playlists or blogs' },
-      { value: 'album-completion', label: 'Completing a professional-quality EP/album' },
-      { value: 'touring-schedule', label: 'Building a sustainable touring schedule' },
-      { value: 'dont-know', label: "I don't know" }
-    ]
-  },
 
   // Section 2: Tools & Software Usage (8 questions)
   {
