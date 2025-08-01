@@ -3608,16 +3608,40 @@ const HOMECreatorFlow = () => {
                     </div>
                   </div>
                   
-                  <LiquidButton
-                    onClick={() => setScreen('survey')}
-                    className="w-full"
-                  >
-                    Join Music Tech Bootcamp →
-                  </LiquidButton>
+                  {/* Two Clear Options */}
+                  <div className="space-y-4">
+                    <LiquidButton
+                      onClick={() => setScreen('email')}
+                      className="w-full"
+                    >
+                      Get My Personal Roadmap PDF →
+                    </LiquidButton>
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/20"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-3 bg-black text-gray-400">OR</span>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={() => setScreen('survey')}
+                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 text-white rounded-xl hover:from-purple-600/30 hover:to-blue-600/30 hover:border-purple-400/50 transition-all duration-300 font-medium"
+                    >
+                      Join Music Tech Innovation Bootcamp 🚀
+                    </button>
+                  </div>
                   
-                  <p className="text-xs text-gray-400 mt-3">
-                    Share your music tech idea and join our innovation community
-                  </p>
+                  <div className="text-center mt-4 space-y-2">
+                    <p className="text-xs text-gray-400">
+                      <strong>Roadmap:</strong> AI-powered personalized pathway + bonus resources
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      <strong>Bootcamp:</strong> Share your tech idea & join our innovation community
+                    </p>
+                  </div>
                 </div>
               </div>
               
