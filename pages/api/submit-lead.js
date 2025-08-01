@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // Connect to MongoDB
     await dbConnect();
     
-    const { email, pathway, responses, source, results, surveyResponses } = req.body;
+    const { email, artistName, pathway, responses, source, results, surveyResponses } = req.body;
     
     // Enhanced validation
     if (!email) {
@@ -127,12 +127,19 @@ export default async function handler(req, res) {
         console.log('👤 Creating new artist profile...');
         artistProfile = new ArtistProfile({
           email: email.toLowerCase(),
+          name: artistName || '',
           career: {
             stage: responses?.['stage-level'] || 'planning',
             startedAt: new Date()
           },
           tags: ['quiz-completed']
         });
+      } else {
+        // Update name if provided and not already set
+        if (artistName && !artistProfile.name) {
+          console.log('👤 Updating artist name...');
+          artistProfile.name = artistName;
+        }
       }
       
       // Update pathway scores

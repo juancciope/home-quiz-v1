@@ -3611,7 +3611,7 @@ const HOMECreatorFlow = () => {
                   {/* Two Clear Options */}
                   <div className="space-y-4">
                     <LiquidButton
-                      onClick={() => setScreen('email')}
+                      onClick={() => setScreen('assessment')}
                       className="w-full"
                     >
                       Get My Personal Roadmap PDF →
