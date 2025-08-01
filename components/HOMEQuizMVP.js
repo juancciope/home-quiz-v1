@@ -3683,9 +3683,11 @@ const HOMECreatorFlow = () => {
               
               {/* Header */}
               <div className="text-center mb-8">
-                <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
-                  Music Tech Incubator Contest
+                <h1 className="text-3xl sm:text-4xl font-bold mb-4">
                   <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
+                    Music Tech Incubator Contest
+                  </span>
+                  <span className="block text-white">
                     Registration
                   </span>
                 </h1>
