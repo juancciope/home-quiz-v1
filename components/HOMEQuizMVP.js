@@ -3617,19 +3617,19 @@ const HOMECreatorFlow = () => {
                     Download Your Personalized PDF Roadmap →
                   </LiquidButton>
                   
-                  {/* Bootcamp Section - Separate Box */}
+                  {/* Music Tech Incubator Contest Section - Separate Box */}
                   <div className="mt-6 p-6 bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/30 rounded-2xl">
                     <h3 className="text-xl font-bold text-white mb-3">
-                      Do you have an idea to add value to the music industry?
+                      Do you have an idea, project or startup that will empower music creators?
                     </h3>
                     <p className="text-gray-300 mb-4">
                       Apply here and make it happen with our tech innovation community
                     </p>
                     <button
-                      onClick={() => setScreen('bootcamp')}
+                      onClick={() => setScreen('contest')}
                       className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-500 hover:to-blue-500 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/25"
                     >
-                      Join Music Tech Innovation Bootcamp 🚀
+                      Join Music Tech Incubator Contest 🚀
                     </button>
                   </div>
                   
@@ -3667,8 +3667,8 @@ const HOMECreatorFlow = () => {
         </div>
       )}
       
-      {/* Bootcamp Registration Screen */}
-      {screen === 'bootcamp' && (
+      {/* Music Tech Incubator Contest Registration Screen */}
+      {screen === 'contest' && (
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
           <div className="max-w-2xl w-full">
             <div className="animate-fadeIn">
@@ -3684,9 +3684,9 @@ const HOMECreatorFlow = () => {
               {/* Header */}
               <div className="text-center mb-8">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
-                  Music Tech Innovation
+                  Music Tech Incubator Contest
                   <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
-                    Bootcamp Registration
+                    Registration
                   </span>
                 </h1>
                 <p className="text-lg text-gray-300 max-w-xl mx-auto">
@@ -3698,26 +3698,11 @@ const HOMECreatorFlow = () => {
               <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-8 safari-fallback">
                 <div className="mb-6">
                   <h2 className="text-xl font-bold text-white mb-2">
-                    Do you have an idea that will add value to the music industry using technology?
+                    Do you have an idea, project or startup that will empower music creators?
                   </h2>
                   <p className="text-gray-400 text-sm mb-6">
                     Share your vision and join a community of builders, creators, and innovators working to revolutionize how music gets made, distributed, and experienced.
                   </p>
-                </div>
-
-                {/* Email Input */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none"
-                    required
-                  />
                 </div>
 
                 {/* Idea Description */}
@@ -3774,8 +3759,8 @@ const HOMECreatorFlow = () => {
                 <div className="text-center">
                   <button
                     onClick={async () => {
-                      if (!email || !surveyResponses.techIdea) {
-                        alert('Please fill in your email and tech idea description');
+                      if (!surveyResponses.techIdea) {
+                        alert('Please describe your idea, project or startup');
                         return;
                       }
                       
@@ -3785,7 +3770,7 @@ const HOMECreatorFlow = () => {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
-                            email,
+                            email: 'anonymous@contest.com', // Placeholder since email not collected
                             techIdea: surveyResponses.techIdea,
                             techBackground: surveyResponses.techBackground || 'not specified'
                           })
@@ -3793,7 +3778,7 @@ const HOMECreatorFlow = () => {
 
                         if (response.ok) {
                           // Show success message
-                          setScreen('bootcamp-success');
+                          setScreen('contest-success');
                         } else {
                           alert('Registration failed. Please try again.');
                         }
@@ -3802,10 +3787,10 @@ const HOMECreatorFlow = () => {
                         alert('Registration failed. Please try again.');
                       }
                     }}
-                    disabled={!email || !surveyResponses.techIdea}
+                    disabled={!surveyResponses.techIdea}
                     className="w-full px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Join the Music Tech Innovation Hub
+                    Submit Contest Registration
                   </button>
                   
                   <p className="text-xs text-gray-400 mt-4">
@@ -3818,8 +3803,8 @@ const HOMECreatorFlow = () => {
         </div>
       )}
 
-      {/* Bootcamp Success Screen */}
-      {screen === 'bootcamp-success' && (
+      {/* Contest Success Screen */}
+      {screen === 'contest-success' && (
         <div className="screen-height bg-black flex items-center justify-center px-6">
           <div className="max-w-md w-full text-center">
             <div className="animate-fadeIn">
@@ -3828,10 +3813,10 @@ const HOMECreatorFlow = () => {
                   <Check className="w-10 h-10 text-white" />
                 </div>
                 <h1 className="text-3xl font-bold text-white mb-4">
-                  Registration Submitted!
+                  Contest Registration Submitted!
                 </h1>
                 <p className="text-gray-300 leading-relaxed">
-                  Thank you for sharing your music tech vision with us. We'll review your idea and get back to you soon with information about joining our innovation community.
+                  Thank you for sharing your music tech vision with us. We'll review your submission and get back to you soon about the Music Tech Incubator Contest.
                 </p>
               </div>
               
