@@ -3612,11 +3612,11 @@ const HOMECreatorFlow = () => {
                     onClick={() => setScreen('survey')}
                     className="w-full"
                   >
-                    Start Survey →
+                    Join Music Tech Bootcamp →
                   </LiquidButton>
                   
                   <p className="text-xs text-gray-400 mt-3">
-                    Complete a quick survey to unlock your roadmap and bonuses
+                    Share your music tech idea and join our innovation community
                   </p>
                 </div>
               </div>
@@ -3640,483 +3640,186 @@ const HOMECreatorFlow = () => {
         </div>
       )}
       
-      {/* Survey Screen */}
+      {/* Bootcamp Registration Screen */}
       {screen === 'survey' && (
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
-          <div className="max-w-lg w-full">
+          <div className="max-w-2xl w-full">
             <div className="animate-fadeIn">
               {/* Back button */}
               <button
-                onClick={() => {
-                  if (surveyQuestionIndex > 0) {
-                    setSurveyQuestionIndex(prev => prev - 1);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  } else {
-                    setScreen('execute');
-                  }
-                }}
+                onClick={() => setScreen('execute')}
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
               >
                 <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                 <span>Back</span>
               </button>
               
-              {/* Progress bar */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-400">
-                    Question {surveyQuestionIndex + 1} of {surveyQuestions.length}
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
+                  Music Tech Innovation
+                  <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
+                    Bootcamp Registration
                   </span>
-                  <span className="text-sm text-gray-400">
-                    {Math.round(((surveyQuestionIndex + 1) / surveyQuestions.length) * 100)}%
-                  </span>
-                </div>
-                <div className="w-full bg-gray-800 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${((surveyQuestionIndex + 1) / surveyQuestions.length) * 100}%` }}
-                  />
-                </div>
+                </h1>
+                <p className="text-lg text-gray-300 max-w-xl mx-auto">
+                  Join our hub of tech innovators building the future of the music industry
+                </p>
               </div>
-              
-              {/* Question */}
-              {surveyQuestions[surveyQuestionIndex] && (
-                <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
-                  {/* Section indicator */}
-                  <div className="mb-4">
-                    <span className="text-xs font-medium text-[#1DD1A1] uppercase tracking-wide">
-                      {surveyQuestions[surveyQuestionIndex].section}
-                    </span>
-                  </div>
-                  
-                  {/* Question text */}
-                  <h2 className="text-lg font-bold text-white mb-6">
-                    {surveyQuestions[surveyQuestionIndex].question}
+
+              {/* Registration Form */}
+              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-8 safari-fallback">
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold text-white mb-2">
+                    Do you have an idea that will add value to the music industry using technology?
                   </h2>
-                  
-                  {/* Investment Slider */}
-                  {surveyQuestions[surveyQuestionIndex].type === 'investment-slider' ? (
-                    <div className="space-y-6 mb-6">
-                      {(() => {
-                        // Initialize default value if not already set
-                        const currentQuestion = surveyQuestions[surveyQuestionIndex];
-                        if (!surveyResponses[currentQuestion.id]) {
-                          setSurveyResponses(prev => ({
-                            ...prev,
-                            [currentQuestion.id]: { amount: currentQuestion.defaultValue, dontKnow: false }
-                          }));
-                        }
-                        return null;
-                      })()}
-                      
-                      <div className="bg-black/30 border border-white/10 rounded-xl p-5">
-                        <div className="mb-4">
-                          <label className="flex items-center gap-3">
-                            <input
-                              type="checkbox"
-                              checked={surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.dontKnow || false}
-                              onChange={(e) => {
-                                setSurveyResponses(prev => ({
-                                  ...prev,
-                                  [surveyQuestions[surveyQuestionIndex].id]: {
-                                    ...prev[surveyQuestions[surveyQuestionIndex].id],
-                                    dontKnow: e.target.checked
-                                  }
-                                }));
-                              }}
-                              className="w-4 h-4 text-[#1DD1A1] bg-gray-700 border-gray-600 rounded focus:ring-[#1DD1A1] focus:ring-2"
-                            />
-                            <span className="text-gray-300 text-sm">I don't know</span>
-                          </label>
-                        </div>
-                        
-                        {!surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.dontKnow && (
-                          <div>
-                            <div className="flex justify-between items-center mb-3">
-                              <span className="text-white font-medium">Monthly Investment</span>
-                              <span className="text-[#1DD1A1] font-bold text-lg">
-                                ${surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue}
-                              </span>
-                            </div>
-                            <input
-                              type="range"
-                              min={surveyQuestions[surveyQuestionIndex].min}
-                              max={surveyQuestions[surveyQuestionIndex].max}
-                              step={surveyQuestions[surveyQuestionIndex].step}
-                              value={surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue}
-                              onChange={(e) => {
-                                const newValue = parseInt(e.target.value);
-                                setSurveyResponses(prev => ({
-                                  ...prev,
-                                  [surveyQuestions[surveyQuestionIndex].id]: {
-                                    ...prev[surveyQuestions[surveyQuestionIndex].id],
-                                    amount: newValue
-                                  }
-                                }));
-                              }}
-                              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                              style={{
-                                background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue) / surveyQuestions[surveyQuestionIndex].max) * 100}%, #374151 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.amount || surveyQuestions[surveyQuestionIndex].defaultValue) / surveyQuestions[surveyQuestionIndex].max) * 100}%, #374151 100%)`
-                              }}
-                            />
-                            <div className="flex justify-between text-xs text-gray-400 mt-2">
-                              <span>$0</span>
-                              <span>$3,000+</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ) : 
-                  /* NPS Slider */
-                  surveyQuestions[surveyQuestionIndex].type === 'nps-slider' ? (
-                    <div className="space-y-6 mb-6">
-                      {(() => {
-                        // Initialize default value if not already set
-                        const currentQuestion = surveyQuestions[surveyQuestionIndex];
-                        if (!surveyResponses[currentQuestion.id]) {
-                          setSurveyResponses(prev => ({
-                            ...prev,
-                            [currentQuestion.id]: currentQuestion.defaultValue
-                          }));
-                        }
-                        return null;
-                      })()}
-                      
-                      <div className="bg-black/30 border border-white/10 rounded-xl p-5">
-                        <div>
-                          <div className="flex justify-between items-center mb-4">
-                            <span className="text-[#1DD1A1] font-bold text-2xl">
-                              {surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min={surveyQuestions[surveyQuestionIndex].min}
-                            max={surveyQuestions[surveyQuestionIndex].max}
-                            step={1}
-                            value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
-                            onChange={(e) => {
-                              const newValue = parseInt(e.target.value);
-                              setSurveyResponses(prev => ({
-                                ...prev,
-                                [surveyQuestions[surveyQuestionIndex].id]: newValue
-                              }));
-                            }}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                            style={{
-                              background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 100%)`
-                            }}
-                          />
-                          <div className="flex justify-between text-xs text-gray-400 mt-3">
-                            <span>{surveyQuestions[surveyQuestionIndex].labels.min}</span>
-                            <span>{surveyQuestions[surveyQuestionIndex].labels.max}</span>
-                          </div>
-                          <div className="flex justify-between text-xs text-gray-500 mt-1">
-                            {[...Array(10)].map((_, i) => (
-                              <span key={i + 1}>{i + 1}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ) :
-                  /* CES Slider */
-                  surveyQuestions[surveyQuestionIndex].type === 'ces-slider' ? (
-                    <div className="space-y-6 mb-6">
-                      {(() => {
-                        // Initialize default value if not already set
-                        const currentQuestion = surveyQuestions[surveyQuestionIndex];
-                        if (!surveyResponses[currentQuestion.id]) {
-                          setSurveyResponses(prev => ({
-                            ...prev,
-                            [currentQuestion.id]: currentQuestion.defaultValue
-                          }));
-                        }
-                        return null;
-                      })()}
-                      
-                      <div className="bg-black/30 border border-white/10 rounded-xl p-5">
-                        <div>
-                          <div className="flex justify-between items-center mb-4">
-                            <span className="text-[#1DD1A1] font-bold text-2xl">
-                              {surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min={surveyQuestions[surveyQuestionIndex].min}
-                            max={surveyQuestions[surveyQuestionIndex].max}
-                            step={1}
-                            value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue}
-                            onChange={(e) => {
-                              const newValue = parseInt(e.target.value);
-                              setSurveyResponses(prev => ({
-                                ...prev,
-                                [surveyQuestions[surveyQuestionIndex].id]: newValue
-                              }));
-                            }}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                            style={{
-                              background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 ${((surveyResponses[surveyQuestions[surveyQuestionIndex].id] || surveyQuestions[surveyQuestionIndex].defaultValue) - surveyQuestions[surveyQuestionIndex].min) / (surveyQuestions[surveyQuestionIndex].max - surveyQuestions[surveyQuestionIndex].min) * 100}%, #374151 100%)`
-                            }}
-                          />
-                          <div className="flex justify-between text-xs text-gray-400 mt-3">
-                            <span>{surveyQuestions[surveyQuestionIndex].labels.min}</span>
-                            <span>{surveyQuestions[surveyQuestionIndex].labels.max}</span>
-                          </div>
-                          <div className="flex justify-between text-xs text-gray-500 mt-1">
-                            {[...Array(10)].map((_, i) => (
-                              <span key={i + 1}>{i + 1}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ) :
-                  /* Pricing Sliders */
-                  surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' ? (
-                    <div className="space-y-6 mb-6">
-                      {(() => {
-                        // Initialize default values if not already set
-                        if (!surveyResponses[surveyQuestions[surveyQuestionIndex].id]) {
-                          const defaultValues = {};
-                          surveyQuestions[surveyQuestionIndex].services.forEach(s => {
-                            defaultValues[s.id] = s.defaultValue;
-                          });
-                          setSurveyResponses(prev => ({
-                            ...prev,
-                            [surveyQuestions[surveyQuestionIndex].id]: defaultValues
-                          }));
-                        }
-                        return null;
-                      })()}
-                      
-                      {surveyQuestions[surveyQuestionIndex].services.map((service, index) => {
-                        const currentValue = surveyResponses[surveyQuestions[surveyQuestionIndex].id]?.[service.id] || service.defaultValue;
-                        
-                        return (
-                          <div key={index} className="bg-black/30 border border-white/10 rounded-xl p-5">
-                            <div className="flex justify-between items-start mb-3">
-                              <div>
-                                <h3 className="text-white font-semibold text-sm">{service.name}</h3>
-                                <p className="text-gray-400 text-xs mt-1">{service.description}</p>
-                              </div>
-                              <div className="text-right">
-                                <span className="text-[#1DD1A1] font-bold text-lg">
-                                  ${currentValue}/mo
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <div className="mt-4">
-                              <input
-                                type="range"
-                                min={service.min}
-                                max={service.max}
-                                step={service.step}
-                                value={currentValue}
-                                onChange={(e) => {
-                                  const newValue = parseInt(e.target.value);
-                                  setSurveyResponses(prev => ({
-                                    ...prev,
-                                    [surveyQuestions[surveyQuestionIndex].id]: {
-                                      ...prev[surveyQuestions[surveyQuestionIndex].id],
-                                      [service.id]: newValue
-                                    }
-                                  }));
-                                }}
-                                className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                                style={{
-                                  background: `linear-gradient(to right, #1DD1A1 0%, #1DD1A1 ${(currentValue / service.max) * 100}%, #374151 ${(currentValue / service.max) * 100}%, #374151 100%)`
-                                }}
-                              />
-                              <div className="flex justify-between text-xs text-gray-500 mt-2">
-                                <span>$0</span>
-                                <span>${service.max}+</span>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : 
-                  /* Textarea */
-                  surveyQuestions[surveyQuestionIndex].type === 'textarea' ? (
-                    <div className="mb-6">
-                      <textarea
-                        value={surveyResponses[surveyQuestions[surveyQuestionIndex].id] || ''}
-                        onChange={(e) => {
-                          setSurveyResponses(prev => ({
-                            ...prev,
-                            [surveyQuestions[surveyQuestionIndex].id]: e.target.value
-                          }));
-                        }}
-                        placeholder={surveyQuestions[surveyQuestionIndex].placeholder}
-                        rows={6}
-                        className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none"
-                      />
-                      <p className="text-xs text-gray-400 mt-2">
-                        {surveyQuestions[surveyQuestionIndex].optional ? 'Optional - feel free to skip if you prefer' : ''}
-                      </p>
-                    </div>
-                  ) : (
-                    /* Regular Options */
-                    <div className="space-y-3 mb-6">
-                      {surveyQuestions[surveyQuestionIndex].options.map((option, index) => {
-                      const currentQuestion = surveyQuestions[surveyQuestionIndex];
-                      const isSelected = currentQuestion.type === 'multiple' 
-                        ? (surveyResponses[currentQuestion.id] || []).includes(option.value)
-                        : surveyResponses[currentQuestion.id] === option.value;
-                      
-                      const isMaxSelected = currentQuestion.type === 'multiple' && 
-                        currentQuestion.maxSelections &&
-                        (surveyResponses[currentQuestion.id] || []).length >= currentQuestion.maxSelections &&
-                        !isSelected;
-                      
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => {
-                            const questionId = currentQuestion.id;
-                            if (currentQuestion.type === 'multiple') {
-                              const current = surveyResponses[questionId] || [];
-                              if (isSelected) {
-                                // Remove selection
-                                setSurveyResponses(prev => ({
-                                  ...prev,
-                                  [questionId]: current.filter(v => v !== option.value)
-                                }));
-                              } else if (!isMaxSelected) {
-                                // Add selection
-                                setSurveyResponses(prev => ({
-                                  ...prev,
-                                  [questionId]: [...current, option.value]
-                                }));
-                              }
-                            } else {
-                              // Single selection
-                              setSurveyResponses(prev => ({
-                                ...prev,
-                                [questionId]: option.value
-                              }));
-                            }
-                          }}
-                          disabled={isMaxSelected}
-                          className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
-                            isSelected
-                              ? 'bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 border-[#1DD1A1] text-white'
-                              : isMaxSelected
-                              ? 'bg-gray-800/50 border-gray-600 text-gray-500 cursor-not-allowed'
-                              : 'bg-black/50 border-white/20 text-gray-300 hover:bg-white/5 hover:border-white/40'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                              isSelected 
-                                ? 'border-[#1DD1A1] bg-[#1DD1A1]' 
-                                : 'border-gray-400'
-                            }`}>
-                              {isSelected && (
-                                <Check className="w-3 h-3 text-black" />
-                              )}
-                            </div>
-                            <span className="text-sm">{option.label}</span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                    </div>
-                  )}
-                  
-                  {/* Selection helper text */}
-                  {surveyQuestions[surveyQuestionIndex].maxSelections && surveyQuestions[surveyQuestionIndex].type !== 'pricing-sliders' && surveyQuestions[surveyQuestionIndex].type !== 'investment-slider' && surveyQuestions[surveyQuestionIndex].type !== 'nps-slider' && surveyQuestions[surveyQuestionIndex].type !== 'ces-slider' && (
-                    <p className="text-xs text-gray-400 mb-4">
-                      Select up to {surveyQuestions[surveyQuestionIndex].maxSelections} options
-                    </p>
-                  )}
-                  
-                  {/* Navigation buttons */}
-                  <div className="flex gap-3">
-                    <button
-                      onClick={async () => {
-                        if (surveyQuestionIndex < surveyQuestions.length - 1) {
-                          setSurveyQuestionIndex(prev => prev + 1);
-                          // Scroll to top of the page when advancing to next question
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        } else {
-                          // Survey completed - submit survey data and generate PDF
-                          setSurveyCompleted(true);
-                          await handleSurveySubmission();
-                          handlePDFGeneration();
-                        }
-                      }}
-                      disabled={
-                        surveyQuestions[surveyQuestionIndex].type === 'pricing-sliders' || 
-                        surveyQuestions[surveyQuestionIndex].type === 'investment-slider' ||
-                        surveyQuestions[surveyQuestionIndex].type === 'nps-slider' ||
-                        surveyQuestions[surveyQuestionIndex].type === 'ces-slider' ||
-                        surveyQuestions[surveyQuestionIndex].type === 'textarea'
-                          ? false // Sliders always have default values, textarea is optional
-                          : !surveyResponses[surveyQuestions[surveyQuestionIndex].id]
-                      }
-                      className="w-full px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {surveyQuestionIndex < surveyQuestions.length - 1 ? 'Next' : 'Complete & Download'}
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {/* Survey completion status */}
-              {surveyCompleted && (
-                <div className="bg-green-900/20 border border-green-400/20 rounded-xl p-4 text-center">
-                  <h3 className="text-green-400 font-semibold mb-2">Survey Complete!</h3>
-                  <p className="text-green-300 text-sm">
-                    {isPDFGenerating ? 'Generating your roadmap...' : 'Your roadmap is ready for download!'}
+                  <p className="text-gray-400 text-sm mb-6">
+                    Share your vision and join a community of builders, creators, and innovators working to revolutionize how music gets made, distributed, and experienced.
                   </p>
                 </div>
-              )}
+
+                {/* Email Input */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none"
+                    required
+                  />
+                </div>
+
+                {/* Idea Description */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Describe your music tech idea *
+                  </label>
+                  <textarea
+                    value={surveyResponses.techIdea || ''}
+                    onChange={(e) => {
+                      setSurveyResponses(prev => ({
+                        ...prev,
+                        techIdea: e.target.value
+                      }));
+                    }}
+                    placeholder="What problem are you solving? How will technology help? What's your vision for the future of music?"
+                    rows={6}
+                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none"
+                    required
+                  />
+                  <p className="text-xs text-gray-400 mt-2">
+                    Be as detailed as you'd like - this helps us understand your vision and connect you with the right people
+                  </p>
+                </div>
+
+                {/* Experience Level */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    What's your technical background?
+                  </label>
+                  <select
+                    value={surveyResponses.techBackground || ''}
+                    onChange={(e) => {
+                      setSurveyResponses(prev => ({
+                        ...prev,
+                        techBackground: e.target.value
+                      }));
+                    }}
+                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white focus:border-[#1DD1A1] focus:outline-none"
+                  >
+                    <option value="">Select your background...</option>
+                    <option value="developer">Software Developer/Engineer</option>
+                    <option value="designer">UX/UI Designer</option>
+                    <option value="product">Product Manager</option>
+                    <option value="entrepreneur">Entrepreneur/Founder</option>
+                    <option value="musician-tech">Musician with tech skills</option>
+                    <option value="student">Student (CS/Engineering/Design)</option>
+                    <option value="business">Business/Marketing</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                {/* Call to Action */}
+                <div className="text-center">
+                  <button
+                    onClick={async () => {
+                      if (!email || !surveyResponses.techIdea) {
+                        alert('Please fill in your email and tech idea description');
+                        return;
+                      }
+                      
+                      try {
+                        // Submit to API
+                        const response = await fetch('/api/submit-bootcamp-registration', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            email,
+                            techIdea: surveyResponses.techIdea,
+                            techBackground: surveyResponses.techBackground || 'not specified'
+                          })
+                        });
+
+                        if (response.ok) {
+                          // Show success message
+                          setScreen('bootcamp-success');
+                        } else {
+                          alert('Registration failed. Please try again.');
+                        }
+                      } catch (error) {
+                        console.error('Registration error:', error);
+                        alert('Registration failed. Please try again.');
+                      }
+                    }}
+                    disabled={!email || !surveyResponses.techIdea}
+                    className="w-full px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Join the Music Tech Innovation Hub
+                  </button>
+                  
+                  <p className="text-xs text-gray-400 mt-4">
+                    We'll review your submission and get back to you with next steps for joining our community of music tech innovators.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Smart Brand Footer - Adapts to page content length */}
-      <BrandFooter currentScreen={screen} />
+      {/* Bootcamp Success Screen */}
+      {screen === 'bootcamp-success' && (
+        <div className="screen-height bg-black flex items-center justify-center px-6">
+          <div className="max-w-md w-full text-center">
+            <div className="animate-fadeIn">
+              <div className="mb-8">
+                <div className="w-20 h-20 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check className="w-10 h-10 text-white" />
+                </div>
+                <h1 className="text-3xl font-bold text-white mb-4">
+                  Registration Submitted!
+                </h1>
+                <p className="text-gray-300 leading-relaxed">
+                  Thank you for sharing your music tech vision with us. We'll review your idea and get back to you soon with information about joining our innovation community.
+                </p>
+              </div>
+              
+              <button
+                onClick={() => setScreen('landing')}
+                className="px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all"
+              >
+                Back to Home
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default HOMECreatorFlow;
-
-// Add custom CSS for sliders
-const sliderStyles = `
-  .slider::-webkit-slider-thumb {
-    appearance: none;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: #1DD1A1;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    border: 2px solid #ffffff;
-  }
-
-  .slider::-moz-range-thumb {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: #1DD1A1;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    border: 2px solid #ffffff;
-  }
-`;
-
-// Inject styles
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement("style");
-  styleSheet.innerText = sliderStyles;
-  document.head.appendChild(styleSheet);
-}
+export default HOMEQuizMVP;
