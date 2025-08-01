@@ -1697,6 +1697,7 @@ const HOMECreatorFlow = () => {
   // Survey state
   const [surveyResponses, setSurveyResponses] = useState({});
   const [surveyQuestionIndex, setSurveyQuestionIndex] = useState(0);
+  const [feedbackText, setFeedbackText] = useState('');
   const [surveyCompleted, setSurveyCompleted] = useState(false);
   
   // Backwards compatibility getters
@@ -3608,19 +3609,16 @@ const HOMECreatorFlow = () => {
                     </div>
                   </div>
                   
-                  {/* Two Clear Options */}
-                  <div className="space-y-4">
-                    <LiquidButton
-                      onClick={() => setScreen('assessment')}
-                      className="w-full"
-                    >
-                      Get My Personal Roadmap PDF →
-                    </LiquidButton>
-                    
-                  </div>
+                  {/* PDF Download Button */}
+                  <LiquidButton
+                    onClick={() => handleFreeCheckout()}
+                    className="w-full mb-6"
+                  >
+                    Download Your Personalized PDF Roadmap →
+                  </LiquidButton>
                   
                   {/* Bootcamp Section - Separate Box */}
-                  <div className="mt-8 p-6 bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/30 rounded-2xl">
+                  <div className="mt-6 p-6 bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/30 rounded-2xl">
                     <h3 className="text-xl font-bold text-white mb-3">
                       Do you have an idea to add value to the music industry?
                     </h3>
@@ -3632,6 +3630,33 @@ const HOMECreatorFlow = () => {
                       className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-500 hover:to-blue-500 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/25"
                     >
                       Join Music Tech Innovation Bootcamp 🚀
+                    </button>
+                  </div>
+                  
+                  {/* Feedback Section */}
+                  <div className="mt-6 p-6 bg-black/50 border border-white/10 rounded-2xl">
+                    <h3 className="text-lg font-semibold text-white mb-3">
+                      Share Your Feedback
+                    </h3>
+                    <textarea
+                      value={feedbackText}
+                      onChange={(e) => setFeedbackText(e.target.value)}
+                      placeholder="Tell us what you think about your experience..."
+                      rows={4}
+                      className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none mb-3"
+                    />
+                    <button
+                      onClick={() => {
+                        if (feedbackText.trim()) {
+                          console.log('Feedback submitted:', feedbackText);
+                          alert('Thank you for your feedback!');
+                          setFeedbackText('');
+                        }
+                      }}
+                      disabled={!feedbackText.trim()}
+                      className="px-6 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-lg hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    >
+                      Submit Feedback
                     </button>
                   </div>
                 </div>
