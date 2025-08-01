@@ -3618,7 +3618,7 @@ const HOMECreatorFlow = () => {
                       console.log('🔍 Current AI pathway data:', aiGeneratedPathway);
                       console.log('🔍 Current responses:', responses);
                       
-                      // Store current session data in localStorage for PDF access
+                      // Store current session data in sessionStorage for PDF access
                       const pdfData = {
                         pathway: aiGeneratedPathway || pathway,
                         responses: responses,
@@ -3627,7 +3627,7 @@ const HOMECreatorFlow = () => {
                         artistName: artistName
                       };
                       
-                      localStorage.setItem(`pdfData_${sessionId}`, JSON.stringify(pdfData));
+                      sessionStorage.setItem(`pdf-data-${sessionId}`, JSON.stringify(pdfData));
                       
                       // Open PDF in new tab
                       window.open(`/pdf/${sessionId}`, '_blank');
