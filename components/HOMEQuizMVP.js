@@ -3611,54 +3611,32 @@ const HOMECreatorFlow = () => {
                   {/* Two Clear Options */}
                   <div className="space-y-4">
                     <LiquidButton
-                      onClick={() => setScreen('survey')}
+                      onClick={() => setScreen('assessment')}
                       className="w-full"
                     >
                       Get My Personal Roadmap PDF →
                     </LiquidButton>
                     
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/20"></div>
-                      </div>
-                      <div className="relative flex justify-center text-sm">
-                        <span className="px-3 bg-black text-gray-400">OR</span>
-                      </div>
-                    </div>
-                    
+                  </div>
+                  
+                  {/* Bootcamp Section - Separate Box */}
+                  <div className="mt-8 p-6 bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/30 rounded-2xl">
+                    <h3 className="text-xl font-bold text-white mb-3">
+                      Do you have an idea to add value to the music industry?
+                    </h3>
+                    <p className="text-gray-300 mb-4">
+                      Apply here and make it happen with our tech innovation community
+                    </p>
                     <button
                       onClick={() => setScreen('bootcamp')}
-                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 text-white rounded-xl hover:from-purple-600/30 hover:to-blue-600/30 hover:border-purple-400/50 transition-all duration-300 font-medium"
+                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-500 hover:to-blue-500 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/25"
                     >
                       Join Music Tech Innovation Bootcamp 🚀
                     </button>
                   </div>
-                  
-                  <div className="text-center mt-4 space-y-2">
-                    <p className="text-xs text-gray-400">
-                      <strong>Roadmap:</strong> AI-powered personalized pathway + bonus resources
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      <strong>Bootcamp:</strong> Share your tech idea & join our innovation community
-                    </p>
-                  </div>
                 </div>
               </div>
               
-              {/* Footer */}
-              <div className="text-center space-y-2">
-                <p className="text-gray-400 text-xs">
-                  Have feedback or found an issue? 
-                  <a 
-                    href="https://github.com/anthropics/claude-code/issues" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-[#1DD1A1] hover:text-[#B91372] transition-colors ml-1"
-                  >
-                    Let us know
-                  </a>
-                </p>
-              </div>
             </div>
           </div>
         </div>
