@@ -3611,15 +3611,7 @@ const HOMECreatorFlow = () => {
                   {/* Two Clear Options */}
                   <div className="space-y-4">
                     <LiquidButton
-                      onClick={() => {
-                        // Reset quiz state before starting
-                        setQuestionIndex(0);
-                        setResponses({});
-                        setSurveyResponses({});
-                        setEmail('');
-                        setArtistName('');
-                        setScreen('assessment');
-                      }}
+                      onClick={() => setScreen('survey')}
                       className="w-full"
                     >
                       Get My Personal Roadmap PDF →
@@ -3635,7 +3627,7 @@ const HOMECreatorFlow = () => {
                     </div>
                     
                     <button
-                      onClick={() => setScreen('survey')}
+                      onClick={() => setScreen('bootcamp')}
                       className="w-full px-6 py-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 text-white rounded-xl hover:from-purple-600/30 hover:to-blue-600/30 hover:border-purple-400/50 transition-all duration-300 font-medium"
                     >
                       Join Music Tech Innovation Bootcamp 🚀
@@ -3673,7 +3665,7 @@ const HOMECreatorFlow = () => {
       )}
       
       {/* Bootcamp Registration Screen */}
-      {screen === 'survey' && (
+      {screen === 'bootcamp' && (
         <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
           <div className="max-w-2xl w-full">
             <div className="animate-fadeIn">
@@ -3846,6 +3838,125 @@ const HOMECreatorFlow = () => {
               >
                 Back to Home
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Survey Screen - ACTUAL QUIZ */}
+      {screen === 'survey' && (
+        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
+          <div className="max-w-lg w-full">
+            <div className="animate-fadeIn">
+              {/* Back button */}
+              <button
+                onClick={() => {
+                  if (surveyQuestionIndex > 0) {
+                    setSurveyQuestionIndex(prev => prev - 1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    setScreen('execute');
+                  }
+                }}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
+              >
+                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span>Back</span>
+              </button>
+              
+              {/* Progress bar */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-400">
+                    Question {surveyQuestionIndex + 1} of {surveyQuestions.length}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    {Math.round(((surveyQuestionIndex + 1) / surveyQuestions.length) * 100)}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-800 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-[#1DD1A1] to-[#B91372] h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${((surveyQuestionIndex + 1) / surveyQuestions.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+              
+              {/* Survey complete - go to email capture */}
+              {surveyQuestionIndex >= surveyQuestions.length ? (
+                <div className="text-center">
+                  <button
+                    onClick={() => setScreen('email')}
+                    className="px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all"
+                  >
+                    Continue to Results →
+                  </button>
+                </div>
+              ) : (
+                /* Current Question */
+                surveyQuestions[surveyQuestionIndex] && (
+                  <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
+                    {/* Question text */}
+                    <h2 className="text-lg font-bold text-white mb-6">
+                      {surveyQuestions[surveyQuestionIndex].question}
+                    </h2>
+                    
+                    {/* Options */}
+                    <div className="space-y-3 mb-6">
+                      {surveyQuestions[surveyQuestionIndex].options?.map((option, index) => {
+                        const isSelected = surveyResponses[surveyQuestions[surveyQuestionIndex].id] === option.value;
+                        
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setSurveyResponses(prev => ({
+                                ...prev,
+                                [surveyQuestions[surveyQuestionIndex].id]: option.value
+                              }));
+                            }}
+                            className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
+                              isSelected
+                                ? 'bg-gradient-to-r from-[#1DD1A1]/20 to-[#B91372]/20 border-[#1DD1A1] text-white'
+                                : 'bg-black/50 border-white/20 text-gray-300 hover:bg-white/5 hover:border-white/40'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                                isSelected 
+                                  ? 'border-[#1DD1A1] bg-[#1DD1A1]' 
+                                  : 'border-gray-400'
+                              }`}>
+                                {isSelected && (
+                                  <Check className="w-3 h-3 text-black" />
+                                )}
+                              </div>
+                              <span className="text-sm">{option.label}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* Next button */}
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => {
+                          if (surveyQuestionIndex < surveyQuestions.length - 1) {
+                            setSurveyQuestionIndex(prev => prev + 1);
+                          } else {
+                            setScreen('email');
+                          }
+                        }}
+                        disabled={!surveyResponses[surveyQuestions[surveyQuestionIndex].id]}
+                        className="px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {surveyQuestionIndex < surveyQuestions.length - 1 ? 'Next' : 'Complete Survey'}
+                      </button>
+                    </div>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
