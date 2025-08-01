@@ -3611,7 +3611,15 @@ const HOMECreatorFlow = () => {
                   {/* Two Clear Options */}
                   <div className="space-y-4">
                     <LiquidButton
-                      onClick={() => setScreen('assessment')}
+                      onClick={() => {
+                        // Reset quiz state before starting
+                        setQuestionIndex(0);
+                        setResponses({});
+                        setSurveyResponses({});
+                        setEmail('');
+                        setArtistName('');
+                        setScreen('assessment');
+                      }}
                       className="w-full"
                     >
                       Get My Personal Roadmap PDF →
