@@ -3611,27 +3611,7 @@ const HOMECreatorFlow = () => {
                   
                   {/* PDF Download Button */}
                   <LiquidButton
-                    onClick={() => {
-                      // Use timestamp-based session ID and current pathway data
-                      const sessionId = Date.now().toString();
-                      console.log('🔍 Current pathway data:', pathway);
-                      console.log('🔍 Current AI pathway data:', aiGeneratedPathway);
-                      console.log('🔍 Current responses:', responses);
-                      
-                      // Store current session data in sessionStorage for PDF access
-                      const pdfData = {
-                        pathway: aiGeneratedPathway || pathway,
-                        responses: responses,
-                        scoreResult: scoreResult,
-                        email: email,
-                        artistName: artistName
-                      };
-                      
-                      sessionStorage.setItem(`pdf-data-${sessionId}`, JSON.stringify(pdfData));
-                      
-                      // Open PDF in new tab
-                      window.open(`/pdf/${sessionId}`, '_blank');
-                    }}
+                    onClick={handlePDFGeneration}
                     className="w-full mb-6"
                   >
                     Download Your Personalized PDF Roadmap →
