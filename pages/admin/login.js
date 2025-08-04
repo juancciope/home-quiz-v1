@@ -42,6 +42,77 @@ export default function AdminLogin() {
     <>
       <Head>
         <title>Admin Login - HOME for Music</title>
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+          
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+          }
+          
+          .screen-height {
+            min-height: 100vh;
+          }
+          
+          .animate-fadeIn {
+            animation: fadeIn 0.8s ease-out forwards;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          .safari-fallback {
+            background: rgba(0, 0, 0, 0.8);
+          }
+          
+          @supports (backdrop-filter: blur(10px)) {
+            .safari-fallback {
+              backdrop-filter: blur(10px);
+              background: rgba(0, 0, 0, 0.7);
+            }
+          }
+          
+          .animate-liquid-rotate {
+            animation: liquidRotate 8s ease-in-out infinite;
+          }
+          
+          .animate-liquid-float {
+            animation: liquidFloat 3s ease-in-out infinite;
+          }
+          
+          .animate-liquid-float-delayed {
+            animation: liquidFloat 3s ease-in-out infinite 1.5s;
+          }
+          
+          .animate-liquid-pulse {
+            animation: liquidPulse 2s ease-in-out infinite;
+          }
+          
+          @keyframes liquidRotate {
+            0%, 100% { transform: rotate(0deg) translateZ(-5px); }
+            50% { transform: rotate(180deg) translateZ(-5px); }
+          }
+          
+          @keyframes liquidFloat {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.7; }
+            50% { transform: translateY(-10px) scale(1.1); opacity: 1; }
+          }
+          
+          @keyframes liquidPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+          }
+        `}</style>
       </Head>
       
       <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
