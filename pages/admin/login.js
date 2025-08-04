@@ -44,63 +44,90 @@ export default function AdminLogin() {
         <title>Admin Login - HOME for Music</title>
       </Head>
       
-      <div className="min-h-screen bg-black flex items-center justify-center px-6">
+      <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
         <div className="max-w-md w-full">
-          <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-8">
+          <div className="animate-fadeIn">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2">
-                Admin Login
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1]/30 to-[#B91372]/30 rounded-full border border-white/30 mb-6">
+                <span className="text-sm font-semibold text-white">🔐 Admin Access</span>
+              </div>
+              <h1 className="text-3xl font-bold mb-4 text-white">
+                Admin
+                <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
+                  Login
+                </span>
               </h1>
-              <p className="text-gray-400">
-                Access the CRM dashboard
-              </p>
+              <p className="text-gray-300">Access the CRM dashboard</p>
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleLogin} className="space-y-6">
-              {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
-                  <p className="text-red-400 text-sm">{error}</p>
+            <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-8 safari-fallback">
+              <form onSubmit={handleLogin} className="space-y-6">
+                {error && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl 
+                             focus:bg-black/50 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
+                             transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
+                    placeholder="Enter username"
+                    required
+                  />
                 </div>
-              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none"
-                  placeholder="Enter username"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-6 py-4 bg-black/30 border border-white/20 rounded-xl 
+                             focus:bg-black/50 focus:border-[#1DD1A1] focus:outline-none focus:ring-2 focus:ring-[#1DD1A1]/20
+                             transition-all duration-300 text-white placeholder-gray-400 text-lg backdrop-blur-sm"
+                    placeholder="Enter password"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none"
-                  placeholder="Enter password"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Logging in...' : 'Login'}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={loading || !username || !password}
+                  className="group relative inline-flex items-center justify-center gap-3 px-10 py-4 w-full bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-500 hover:shadow-2xl hover:shadow-[#B91372]/30 hover:scale-105 text-white text-lg overflow-hidden transform-gpu disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  {/* 3D Liquid layers */}
+                  <div className="absolute inset-0 rounded-2xl" style={{ transform: 'translateZ(-10px)' }}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1DD1A1] to-[#B91372] rounded-2xl" />
+                  </div>
+                  
+                  {/* Animated liquid blobs */}
+                  <div className="absolute inset-0 rounded-2xl animate-liquid-rotate" style={{ transform: 'translateZ(-5px)' }}>
+                    <div className="absolute top-2 left-4 w-8 h-8 bg-white/20 rounded-full animate-liquid-float" />
+                    <div className="absolute bottom-3 right-6 w-6 h-6 bg-white/15 rounded-full animate-liquid-float-delayed" />
+                    <div className="absolute top-1/2 right-8 w-4 h-4 bg-white/25 rounded-full animate-liquid-pulse" />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="relative z-10 flex items-center gap-3">
+                    <span>{loading ? 'Logging in...' : 'Access CRM Dashboard'}</span>
+                    {!loading && <span className="group-hover:translate-x-1 transition-transform">→</span>}
+                  </div>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
