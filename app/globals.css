@@ -35,6 +35,32 @@
     @apply bg-blue-600 h-2 rounded-full transition-all duration-500;
   }
 
+  /* Glass morphism effect for admin pages */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+  }
+
+  /* Table row hover effect */
+  .table-row-hover:hover {
+    background: rgba(255, 255, 255, 0.02);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  /* Scrollbar hiding */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Safari fallbacks for gradient and backdrop-filter issues */
   .safari-fallback {
     background: rgba(0, 0, 0, 0.85) !important;
