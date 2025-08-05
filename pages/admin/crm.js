@@ -39,22 +39,6 @@ export default function CRMDashboard() {
     withSurvey: 0,
     withContest: 0
   });
-  const [isMigrating, setIsMigrating] = useState(false);
-  const [showMigrationResults, setShowMigrationResults] = useState(false);
-  const [migrationResults, setMigrationResults] = useState(null);
-  const [showDebugData, setShowDebugData] = useState(false);
-  const [debugData, setDebugData] = useState(null);
-  const [isRollingBack, setIsRollingBack] = useState(false);
-  const [showRollbackResults, setShowRollbackResults] = useState(false);
-  const [rollbackResults, setRollbackResults] = useState(null);
-  const [showRecoveryModal, setShowRecoveryModal] = useState(false);
-  const [recoveryData, setRecoveryData] = useState(null);
-  const [manualEntry, setManualEntry] = useState({
-    email: '',
-    techIdea: '',
-    techBackground: '',
-    submittedAt: ''
-  });
   const router = useRouter();
 
   useEffect(() => {
@@ -317,167 +301,6 @@ export default function CRMDashboard() {
     }
   };
 
-  const handleMigrateContestData = async () => {
-    if (!confirm('This will fix orphaned contest entries by linking them to artist profiles. Continue?')) {
-      return;
-    }
-
-    setIsMigrating(true);
-    const token = localStorage.getItem('adminToken');
-    
-    try {
-      const response = await fetch('/api/admin/migrate-contest-data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        setMigrationResults(result.results);
-        setShowMigrationResults(true);
-        // Refresh data to show updated linkages
-        loadData();
-      } else {
-        alert(`Migration failed: ${result.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error in migration:', error);
-      alert('Migration failed due to network error');
-    } finally {
-      setIsMigrating(false);
-    }
-  };
-
-  const handleDebugContestData = async () => {
-    const token = localStorage.getItem('adminToken');
-    
-    try {
-      const response = await fetch('/api/admin/debug-contest-data', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const result = await response.json();
-      
-      if (response.ok) {
-        setDebugData(result);
-        setShowDebugData(true);
-        console.log('🔍 Debug data:', result);
-      } else {
-        alert(`Debug failed: ${result.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error in debug:', error);
-      alert('Debug failed due to network error');
-    }
-  };
-
-  const handleRollbackMigration = async () => {
-    if (!confirm('⚠️ WARNING: This will rollback the migration by:\n\n• Clearing artistProfileId from all contest entries\n• Removing migration tags from artist profiles\n• Unlinking all contest data\n\nThis action cannot be undone. Continue?')) {
-      return;
-    }
-
-    setIsRollingBack(true);
-    const token = localStorage.getItem('adminToken');
-    
-    try {
-      const response = await fetch('/api/admin/rollback-migration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        setRollbackResults(result.results);
-        setShowRollbackResults(true);
-        // Refresh data to show rollback changes
-        loadData();
-      } else {
-        alert(`Rollback failed: ${result.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error in rollback:', error);
-      alert('Rollback failed due to network error');
-    } finally {
-      setIsRollingBack(false);
-    }
-  };
-
-  const handleRecoveryCheck = async () => {
-    const token = localStorage.getItem('adminToken');
-    
-    try {
-      const response = await fetch('/api/admin/recover-contest-data', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      const result = await response.json();
-      
-      if (response.ok) {
-        setRecoveryData(result);
-        setShowRecoveryModal(true);
-        console.log('🔍 Recovery data:', result);
-      } else {
-        alert(`Recovery check failed: ${result.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error in recovery check:', error);
-      alert('Recovery check failed due to network error');
-    }
-  };
-
-  const handleManualEntrySubmit = async () => {
-    if (!manualEntry.email || !manualEntry.techIdea) {
-      alert('Email and tech idea are required');
-      return;
-    }
-
-    const token = localStorage.getItem('adminToken');
-    
-    try {
-      const response = await fetch('/api/admin/recover-contest-data', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(manualEntry)
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        alert('Contest entry recovered successfully!');
-        setManualEntry({ email: '', techIdea: '', techBackground: '', submittedAt: '' });
-        setShowRecoveryModal(false);
-        // Refresh data
-        loadData();
-      } else {
-        alert(`Recovery failed: ${result.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error in manual entry:', error);
-      alert('Manual entry failed due to network error');
-    }
-  };
 
   if (loading) {
     return (
@@ -629,36 +452,6 @@ export default function CRMDashboard() {
                   >
                     <Download className="w-4 h-4" />
                     Export
-                  </button>
-                  <button
-                    onClick={handleMigrateContestData}
-                    disabled={isMigrating}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
-                  >
-                    <Trophy className="w-4 h-4" />
-                    {isMigrating ? 'Fixing...' : 'Fix Contest Data'}
-                  </button>
-                  <button
-                    onClick={handleDebugContestData}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl hover:shadow-lg transition-all"
-                  >
-                    <Eye className="w-4 h-4" />
-                    Debug Contest
-                  </button>
-                  <button
-                    onClick={handleRollbackMigration}
-                    disabled={isRollingBack}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-800 rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
-                  >
-                    <Clock className="w-4 h-4" />
-                    {isRollingBack ? 'Rolling Back...' : 'Rollback Migration'}
-                  </button>
-                  <button
-                    onClick={handleRecoveryCheck}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl hover:shadow-lg transition-all"
-                  >
-                    <Users className="w-4 h-4" />
-                    Recover Data
                   </button>
                   {selectedContacts.size > 0 && (
                     <button
@@ -919,6 +712,7 @@ export default function CRMDashboard() {
                       <h3 className="text-green-400 font-semibold">Survey Response</h3>
                     </div>
                     <div className="space-y-3">
+                      {/* Scores and Investment */}
                       <div className="grid grid-cols-3 gap-4 text-center">
                         <div>
                           <div className="text-2xl font-bold text-white">{selectedProfile.survey.nps || 'N/A'}</div>
@@ -932,13 +726,32 @@ export default function CRMDashboard() {
                           <div className="text-lg font-bold text-white">
                             {formatMonthlyInvestment(selectedProfile.survey.monthlyInvestment)}
                           </div>
-                          <div className="text-xs text-gray-400">Monthly</div>
+                          <div className="text-xs text-gray-400">Monthly Investment</div>
                         </div>
                       </div>
+
+                      {/* Career Details */}
+                      {(selectedProfile.survey.careerStage || selectedProfile.survey.careerImpact) && (
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          {selectedProfile.survey.careerStage && (
+                            <div>
+                              <span className="text-gray-400 block mb-1">Career Stage:</span>
+                              <span className="text-white">{selectedProfile.survey.careerStage}</span>
+                            </div>
+                          )}
+                          {selectedProfile.survey.careerImpact && (
+                            <div>
+                              <span className="text-gray-400 block mb-1">Career Impact:</span>
+                              <span className="text-white">{selectedProfile.survey.careerImpact}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       
+                      {/* Challenges */}
                       {selectedProfile.survey.primaryChallenges && selectedProfile.survey.primaryChallenges.length > 0 && (
                         <div>
-                          <span className="text-gray-400 block mb-1">Challenges:</span>
+                          <span className="text-gray-400 block mb-1">Primary Challenges:</span>
                           <div className="flex flex-wrap gap-1">
                             {selectedProfile.survey.primaryChallenges.map((challenge, idx) => (
                               <span key={idx} className="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">
@@ -949,25 +762,76 @@ export default function CRMDashboard() {
                         </div>
                       )}
                       
+                      {/* Genres */}
                       {selectedProfile.survey.genres && selectedProfile.survey.genres.length > 0 && (
                         <div>
                           <span className="text-gray-400 block mb-1">Genres:</span>
                           <div className="flex flex-wrap gap-1">
                             {selectedProfile.survey.genres.map((genre, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">
+                              <span key={idx} className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">
                                 {genre}
                               </span>
                             ))}
                           </div>
                         </div>
                       )}
-                      
+
+                      {/* Skills */}
+                      <div className="grid grid-cols-2 gap-4">
+                        {selectedProfile.survey.skillsOffered && selectedProfile.survey.skillsOffered.length > 0 && (
+                          <div>
+                            <span className="text-gray-400 block mb-1">Skills Offered:</span>
+                            <div className="flex flex-wrap gap-1">
+                              {selectedProfile.survey.skillsOffered.map((skill, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-green-600/20 text-green-300 rounded text-xs">
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {selectedProfile.survey.skillsSeeking && selectedProfile.survey.skillsSeeking.length > 0 && (
+                          <div>
+                            <span className="text-gray-400 block mb-1">Skills Seeking:</span>
+                            <div className="flex flex-wrap gap-1">
+                              {selectedProfile.survey.skillsSeeking.map((skill, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-orange-500/20 text-orange-300 rounded text-xs">
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Tools and Software */}
+                      {selectedProfile.survey.recordingSoftware && selectedProfile.survey.recordingSoftware.length > 0 && (
+                        <div>
+                          <span className="text-gray-400 block mb-1">Recording Software:</span>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedProfile.survey.recordingSoftware.map((software, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs">
+                                {software}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Feedback */}
                       {selectedProfile.survey.feedback && (
                         <div>
                           <span className="text-gray-400 block mb-1">Feedback:</span>
                           <p className="text-white text-sm bg-white/5 p-3 rounded-lg">
                             {selectedProfile.survey.feedback}
                           </p>
+                        </div>
+                      )}
+
+                      {/* Completion Date */}
+                      {selectedProfile.survey.completedAt && (
+                        <div className="text-xs text-gray-500 pt-2 border-t border-white/10">
+                          Completed: {formatDate(selectedProfile.survey.completedAt)}
                         </div>
                       )}
                     </div>
@@ -1074,439 +938,6 @@ export default function CRMDashboard() {
           </div>
         )}
 
-        {/* Migration Results Modal */}
-        {showMigrationResults && migrationResults && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Contest Data Migration Results</h3>
-                <button
-                  onClick={() => setShowMigrationResults(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="space-y-4">
-                {/* Summary Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-blue-400">{migrationResults.processed}</div>
-                    <div className="text-xs text-gray-400">Processed</div>
-                  </div>
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-green-400">{migrationResults.created}</div>
-                    <div className="text-xs text-gray-400">Created</div>
-                  </div>
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-purple-400">{migrationResults.linked}</div>
-                    <div className="text-xs text-gray-400">Linked</div>
-                  </div>
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-red-400">{migrationResults.errors}</div>
-                    <div className="text-xs text-gray-400">Errors</div>
-                  </div>
-                </div>
-
-                {/* Detailed Results */}
-                {migrationResults.details && migrationResults.details.length > 0 && (
-                  <div className="glass-card p-4">
-                    <h4 className="text-white font-semibold mb-3">Detailed Results</h4>
-                    <div className="space-y-2 max-h-60 overflow-y-auto">
-                      {migrationResults.details.map((detail, index) => (
-                        <div 
-                          key={index}
-                          className={`flex items-center justify-between p-2 rounded-lg text-sm ${
-                            detail.status === 'success' 
-                              ? 'bg-green-500/10 border border-green-500/20' 
-                              : 'bg-red-500/10 border border-red-500/20'
-                          }`}
-                        >
-                          <span className="text-white font-mono">{detail.email}</span>
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            detail.status === 'success'
-                              ? 'bg-green-500/20 text-green-400'
-                              : 'bg-red-500/20 text-red-400'
-                          }`}>
-                            {detail.status === 'success' ? detail.action : detail.error}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setShowMigrationResults(false)}
-                    className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Debug Contest Data Modal */}
-        {showDebugData && debugData && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="glass-card p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Contest Data Debug</h3>
-                <button
-                  onClick={() => setShowDebugData(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="space-y-6 text-sm">
-                {/* Contest Submissions */}
-                <div className="glass-card p-4">
-                  <h4 className="text-white font-semibold mb-3">Contest Submissions ({debugData.collections.contestSubmissions.count})</h4>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {debugData.collections.contestSubmissions.entries.map((entry, index) => (
-                      <div key={index} className="bg-white/5 p-3 rounded-lg">
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div><span className="text-gray-400">ID:</span> <span className="font-mono">{entry._id}</span></div>
-                          <div><span className="text-gray-400">Email:</span> <span className="text-white">{entry.email}</span></div>
-                          <div><span className="text-gray-400">Submitted:</span> <span className="text-white">{new Date(entry.submittedAt).toLocaleString()}</span></div>
-                          <div><span className="text-gray-400">Profile ID:</span> <span className="font-mono text-green-400">{entry.artistProfileId || 'NONE'}</span></div>
-                          <div className="col-span-2"><span className="text-gray-400">Tech Idea:</span> <span className="text-white">{entry.techIdea}</span></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Potential Issues */}
-                <div className="glass-card p-4">
-                  <h4 className="text-white font-semibold mb-3">Potential Issues</h4>
-                  
-                  {/* Wrongly Linked */}
-                  {debugData.potentialIssues.wronglyLinked.length > 0 && (
-                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-                      <h5 className="text-red-400 font-semibold mb-2">❌ Wrongly Linked Entries ({debugData.potentialIssues.wronglyLinked.length})</h5>
-                      {debugData.potentialIssues.wronglyLinked.map((entry, index) => (
-                        <div key={index} className="text-xs text-white font-mono mb-1">
-                          Contest: {entry.email} → Profile: {entry.artistProfileId}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Orphaned */}
-                  {debugData.potentialIssues.orphanedEntries.length > 0 && (
-                    <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                      <h5 className="text-yellow-400 font-semibold mb-2">⚠️ Orphaned Entries ({debugData.potentialIssues.orphanedEntries.length})</h5>
-                      {debugData.potentialIssues.orphanedEntries.map((entry, index) => (
-                        <div key={index} className="text-xs text-white font-mono mb-1">
-                          {entry.email} - {entry._id}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Duplicate Emails */}
-                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                    <h5 className="text-blue-400 font-semibold mb-2">📧 Emails by Frequency</h5>
-                    {Object.entries(debugData.potentialIssues.duplicateEmails).map(([email, entries]) => (
-                      <div key={email} className="text-xs mb-2">
-                        <div className="text-white font-mono">{email} ({entries.length} entries)</div>
-                        {entries.map((entry, idx) => (
-                          <div key={idx} className="ml-4 text-gray-400">
-                            {entry._id} - {new Date(entry.submittedAt).toLocaleString()} - Profile: {entry.artistProfileId || 'NONE'}
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setShowDebugData(false)}
-                    className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Rollback Results Modal */}
-        {showRollbackResults && rollbackResults && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Migration Rollback Results</h3>
-                <button
-                  onClick={() => setShowRollbackResults(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="space-y-4">
-                {/* Summary Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-blue-400">{rollbackResults.artistProfilesProcessed}</div>
-                    <div className="text-xs text-gray-400">Profiles Processed</div>
-                  </div>
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-green-400">{rollbackResults.migratedTagsRemoved}</div>
-                    <div className="text-xs text-gray-400">Tags Removed</div>
-                  </div>
-                  <div className="glass-card p-3 text-center">
-                    <div className="text-xl font-bold text-purple-400">{rollbackResults.contestEntriesProcessed}</div>
-                    <div className="text-xs text-gray-400">Contest Links Cleared</div>
-                  </div>
-                </div>
-
-                {/* Success Message */}
-                <div className="glass-card p-4 bg-green-500/10 border border-green-500/20">
-                  <h4 className="text-green-400 font-semibold mb-2">✅ Rollback Completed Successfully</h4>
-                  <div className="text-white text-sm space-y-1">
-                    <p>• Cleared {rollbackResults.artistProfileIdsCleared} contest entry links</p>
-                    <p>• Removed {rollbackResults.migratedTagsRemoved} migration tags from profiles</p>
-                    <p>• Processed {rollbackResults.artistProfilesProcessed} artist profiles</p>
-                    {rollbackResults.errors > 0 && (
-                      <p className="text-red-400">• {rollbackResults.errors} errors occurred (see details below)</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Detailed Results */}
-                {rollbackResults.details && rollbackResults.details.length > 0 && (
-                  <div className="glass-card p-4">
-                    <h4 className="text-white font-semibold mb-3">Detailed Results</h4>
-                    <div className="space-y-2 max-h-60 overflow-y-auto">
-                      {rollbackResults.details.map((detail, index) => (
-                        <div 
-                          key={index}
-                          className={`p-2 rounded-lg text-sm ${
-                            detail.status === 'success' 
-                              ? 'bg-green-500/10 border border-green-500/20' 
-                              : detail.status === 'error'
-                              ? 'bg-red-500/10 border border-red-500/20'
-                              : 'bg-blue-500/10 border border-blue-500/20'
-                          }`}
-                        >
-                          {detail.email && (
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-white font-mono">{detail.email}</span>
-                              <span className={`text-xs px-2 py-1 rounded ${
-                                detail.status === 'success'
-                                  ? 'bg-green-500/20 text-green-400'
-                                  : detail.status === 'error'
-                                  ? 'bg-red-500/20 text-red-400'
-                                  : 'bg-blue-500/20 text-blue-400'
-                              }`}>
-                                {detail.action}
-                              </span>
-                            </div>
-                          )}
-                          {detail.removedTags && (
-                            <div className="text-xs text-gray-400">
-                              Removed tags: {detail.removedTags.join(', ')}
-                            </div>
-                          )}
-                          {detail.error && (
-                            <div className="text-xs text-red-300">
-                              Error: {detail.error}
-                            </div>
-                          )}
-                          {detail.note && (
-                            <div className="text-xs text-blue-300">
-                              {detail.note}
-                            </div>
-                          )}
-                          {detail.count && (
-                            <div className="text-xs text-white">
-                              Found {detail.count} contest-only profiles: {detail.emails?.slice(0, 3).join(', ')}{detail.emails?.length > 3 ? '...' : ''}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setShowRollbackResults(false)}
-                    className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Data Recovery Modal */}
-        {showRecoveryModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="glass-card p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">🚨 Contest Data Recovery</h3>
-                <button
-                  onClick={() => setShowRecoveryModal(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="space-y-6">
-                {/* Current Status */}
-                {recoveryData && (
-                  <div className="glass-card p-4">
-                    <h4 className="text-white font-semibold mb-3">Current Database Status</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-400">Contest Entries:</span>
-                        <span className="text-white ml-2 font-mono">{recoveryData.currentContestEntries}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Available Collections:</span>
-                        <span className="text-white ml-2">{recoveryData.availableCollections.length}</span>
-                      </div>
-                    </div>
-                    
-                    {recoveryData.currentContests.length > 0 && (
-                      <div className="mt-4">
-                        <h5 className="text-gray-400 mb-2">Current Contest Entries:</h5>
-                        <div className="space-y-2 max-h-40 overflow-y-auto">
-                          {recoveryData.currentContests.map((contest, index) => (
-                            <div key={index} className="bg-white/5 p-2 rounded text-xs">
-                              <div className="font-mono text-white">{contest.email}</div>
-                              <div className="text-gray-400">{new Date(contest.submittedAt).toLocaleString()}</div>
-                              <div className="text-gray-300">{contest.techIdea}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Recovery Options */}
-                <div className="glass-card p-4">
-                  <h4 className="text-white font-semibold mb-3">Recovery Options</h4>
-                  <div className="space-y-3 text-sm">
-                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                      <h5 className="text-blue-400 font-semibold mb-2">💾 Check for Backups</h5>
-                      <ul className="text-gray-300 space-y-1">
-                        <li>• MongoDB Atlas automatic backups (if using Atlas)</li>
-                        <li>• File system backups (if self-hosted)</li>
-                        <li>• Application-level backups</li>
-                      </ul>
-                    </div>
-                    
-                    <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                      <h5 className="text-green-400 font-semibold mb-2">✏️ Manual Entry Recreation</h5>
-                      <p className="text-gray-300 mb-3">If you have the original contest submission details, you can manually recreate the entry:</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Manual Entry Form */}
-                <div className="glass-card p-4">
-                  <h4 className="text-white font-semibold mb-3">Manual Contest Entry Recreation</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        value={manualEntry.email}
-                        onChange={(e) => setManualEntry(prev => ({ ...prev, email: e.target.value }))}
-                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white placeholder-gray-400"
-                        placeholder="contest@example.com"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-1">Tech Idea *</label>
-                      <textarea
-                        value={manualEntry.techIdea}
-                        onChange={(e) => setManualEntry(prev => ({ ...prev, techIdea: e.target.value }))}
-                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white placeholder-gray-400 h-24"
-                        placeholder="Describe the tech idea that was submitted..."
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-1">Tech Background</label>
-                      <input
-                        type="text"
-                        value={manualEntry.techBackground}
-                        onChange={(e) => setManualEntry(prev => ({ ...prev, techBackground: e.target.value }))}
-                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white placeholder-gray-400"
-                        placeholder="Technical background (optional)"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-1">Original Submission Date</label>
-                      <input
-                        type="datetime-local"
-                        value={manualEntry.submittedAt}
-                        onChange={(e) => setManualEntry(prev => ({ ...prev, submittedAt: e.target.value }))}
-                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white"
-                      />
-                    </div>
-                    
-                    <div className="flex gap-3 justify-end">
-                      <button
-                        onClick={() => setShowRecoveryModal(false)}
-                        className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={handleManualEntrySubmit}
-                        className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:shadow-lg transition-all"
-                      >
-                        Recreate Entry
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Direct Database Instructions */}
-                <div className="glass-card p-4 bg-yellow-500/10 border border-yellow-500/20">
-                  <h4 className="text-yellow-400 font-semibold mb-3">🔧 Direct Database Recovery (Advanced)</h4>
-                  <div className="text-sm text-gray-300 space-y-2">
-                    <p><strong>If you have direct database access:</strong></p>
-                    <div className="bg-black/30 p-3 rounded font-mono text-xs overflow-x-auto">
-                      <div className="text-green-400">// Connect to your MongoDB</div>
-                      <div className="text-white">use your-database-name</div>
-                      <div className="text-white">db.bootcamp_registrations.find()</div>
-                      <div className="text-green-400">// Check for any remaining entries</div>
-                      <div className="text-white">db.bootcamp_registrations.insertOne({`{`}</div>
-                      <div className="text-white ml-4">email: "original@email.com",</div>
-                      <div className="text-white ml-4">techIdea: "original tech idea",</div>
-                      <div className="text-white ml-4">techBackground: "background",</div>
-                      <div className="text-white ml-4">submittedAt: new Date("2024-01-01"),</div>
-                      <div className="text-white ml-4">status: "pending_review"</div>
-                      <div className="text-white">{`}`})</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
