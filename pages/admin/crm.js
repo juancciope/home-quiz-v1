@@ -16,7 +16,11 @@ import {
   MapPin,
   Eye,
   Clock,
-  Award
+  Award,
+  Trash2,
+  MoreHorizontal,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 export default function CRMDashboard() {
@@ -25,6 +29,9 @@ export default function CRMDashboard() {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all'); // all, quiz, survey, contest
+  const [selectedContacts, setSelectedContacts] = useState(new Set());
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalContacts: 0,
@@ -185,6 +192,115 @@ export default function CRMDashboard() {
     applyFilters(searchTerm, value);
   };
 
+  const handleSelectContact = (email, isSelected) => {
+    const newSelected = new Set(selectedContacts);
+    if (isSelected) {
+      newSelected.add(email);
+    } else {
+      newSelected.delete(email);
+    }
+    setSelectedContacts(newSelected);
+  };
+
+  const handleSelectAll = (isSelected) => {
+    if (isSelected) {
+      setSelectedContacts(new Set(filteredContacts.map(c => c.email)));
+    } else {
+      setSelectedContacts(new Set());
+    }
+  };
+
+  const handleDeleteContact = async (email) => {
+    setIsDeleting(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch('/api/admin/delete-contact', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ email })
+      });
+
+      if (response.ok) {
+        // Remove from local state
+        setContacts(prev => prev.filter(c => c.email !== email));
+        setFilteredContacts(prev => prev.filter(c => c.email !== email));
+        
+        // Clear selection if deleted contact was selected
+        if (selectedProfile?.email === email) {
+          setSelectedProfile(null);
+        }
+        
+        // Update stats
+        const remainingContacts = contacts.filter(c => c.email !== email);
+        setStats({
+          totalContacts: remainingContacts.length,
+          withQuiz: remainingContacts.filter(p => p.quiz).length,
+          withSurvey: remainingContacts.filter(p => p.survey).length,
+          withContest: remainingContacts.filter(p => p.contest).length
+        });
+      } else {
+        const error = await response.json();
+        alert(`Error deleting contact: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error deleting contact:', error);
+      alert('Error deleting contact');
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(null);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedContacts.size === 0) return;
+    
+    if (!confirm(`Are you sure you want to delete ${selectedContacts.size} contacts? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    const emailsToDelete = Array.from(selectedContacts);
+    const token = localStorage.getItem('adminToken');
+    
+    try {
+      // Delete each contact
+      const deletePromises = emailsToDelete.map(email => 
+        fetch('/api/admin/delete-contact', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ email })
+        })
+      );
+
+      await Promise.all(deletePromises);
+      
+      // Update local state
+      setContacts(prev => prev.filter(c => !selectedContacts.has(c.email)));
+      setFilteredContacts(prev => prev.filter(c => !selectedContacts.has(c.email)));
+      setSelectedContacts(new Set());
+      
+      // Clear selection if deleted
+      if (selectedProfile && selectedContacts.has(selectedProfile.email)) {
+        setSelectedProfile(null);
+      }
+      
+      // Refresh data to ensure accuracy
+      loadData();
+      
+    } catch (error) {
+      console.error('Error in bulk delete:', error);
+      alert('Some contacts could not be deleted');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -328,18 +444,49 @@ export default function CRMDashboard() {
                   <option value="survey">Survey Completed</option>
                   <option value="contest">Contest Entered</option>
                 </select>
-                <button
-                  onClick={exportToCSV}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
-                >
-                  <Download className="w-4 h-4" />
-                  Export
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={exportToCSV}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export
+                  </button>
+                  {selectedContacts.size > 0 && (
+                    <button
+                      onClick={handleBulkDelete}
+                      disabled={isDeleting}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-white transition-colors disabled:opacity-50"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete ({selectedContacts.size})
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Contacts List */}
-            <div className="flex-1 overflow-y-auto px-6">
+            {/* Bulk Actions */}
+            {selectedContacts.size > 0 && (
+              <div className="px-6 py-3 bg-gradient-to-r from-red-500/10 to-red-700/10 border-b border-red-500/20">
+                <div className="flex items-center justify-between">
+                  <span className="text-white text-sm">
+                    {selectedContacts.size} contact{selectedContacts.size > 1 ? 's' : ''} selected
+                  </span>
+                  <button
+                    onClick={handleBulkDelete}
+                    disabled={isDeleting}
+                    className="flex items-center gap-2 px-3 py-1 bg-red-600 hover:bg-red-700 rounded-lg text-white text-sm transition-colors disabled:opacity-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete Selected
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Contacts Table */}
+            <div className="flex-1 overflow-y-auto">
               {filteredContacts.length === 0 ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="text-center">
@@ -348,48 +495,128 @@ export default function CRMDashboard() {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-2">
-                  {filteredContacts.map((contact) => (
-                    <div
-                      key={contact.email}
-                      onClick={() => setSelectedProfile(contact)}
-                      className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
-                        selectedProfile?.email === contact.email
-                          ? 'bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 border-[#1DD1A1]/30'
-                          : 'glass-card border-white/10 hover:bg-white/5 hover:border-white/20'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-teal-500/20 to-teal-700/20 rounded-full flex items-center justify-center">
-                              <User className="w-5 h-5 text-teal-400" />
+                <div className="glass-card m-6 overflow-hidden">
+                  <table className="w-full">
+                    <thead className="bg-white/5 border-b border-white/10">
+                      <tr>
+                        <th className="text-left p-4 w-8">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const allSelected = filteredContacts.every(c => selectedContacts.has(c.email));
+                              handleSelectAll(!allSelected);
+                            }}
+                            className="p-1 hover:bg-white/10 rounded"
+                          >
+                            {filteredContacts.every(c => selectedContacts.has(c.email)) && filteredContacts.length > 0 ? (
+                              <CheckSquare className="w-4 h-4 text-[#1DD1A1]" />
+                            ) : (
+                              <Square className="w-4 h-4 text-gray-400" />
+                            )}
+                          </button>
+                        </th>
+                        <th className="text-left p-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Contact</th>
+                        <th className="text-left p-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Activities</th>
+                        <th className="text-left p-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Pathway</th>
+                        <th className="text-left p-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Last Activity</th>
+                        <th className="text-left p-4 text-xs font-semibold text-gray-300 uppercase tracking-wider w-20">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredContacts.map((contact) => (
+                        <tr 
+                          key={contact.email} 
+                          className={`border-t border-white/5 hover:bg-white/5 transition-colors cursor-pointer ${
+                            selectedProfile?.email === contact.email ? 'bg-gradient-to-r from-[#1DD1A1]/5 to-[#B91372]/5' : ''
+                          }`}
+                          onClick={() => setSelectedProfile(contact)}
+                        >
+                          <td className="p-4">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectContact(contact.email, !selectedContacts.has(contact.email));
+                              }}
+                              className="p-1 hover:bg-white/10 rounded"
+                            >
+                              {selectedContacts.has(contact.email) ? (
+                                <CheckSquare className="w-4 h-4 text-[#1DD1A1]" />
+                              ) : (
+                                <Square className="w-4 h-4 text-gray-400" />
+                              )}
+                            </button>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-gradient-to-br from-teal-500/20 to-teal-700/20 rounded-full flex items-center justify-center">
+                                <User className="w-4 h-4 text-teal-400" />
+                              </div>
+                              <div>
+                                <p className="text-white font-medium text-sm">
+                                  {contact.name || contact.stageName || contact.email.split('@')[0]}
+                                </p>
+                                <p className="text-gray-400 text-xs">{contact.email}</p>
+                              </div>
                             </div>
-                            <div>
-                              <h3 className="text-white font-medium">
-                                {contact.name || contact.stageName || contact.email.split('@')[0]}
-                              </h3>
-                              <p className="text-gray-400 text-sm">{contact.email}</p>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-2">
+                              {contact.quiz && (
+                                <div className="w-2 h-2 bg-blue-400 rounded-full" title="Quiz completed" />
+                              )}
+                              {contact.survey && (
+                                <div className="w-2 h-2 bg-green-400 rounded-full" title="Survey completed" />
+                              )}
+                              {contact.contest && (
+                                <div className="w-2 h-2 bg-purple-400 rounded-full" title="Contest entered" />
+                              )}
+                              <span className="text-gray-500 text-xs ml-1">
+                                {[contact.quiz && 'Quiz', contact.survey && 'Survey', contact.contest && 'Contest']
+                                  .filter(Boolean).join(', ') || 'None'}
+                              </span>
                             </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {contact.quiz && <div className="w-2 h-2 bg-blue-400 rounded-full" title="Quiz completed" />}
-                          {contact.survey && <div className="w-2 h-2 bg-green-400 rounded-full" title="Survey completed" />}
-                          {contact.contest && <div className="w-2 h-2 bg-purple-400 rounded-full" title="Contest entered" />}
-                          <span className="text-gray-500 text-xs">{formatDate(contact.lastActivity)}</span>
-                        </div>
-                      </div>
-                      {contact.quiz && (
-                        <div className="mt-2 pt-2 border-t border-white/5">
-                          <p className="text-xs text-gray-400">
-                            <span className="text-blue-400">Pathway:</span> {contact.quiz.pathway} • 
-                            <span className="text-blue-400">Stage:</span> {contact.quiz.stage}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                          </td>
+                          <td className="p-4">
+                            <span className="text-white text-sm">
+                              {contact.quiz?.pathway || 'N/A'}
+                            </span>
+                            {contact.quiz?.stage && (
+                              <p className="text-gray-400 text-xs">{contact.quiz.stage}</p>
+                            )}
+                          </td>
+                          <td className="p-4">
+                            <span className="text-gray-400 text-xs">
+                              {formatDate(contact.lastActivity)}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedProfile(contact);
+                                }}
+                                className="p-1 hover:bg-white/10 rounded text-gray-400 hover:text-white transition-colors"
+                                title="View Details"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowDeleteConfirm(contact.email);
+                                }}
+                                className="p-1 hover:bg-red-500/20 rounded text-gray-400 hover:text-red-400 transition-colors"
+                                title="Delete Contact"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </div>
@@ -610,6 +837,34 @@ export default function CRMDashboard() {
             </div>
           )}
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="glass-card p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold text-white mb-4">Delete Contact</h3>
+              <p className="text-gray-300 mb-6">
+                Are you sure you want to delete <strong>{showDeleteConfirm}</strong>? 
+                This will remove all their data including quiz results, survey responses, and contest entries.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowDeleteConfirm(null)}
+                  className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeleteContact(showDeleteConfirm)}
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
