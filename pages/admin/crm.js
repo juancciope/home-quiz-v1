@@ -39,6 +39,9 @@ export default function CRMDashboard() {
     withSurvey: 0,
     withContest: 0
   });
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [showMigrationResults, setShowMigrationResults] = useState(false);
+  const [migrationResults, setMigrationResults] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -301,6 +304,42 @@ export default function CRMDashboard() {
     }
   };
 
+  const handleMigrateContestData = async () => {
+    if (!confirm('This will fix orphaned contest entries by linking them to artist profiles. Continue?')) {
+      return;
+    }
+
+    setIsMigrating(true);
+    const token = localStorage.getItem('adminToken');
+    
+    try {
+      const response = await fetch('/api/admin/migrate-contest-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        setMigrationResults(result.results);
+        setShowMigrationResults(true);
+        // Refresh data to show updated linkages
+        loadData();
+      } else {
+        alert(`Migration failed: ${result.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Error in migration:', error);
+      alert('Migration failed due to network error');
+    } finally {
+      setIsMigrating(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -451,6 +490,14 @@ export default function CRMDashboard() {
                   >
                     <Download className="w-4 h-4" />
                     Export
+                  </button>
+                  <button
+                    onClick={handleMigrateContestData}
+                    disabled={isMigrating}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
+                  >
+                    <Trophy className="w-4 h-4" />
+                    {isMigrating ? 'Fixing...' : 'Fix Contest Data'}
                   </button>
                   {selectedContacts.size > 0 && (
                     <button
@@ -861,6 +908,82 @@ export default function CRMDashboard() {
                 >
                   {isDeleting ? 'Deleting...' : 'Delete'}
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Migration Results Modal */}
+        {showMigrationResults && migrationResults && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Contest Data Migration Results</h3>
+                <button
+                  onClick={() => setShowMigrationResults(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {/* Summary Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-blue-400">{migrationResults.processed}</div>
+                    <div className="text-xs text-gray-400">Processed</div>
+                  </div>
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-green-400">{migrationResults.created}</div>
+                    <div className="text-xs text-gray-400">Created</div>
+                  </div>
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-purple-400">{migrationResults.linked}</div>
+                    <div className="text-xs text-gray-400">Linked</div>
+                  </div>
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-red-400">{migrationResults.errors}</div>
+                    <div className="text-xs text-gray-400">Errors</div>
+                  </div>
+                </div>
+
+                {/* Detailed Results */}
+                {migrationResults.details && migrationResults.details.length > 0 && (
+                  <div className="glass-card p-4">
+                    <h4 className="text-white font-semibold mb-3">Detailed Results</h4>
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {migrationResults.details.map((detail, index) => (
+                        <div 
+                          key={index}
+                          className={`flex items-center justify-between p-2 rounded-lg text-sm ${
+                            detail.status === 'success' 
+                              ? 'bg-green-500/10 border border-green-500/20' 
+                              : 'bg-red-500/10 border border-red-500/20'
+                          }`}
+                        >
+                          <span className="text-white font-mono">{detail.email}</span>
+                          <span className={`text-xs px-2 py-1 rounded ${
+                            detail.status === 'success'
+                              ? 'bg-green-500/20 text-green-400'
+                              : 'bg-red-500/20 text-red-400'
+                          }`}>
+                            {detail.status === 'success' ? detail.action : detail.error}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowMigrationResults(false)}
+                    className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
