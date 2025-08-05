@@ -47,6 +47,14 @@ export default function CRMDashboard() {
   const [isRollingBack, setIsRollingBack] = useState(false);
   const [showRollbackResults, setShowRollbackResults] = useState(false);
   const [rollbackResults, setRollbackResults] = useState(null);
+  const [showRecoveryModal, setShowRecoveryModal] = useState(false);
+  const [recoveryData, setRecoveryData] = useState(null);
+  const [manualEntry, setManualEntry] = useState({
+    email: '',
+    techIdea: '',
+    techBackground: '',
+    submittedAt: ''
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -408,6 +416,69 @@ export default function CRMDashboard() {
     }
   };
 
+  const handleRecoveryCheck = async () => {
+    const token = localStorage.getItem('adminToken');
+    
+    try {
+      const response = await fetch('/api/admin/recover-contest-data', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        setRecoveryData(result);
+        setShowRecoveryModal(true);
+        console.log('🔍 Recovery data:', result);
+      } else {
+        alert(`Recovery check failed: ${result.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Error in recovery check:', error);
+      alert('Recovery check failed due to network error');
+    }
+  };
+
+  const handleManualEntrySubmit = async () => {
+    if (!manualEntry.email || !manualEntry.techIdea) {
+      alert('Email and tech idea are required');
+      return;
+    }
+
+    const token = localStorage.getItem('adminToken');
+    
+    try {
+      const response = await fetch('/api/admin/recover-contest-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(manualEntry)
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Contest entry recovered successfully!');
+        setManualEntry({ email: '', techIdea: '', techBackground: '', submittedAt: '' });
+        setShowRecoveryModal(false);
+        // Refresh data
+        loadData();
+      } else {
+        alert(`Recovery failed: ${result.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Error in manual entry:', error);
+      alert('Manual entry failed due to network error');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -581,6 +652,13 @@ export default function CRMDashboard() {
                   >
                     <Clock className="w-4 h-4" />
                     {isRollingBack ? 'Rolling Back...' : 'Rollback Migration'}
+                  </button>
+                  <button
+                    onClick={handleRecoveryCheck}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl hover:shadow-lg transition-all"
+                  >
+                    <Users className="w-4 h-4" />
+                    Recover Data
                   </button>
                   {selectedContacts.size > 0 && (
                     <button
@@ -1269,6 +1347,161 @@ export default function CRMDashboard() {
                   >
                     Close
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Data Recovery Modal */}
+        {showRecoveryModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="glass-card p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">🚨 Contest Data Recovery</h3>
+                <button
+                  onClick={() => setShowRecoveryModal(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {/* Current Status */}
+                {recoveryData && (
+                  <div className="glass-card p-4">
+                    <h4 className="text-white font-semibold mb-3">Current Database Status</h4>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-400">Contest Entries:</span>
+                        <span className="text-white ml-2 font-mono">{recoveryData.currentContestEntries}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">Available Collections:</span>
+                        <span className="text-white ml-2">{recoveryData.availableCollections.length}</span>
+                      </div>
+                    </div>
+                    
+                    {recoveryData.currentContests.length > 0 && (
+                      <div className="mt-4">
+                        <h5 className="text-gray-400 mb-2">Current Contest Entries:</h5>
+                        <div className="space-y-2 max-h-40 overflow-y-auto">
+                          {recoveryData.currentContests.map((contest, index) => (
+                            <div key={index} className="bg-white/5 p-2 rounded text-xs">
+                              <div className="font-mono text-white">{contest.email}</div>
+                              <div className="text-gray-400">{new Date(contest.submittedAt).toLocaleString()}</div>
+                              <div className="text-gray-300">{contest.techIdea}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Recovery Options */}
+                <div className="glass-card p-4">
+                  <h4 className="text-white font-semibold mb-3">Recovery Options</h4>
+                  <div className="space-y-3 text-sm">
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                      <h5 className="text-blue-400 font-semibold mb-2">💾 Check for Backups</h5>
+                      <ul className="text-gray-300 space-y-1">
+                        <li>• MongoDB Atlas automatic backups (if using Atlas)</li>
+                        <li>• File system backups (if self-hosted)</li>
+                        <li>• Application-level backups</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                      <h5 className="text-green-400 font-semibold mb-2">✏️ Manual Entry Recreation</h5>
+                      <p className="text-gray-300 mb-3">If you have the original contest submission details, you can manually recreate the entry:</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Manual Entry Form */}
+                <div className="glass-card p-4">
+                  <h4 className="text-white font-semibold mb-3">Manual Contest Entry Recreation</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-1">Email *</label>
+                      <input
+                        type="email"
+                        value={manualEntry.email}
+                        onChange={(e) => setManualEntry(prev => ({ ...prev, email: e.target.value }))}
+                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white placeholder-gray-400"
+                        placeholder="contest@example.com"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-1">Tech Idea *</label>
+                      <textarea
+                        value={manualEntry.techIdea}
+                        onChange={(e) => setManualEntry(prev => ({ ...prev, techIdea: e.target.value }))}
+                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white placeholder-gray-400 h-24"
+                        placeholder="Describe the tech idea that was submitted..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-1">Tech Background</label>
+                      <input
+                        type="text"
+                        value={manualEntry.techBackground}
+                        onChange={(e) => setManualEntry(prev => ({ ...prev, techBackground: e.target.value }))}
+                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white placeholder-gray-400"
+                        placeholder="Technical background (optional)"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-1">Original Submission Date</label>
+                      <input
+                        type="datetime-local"
+                        value={manualEntry.submittedAt}
+                        onChange={(e) => setManualEntry(prev => ({ ...prev, submittedAt: e.target.value }))}
+                        className="w-full px-3 py-2 bg-black/30 border border-white/20 rounded-lg focus:border-[#1DD1A1] focus:outline-none text-white"
+                      />
+                    </div>
+                    
+                    <div className="flex gap-3 justify-end">
+                      <button
+                        onClick={() => setShowRecoveryModal(false)}
+                        className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleManualEntrySubmit}
+                        className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:shadow-lg transition-all"
+                      >
+                        Recreate Entry
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Direct Database Instructions */}
+                <div className="glass-card p-4 bg-yellow-500/10 border border-yellow-500/20">
+                  <h4 className="text-yellow-400 font-semibold mb-3">🔧 Direct Database Recovery (Advanced)</h4>
+                  <div className="text-sm text-gray-300 space-y-2">
+                    <p><strong>If you have direct database access:</strong></p>
+                    <div className="bg-black/30 p-3 rounded font-mono text-xs overflow-x-auto">
+                      <div className="text-green-400">// Connect to your MongoDB</div>
+                      <div className="text-white">use your-database-name</div>
+                      <div className="text-white">db.bootcamp_registrations.find()</div>
+                      <div className="text-green-400">// Check for any remaining entries</div>
+                      <div className="text-white">db.bootcamp_registrations.insertOne({`{`}</div>
+                      <div className="text-white ml-4">email: "original@email.com",</div>
+                      <div className="text-white ml-4">techIdea: "original tech idea",</div>
+                      <div className="text-white ml-4">techBackground: "background",</div>
+                      <div className="text-white ml-4">submittedAt: new Date("2024-01-01"),</div>
+                      <div className="text-white ml-4">status: "pending_review"</div>
+                      <div className="text-white">{`}`})</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
