@@ -130,6 +130,15 @@ export default function CRMDashboard() {
     });
   };
 
+  const formatMonthlyInvestment = (investment) => {
+    if (!investment) return 'N/A';
+    if (typeof investment === 'object') {
+      if (investment.dontKnow) return 'N/A';
+      return `$${investment.amount || 0}`;
+    }
+    return `$${investment}`;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -396,7 +405,9 @@ export default function CRMDashboard() {
                               </div>
                               {profile.survey.monthlyInvestment && (
                                 <div className="text-center">
-                                  <p className="text-white text-sm font-medium">${profile.survey.monthlyInvestment}</p>
+                                  <p className="text-white text-sm font-medium">
+                                    {formatMonthlyInvestment(profile.survey.monthlyInvestment)}
+                                  </p>
                                   <p className="text-gray-400 text-xs">Monthly</p>
                                 </div>
                               )}
