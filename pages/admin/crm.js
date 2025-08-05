@@ -44,6 +44,9 @@ export default function CRMDashboard() {
   const [migrationResults, setMigrationResults] = useState(null);
   const [showDebugData, setShowDebugData] = useState(false);
   const [debugData, setDebugData] = useState(null);
+  const [isRollingBack, setIsRollingBack] = useState(false);
+  const [showRollbackResults, setShowRollbackResults] = useState(false);
+  const [rollbackResults, setRollbackResults] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -369,6 +372,42 @@ export default function CRMDashboard() {
     }
   };
 
+  const handleRollbackMigration = async () => {
+    if (!confirm('⚠️ WARNING: This will rollback the migration by:\n\n• Clearing artistProfileId from all contest entries\n• Removing migration tags from artist profiles\n• Unlinking all contest data\n\nThis action cannot be undone. Continue?')) {
+      return;
+    }
+
+    setIsRollingBack(true);
+    const token = localStorage.getItem('adminToken');
+    
+    try {
+      const response = await fetch('/api/admin/rollback-migration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        setRollbackResults(result.results);
+        setShowRollbackResults(true);
+        // Refresh data to show rollback changes
+        loadData();
+      } else {
+        alert(`Rollback failed: ${result.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Error in rollback:', error);
+      alert('Rollback failed due to network error');
+    } finally {
+      setIsRollingBack(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -534,6 +573,14 @@ export default function CRMDashboard() {
                   >
                     <Eye className="w-4 h-4" />
                     Debug Contest
+                  </button>
+                  <button
+                    onClick={handleRollbackMigration}
+                    disabled={isRollingBack}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600 to-red-800 rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
+                  >
+                    <Clock className="w-4 h-4" />
+                    {isRollingBack ? 'Rolling Back...' : 'Rollback Migration'}
                   </button>
                   {selectedContacts.size > 0 && (
                     <button
@@ -1105,6 +1152,119 @@ export default function CRMDashboard() {
                 <div className="flex justify-end">
                   <button
                     onClick={() => setShowDebugData(false)}
+                    className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Rollback Results Modal */}
+        {showRollbackResults && rollbackResults && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="glass-card p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Migration Rollback Results</h3>
+                <button
+                  onClick={() => setShowRollbackResults(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {/* Summary Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-blue-400">{rollbackResults.artistProfilesProcessed}</div>
+                    <div className="text-xs text-gray-400">Profiles Processed</div>
+                  </div>
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-green-400">{rollbackResults.migratedTagsRemoved}</div>
+                    <div className="text-xs text-gray-400">Tags Removed</div>
+                  </div>
+                  <div className="glass-card p-3 text-center">
+                    <div className="text-xl font-bold text-purple-400">{rollbackResults.contestEntriesProcessed}</div>
+                    <div className="text-xs text-gray-400">Contest Links Cleared</div>
+                  </div>
+                </div>
+
+                {/* Success Message */}
+                <div className="glass-card p-4 bg-green-500/10 border border-green-500/20">
+                  <h4 className="text-green-400 font-semibold mb-2">✅ Rollback Completed Successfully</h4>
+                  <div className="text-white text-sm space-y-1">
+                    <p>• Cleared {rollbackResults.artistProfileIdsCleared} contest entry links</p>
+                    <p>• Removed {rollbackResults.migratedTagsRemoved} migration tags from profiles</p>
+                    <p>• Processed {rollbackResults.artistProfilesProcessed} artist profiles</p>
+                    {rollbackResults.errors > 0 && (
+                      <p className="text-red-400">• {rollbackResults.errors} errors occurred (see details below)</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Detailed Results */}
+                {rollbackResults.details && rollbackResults.details.length > 0 && (
+                  <div className="glass-card p-4">
+                    <h4 className="text-white font-semibold mb-3">Detailed Results</h4>
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {rollbackResults.details.map((detail, index) => (
+                        <div 
+                          key={index}
+                          className={`p-2 rounded-lg text-sm ${
+                            detail.status === 'success' 
+                              ? 'bg-green-500/10 border border-green-500/20' 
+                              : detail.status === 'error'
+                              ? 'bg-red-500/10 border border-red-500/20'
+                              : 'bg-blue-500/10 border border-blue-500/20'
+                          }`}
+                        >
+                          {detail.email && (
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-white font-mono">{detail.email}</span>
+                              <span className={`text-xs px-2 py-1 rounded ${
+                                detail.status === 'success'
+                                  ? 'bg-green-500/20 text-green-400'
+                                  : detail.status === 'error'
+                                  ? 'bg-red-500/20 text-red-400'
+                                  : 'bg-blue-500/20 text-blue-400'
+                              }`}>
+                                {detail.action}
+                              </span>
+                            </div>
+                          )}
+                          {detail.removedTags && (
+                            <div className="text-xs text-gray-400">
+                              Removed tags: {detail.removedTags.join(', ')}
+                            </div>
+                          )}
+                          {detail.error && (
+                            <div className="text-xs text-red-300">
+                              Error: {detail.error}
+                            </div>
+                          )}
+                          {detail.note && (
+                            <div className="text-xs text-blue-300">
+                              {detail.note}
+                            </div>
+                          )}
+                          {detail.count && (
+                            <div className="text-xs text-white">
+                              Found {detail.count} contest-only profiles: {detail.emails?.slice(0, 3).join(', ')}{detail.emails?.length > 3 ? '...' : ''}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowRollbackResults(false)}
                     className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
                   >
                     Close
