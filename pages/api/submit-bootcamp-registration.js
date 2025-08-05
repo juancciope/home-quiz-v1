@@ -1,5 +1,6 @@
 import dbConnect from '../../lib/mongoose';
 import { isValidEmail } from '../../lib/validation';
+import ArtistProfile from '../../models/ArtistProfile';
 
 export default async function handler(req, res) {
   console.log('🚀 BOOTCAMP REGISTRATION API CALLED');
@@ -45,6 +46,31 @@ export default async function handler(req, res) {
     console.log('💡 Tech Idea:', techIdea.substring(0, 100) + '...');
     console.log('👨‍💻 Background:', techBackground);
 
+    // First, find or create artist profile to ensure linkage
+    let artistProfile = await ArtistProfile.findOne({ email: email.toLowerCase() });
+    
+    if (!artistProfile) {
+      console.log('👤 Creating new artist profile for contest registration...');
+      artistProfile = new ArtistProfile({
+        email: email.toLowerCase(),
+        name: '', // Will be updated when they complete quiz
+        career: {
+          stage: 'planning', // Default stage
+          startedAt: new Date()
+        },
+        tags: ['contest-registered']
+      });
+      await artistProfile.save();
+      console.log('✅ Artist profile created for contest registration');
+    } else {
+      console.log('👤 Found existing artist profile, linking contest...');
+      // Add contest tag if not already present
+      if (!artistProfile.tags.includes('contest-registered')) {
+        artistProfile.tags.push('contest-registered');
+        await artistProfile.save();
+      }
+    }
+
     // Store in MongoDB - we'll create a simple collection for now
     const { MongoClient } = require('mongodb');
     const client = new MongoClient(process.env.MONGODB_URI);
@@ -60,7 +86,8 @@ export default async function handler(req, res) {
         techBackground: techBackground || 'not specified',
         submittedAt: new Date(),
         status: 'pending_review',
-        source: 'music-creator-roadmap-quiz'
+        source: 'music-creator-roadmap-quiz',
+        artistProfileId: artistProfile._id // Link to artist profile
       };
       
       // Check if email already exists
