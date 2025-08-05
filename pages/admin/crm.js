@@ -42,6 +42,8 @@ export default function CRMDashboard() {
   const [isMigrating, setIsMigrating] = useState(false);
   const [showMigrationResults, setShowMigrationResults] = useState(false);
   const [migrationResults, setMigrationResults] = useState(null);
+  const [showDebugData, setShowDebugData] = useState(false);
+  const [debugData, setDebugData] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -340,6 +342,33 @@ export default function CRMDashboard() {
     }
   };
 
+  const handleDebugContestData = async () => {
+    const token = localStorage.getItem('adminToken');
+    
+    try {
+      const response = await fetch('/api/admin/debug-contest-data', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        setDebugData(result);
+        setShowDebugData(true);
+        console.log('🔍 Debug data:', result);
+      } else {
+        alert(`Debug failed: ${result.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Error in debug:', error);
+      alert('Debug failed due to network error');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -498,6 +527,13 @@ export default function CRMDashboard() {
                   >
                     <Trophy className="w-4 h-4" />
                     {isMigrating ? 'Fixing...' : 'Fix Contest Data'}
+                  </button>
+                  <button
+                    onClick={handleDebugContestData}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl hover:shadow-lg transition-all"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Debug Contest
                   </button>
                   {selectedContacts.size > 0 && (
                     <button
@@ -979,6 +1015,96 @@ export default function CRMDashboard() {
                 <div className="flex justify-end">
                   <button
                     onClick={() => setShowMigrationResults(false)}
+                    className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Debug Contest Data Modal */}
+        {showDebugData && debugData && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="glass-card p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Contest Data Debug</h3>
+                <button
+                  onClick={() => setShowDebugData(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-6 text-sm">
+                {/* Contest Submissions */}
+                <div className="glass-card p-4">
+                  <h4 className="text-white font-semibold mb-3">Contest Submissions ({debugData.collections.contestSubmissions.count})</h4>
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {debugData.collections.contestSubmissions.entries.map((entry, index) => (
+                      <div key={index} className="bg-white/5 p-3 rounded-lg">
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div><span className="text-gray-400">ID:</span> <span className="font-mono">{entry._id}</span></div>
+                          <div><span className="text-gray-400">Email:</span> <span className="text-white">{entry.email}</span></div>
+                          <div><span className="text-gray-400">Submitted:</span> <span className="text-white">{new Date(entry.submittedAt).toLocaleString()}</span></div>
+                          <div><span className="text-gray-400">Profile ID:</span> <span className="font-mono text-green-400">{entry.artistProfileId || 'NONE'}</span></div>
+                          <div className="col-span-2"><span className="text-gray-400">Tech Idea:</span> <span className="text-white">{entry.techIdea}</span></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Potential Issues */}
+                <div className="glass-card p-4">
+                  <h4 className="text-white font-semibold mb-3">Potential Issues</h4>
+                  
+                  {/* Wrongly Linked */}
+                  {debugData.potentialIssues.wronglyLinked.length > 0 && (
+                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                      <h5 className="text-red-400 font-semibold mb-2">❌ Wrongly Linked Entries ({debugData.potentialIssues.wronglyLinked.length})</h5>
+                      {debugData.potentialIssues.wronglyLinked.map((entry, index) => (
+                        <div key={index} className="text-xs text-white font-mono mb-1">
+                          Contest: {entry.email} → Profile: {entry.artistProfileId}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Orphaned */}
+                  {debugData.potentialIssues.orphanedEntries.length > 0 && (
+                    <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                      <h5 className="text-yellow-400 font-semibold mb-2">⚠️ Orphaned Entries ({debugData.potentialIssues.orphanedEntries.length})</h5>
+                      {debugData.potentialIssues.orphanedEntries.map((entry, index) => (
+                        <div key={index} className="text-xs text-white font-mono mb-1">
+                          {entry.email} - {entry._id}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Duplicate Emails */}
+                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                    <h5 className="text-blue-400 font-semibold mb-2">📧 Emails by Frequency</h5>
+                    {Object.entries(debugData.potentialIssues.duplicateEmails).map(([email, entries]) => (
+                      <div key={email} className="text-xs mb-2">
+                        <div className="text-white font-mono">{email} ({entries.length} entries)</div>
+                        {entries.map((entry, idx) => (
+                          <div key={idx} className="ml-4 text-gray-400">
+                            {entry._id} - {new Date(entry.submittedAt).toLocaleString()} - Profile: {entry.artistProfileId || 'NONE'}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowDebugData(false)}
                     className="px-4 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-xl hover:shadow-lg transition-all"
                   >
                     Close
