@@ -105,6 +105,7 @@ export default async function handler(req, res) {
 
     if (useAssistant) {
       try {
+        const startTime = Date.now();
         console.log('🤖 Calling OpenAI Assistant for pathway generation...');
 
         // Create a thread
@@ -155,31 +156,41 @@ Do not box them into a single category - acknowledge their unique blend and prov
           assistant_id: ASSISTANT_ID
         });
 
-        // Wait for completion with optimized timeout - faster for better UX
+        // Wait for completion with VERY aggressive timeout for better UX
         let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
         let attempts = 0;
-        const maxAttempts = 15; // Reduced from 30 to 15 attempts (~20-25s total)
-        let waitTime = 800; // Start with 800ms instead of 1000ms
+        const maxAttempts = 10; // Further reduced to 10 attempts (~10-15s max)
+        let waitTime = 500; // Start with 500ms for faster initial checks
+        const maxTotalTime = 15000; // 15 second hard limit
+        const runStartTime = Date.now();
         
         while (runStatus.status !== 'completed' && attempts < maxAttempts) {
+          // Check total time elapsed
+          if (Date.now() - runStartTime > maxTotalTime) {
+            console.error(`❌ Assistant run exceeded 15s time limit - aborting`);
+            throw new Error('Assistant timeout - using fallback');
+          }
+          
           if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
             console.error(`❌ Assistant run failed with status: ${runStatus.status}`);
             throw new Error(`Assistant run failed: ${runStatus.status}`);
           }
           
-          // Wait with controlled backoff (max 2 seconds for faster response)
-          await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 2000)));
-          waitTime = waitTime * 1.15; // Gentler increase - 15% instead of 20%
+          // Wait with controlled backoff (max 1.5 seconds for faster response)
+          await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 1500)));
+          waitTime = waitTime * 1.2; // 20% increase
           
           runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
           attempts++;
           
-          console.log(`🔄 Assistant run status: ${runStatus.status} (attempt ${attempts}/${maxAttempts}) - waited ${Math.min(waitTime/1.15, 2000)}ms`);
+          const elapsed = ((Date.now() - runStartTime) / 1000).toFixed(1);
+          console.log(`🔄 Assistant run status: ${runStatus.status} (attempt ${attempts}/${maxAttempts}) - ${elapsed}s elapsed`);
         }
 
         if (runStatus.status !== 'completed') {
-          console.error(`❌ Assistant run timed out after ${maxAttempts} attempts (~20-25s total)`);
-          throw new Error('Assistant run timed out');
+          const totalTime = ((Date.now() - runStartTime) / 1000).toFixed(1);
+          console.error(`❌ Assistant run timed out after ${attempts} attempts (${totalTime}s)`);
+          throw new Error('Assistant timeout - using fallback');
         }
 
         // Get the assistant's response
@@ -280,13 +291,15 @@ const result = {
   assistantUsed: true
 };
 
+const totalTime = ((Date.now() - startTime) / 1000).toFixed(1);
 console.log('✅ Successfully generated personalized pathway:', {
   pathway: result.pathway,
   hasSteps: result.nextSteps.length,
-  hasResources: result.resources.length
+  hasResources: result.resources.length,
+  totalTime: `${totalTime}s`
 });
 
-        console.log('✅ Successfully generated personalized pathway using Assistant');
+        console.log(`✅ Successfully generated personalized pathway using Assistant in ${totalTime}s`);
         res.status(200).json(result);
         return;
         
