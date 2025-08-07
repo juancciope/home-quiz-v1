@@ -2057,6 +2057,73 @@ const HOMECreatorFlow = () => {
     }
   };
 
+  // Handle PDF download with Stripe payment
+  const handleStripeCheckout = async () => {
+    try {
+      // Ensure we have required data
+      if (!responses || !responses.email) {
+        alert('Please provide your email address first.');
+        return;
+      }
+      
+      const currentPathway = aiGeneratedPathway || pathway;
+      if (!currentPathway) {
+        console.error('❌ No pathway data available for PDF generation');
+        alert('Error: Please complete the assessment first.');
+        return;
+      }
+      
+      console.log('💳 Creating Stripe checkout for PDF...');
+      
+      // Create a session ID to track this user's data
+      const sessionId = Date.now().toString();
+      
+      // Store pathway data in localStorage for after payment
+      const pdfData = {
+        pathway: currentPathway,
+        responses: responses || {},
+        scoreResult: scoreResult || null,
+        pathwayDetails: currentPathway?.pathwayDetails || {},
+        fuzzyScores: scoreResult?.displayPct || fuzzyScores || {},
+        pathwayBlend: scoreResult ? { 
+          type: scoreResult.blendType || 'focused', 
+          primary: scoreResult.recommendation?.path || 'creative-artist'
+        } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' }),
+        artistName: artistName || ''
+      };
+      
+      localStorage.setItem(`pdfData_${sessionId}`, JSON.stringify(pdfData));
+      
+      // Create Stripe checkout session
+      const response = await fetch('/api/create-pdf-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          email: responses.email,
+          pathwayData: pdfData
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Checkout creation failed:', errorData);
+        throw new Error(errorData.message || 'Failed to create checkout session');
+      }
+      
+      const { url } = await response.json();
+      
+      console.log('✅ Redirecting to Stripe checkout...');
+      
+      // Redirect to Stripe checkout
+      window.location.href = url;
+      
+    } catch (error) {
+      console.error('❌ Stripe checkout error:', error);
+      alert('An error occurred while setting up payment. Please try again.');
+    }
+  };
+
   // Handle instant PDF download (uses pre-generated PDF)
   const handlePDFGeneration = async () => {
     try {
@@ -3695,7 +3762,7 @@ const HOMECreatorFlow = () => {
                   
                   {/* PDF Download Button */}
                   <LiquidButton
-                    onClick={handlePDFGeneration}
+                    onClick={handleStripeCheckout}
                     className="w-full mb-0"
                   >
                     Download Now
