@@ -12,8 +12,8 @@ STRIPE_PUBLISHABLE_KEY=pk_live_your_stripe_publishable_key_here
 STRIPE_SECRET_KEY=sk_live_your_stripe_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_endpoint_secret_here
 
-# Optional: Use your pre-created Stripe Product ID
-STRIPE_PDF_PRODUCT_ID=price_your_stripe_price_id_here
+# Optional: Use your pre-created Stripe Price ID  
+STRIPE_PDF_PRICE_ID=price_your_stripe_price_id_here
 
 # Application URL (Required for redirects)
 NEXT_PUBLIC_URL=https://your-domain.com
@@ -61,7 +61,7 @@ For testing, use Stripe's test mode:
 
 ## Fallback Behavior
 
-If `STRIPE_PDF_PRODUCT_ID` is not set, the system will create dynamic pricing at $20 USD automatically.
+If `STRIPE_PDF_PRICE_ID` is not set, the system will create dynamic pricing at $20 USD automatically.
 
 ## Security Notes
 

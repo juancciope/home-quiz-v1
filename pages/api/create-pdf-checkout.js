@@ -17,10 +17,14 @@ export default async function handler(req, res) {
       pathwayTitle: pathwayData?.pathway?.title
     });
 
-    // Use product ID if available, otherwise create dynamic pricing
-    const lineItems = process.env.STRIPE_PDF_PRODUCT_ID ? [
+    // Use price ID if available, otherwise create dynamic pricing
+    const usePreCreatedPrice = !!process.env.STRIPE_PDF_PRICE_ID;
+    console.log(`💰 Using ${usePreCreatedPrice ? 'pre-created price ID' : 'dynamic pricing'}:`, 
+      usePreCreatedPrice ? process.env.STRIPE_PDF_PRICE_ID : '$20 USD dynamic');
+    
+    const lineItems = usePreCreatedPrice ? [
       {
-        price: process.env.STRIPE_PDF_PRODUCT_ID, // Use your pre-created product
+        price: process.env.STRIPE_PDF_PRICE_ID, // Use your pre-created price
         quantity: 1,
       },
     ] : [
