@@ -2005,19 +2005,48 @@ const HOMECreatorFlow = () => {
         return;
       }
       
-      const response = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, pathwayData: pdfData }),
-      });
+      // Add retry logic for network issues
+      let retryCount = 0;
+      const maxRetries = 3;
+      const retryDelay = 2000; // 2 seconds
+      
+      while (retryCount <= maxRetries) {
+        try {
+          const response = await fetch('/api/generate-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId, pathwayData: pdfData }),
+          });
 
-      if (response.ok) {
-        const blob = await response.blob();
-        setPreGeneratedPDF(blob);
-        console.log('✅ PDF pre-generated successfully');
-      } else {
-        const errorText = await response.text();
-        console.error('❌ PDF pre-generation failed:', response.status, errorText);
+          if (response.ok) {
+            const blob = await response.blob();
+            setPreGeneratedPDF(blob);
+            console.log('✅ PDF pre-generated successfully');
+            break; // Success, exit retry loop
+          } else {
+            const errorText = await response.text();
+            console.error(`❌ PDF pre-generation failed (attempt ${retryCount + 1}):`, response.status, errorText);
+            
+            if (retryCount === maxRetries) {
+              console.error('❌ PDF pre-generation failed after all retries');
+              break;
+            }
+          }
+        } catch (fetchError) {
+          console.error(`❌ PDF pre-generation network error (attempt ${retryCount + 1}):`, fetchError.message);
+          
+          if (retryCount === maxRetries) {
+            console.error('❌ PDF pre-generation failed after all retries due to network issues');
+            // Don't throw error, just log and continue - user can still generate PDF on demand
+            break;
+          }
+        }
+        
+        retryCount++;
+        if (retryCount <= maxRetries) {
+          console.log(`🔄 Retrying PDF pre-generation in ${retryDelay}ms... (${retryCount}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+        }
       }
     } catch (error) {
       console.error('❌ PDF pre-generation error:', error);
@@ -2060,18 +2089,48 @@ const HOMECreatorFlow = () => {
         
         console.log('📤 Sending PDF data to API...');
         
-        const response = await fetch('/api/generate-pdf', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId, pathwayData: pdfData }),
-        });
+        // Add retry logic for on-demand PDF generation too
+        let retryCount = 0;
+        const maxRetries = 2;
+        const retryDelay = 1000; // 1 second for user-initiated requests
+        let success = false;
+        
+        while (retryCount <= maxRetries && !success) {
+          try {
+            const response = await fetch('/api/generate-pdf', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ sessionId, pathwayData: pdfData }),
+            });
 
-        if (response.ok) {
-          blob = await response.blob();
-        } else {
-          console.error('❌ PDF generation failed');
-          alert('Failed to generate PDF. Please try again.');
-          return;
+            if (response.ok) {
+              blob = await response.blob();
+              success = true;
+              console.log('✅ PDF generated successfully');
+            } else {
+              console.error(`❌ PDF generation failed (attempt ${retryCount + 1}):`, response.status);
+              
+              if (retryCount === maxRetries) {
+                alert('Failed to generate PDF after multiple attempts. Please check your internet connection and try again.');
+                return;
+              }
+            }
+          } catch (fetchError) {
+            console.error(`❌ PDF generation network error (attempt ${retryCount + 1}):`, fetchError.message);
+            
+            if (retryCount === maxRetries) {
+              alert('Network error while generating PDF. Please check your internet connection and try again.');
+              return;
+            }
+          }
+          
+          if (!success) {
+            retryCount++;
+            if (retryCount <= maxRetries) {
+              console.log(`🔄 Retrying PDF generation in ${retryDelay}ms... (${retryCount}/${maxRetries})`);
+              await new Promise(resolve => setTimeout(resolve, retryDelay));
+            }
+          }
         }
       } else {
         console.log('✅ Using pre-generated PDF for instant download');
