@@ -1862,20 +1862,21 @@ const HOMECreatorFlow = () => {
             setPathway(transformedPathway);
             console.log('✅ AI pathway transformed:', transformedPathway);
             
-            // Pre-generate PDF using the AI pathway directly (no waiting for state)
-            setTimeout(() => {
-              preGeneratePDF(aiPathway, result);
-            }, 500); // Pass the aiPathway and scoreResult directly
+            // Pre-generate PDF using the AI pathway directly (non-blocking)
+            // Don't wait - start immediately in background to not delay UI
+            preGeneratePDF(aiPathway, result).catch(error => {
+              console.log('📝 Background PDF pre-generation failed (non-critical):', error.message);
+            });
           } else {
             // Fallback to template if AI fails
             console.warn('❌ AI generation failed, using fallback');
             const pathwayKey = result.recommendation.path;
             setPathway(pathwayTemplates[pathwayKey]);
             
-            // Pre-generate PDF for fallback pathway too
-            setTimeout(() => {
-              preGeneratePDF(pathwayTemplates[pathwayKey], result);
-            }, 500);
+            // Pre-generate PDF for fallback pathway too (non-blocking)
+            preGeneratePDF(pathwayTemplates[pathwayKey], result).catch(error => {
+              console.log('📝 Background PDF pre-generation failed (non-critical):', error.message);
+            });
           }
         } catch (error) {
           console.error('❌ Error generating AI pathway:', error);
@@ -1894,10 +1895,10 @@ const HOMECreatorFlow = () => {
           const pathwayKey = result.recommendation.path;
           setPathway(pathwayTemplates[pathwayKey]);
           
-          // Pre-generate PDF for error fallback too
-          setTimeout(() => {
-            preGeneratePDF(pathwayTemplates[pathwayKey], result);
-          }, 1000);
+          // Pre-generate PDF for error fallback too (non-blocking)
+          preGeneratePDF(pathwayTemplates[pathwayKey], result).catch(error => {
+            console.log('📝 Background PDF pre-generation failed (non-critical):', error.message);
+          });
         }
         
         setIsGenerating(false);
@@ -2006,10 +2007,10 @@ const HOMECreatorFlow = () => {
         return;
       }
       
-      // Add retry logic for network issues
+      // Add retry logic for network issues - faster for background process
       let retryCount = 0;
-      const maxRetries = 3;
-      const retryDelay = 2000; // 2 seconds
+      const maxRetries = 2; // Reduced from 3 to 2 for background pre-generation
+      const retryDelay = 1000; // Reduced from 2000ms to 1000ms
       
       while (retryCount <= maxRetries) {
         try {

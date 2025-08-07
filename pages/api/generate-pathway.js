@@ -155,11 +155,11 @@ Do not box them into a single category - acknowledge their unique blend and prov
           assistant_id: ASSISTANT_ID
         });
 
-        // Wait for completion with increased timeout and exponential backoff
+        // Wait for completion with optimized timeout - faster for better UX
         let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
         let attempts = 0;
-        const maxAttempts = 30; // Increased to 30 seconds total
-        let waitTime = 1000; // Start with 1 second
+        const maxAttempts = 15; // Reduced from 30 to 15 attempts (~20-25s total)
+        let waitTime = 800; // Start with 800ms instead of 1000ms
         
         while (runStatus.status !== 'completed' && attempts < maxAttempts) {
           if (runStatus.status === 'failed' || runStatus.status === 'cancelled') {
@@ -167,18 +167,18 @@ Do not box them into a single category - acknowledge their unique blend and prov
             throw new Error(`Assistant run failed: ${runStatus.status}`);
           }
           
-          // Wait with exponential backoff (max 3 seconds)
-          await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 3000)));
-          waitTime = waitTime * 1.2; // Increase wait time by 20%
+          // Wait with controlled backoff (max 2 seconds for faster response)
+          await new Promise(resolve => setTimeout(resolve, Math.min(waitTime, 2000)));
+          waitTime = waitTime * 1.15; // Gentler increase - 15% instead of 20%
           
           runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
           attempts++;
           
-          console.log(`🔄 Assistant run status: ${runStatus.status} (attempt ${attempts}/${maxAttempts})`);
+          console.log(`🔄 Assistant run status: ${runStatus.status} (attempt ${attempts}/${maxAttempts}) - waited ${Math.min(waitTime/1.15, 2000)}ms`);
         }
 
         if (runStatus.status !== 'completed') {
-          console.error(`❌ Assistant run timed out after ${maxAttempts} attempts`);
+          console.error(`❌ Assistant run timed out after ${maxAttempts} attempts (~20-25s total)`);
           throw new Error('Assistant run timed out');
         }
 
