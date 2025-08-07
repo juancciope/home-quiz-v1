@@ -3773,8 +3773,6 @@ const HOMECreatorFlow = () => {
                   </LiquidButton>
                 </div>
               </div>
-                </div>
-              </div>
               
             </div>
           </div>
