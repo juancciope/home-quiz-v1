@@ -1981,7 +1981,8 @@ const HOMECreatorFlow = () => {
         pathwayBlend: currentScoreResult ? { 
           type: currentScoreResult.blendType || 'focused', 
           primary: currentScoreResult.recommendation?.path || 'creative-artist'
-        } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
+        } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' }),
+        artistName: artistName || ''
       };
       
       console.log('📋 PDF data being sent:', {
@@ -2084,7 +2085,8 @@ const HOMECreatorFlow = () => {
           pathwayBlend: scoreResult ? { 
             type: scoreResult.blendType || 'focused', 
             primary: scoreResult.recommendation?.path || 'creative-artist'
-          } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' })
+          } : (pathwayBlend || { type: 'focused', primary: 'creative-artist' }),
+          artistName: artistName || ''
         };
         
         console.log('📤 Sending PDF data to API...');
@@ -3312,7 +3314,15 @@ const HOMECreatorFlow = () => {
                           const pathLabel = PATH_LABELS[rec.path] || rec.path;
                           resultHeadline = pathLabel;
                         }
-                        return <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>;
+                        const greeting = artistName ? `${artistName}, here's your path:` : "Here's your path:";
+                        return (
+                          <>
+                            {artistName && (
+                              <p className="text-lg text-gray-300 mb-2">{greeting}</p>
+                            )}
+                            <h1 className="text-2xl font-bold mb-4 text-white">{resultHeadline}</h1>
+                          </>
+                        );
                       })()}
                     </div>
                     
@@ -3642,7 +3652,6 @@ const HOMECreatorFlow = () => {
                   <div className="mb-4">
                     <h3 className="text-xl font-bold mb-2 text-white">Get Your Personalized PDF Roadmap</h3>
                     <div className="flex items-center justify-center gap-2 mb-3">
-                      <span className="text-lg text-gray-400 line-through">$50</span>
                       <span className="text-2xl font-bold text-[#1DD1A1]">$20</span>
                     </div>
                   </div>
@@ -3650,7 +3659,7 @@ const HOMECreatorFlow = () => {
                   <div className="text-left space-y-4 mb-6">
                     <div className="bg-black/30 rounded-xl p-4 border border-white/10">
                       <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                        <span className="text-2xl">📊</span> What's Included:
+                        <span className="text-2xl">📊</span> What's in the PDF?
                       </h4>
                       <ul className="space-y-3 text-sm text-gray-300">
                         <li className="flex items-start gap-3">
@@ -3659,21 +3668,33 @@ const HOMECreatorFlow = () => {
                         </li>
                         <li className="flex items-start gap-3">
                           <span className="text-[#1DD1A1] font-bold">✓</span>
+                          <span><strong>Top 10 Industry Company List:</strong> Top 10 companies you should have on your radar</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-[#1DD1A1] font-bold">✓</span>
                           <span><strong>HOME Resources Guide:</strong> Specific resources and facilities perfectly matched to accelerate your growth</span>
                         </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-[#1DD1A1] font-bold">✓</span>
-                          <span><strong>Industry Contact List:</strong> Top 10 companies and contacts you should have on your radar</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-[#1DD1A1] font-bold">✓</span>
-                          <span><strong>Artist Branding Playbook:</strong> 8-part comprehensive guide to building your artistic identity</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-[#1DD1A1] font-bold">✓</span>
-                          <span><strong>Music Release Strategy:</strong> 6-part step-by-step release playbook that actually works</span>
-                        </li>
                       </ul>
+                      
+                      <div className="mt-4 pt-4 border-t border-white/20">
+                        <h5 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                          <span className="text-lg">🎁</span> BONUS (Delivered via email, unsubscribe anytime)
+                        </h5>
+                        <ul className="space-y-2 text-xs text-gray-400">
+                          <li className="flex items-start gap-3">
+                            <span className="text-[#1DD1A1] font-bold">✓</span>
+                            <span><strong>Full Music Creator Roadmap Guidebook:</strong> 9-part e-book explaining the entire framework</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <span className="text-[#1DD1A1] font-bold">✓</span>
+                            <span><strong>Artist Branding Playbook:</strong> 8-part comprehensive guide to building your artistic identity</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <span className="text-[#1DD1A1] font-bold">✓</span>
+                            <span><strong>Music Release Strategy:</strong> 6-part step-by-step release playbook that actually works</span>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                   

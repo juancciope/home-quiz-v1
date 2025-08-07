@@ -1245,7 +1245,7 @@
           <div style="text-align: center; margin-bottom: 24px;">
             <div class="bubble-header">
               <span class="sparkle">✨</span>
-              <span>Your Creative Profile</span>
+              <span>{{#if artistName}}{{artistName}}'s Creative Profile{{else}}Your Creative Profile{{/if}}</span>
               <span class="sparkle-pink">✨</span>
             </div>
           </div>
@@ -1257,7 +1257,7 @@
               <span class="archetype-icon" style="font-size: 28px;">{{fuzzyScoresArray.[0].icon}}</span>
               <h1 style="font-size: 24px; font-weight: 700; color: #ffffff; margin: 0;">{{fuzzyScoresArray.[0].name}}</h1>
             </div>
-            <p style="color: #e5e7eb; font-size: 14px; line-height: 1.5; margin: 0; max-width: 600px; margin: 0 auto;">{{dynamicDescription}}</p>
+            <p style="color: #e5e7eb; font-size: 14px; line-height: 1.5; margin: 0; max-width: 600px; margin: 0 auto;">{{#if artistName}}{{artistName}}, {{/if}}{{dynamicDescription}}</p>
           </div>
           
           <div>
