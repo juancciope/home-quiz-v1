@@ -3581,31 +3581,40 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   <div className="mb-4">
-                    <h3 className="text-xl font-bold mb-2 text-white">Get Your Complete Roadmap</h3>
+                    <h3 className="text-xl font-bold mb-2 text-white">Get Your Personalized PDF Roadmap</h3>
                     <div className="flex items-center justify-center gap-2 mb-3">
                       <span className="text-lg text-gray-400 line-through">$50</span>
-                      <span className="text-2xl font-bold text-[#1DD1A1]">Included</span>
+                      <span className="text-2xl font-bold text-[#1DD1A1]">$20</span>
                     </div>
                   </div>
                   
                   <div className="text-left space-y-4 mb-6">
-                    <div>
-                      <h4 className="text-sm font-semibold text-white mb-2">📊 Your Complete Strategic Roadmap</h4>
-                      <ul className="space-y-1 text-sm text-gray-300 ml-4">
-                        <li>• Full roadmap breakdown with detailed action items</li>
-                        <li>• HOME resources perfectly matched to your pathway</li>
-                        <li>• Top 10 companies you should have on your radar</li>
+                    <div className="bg-black/30 rounded-xl p-4 border border-white/10">
+                      <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                        <span className="text-2xl">📊</span> What's Included:
+                      </h4>
+                      <ul className="space-y-3 text-sm text-gray-300">
+                        <li className="flex items-start gap-3">
+                          <span className="text-[#1DD1A1] font-bold">✓</span>
+                          <span><strong>Complete Strategic Roadmap:</strong> Full breakdown with detailed action items tailored to your pathway</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-[#1DD1A1] font-bold">✓</span>
+                          <span><strong>HOME Resources Guide:</strong> Specific resources and facilities perfectly matched to accelerate your growth</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-[#1DD1A1] font-bold">✓</span>
+                          <span><strong>Industry Contact List:</strong> Top 10 companies and contacts you should have on your radar</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-[#1DD1A1] font-bold">✓</span>
+                          <span><strong>Artist Branding Playbook:</strong> 8-part comprehensive guide to building your artistic identity</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-[#1DD1A1] font-bold">✓</span>
+                          <span><strong>Music Release Strategy:</strong> 6-part step-by-step release playbook that actually works</span>
+                        </li>
                       </ul>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-sm font-semibold text-white mb-2">🎨 Bonus: Artists Branding Playbook</h4>
-                      <p className="text-sm text-gray-300 ml-4">8-part comprehensive guide to building your artistic identity</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-sm font-semibold text-white mb-2">🚀 Bonus: Successful Music Release Playbook</h4>
-                      <p className="text-sm text-gray-300 ml-4">6-part step-by-step release strategy that works</p>
                     </div>
                   </div>
                   
@@ -3614,22 +3623,47 @@ const HOMECreatorFlow = () => {
                     onClick={handlePDFGeneration}
                     className="w-full mb-6"
                   >
-                    Download Your Personalized PDF Roadmap →
+                    Get Your Personalized PDF Roadmap - $20 →
                   </LiquidButton>
                   
-                  {/* Music Tech Incubator Contest Section - Separate Box */}
-                  <div className="mt-6 p-6 bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/30 rounded-2xl">
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      Do you have an idea, project or startup that will empower music creators?
-                    </h3>
-                    <p className="text-gray-300 mb-4">
-                      Apply here and make it happen with our tech innovation community
-                    </p>
+                  {/* Join HOME Community Section */}
+                  <div className="mt-6 p-6 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 border border-[#1DD1A1]/30 rounded-2xl">
+                    <div className="text-center mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Users className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">
+                        Join the HOME Community
+                      </h3>
+                      <p className="text-gray-300 text-sm">
+                        Connect with 1,500+ music creators, access exclusive resources, and accelerate your career with our supportive community
+                      </p>
+                    </div>
+                    <div className="bg-black/30 rounded-lg p-4 mb-4">
+                      <div className="grid grid-cols-2 gap-4 text-xs text-gray-300">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#1DD1A1]">✓</span>
+                          <span>24/7 Studio Access</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#1DD1A1]">✓</span>
+                          <span>Creator Network</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#1DD1A1]">✓</span>
+                          <span>Monthly Workshops</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#1DD1A1]">✓</span>
+                          <span>Industry Events</span>
+                        </div>
+                      </div>
+                    </div>
                     <button
-                      onClick={() => setScreen('contest')}
-                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-500 hover:to-blue-500 transition-all duration-300 font-medium shadow-lg hover:shadow-purple-500/25"
+                      onClick={() => window.open('https://homeformusic.app/community', '_blank')}
+                      className="w-full px-6 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/25 transition-all duration-300 font-medium"
                     >
-                      Join Music Tech Incubator Contest 🚀
+                      Join HOME Community →
                     </button>
                   </div>
                   
@@ -3667,171 +3701,6 @@ const HOMECreatorFlow = () => {
         </div>
       )}
       
-      {/* Music Tech Incubator Contest Registration Screen */}
-      {screen === 'contest' && (
-        <div className="screen-height bg-black pt-20 sm:pt-24 flex items-center justify-center px-6 pb-20">
-          <div className="max-w-2xl w-full">
-            <div className="animate-fadeIn">
-              {/* Back button */}
-              <button
-                onClick={() => setScreen('execute')}
-                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 group"
-              >
-                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                <span>Back</span>
-              </button>
-              
-              {/* Header */}
-              <div className="text-center mb-8">
-                <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-                  <span className="block bg-gradient-to-r from-[#1DD1A1] to-[#B91372] bg-clip-text text-transparent">
-                    Music Tech Incubator Contest
-                  </span>
-                  <span className="block text-white">
-                    Registration
-                  </span>
-                </h1>
-                <p className="text-lg text-gray-300 max-w-xl mx-auto">
-                  Join our hub of tech innovators building the future of the music industry
-                </p>
-              </div>
-
-              {/* Registration Form */}
-              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-8 safari-fallback">
-                <div className="mb-6">
-                  <h2 className="text-xl font-bold text-white mb-2">
-                    Do you have an idea, project or startup that will empower music creators?
-                  </h2>
-                  <p className="text-gray-400 text-sm mb-6">
-                    Share your vision and join a community of builders, creators, and innovators working to revolutionize how music gets made, distributed, and experienced.
-                  </p>
-                </div>
-
-                {/* Idea Description */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Describe your music tech idea *
-                  </label>
-                  <textarea
-                    value={surveyResponses.techIdea || ''}
-                    onChange={(e) => {
-                      setSurveyResponses(prev => ({
-                        ...prev,
-                        techIdea: e.target.value
-                      }));
-                    }}
-                    placeholder="What problem are you solving? How will technology help? What's your vision for the future of music?"
-                    rows={6}
-                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none"
-                    required
-                  />
-                  <p className="text-xs text-gray-400 mt-2">
-                    Be as detailed as you'd like - this helps us understand your vision and connect you with the right people
-                  </p>
-                </div>
-
-                {/* Experience Level */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    What's your technical background?
-                  </label>
-                  <select
-                    value={surveyResponses.techBackground || ''}
-                    onChange={(e) => {
-                      setSurveyResponses(prev => ({
-                        ...prev,
-                        techBackground: e.target.value
-                      }));
-                    }}
-                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white focus:border-[#1DD1A1] focus:outline-none"
-                  >
-                    <option value="">Select your background...</option>
-                    <option value="developer">Software Developer/Engineer</option>
-                    <option value="designer">UX/UI Designer</option>
-                    <option value="product">Product Manager</option>
-                    <option value="entrepreneur">Entrepreneur/Founder</option>
-                    <option value="musician-tech">Musician with tech skills</option>
-                    <option value="student">Student (CS/Engineering/Design)</option>
-                    <option value="business">Business/Marketing</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-
-                {/* Call to Action */}
-                <div className="text-center">
-                  <button
-                    onClick={async () => {
-                      if (!surveyResponses.techIdea) {
-                        alert('Please describe your idea, project or startup');
-                        return;
-                      }
-                      
-                      try {
-                        // Submit to API
-                        const response = await fetch('/api/submit-bootcamp-registration', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            email: 'anonymous@contest.com', // Placeholder since email not collected
-                            techIdea: surveyResponses.techIdea,
-                            techBackground: surveyResponses.techBackground || 'not specified'
-                          })
-                        });
-
-                        if (response.ok) {
-                          // Show success message
-                          setScreen('contest-success');
-                        } else {
-                          alert('Registration failed. Please try again.');
-                        }
-                      } catch (error) {
-                        console.error('Registration error:', error);
-                        alert('Registration failed. Please try again.');
-                      }
-                    }}
-                    disabled={!surveyResponses.techIdea}
-                    className="w-full px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Submit Contest Registration
-                  </button>
-                  
-                  <p className="text-xs text-gray-400 mt-4">
-                    We'll review your submission and get back to you with next steps for joining our community of music tech innovators.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Contest Success Screen */}
-      {screen === 'contest-success' && (
-        <div className="screen-height bg-black flex items-center justify-center px-6">
-          <div className="max-w-md w-full text-center">
-            <div className="animate-fadeIn">
-              <div className="mb-8">
-                <div className="w-20 h-20 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Check className="w-10 h-10 text-white" />
-                </div>
-                <h1 className="text-3xl font-bold text-white mb-4">
-                  Contest Registration Submitted!
-                </h1>
-                <p className="text-gray-300 leading-relaxed">
-                  Thank you for sharing your music tech vision with us. We'll review your submission and get back to you soon about the Music Tech Incubator Contest.
-                </p>
-              </div>
-              
-              <button
-                onClick={() => setScreen('landing')}
-                className="px-6 py-3 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all"
-              >
-                Back to Home
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       
       {/* Survey Screen - ACTUAL QUIZ */}
       {screen === 'survey' && (
