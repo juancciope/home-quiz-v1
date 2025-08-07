@@ -2061,7 +2061,7 @@ const HOMECreatorFlow = () => {
   const handleStripeCheckout = async () => {
     try {
       // Ensure we have required data
-      if (!responses || !responses.email) {
+      if (!email) {
         alert('Please provide your email address first.');
         return;
       }
@@ -2094,13 +2094,21 @@ const HOMECreatorFlow = () => {
       
       localStorage.setItem(`pdfData_${sessionId}`, JSON.stringify(pdfData));
       
+      console.log('💳 PDF data prepared for Stripe:', {
+        hasPathway: !!pdfData.pathway,
+        pathwayTitle: pdfData.pathway?.title,
+        hasEmail: !!email,
+        email: email,
+        sessionId: sessionId
+      });
+      
       // Create Stripe checkout session
       const response = await fetch('/api/create-pdf-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionId,
-          email: responses.email,
+          email: email,
           pathwayData: pdfData
         }),
       });
@@ -2111,9 +2119,16 @@ const HOMECreatorFlow = () => {
         throw new Error(errorData.message || 'Failed to create checkout session');
       }
       
-      const { url } = await response.json();
+      const responseData = await response.json();
+      console.log('💳 Stripe checkout response:', responseData);
       
-      console.log('✅ Redirecting to Stripe checkout...');
+      const { url } = responseData;
+      
+      if (!url) {
+        throw new Error('No checkout URL received from Stripe');
+      }
+      
+      console.log('✅ Redirecting to Stripe checkout:', url);
       
       // Redirect to Stripe checkout
       window.location.href = url;

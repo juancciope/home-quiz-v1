@@ -159,15 +159,15 @@ Do not box them into a single category - acknowledge their unique blend and prov
         // Wait for completion with VERY aggressive timeout for better UX
         let runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
         let attempts = 0;
-        const maxAttempts = 10; // Further reduced to 10 attempts (~10-15s max)
+        const maxAttempts = 15; // Increased back to 15 attempts for more reliability
         let waitTime = 500; // Start with 500ms for faster initial checks
-        const maxTotalTime = 15000; // 15 second hard limit
+        const maxTotalTime = 25000; // 25 second limit - increased for reliability
         const runStartTime = Date.now();
         
         while (runStatus.status !== 'completed' && attempts < maxAttempts) {
           // Check total time elapsed
           if (Date.now() - runStartTime > maxTotalTime) {
-            console.error(`❌ Assistant run exceeded 15s time limit - aborting`);
+            console.error(`❌ Assistant run exceeded 25s time limit - aborting`);
             throw new Error('Assistant timeout - using fallback');
           }
           
@@ -304,7 +304,12 @@ console.log('✅ Successfully generated personalized pathway:', {
         return;
         
       } catch (error) {
-        console.error('🚨 Assistant API error:', error);
+        console.error('🚨 Assistant API error:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack?.substring(0, 500),
+          timestamp: new Date().toISOString()
+        });
         console.log('📋 Falling back to template-based generation...');
       }
     }

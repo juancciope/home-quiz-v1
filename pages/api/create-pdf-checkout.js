@@ -9,6 +9,13 @@ export default async function handler(req, res) {
 
   try {
     const { sessionId, email, pathwayData } = req.body;
+    
+    console.log('🔍 Create PDF checkout called with:', {
+      sessionId,
+      email,
+      hasPathwayData: !!pathwayData,
+      pathwayTitle: pathwayData?.pathway?.title
+    });
 
     // Use product ID if available, otherwise create dynamic pricing
     const lineItems = process.env.STRIPE_PDF_PRODUCT_ID ? [
@@ -47,9 +54,22 @@ export default async function handler(req, res) {
       }
     });
 
+    console.log('✅ Stripe checkout session created:', {
+      sessionId: session.id,
+      url: session.url
+    });
+    
     res.status(200).json({ sessionId: session.id, url: session.url });
   } catch (error) {
-    console.error('Stripe checkout error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('❌ Stripe checkout error:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      stack: error.stack?.substring(0, 300)
+    });
+    res.status(500).json({ 
+      error: error.message,
+      type: error.type || 'unknown_error'
+    });
   }
 }
