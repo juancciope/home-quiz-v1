@@ -3637,22 +3637,16 @@ const HOMECreatorFlow = () => {
                   <span className="text-sm font-semibold text-white">Execute Your Roadmap</span>
                 </div>
                 
-                <h1 className="text-2xl font-bold mb-4 text-white">Ready to Accelerate?</h1>
+                <h1 className="text-2xl font-bold mb-2 text-white">Ready to Accelerate?</h1>
                 <p className="text-sm text-gray-300 mb-8">Choose how you want to start your journey with HOME</p>
               </div>
               
-              {/* Complete Roadmap Package */}
+              {/* PDF Download Box */}
               <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
                 <div className="text-center">
-                  <div className="relative inline-block mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#1DD1A1]/20 to-[#B91372]/20 rounded-full flex items-center justify-center">
-                      <ListChecks className="w-6 h-6 text-[#1DD1A1]" />
-                    </div>
-                  </div>
-                  
                   <div className="mb-4">
-                    <h3 className="text-xl font-bold mb-2 text-white">Get Your Personalized PDF Roadmap</h3>
-                    <div className="flex items-center justify-center gap-2 mb-3">
+                    <h3 className="text-xl font-bold mb-2 text-white">Download Your Personalized Roadmap</h3>
+                    <div className="flex items-center justify-center gap-2 mb-6">
                       <span className="text-2xl font-bold text-[#1DD1A1]">$20</span>
                     </div>
                   </div>
@@ -3660,9 +3654,9 @@ const HOMECreatorFlow = () => {
                   <div className="text-left space-y-4 mb-6">
                     <div className="bg-black/30 rounded-xl p-4 border border-white/10">
                       <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                        <span className="text-2xl">📊</span> What's in the PDF?
+                        <span className="text-2xl">📊</span> What's in the download?
                       </h4>
-                      <ul className="space-y-3 text-sm text-gray-300">
+                      <ul className="space-y-3 text-xs text-white">
                         <li className="flex items-start gap-3">
                           <span className="text-[#1DD1A1] font-bold">✓</span>
                           <span><strong>Complete Strategic Roadmap:</strong> Full breakdown with detailed action items tailored to your pathway</span>
@@ -3681,7 +3675,7 @@ const HOMECreatorFlow = () => {
                         <h5 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                           <span className="text-lg">🎁</span> BONUS (Delivered via email, unsubscribe anytime)
                         </h5>
-                        <ul className="space-y-2 text-xs text-gray-400">
+                        <ul className="space-y-2 text-xs text-white">
                           <li className="flex items-start gap-3">
                             <span className="text-[#1DD1A1] font-bold">✓</span>
                             <span><strong>Full Music Creator Roadmap Guidebook:</strong> 9-part e-book explaining the entire framework</span>
@@ -3702,78 +3696,83 @@ const HOMECreatorFlow = () => {
                   {/* PDF Download Button */}
                   <LiquidButton
                     onClick={handlePDFGeneration}
-                    className="w-full mb-6"
+                    className="w-full mb-0"
                   >
-                    Get Your Personalized PDF Roadmap - $20 →
+                    Download Now
                   </LiquidButton>
-                  
-                  {/* Join HOME Community Section */}
-                  <div className="mt-6 p-6 bg-gradient-to-r from-[#1DD1A1]/10 to-[#B91372]/10 border border-[#1DD1A1]/30 rounded-2xl">
-                    <div className="text-center mb-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Users className="w-8 h-8 text-white" />
-                      </div>
-                      <h3 className="text-xl font-bold text-white mb-2">
-                        Join the HOME Community
-                      </h3>
-                      <p className="text-gray-300 text-sm">
-                        Connect with 1,500+ music creators, access exclusive resources, and accelerate your career with our supportive community
-                      </p>
-                    </div>
-                    <div className="bg-black/30 rounded-lg p-4 mb-4">
-                      <div className="grid grid-cols-2 gap-4 text-xs text-gray-300">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[#1DD1A1]">✓</span>
-                          <span>24/7 Studio Access</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[#1DD1A1]">✓</span>
-                          <span>Creator Network</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[#1DD1A1]">✓</span>
-                          <span>Monthly Workshops</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[#1DD1A1]">✓</span>
-                          <span>Industry Events</span>
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => window.open('https://homeformusic.app/community', '_blank')}
-                      className="w-full px-6 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-xl hover:shadow-lg hover:shadow-[#1DD1A1]/25 transition-all duration-300 font-medium"
-                    >
-                      Join HOME Community →
-                    </button>
+                </div>
+              </div>
+              
+              {/* Join HOME Community Box */}
+              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 mb-6 safari-fallback">
+                <div className="text-center">
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold text-white mb-3">Join the HOME Community</h3>
+                    <p className="text-sm text-gray-300">
+                      Connect with 1,500+ music creators, access exclusive resources, and accelerate your career with our supportive community
+                    </p>
                   </div>
                   
-                  {/* Feedback Section */}
-                  <div className="mt-6 p-6 bg-black/50 border border-white/10 rounded-2xl">
-                    <h3 className="text-lg font-semibold text-white mb-3">
-                      Share Your Feedback
-                    </h3>
-                    <textarea
-                      value={feedbackText}
-                      onChange={(e) => setFeedbackText(e.target.value)}
-                      placeholder="Tell us what you think about your experience..."
-                      rows={4}
-                      className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none mb-3"
-                    />
-                    <button
-                      onClick={() => {
-                        if (feedbackText.trim()) {
-                          console.log('Feedback submitted:', feedbackText);
-                          alert('Thank you for your feedback!');
-                          setFeedbackText('');
-                        }
-                      }}
-                      disabled={!feedbackText.trim()}
-                      className="px-6 py-2 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] text-white rounded-lg hover:shadow-lg hover:shadow-[#1DD1A1]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                    >
-                      Submit Feedback
-                    </button>
+                  <div className="bg-black/30 rounded-xl p-4 mb-6 border border-white/10">
+                    <div className="grid grid-cols-2 gap-4 text-xs text-white">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#1DD1A1] font-bold">✓</span>
+                        <span>24/7 Studio Access</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#1DD1A1] font-bold">✓</span>
+                        <span>Creator Network</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#1DD1A1] font-bold">✓</span>
+                        <span>Monthly Workshops</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#1DD1A1] font-bold">✓</span>
+                        <span>Industry Events</span>
+                      </div>
+                    </div>
                   </div>
+                  
+                  <LiquidButton
+                    onClick={() => window.open('https://homeformusic.app/community', '_blank')}
+                    className="w-full mb-0"
+                  >
+                    Start for Free
+                  </LiquidButton>
+                </div>
+              </div>
+              
+              {/* Feedback Box */}
+              <div className="bg-black/80 backdrop-blur-sm rounded-3xl border border-white/10 p-6 safari-fallback">
+                <div className="text-center">
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold text-white mb-3">Share Your Feedback</h3>
+                  </div>
+                  
+                  <textarea
+                    value={feedbackText}
+                    onChange={(e) => setFeedbackText(e.target.value)}
+                    placeholder="Tell us what you think about your experience..."
+                    rows={4}
+                    className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:border-[#1DD1A1] focus:outline-none resize-none mb-6"
+                  />
+                  
+                  <LiquidButton
+                    onClick={() => {
+                      if (feedbackText.trim()) {
+                        console.log('Feedback submitted:', feedbackText);
+                        alert('Thank you for your feedback!');
+                        setFeedbackText('');
+                      }
+                    }}
+                    disabled={!feedbackText.trim()}
+                    className="w-full mb-0"
+                  >
+                    Submit Feedback
+                  </LiquidButton>
+                </div>
+              </div>
                 </div>
               </div>
               
