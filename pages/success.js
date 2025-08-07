@@ -3,19 +3,78 @@ import { Check, Mail, Download } from 'lucide-react';
 
 export default function Success() {
   const [sessionId, setSessionId] = useState(null);
+  const [pdfSessionId, setPdfSessionId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
-    // Get session ID from URL params
+    // Get URL params
     const urlParams = new URLSearchParams(window.location.search);
     const sessionIdParam = urlParams.get('session_id');
+    const pdfSessionParam = urlParams.get('pdf_session');
+    const paymentSuccessParam = urlParams.get('payment_success');
     
     if (sessionIdParam) {
       setSessionId(sessionIdParam);
     }
     
+    if (pdfSessionParam) {
+      setPdfSessionId(pdfSessionParam);
+    }
+    
+    if (paymentSuccessParam === 'true') {
+      setPaymentSuccess(true);
+    }
+    
     setLoading(false);
   }, []);
+
+  const handlePDFDownload = async () => {
+    if (!sessionId || !pdfSessionId) {
+      alert('Missing session information for PDF download');
+      return;
+    }
+
+    try {
+      setDownloading(true);
+      console.log('📥 Downloading PDF after payment verification...');
+
+      // Check if we have pre-generated PDF in localStorage
+      const pdfDataKey = `pdfData_${pdfSessionId}`;
+      const storedPdfData = localStorage.getItem(pdfDataKey);
+      
+      if (storedPdfData) {
+        console.log('📄 Using stored PDF data for download...');
+        
+        // Verify payment first, then download
+        const response = await fetch(`/api/download-pdf?session_id=${sessionId}&pdf_session=${pdfSessionId}`);
+        
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `music-creator-roadmap-${pdfSessionId}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          
+          console.log('✅ PDF downloaded successfully');
+        } else {
+          throw new Error('Failed to download PDF');
+        }
+      } else {
+        alert('PDF data not found. Please return to the main page and complete the assessment again.');
+      }
+    } catch (error) {
+      console.error('❌ PDF download error:', error);
+      alert('Error downloading PDF. Please try again or contact support.');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -47,35 +106,59 @@ export default function Success() {
         </h1>
         
         <p className="text-xl text-gray-300 mb-8">
-          Your Local Music Industry Map is being prepared and will be delivered to your email within the next few minutes.
+          {paymentSuccess 
+            ? "Your personalized Music Creator Roadmap PDF is ready for download!" 
+            : "Thank you for your purchase!"}
         </p>
         
+        {/* PDF Download Section */}
+        {paymentSuccess && pdfSessionId && (
+          <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8">
+            <h2 className="text-2xl font-bold mb-6 text-white">Download Your Roadmap</h2>
+            
+            <div className="text-center">
+              <button
+                onClick={handlePDFDownload}
+                disabled={downloading}
+                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DD1A1] to-[#B91372] rounded-2xl font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="w-5 h-5" />
+                {downloading ? 'Downloading...' : 'Download Your PDF Roadmap'}
+              </button>
+              
+              <p className="text-sm text-gray-400 mt-4">
+                Your personalized music career roadmap with action steps and resources
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* What's Next */}
         <div className="bg-white/[0.02] backdrop-blur-sm rounded-3xl border border-white/10 p-8 mb-8">
-          <h2 className="text-2xl font-bold mb-6 text-white">What happens next?</h2>
+          <h2 className="text-2xl font-bold mb-6 text-white">What's in your roadmap?</h2>
           
           <div className="space-y-4 text-left">
             <div className="flex items-start gap-4">
-              <Mail className="w-6 h-6 text-[#1DD1A1] mt-0.5" />
+              <Check className="w-6 h-6 text-[#1DD1A1] mt-0.5" />
               <div>
-                <h3 className="font-semibold text-white">Check your email</h3>
-                <p className="text-gray-300">Your industry map with 10 curated contacts will arrive shortly</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-4">
-              <Download className="w-6 h-6 text-[#1DD1A1] mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-white">Download & save</h3>
-                <p className="text-gray-300">Keep the contact list handy for future networking opportunities</p>
+                <h3 className="font-semibold text-white">Personalized Action Steps</h3>
+                <p className="text-gray-300">Tailored next steps based on your specific music career goals</p>
               </div>
             </div>
             
             <div className="flex items-start gap-4">
               <Check className="w-6 h-6 text-[#1DD1A1] mt-0.5" />
               <div>
-                <h3 className="font-semibold text-white">Start connecting</h3>
-                <p className="text-gray-300">Use the networking tips included to make meaningful connections</p>
+                <h3 className="font-semibold text-white">Strategic Resources</h3>
+                <p className="text-gray-300">Curated tools and resources matched to your pathway</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-4">
+              <Check className="w-6 h-6 text-[#1DD1A1] mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-white">HOME Connection</h3>
+                <p className="text-gray-300">How HOME's community and facilities can accelerate your growth</p>
               </div>
             </div>
           </div>

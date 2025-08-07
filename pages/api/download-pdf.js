@@ -118,28 +118,44 @@ export default async function handler(req, res) {
     
     console.log('📄 Generating PDF using internal API...');
     
-    // Use our existing generate-pdf API
-    const pdfResponse = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/generate-pdf`, {
+    // Import the generate-pdf handler directly to avoid network call issues
+    const generatePdfHandler = await import('./generate-pdf.js');
+    
+    // Create a mock request object for the generate-pdf API
+    const mockReq = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      body: {
         sessionId: pdf_session,
         pathwayData: pdfData
-      }),
-    });
+      }
+    };
     
-    if (!pdfResponse.ok) {
-      throw new Error(`PDF generation failed: ${pdfResponse.status}`);
+    // Create a mock response object to capture the PDF
+    let pdfBuffer = null;
+    const mockRes = {
+      setHeader: () => {},
+      end: (buffer) => {
+        pdfBuffer = buffer;
+      },
+      status: () => mockRes,
+      json: (data) => {
+        throw new Error(`PDF generation failed: ${data.message || 'Unknown error'}`);
+      }
+    };
+    
+    // Call the generate-pdf handler directly
+    await generatePdfHandler.default(mockReq, mockRes);
+    
+    if (!pdfBuffer) {
+      throw new Error('PDF generation failed - no buffer received');
     }
-    
-    const pdfBuffer = await pdfResponse.buffer();
     
     console.log('✅ PDF generated successfully');
     
     // Set headers for PDF download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="music-creator-roadmap-${pdf_session}.pdf"`);
-    res.send(pdfBuffer);
+    res.end(pdfBuffer);
     
   } catch (error) {
     console.error('❌ PDF generation error:', error);

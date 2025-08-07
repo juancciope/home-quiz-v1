@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_URL}/api/download-pdf?session_id={CHECKOUT_SESSION_ID}&pdf_session=${sessionId}`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/success?payment_success=true&session_id={CHECKOUT_SESSION_ID}&pdf_session=${sessionId}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/?canceled=true`,
       customer_email: email,
       metadata: {
