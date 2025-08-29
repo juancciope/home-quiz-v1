@@ -3817,7 +3817,7 @@ const HOMECreatorFlow = () => {
                   </div>
                   
                   <LiquidButton
-                    onClick={() => window.open('https://homeformusic.app/community', '_blank')}
+                    onClick={() => window.open('https://homeformusic.app/sign_up?request_host=homeformusic.app&user%5Binvitation_token%5D=d0aac96d9a3247885b7b0a5e6e806bfaf2621daa-c84c5e64-3bdf-4249-84ce-31a96cc11aae#email', '_blank')}
                     className="w-full mb-0"
                   >
                     Start for Free
