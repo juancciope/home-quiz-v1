@@ -3841,11 +3841,47 @@ const HOMECreatorFlow = () => {
                   />
                   
                   <LiquidButton
-                    onClick={() => {
+                    onClick={async () => {
                       if (feedbackText.trim()) {
-                        console.log('Feedback submitted:', feedbackText);
-                        alert('Thank you for your feedback!');
-                        setFeedbackText('');
+                        try {
+                          // Disable button while submitting
+                          const button = event.currentTarget;
+                          button.disabled = true;
+                          
+                          console.log('📤 Submitting feedback...');
+                          
+                          // Send feedback to API
+                          const response = await fetch('/api/submit-feedback', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              email: email || responses?.email || '',
+                              artistName: artistName || '',
+                              feedback: feedbackText,
+                              pathway: pathway?.title || aiGeneratedPathway?.title || '',
+                              sessionId: Date.now().toString()
+                            }),
+                          });
+                          
+                          const data = await response.json();
+                          
+                          if (response.ok && data.success) {
+                            console.log('✅ Feedback submitted successfully');
+                            alert('Thank you for your feedback! We really appreciate it.');
+                            setFeedbackText('');
+                          } else {
+                            console.error('❌ Feedback submission failed:', data);
+                            alert(data.message || 'Failed to submit feedback. Please try again.');
+                          }
+                        } catch (error) {
+                          console.error('❌ Feedback submission error:', error);
+                          alert('An error occurred while submitting feedback. Please try again.');
+                        } finally {
+                          // Re-enable button
+                          if (event?.currentTarget) {
+                            event.currentTarget.disabled = false;
+                          }
+                        }
                       }
                     }}
                     disabled={!feedbackText.trim()}
